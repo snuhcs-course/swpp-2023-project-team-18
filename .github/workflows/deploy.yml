@@ -5,11 +5,15 @@ on:
       - backend/release
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
+    - name: create env file
+      run: |
+        cd /home/ubuntu/swpp-2023-project-team-18/backend/moment/
+        touch .env
+        echo "${{ secrets.ENV_VARS }}" >> .env
     - name: deploy
       uses: appleboy/ssh-action@master
       with:
@@ -21,6 +25,8 @@ jobs:
           git pull origin main
           pip install -r requirements.txt
           cd moment
-          python manage.py makemigrations
-	        python manage.py migrate
+          docker stop dg01
+          docker rm dg01
+          docker stop ng01
+          docker rm ng01
           docker-compose up -d --build
