@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: create env file
-        script: |
-          cd /home/ubuntu/swpp-2023-project-team-18/backend/moments/
+        run: |
           touch .env
           echo "${{ secrets.ENV_VARS }}" >> .env
       - name: deploy
