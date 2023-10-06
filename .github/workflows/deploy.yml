@@ -5,7 +5,6 @@ on:
       - backend/release
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -21,6 +20,5 @@ jobs:
           git pull origin main
           pip install -r requirements.txt
           cd moment
-          python manage.py makemigrations
-	  python manage.py migrate
+          make migrate
           docker-compose up -d --build
