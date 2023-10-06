@@ -20,5 +20,8 @@ jobs:
           git pull origin main
           pip install -r requirements.txt
           cd moment
-          make migrate
+          docker stop dg01
+          docker rm dg01
+          docker stop ng01
+          docker rm ng01
           docker-compose up -d --build
