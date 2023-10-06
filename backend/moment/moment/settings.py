@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-eg5-0nln@u+tc_#fi!tlgqxwzguhlkuk*7tgr4a4dcqjt8a@=1
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "127.0.0.1",
     "ec2-54-180-98-145.ap-northeast-2.compute.amazonaws.com"
 ]
 
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'quickstart'
 ]
 
 MIDDLEWARE = [
