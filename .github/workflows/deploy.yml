@@ -18,7 +18,7 @@ jobs:
         script: |
           cd /home/ubuntu/swpp-2023-project-team-18/backend/
           git pull origin backend/release
-          pip install -r requirements.txt
+          pip install -r config/requirements.txt
           cd moment
           touch .env
           echo "${{ secrets.ENV_VARS }}" >> .env
