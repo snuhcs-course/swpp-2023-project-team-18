@@ -94,7 +94,7 @@ if IS_PROD:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "team18-database",
+            "NAME": "quickstart",
             "USER": "admin",
             "PASSWORD": DB_PASSWORD,
             "HOST": "team18-database.c4um0oyskdxb.ap-northeast-2.rds.amazonaws.com",
