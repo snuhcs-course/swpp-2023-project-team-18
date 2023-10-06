@@ -9,6 +9,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+    - name: create env file
+      run: |
+        cd /home/ubuntu/swpp-2023-project-team-18/backend/moment/
+        touch .env
+        echo "${{ secrets.ENV_VARS }}" >> .env
     - name: deploy
       uses: appleboy/ssh-action@master
       with:
