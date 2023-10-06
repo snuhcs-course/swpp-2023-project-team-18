@@ -12,19 +12,29 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+import pymysql
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(IS_PROD=(bool, True))
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, '.env')
+)
+
+IS_PROD = env('IS_PROD')
+SECRET_KEY = env('SECRET_KEY')
+DB_PASSWORD = env('DB_PASSWORD')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-eg5-0nln@u+tc_#fi!tlgqxwzguhlkuk*7tgr4a4dcqjt8a@=1'
+# SECRET_KEY = 'django-insecure-eg5-0nln@u+tc_#fi!tlgqxwzguhlkuk*7tgr4a4dcqjt8a@=1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not IS_PROD
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -79,12 +89,32 @@ WSGI_APPLICATION = 'moment.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if IS_PROD:
+    pymysql.install_as_MySQLdb()
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "team18-database",
+            "USER": "admin",
+            "PASSWORD": DB_PASSWORD,
+            "HOST": "team18-database.c4um0oyskdxb.ap-northeast-2.rds.amazonaws.com",
+            "PORT": "3306",
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 
 # Password validation
