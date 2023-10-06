@@ -9,6 +9,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+    - name: create env file
+      run: |
+        touch .env
+        echo "${{ secrets.ENV_VARS }}" >> .env
+
     - name: deploy
       uses: appleboy/ssh-action@master
       with:
@@ -20,8 +25,6 @@ jobs:
           git pull origin backend/release
           pip install -r config/requirements.txt
           cd moment
-          touch .env
-          echo "${{ secrets.ENV_VARS }}" >> .env
           docker stop dg01
           docker rm dg01
           docker stop ng01
