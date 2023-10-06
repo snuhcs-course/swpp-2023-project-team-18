@@ -1,0 +1,26 @@
+name: Deploy to EC2
+on:
+  push:
+    branches:
+      - backend/release
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd /home/ubuntu/swpp-2023-project-team-18/backend/
+          git pull origin main
+          pip install -r requirements.txt
+          cd moment
+          python manage.py makemigrations
+	        python manage.py migrate
+          docker-compose up -d --build
