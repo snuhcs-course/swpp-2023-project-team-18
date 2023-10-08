@@ -37,3 +37,15 @@ class LoginSerializer(serializers.Serializer):
                 {"error": "Unable to log in with provided credentials."}
             )
         return Token.objects.get(user=user)
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'nickname', 'date_joined']
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['nickname']
