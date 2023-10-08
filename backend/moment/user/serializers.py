@@ -43,6 +43,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'nickname', 'date_joined']
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["createdAt"] = representation.pop("date_joined")
+        return representation
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
