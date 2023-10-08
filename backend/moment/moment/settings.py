@@ -90,6 +90,7 @@ WSGI_APPLICATION = 'moment.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 if IS_PROD:
     pymysql.install_as_MySQLdb()
     DATABASES = {
