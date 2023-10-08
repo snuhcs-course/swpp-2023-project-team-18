@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'quickstart'
 ]
 
 MIDDLEWARE = [
@@ -94,7 +93,7 @@ if IS_PROD:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "team18-database",
+            "NAME": "moment",
             "USER": "admin",
             "PASSWORD": DB_PASSWORD,
             "HOST": "team18-database.c4um0oyskdxb.ap-northeast-2.rds.amazonaws.com",
