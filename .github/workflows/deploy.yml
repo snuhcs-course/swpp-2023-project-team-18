@@ -3,30 +3,24 @@ on:
   push:
     branches:
       - backend/release
-
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: create env file
-      run: |
-        cd /home/ubuntu/swpp-2023-project-team-18/backend/moment/
-        touch .env
-        echo "${{ secrets.ENV_VARS }}" >> .env
-    - name: deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          cd /home/ubuntu/swpp-2023-project-team-18/backend/
-          git pull origin main
-          pip install -r requirements.txt
-          cd moment
-          docker stop dg01
-          docker rm dg01
-          docker stop ng01
-          docker rm ng01
-          docker-compose up -d --build
+      - name: deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/swpp-2023-project-team-18/backend/
+            git pull origin backend/release
+            pip install -r config/requirements.txt
+            cd moment
+            docker stop dg01
+            docker rm dg01
+            docker stop ng01
+            docker rm ng01
+            docker-compose up -d --build

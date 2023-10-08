@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from user.models import User
+from .models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
