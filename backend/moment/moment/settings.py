@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'quickstart'
+    'rest_framework.authtoken',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +95,7 @@ if IS_PROD:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "team18-database",
+            "NAME": "moment",
             "USER": "admin",
             "PASSWORD": DB_PASSWORD,
             "HOST": "team18-database.c4um0oyskdxb.ap-northeast-2.rds.amazonaws.com",
@@ -120,6 +121,8 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
+AUTH_USER_MODEL = "user.User"
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -138,6 +141,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}
 
 LANGUAGE_CODE = 'en-us'
 
