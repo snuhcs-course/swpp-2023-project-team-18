@@ -1,7 +1,7 @@
 from rest_framework import generics, status, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from moment.user.serializers import RegisterSerializer, LoginSerializer, UserDetailSerializer, UserUpdateSerializer
+from .serializers import RegisterSerializer, LoginSerializer, UserDetailSerializer, UserUpdateSerializer
 
 
 # Create your views here.
