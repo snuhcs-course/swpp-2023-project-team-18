@@ -1,5 +1,5 @@
 from django.db import models
-from moment.user import User
+from moment.user.models import User
 from constants import EMOTIONS_CHOICES
 
 # Create your models here.
