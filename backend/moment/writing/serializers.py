@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework.serializers import IntegerField
 from .models import MomentPair
 
@@ -13,3 +13,8 @@ class MomentPairSerializer(ModelSerializer):
         res["moment_created_at"] = int(instance.moment_created_at.timestamp())
         res["reply_created_at"] = int(instance.reply_created_at.timestamp())
         return res
+
+
+class MomentPairQuerySerializer(Serializer):
+    start = IntegerField()
+    end = IntegerField()

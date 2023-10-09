@@ -31,7 +31,7 @@ class MomentPair(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     moment = models.CharField(max_length=1000)
     reply = models.CharField(max_length=1000, blank=True)
-    story = models.ForeignKey(Story, null=True, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, null=True, blank=True, on_delete=models.CASCADE)
 
     moment_created_at = models.DateTimeField()
     reply_created_at = models.DateTimeField()
