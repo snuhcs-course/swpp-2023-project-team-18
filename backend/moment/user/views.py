@@ -2,7 +2,12 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
-from .serializers import RegisterSerializer, LoginSerializer, UserDetailSerializer, UserUpdateSerializer
+from .serializers import (
+    RegisterSerializer,
+    LoginSerializer,
+    UserDetailSerializer,
+    UserUpdateSerializer,
+)
 
 
 # Create your views here.
@@ -55,7 +60,7 @@ class UserRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = UserDetailSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             return UserDetailSerializer
         return UserUpdateSerializer
 
