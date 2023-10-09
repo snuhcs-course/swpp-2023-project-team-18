@@ -10,3 +10,7 @@ EMOTIONS_CHOICES = [
     ("angry1", "angry1"),
     ("angry2", "angry2"),
 ]
+
+MOMENT_MAX_LENGTH = 1000
+STORY_MAX_LENGTH = 10000
+STORY_TITLE_MAX_LENGTH = 100

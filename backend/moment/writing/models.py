@@ -1,6 +1,11 @@
 from django.db import models
 from user.models import User
-from .constants import EMOTIONS_CHOICES
+from .constants import (
+    EMOTIONS_CHOICES,
+    MOMENT_MAX_LENGTH,
+    STORY_MAX_LENGTH,
+    STORY_TITLE_MAX_LENGTH,
+)
 
 # Create your models here.
 
@@ -18,8 +23,8 @@ class Story(models.Model):
     )
     score = models.IntegerField(default=3)
     is_point_completed = models.BooleanField(default=False)
-    title = models.CharField(max_length=100)
-    content = models.CharField(max_length=1000)
+    title = models.CharField(max_length=STORY_TITLE_MAX_LENGTH)
+    content = models.CharField(max_length=STORY_MAX_LENGTH)
     hashtags = models.ManyToManyField(
         Hashtag,
     )
@@ -29,8 +34,8 @@ class Story(models.Model):
 
 class MomentPair(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    moment = models.CharField(max_length=1000)
-    reply = models.CharField(max_length=1000, blank=True)
+    moment = models.CharField(max_length=MOMENT_MAX_LENGTH)
+    reply = models.CharField(max_length=MOMENT_MAX_LENGTH, blank=True)
     story = models.ForeignKey(Story, null=True, blank=True, on_delete=models.CASCADE)
 
     moment_created_at = models.DateTimeField()
