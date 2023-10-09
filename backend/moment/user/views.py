@@ -1,7 +1,12 @@
 from rest_framework import generics, status, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from .serializers import RegisterSerializer, LoginSerializer, UserDetailSerializer, UserUpdateSerializer
+from .serializers import (
+    RegisterSerializer,
+    LoginSerializer,
+    UserDetailSerializer,
+    UserUpdateSerializer,
+)
 
 
 # Create your views here.
@@ -18,7 +23,7 @@ class RegisterView(generics.GenericAPIView):
                 "user": RegisterSerializer(
                     user, context=self.get_serializer_context()
                 ).data,
-                "token": token.key
+                "token": token.key,
             }
         )
 
@@ -38,7 +43,7 @@ class UserRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = UserDetailSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             return UserDetailSerializer
         return UserUpdateSerializer
 
