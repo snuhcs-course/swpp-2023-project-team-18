@@ -39,12 +39,15 @@ class MomentView(GenericAPIView):
     def post(self, request):
         body = MomentPairCreateSerializer(data=request.data)
         body.is_valid(raise_exception=True)
-        user = request.user
+        user = User.objects.get(pk=request.user.id)
+
+        # TODO: openai api 써서 reply 받아오기
+        #   만약 실패하면 그냥 빈 문자열로 저장하나? 아니면 moment 저장 자체를 취소하나?
 
         moment_pair = MomentPair.objects.create(
             user=user,
             moment=body.data["moment"],
-            reply="",  # FIXME: 나중에 붙이기
+            reply="",  # TODO: 나중에 붙이기
             story=None,
             moment_created_at=datetime.now(),
             reply_created_at=datetime.now(),
