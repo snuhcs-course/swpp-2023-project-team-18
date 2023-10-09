@@ -27,4 +27,6 @@ class MomentView(GenericAPIView):
         )
         serializer = self.get_serializer(data=moments, many=True)
         serializer.is_valid()
-        return Response(serializer.data)
+        return Response(
+            {"moments": serializer.data},
+        )
