@@ -29,11 +29,10 @@ class MomentView(GenericAPIView):
             moment_created_at__range=(start_date, end_date),
             user=user,
         )
-        serializer = self.get_serializer(data=moment_pairs, many=True)
-        serializer.is_valid()
+        serializer = self.get_serializer(moment_pairs, many=True)
 
         return Response(
-            {"moments": serializer.validated_data},
+            {"moments": serializer.data},
         )
 
     def post(self, request):
@@ -43,7 +42,7 @@ class MomentView(GenericAPIView):
 
         moment_pair = MomentPair.objects.create(
             user=user,
-            moment=body.validated_data["moment"],
+            moment=body.data["moment"],
             reply="",  # FIXME: 나중에 붙이기
             story=None,
             moment_created_at=datetime.now(),
@@ -51,9 +50,8 @@ class MomentView(GenericAPIView):
         )
         moment_pair.save()
 
-        serializer = self.get_serializer(data=moment_pair)
-        serializer.is_valid()
+        serializer = self.get_serializer(moment_pair)
 
         return Response(
-            {"moment": serializer.validated_data},
+            {"moment": serializer.data},
         )
