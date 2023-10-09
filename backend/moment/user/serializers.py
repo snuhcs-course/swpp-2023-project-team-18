@@ -1,7 +1,5 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
-
 from .models import User
 
 
@@ -36,7 +34,7 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {"error": "Unable to log in with provided credentials."}
             )
-        return Token.objects.get(user=user)
+        return user
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
