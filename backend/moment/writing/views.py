@@ -5,7 +5,11 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 from .models import MomentPair
-from .serializers import MomentPairQuerySerializer, MomentPairSerializer
+from .serializers import (
+    MomentPairQuerySerializer,
+    MomentPairSerializer,
+    MomentPairCreateSerializer,
+)
 
 
 # Create your views here.
@@ -30,3 +34,10 @@ class MomentView(GenericAPIView):
         return Response(
             {"moments": serializer.data},
         )
+
+    def post(self, request):
+        body = MomentPairCreateSerializer(data=request.data)
+        body.is_valid(raise_exception=True)
+        user = request.user
+
+        m
