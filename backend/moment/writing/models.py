@@ -11,7 +11,7 @@ class Hashtag(models.Model):
 
 
 class Story(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     emotion = models.CharField(
         max_length=100, choices=EMOTIONS_CHOICES, default="normal1"
@@ -28,17 +28,17 @@ class Story(models.Model):
 
 
 class MomentPair(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     moment = models.CharField(max_length=1000)
     reply = models.CharField(max_length=1000, blank=True)
-    story_id = models.ForeignKey(Story, null=True)
+    story = models.ForeignKey(Story, null=True)
 
     moment_created_at = models.DateTimeField()
     reply_created_at = models.DateTimeField()
 
 
 class Nudge(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     content = models.CharField(max_length=1000)
     is_completed = models.BooleanField(default=False)
