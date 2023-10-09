@@ -1,7 +1,7 @@
 from rest_framework import generics, status, permissions
-from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import User
 from .serializers import RegisterSerializer, LoginSerializer, UserDetailSerializer, UserUpdateSerializer
 
 
