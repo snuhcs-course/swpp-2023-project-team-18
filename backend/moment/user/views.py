@@ -60,4 +60,4 @@ class UserRetrieveUpdateView(generics.RetrieveUpdateAPIView):
         return UserUpdateSerializer
 
     def get_object(self):
-        return self.request.user
+        return User.objects.get(pk=self.request.user.id)
