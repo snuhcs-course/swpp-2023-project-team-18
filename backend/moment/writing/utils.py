@@ -82,6 +82,8 @@ def call_gpt(
 
 
 class MomentReplyThrottle(ScopedRateThrottle):
+    scope = "moment-reply"
+
     # Override
     def allow_request(self, request, view):
         # We can only determine the scope once we're called by the view.
@@ -107,7 +109,6 @@ class MomentReplyThrottle(ScopedRateThrottle):
 
         self.history = self.cache.get(self.key, [])
         self.now = self.timer()
-        print(self.history)
         # Drop any requests from the history which have now passed the
         # throttle duration
         while self.history and self._is_outdated(self.history[-1]):

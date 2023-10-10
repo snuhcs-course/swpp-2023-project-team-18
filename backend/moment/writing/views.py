@@ -3,7 +3,6 @@ from datetime import datetime
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework.decorators import throttle_classes
 
 from .models import MomentPair
 from .serializers import (
@@ -54,8 +53,12 @@ class MomentView(GenericAPIView):
             reply = call_gpt(body.data["moment"], timeout=5)  # TODO: 프롬프팅 처리 하기
         except GPTError:
             for throttle in self.get_throttles():
-                history = throttle.cache.get(throttle.key, [])
-                throttle.cache.set(throttle.key, history[1:], throttle.duration)
+                history = throttle.cache.get(throttle.get_cache_key(request, self), [])
+
+                throttle.cache.set(
+                    throttle.get_cache_key(request, self),
+                    history[1:],
+                )
             return Response(
                 data={"error": "GPT3 API call failed"},
                 status=500,
