@@ -15,11 +15,11 @@ from user.models import User
 from .utils import call_gpt, GPTError, MomentReplyThrottle
 
 
-# Create your views here.
 class MomentView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = MomentPairSerializer
 
+    # Override
     def get_throttles(self):
         if self.request.method.lower() == "post":
             self.throttle_scope = "moment-reply"
@@ -53,6 +53,8 @@ class MomentView(GenericAPIView):
         try:
             reply = call_gpt(body.data["moment"], timeout=5)  # TODO: 프롬프팅 처리 하기
         except GPTError:
+            for throttle in self.get_throttles():
+                throttle.history.pop(0)
             return Response(
                 data={"error": "GPT3 API call failed"},
                 status=500,
