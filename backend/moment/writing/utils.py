@@ -41,7 +41,7 @@ def timeout(func: Callable):
     return timeout_wrapper
 
 
-def call_gpt(
+def get_gpt_answer(
     prompt: str,
     timeout: float,
     wait: int = 10,
@@ -54,7 +54,7 @@ def call_gpt(
 
     for trial in range(max_trial):
         try:
-            _gpt_response(prompt, container, timeout=timeout)
+            _call_gpt(prompt, container, timeout=timeout)
 
         except TimeoutError:
             print("Time out")
@@ -63,6 +63,8 @@ def call_gpt(
             time.sleep(wait)
         except OpenAIError as e:
             print(f"OpenAI error: {e}")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
 
         if "answer" in container:
             return container["answer"]
@@ -71,13 +73,13 @@ def call_gpt(
 
 
 @timeout
-def _gpt_response(prompt: str, container: dict) -> None:
+def _call_gpt(prompt: str, container: dict) -> None:
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
     )
 
-    container["answer"] = completion.choices[0].message
+    container["answer"] = completion.choices[0].message.content
 
 
 class GPTError(Exception):

@@ -11,7 +11,7 @@ from .serializers import (
     MomentPairSerializer,
     MomentPairCreateSerializer,
 )
-from .utils import call_gpt, GPTError
+from .utils import get_gpt_answer, GPTError
 
 
 class MomentView(GenericAPIView):
@@ -43,7 +43,7 @@ class MomentView(GenericAPIView):
         user = User.objects.get(pk=request.user.id)
 
         try:
-            reply = call_gpt(body.data["moment"], timeout=5)  # TODO: 프롬프팅 처리 하기
+            reply = get_gpt_answer(body.data["moment"], timeout=5)  # TODO: 프롬프팅 처리 하기
         except GPTError:
             for throttle in self.get_throttles():
                 history = throttle.cache.get(throttle.get_cache_key(request, self), [])
