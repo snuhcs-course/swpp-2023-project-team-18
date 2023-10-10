@@ -1,9 +1,10 @@
-from rest_framework.serializers import ModelSerializer, Serializer
-from rest_framework.serializers import IntegerField
+from rest_framework import serializers
+
 from .models import MomentPair
+from .constants import MOMENT_MAX_LENGTH
 
 
-class MomentPairSerializer(ModelSerializer):
+class MomentPairSerializer(serializers.ModelSerializer):
     class Meta:
         model = MomentPair
         fields = ["id", "moment", "reply", "moment_created_at", "reply_created_at"]
@@ -15,6 +16,10 @@ class MomentPairSerializer(ModelSerializer):
         return res
 
 
-class MomentPairQuerySerializer(Serializer):
-    start = IntegerField()
-    end = IntegerField()
+class MomentPairQuerySerializer(serializers.Serializer):
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
+
+
+class MomentPairCreateSerializer(serializers.Serializer):
+    moment = serializers.CharField(max_length=MOMENT_MAX_LENGTH)
