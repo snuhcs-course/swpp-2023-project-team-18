@@ -35,3 +35,12 @@ def timeout(func: Callable):
 
     timeout_wrapper: func
     return timeout_wrapper
+
+
+def gpt_response(prompt: str):
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+    )
+
+    return completion.choices[0].message
