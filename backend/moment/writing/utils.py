@@ -1,7 +1,9 @@
 from typing import Callable
+import time
 import multiprocessing
 
 import openai
+from openai.error import OpenAIError, RateLimitError
 
 from .constants import OPENAI_API_KEY
 
@@ -37,10 +39,41 @@ def timeout(func: Callable):
     return timeout_wrapper
 
 
-def gpt_response(prompt: str):
+class GPTError(Exception):
+    ...
+
+
+@timeout
+def _gpt_response(prompt: str, container: dict) -> None:
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
     )
 
-    return completion.choices[0].message
+    container["answer"] = completion.choices[0].message
+
+
+def call_gpt(
+    prompt: str,
+    timeout: float,
+    wait: int = 10,
+    max_trial: int = 3,
+) -> str:
+    container = multiprocessing.Manager().dict()
+
+    for trial in range(max_trial):
+        try:
+            _gpt_response(prompt, container, timeout=timeout)
+
+        except TimeoutError:
+            print("Time out")
+        except RateLimitError:
+            print("Rate limit error")
+            time.sleep(wait)
+        except OpenAIError as e:
+            print(f"OpenAI error: {e}")
+
+        if "answer" in container:
+            return container["answer"]
+
+    raise GPTError(f"GPT call failed after {max_trial} trials")
