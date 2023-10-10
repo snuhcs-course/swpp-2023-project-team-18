@@ -1,6 +1,13 @@
 from typing import Callable
 import multiprocessing
 
+import openai
+
+from .constants import OPENAI_API_KEY
+
+
+openai.api_key = OPENAI_API_KEY
+
 
 def timeout(func: Callable):
     """

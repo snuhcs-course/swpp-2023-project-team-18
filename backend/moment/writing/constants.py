@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 
@@ -17,3 +18,6 @@ class Emotions(str, Enum):
     SAD2 = "sad2"
     ANGRY1 = "angry1"
     ANGRY2 = "angry2"
+
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
