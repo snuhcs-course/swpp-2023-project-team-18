@@ -49,9 +49,7 @@ class MomentView(GenericAPIView):
         self.gpt_agent.add_message(body.data["moment"])
 
         try:
-            reply = self.gpt_agent.get_answer(
-                body.data["moment"], timeout=5
-            )  # TODO: 프롬프팅 처리 하기
+            reply = self.gpt_agent.get_answer(timeout=5)  # TODO: 프롬프팅 처리 하기
         except GPTAgent.GPTError:
             for throttle in self.get_throttles():
                 history = throttle.cache.get(throttle.get_cache_key(request, self), [])
