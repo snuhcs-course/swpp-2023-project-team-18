@@ -141,7 +141,13 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication"
-    ]
+    ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "writing.utils.MomentReplyThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "moment-reply": "2/hour",
+    },
 }
 
 SIMPLE_JWT = {

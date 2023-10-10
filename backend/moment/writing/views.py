@@ -3,6 +3,7 @@ from datetime import datetime
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.decorators import throttle_classes
 
 from .models import MomentPair
 from .serializers import (
@@ -11,7 +12,7 @@ from .serializers import (
     MomentPairCreateSerializer,
 )
 from user.models import User
-from .utils import call_gpt, GPTError
+from .utils import call_gpt, GPTError, MomentReplyThrottle
 
 
 # Create your views here.
@@ -38,6 +39,7 @@ class MomentView(GenericAPIView):
             status=200,
         )
 
+    @throttle_classes([MomentReplyThrottle])
     def post(self, request):
         body = MomentPairCreateSerializer(data=request.data)
         body.is_valid(raise_exception=True)
