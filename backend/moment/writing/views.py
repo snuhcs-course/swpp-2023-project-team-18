@@ -54,7 +54,8 @@ class MomentView(GenericAPIView):
             reply = call_gpt(body.data["moment"], timeout=5)  # TODO: 프롬프팅 처리 하기
         except GPTError:
             for throttle in self.get_throttles():
-                throttle.history.pop(0)
+                history = throttle.cache.get(throttle.key, [])
+                throttle.cache.set(throttle.key, history[1:], throttle.duration)
             return Response(
                 data={"error": "GPT3 API call failed"},
                 status=500,
