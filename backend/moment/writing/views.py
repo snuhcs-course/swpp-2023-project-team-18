@@ -4,26 +4,19 @@ from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
+from user.models import User
 from .models import MomentPair
 from .serializers import (
     MomentPairQuerySerializer,
     MomentPairSerializer,
     MomentPairCreateSerializer,
 )
-from user.models import User
-from .utils import call_gpt, GPTError, MomentReplyThrottle
+from .utils import call_gpt, GPTError
 
 
 class MomentView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = MomentPairSerializer
-
-    # Override
-    def get_throttles(self):
-        if self.request.method.lower() == "post":
-            self.throttle_scope = "moment-reply"
-
-        return super(MomentView, self).get_throttles()
 
     def get(self, request):
         params = MomentPairQuerySerializer(data=request.query_params)
@@ -80,3 +73,10 @@ class MomentView(GenericAPIView):
             data={"moment": serializer.data},
             status=201,
         )
+
+    # Override
+    def get_throttles(self):
+        if self.request.method.lower() == "post":
+            self.throttle_scope = "moment-reply"
+
+        return super().get_throttles()

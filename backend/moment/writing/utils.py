@@ -41,26 +41,15 @@ def timeout(func: Callable):
     return timeout_wrapper
 
 
-class GPTError(Exception):
-    ...
-
-
-@timeout
-def _gpt_response(prompt: str, container: dict) -> None:
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-    )
-
-    container["answer"] = completion.choices[0].message
-
-
 def call_gpt(
     prompt: str,
     timeout: float,
     wait: int = 10,
     max_trial: int = 3,
 ) -> str:
+    """
+    Wrapper for GPT API call.
+    """
     container = multiprocessing.Manager().dict()
 
     for trial in range(max_trial):
@@ -79,6 +68,20 @@ def call_gpt(
             return container["answer"]
 
     raise GPTError(f"GPT call failed after {max_trial} trials")
+
+
+@timeout
+def _gpt_response(prompt: str, container: dict) -> None:
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+    )
+
+    container["answer"] = completion.choices[0].message
+
+
+class GPTError(Exception):
+    ...
 
 
 class MomentReplyThrottle(ScopedRateThrottle):
