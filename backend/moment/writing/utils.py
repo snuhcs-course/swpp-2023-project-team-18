@@ -116,14 +116,24 @@ class MomentReplyThrottle(ScopedRateThrottle):
             return self.throttle_failure()
         return self.throttle_success()
 
+    # Override
+    def wait(self) -> float:
+        now = time.time()
+        latest_hour = self._get_latest_hour(now)
+        delta = latest_hour + 3600 - now
+        return delta
+
     def _is_outdated(self, timestamp: float) -> bool:
         """
         현재 시각에서 분 이하 단위를 잘라서
         그보다 이전에 들어온 요청인지 검사
         """
-        converted = datetime.fromtimestamp(timestamp).replace(
-            minute=0, second=0, microsecond=0
-        )
+        latest_hour = self._get_latest_hour(timestamp)
+        return timestamp < latest_hour
 
-        hour = converted.timestamp()
-        return timestamp < hour
+    def _get_latest_hour(self, timestamp: float) -> float:
+        return (
+            datetime.fromtimestamp(timestamp)
+            .replace(minute=0, second=0, microsecond=0)
+            .timestamp()
+        )

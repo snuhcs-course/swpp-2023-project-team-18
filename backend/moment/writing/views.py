@@ -50,8 +50,6 @@ class MomentView(GenericAPIView):
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
-        # TODO: openai api 써서 reply 받아오기
-        #   만약 실패하면 그냥 빈 문자열로 저장하나? 아니면 moment 저장 자체를 취소하나?
         try:
             reply = call_gpt(body.data["moment"], timeout=5)  # TODO: 프롬프팅 처리 하기
         except GPTError:
