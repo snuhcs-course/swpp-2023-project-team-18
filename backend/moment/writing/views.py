@@ -11,12 +11,16 @@ from .serializers import (
     MomentPairSerializer,
     MomentPairCreateSerializer,
 )
-from .utils import get_gpt_answer, GPTError
+from .utils import GPTAgent
 
 
 class MomentView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = MomentPairSerializer
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.gpt_agent = GPTAgent()
 
     def get(self, request):
         params = MomentPairQuerySerializer(data=request.query_params)
@@ -42,9 +46,13 @@ class MomentView(GenericAPIView):
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
+        self.gpt_agent.add_message(body.data["moment"])
+
         try:
-            reply = get_gpt_answer(body.data["moment"], timeout=5)  # TODO: 프롬프팅 처리 하기
-        except GPTError:
+            reply = self.gpt_agent.get_answer(
+                body.data["moment"], timeout=5
+            )  # TODO: 프롬프팅 처리 하기
+        except GPTAgent.GPTError:
             for throttle in self.get_throttles():
                 history = throttle.cache.get(throttle.get_cache_key(request, self), [])
 

@@ -41,49 +41,55 @@ def timeout(func: Callable):
     return timeout_wrapper
 
 
-def get_gpt_answer(
-    prompt: str,
-    timeout: float,
-    wait: int = 10,
-    max_trial: int = 3,
-) -> str:
-    """
-    Wrapper for GPT API call.
-    """
-    container = multiprocessing.Manager().dict()
+class GPTAgent:
+    def __init__(self, model: str = "gpt-3.5-turbo"):
+        self.model = model
+        self._messages = []
 
-    for trial in range(max_trial):
-        try:
-            _call_gpt(prompt, container, timeout=timeout)
+    def add_message(self, content: str, role: str = "user"):
+        self._messages.append({"role": role, "content": content})
 
-        except TimeoutError:
-            print("Time out")
-        except RateLimitError:
-            print("Rate limit error")
-            time.sleep(wait)
-        except OpenAIError as e:
-            print(f"OpenAI error: {e}")
-        except Exception as e:
-            print(f"Unexpected error: {e}")
+    def reset_messages(self):
+        self._messages = []
 
-        if "answer" in container:
-            return container["answer"]
+    def get_answer(self, timeout: float, wait: int = 10, max_trial: int = 3) -> str:
+        """
+        Wrapper for GPT API call.
+        """
+        container = multiprocessing.Manager().dict()
 
-    raise GPTError(f"GPT call failed after {max_trial} trials")
+        for trial in range(max_trial):
+            try:
+                self._call(container, timeout=timeout)
 
+            except TimeoutError:
+                print("Time out")
+            except RateLimitError:
+                print("Rate limit error")
+                time.sleep(wait)
+            except OpenAIError as e:
+                print(f"OpenAI error: {e}")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
 
-@timeout
-def _call_gpt(prompt: str, container: dict) -> None:
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-    )
+            if "answer" in container:
+                return container["answer"]
 
-    container["answer"] = completion.choices[0].message.content
+        raise GPTAgent.GPTError(f"GPT call failed after {max_trial} trials")
 
+    @timeout
+    def _call(self, container: dict):
+        messages = self._messages
+        self.reset_messages()
+        completion = openai.ChatCompletion.create(
+            model=self.model,
+            messages=messages,
+        )
 
-class GPTError(Exception):
-    ...
+        container["answer"] = completion.choices[0].message.content
+
+    class GPTError(Exception):
+        ...
 
 
 class MomentReplyThrottle(ScopedRateThrottle):
