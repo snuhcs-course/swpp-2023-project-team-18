@@ -9,8 +9,8 @@ from openai.error import OpenAIError, RateLimitError
 
 from .constants import OPENAI_API_KEY
 
-
 openai.api_key = OPENAI_API_KEY
+multiprocessing.set_start_method("fork")
 
 
 def timeout(func: Callable):
@@ -107,7 +107,7 @@ class MomentReplyThrottle(ScopedRateThrottle):
 
         self.history = self.cache.get(self.key, [])
         self.now = self.timer()
-
+        print(self.history)
         # Drop any requests from the history which have now passed the
         # throttle duration
         while self.history and self._is_outdated(self.history[-1]):
@@ -116,15 +116,14 @@ class MomentReplyThrottle(ScopedRateThrottle):
             return self.throttle_failure()
         return self.throttle_success()
 
-    def _is_outdated(timestamp: float) -> bool:
+    def _is_outdated(self, timestamp: float) -> bool:
         """
         현재 시각에서 분 이하 단위를 잘라서
         그보다 이전에 들어온 요청인지 검사
         """
-        converted = datetime.fromtimestamp(timestamp)
-        converted.minute = 0
-        converted.second = 0
-        converted.microsecond = 0
+        converted = datetime.fromtimestamp(timestamp).replace(
+            minute=0, second=0, microsecond=0
+        )
 
         hour = converted.timestamp()
         return timestamp < hour

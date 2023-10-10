@@ -20,6 +20,12 @@ class MomentView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = MomentPairSerializer
 
+    def get_throttles(self):
+        if self.request.method.lower() == "post":
+            self.throttle_scope = "moment-reply"
+
+        return super(MomentView, self).get_throttles()
+
     def get(self, request):
         params = MomentPairQuerySerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
@@ -39,7 +45,6 @@ class MomentView(GenericAPIView):
             status=200,
         )
 
-    @throttle_classes([MomentReplyThrottle])
     def post(self, request):
         body = MomentPairCreateSerializer(data=request.data)
         body.is_valid(raise_exception=True)
