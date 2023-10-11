@@ -11,7 +11,7 @@ from .serializers import (
     MomentPairSerializer,
     MomentPairCreateSerializer,
 )
-from .utils import GPTAgent
+from .utils.gpt import GPTAgent
 
 
 class MomentView(GenericAPIView):
