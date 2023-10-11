@@ -139,7 +139,8 @@ class MomentReplyThrottle(ScopedRateThrottle):
         현재 시각에서 분 이하 단위를 잘라서
         그보다 이전에 들어온 요청인지 검사
         """
-        latest_hour = self._get_latest_hour(timestamp)
+        now = time.time()
+        latest_hour = self._get_latest_hour(now)
         return timestamp < latest_hour
 
     def _get_latest_hour(self, timestamp: float) -> float:
