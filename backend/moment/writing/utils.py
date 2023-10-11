@@ -80,7 +80,6 @@ class GPTAgent:
     @timeout
     def _call(self, container: dict):
         messages = self._messages
-        self.reset_messages()
         completion = openai.ChatCompletion.create(
             model=self.model,
             messages=messages,
