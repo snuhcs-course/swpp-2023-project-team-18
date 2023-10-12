@@ -589,3 +589,4 @@ obj/
 
 # Prompt evaluation data
 **/data/*.jsonl
+**/results/

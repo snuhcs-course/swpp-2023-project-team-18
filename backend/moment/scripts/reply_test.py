@@ -1,7 +1,7 @@
 from tqdm import tqdm
 import openai
 
-from writing.data.jsonl import load_jsonl, save_jsonl
+from writing.data.jsonl import load_jsonl, save_jsonl, fpprint
 from writing.utils.gpt import GPTAgent
 from writing.utils.prompt import ExamplePromptTemplate
 
@@ -9,7 +9,9 @@ from writing.utils.prompt import ExamplePromptTemplate
 openai.api_key = ""  # FIXME: API key here
 
 DATA_PATH = "writing/data/reply_test.jsonl"
-OUTPUT_PATH = "writing/data/reply_test_result.jsonl"
+TEST_NAME = "reply1"
+OUTPUT_JSONL_PATH = f"results/{TEST_NAME}.jsonl"
+OUTPUT_TXT_PATH = f"results/{TEST_NAME}.txt"
 
 agent = GPTAgent()
 results = []
@@ -29,7 +31,8 @@ def run():
 
 
 def save():
-    save_jsonl(OUTPUT_PATH, results)
+    save_jsonl(OUTPUT_JSONL_PATH, results)
+    fpprint(OUTPUT_TXT_PATH, results)
 
 
 def main():
