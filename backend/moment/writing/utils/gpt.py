@@ -6,6 +6,7 @@ import openai
 from openai.error import OpenAIError, RateLimitError
 
 from writing.constants import OPENAI_API_KEY
+from writing.utils.log import log
 
 openai.api_key = OPENAI_API_KEY
 multiprocessing.set_start_method("fork")
@@ -67,18 +68,23 @@ class GPTAgent:
                 self._call(container, timeout=timeout, temperature=temperature)
 
             except TimeoutError:
-                print("Time out")
+                log("GPT API timeout", tag="fail", place="GPTAgent.get_answer")
             except RateLimitError:
-                print("Rate limit error")
+                log(
+                    f"GPT API rate limit exceeded; Waiting {rate_limit_wait} seconds",
+                    tag="fail",
+                    place="GPTAgent.get_answer",
+                )
                 time.sleep(rate_limit_wait)
             except OpenAIError as e:
-                print(f"OpenAI error: {e}")
+                log(f"OpenAIError: {e}", tag="fail", place="GPTAgent.get_answer")
             except Exception as e:
-                print(f"Unexpected error: {e}")
+                log(f"Unexpected Error: {e}", tag="fail", place="GPTAgent.get_answer")
 
             if "answer" in container:
                 return container["answer"]
 
+        log(f"GPT API max trial reached", tag="error", place="GPTAgent.get_answer")
         raise GPTAgent.GPTError(f"GPT call failed after {max_trial} trials")
 
     @timeout

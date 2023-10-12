@@ -12,6 +12,7 @@ from .serializers import (
     MomentPairCreateSerializer,
 )
 from .utils.gpt import GPTAgent
+from .utils.log import log
 
 
 class MomentView(GenericAPIView):
@@ -36,6 +37,11 @@ class MomentView(GenericAPIView):
         )
         serializer = self.get_serializer(moment_pairs, many=True)
 
+        log(
+            f"Successfully queried moments (length: {len(serializer.data)})",
+            place="MomentView.get",
+        )
+
         return Response(
             data={"moments": serializer.data},
             status=200,
@@ -51,7 +57,11 @@ class MomentView(GenericAPIView):
 
         try:
             reply = self.gpt_agent.get_answer(timeout=5)  # TODO: 프롬프팅 처리 하기
+
         except GPTAgent.GPTError:
+            log(f"Error while calling GPT API", tag="error", place="MomentView.post")
+
+            # Failure does not affect the user's quota
             for throttle in self.get_throttles():
                 history = throttle.cache.get(throttle.get_cache_key(request, self), [])
 
@@ -59,8 +69,9 @@ class MomentView(GenericAPIView):
                     throttle.get_cache_key(request, self),
                     history[1:],
                 )
+
             return Response(
-                data={"error": "GPT3 API call failed"},
+                data={"error": "GPT API call failed"},
                 status=500,
             )
 
@@ -73,6 +84,8 @@ class MomentView(GenericAPIView):
             reply_created_at=datetime.now(),
         )
         moment_pair.save()
+
+        log(f"Successfully created moment", place="MomentView.post")
 
         serializer = self.get_serializer(moment_pair)
 
