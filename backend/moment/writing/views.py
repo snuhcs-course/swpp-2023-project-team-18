@@ -3,6 +3,7 @@ from datetime import datetime
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.request import Request
 
 from user.models import User
 from .models import MomentPair
@@ -23,7 +24,7 @@ class MomentView(GenericAPIView):
         super().__init__(**kwargs)
         self.gpt_agent = GPTAgent()
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         params = MomentPairQuerySerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
@@ -47,7 +48,7 @@ class MomentView(GenericAPIView):
             status=200,
         )
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         body = MomentPairCreateSerializer(data=request.data)
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)

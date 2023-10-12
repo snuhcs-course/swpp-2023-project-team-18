@@ -1,6 +1,6 @@
 import multiprocessing
 import time
-from typing import Callable
+from typing import Callable, Optional
 
 import openai
 from openai.error import OpenAIError, RateLimitError
@@ -53,13 +53,14 @@ class GPTAgent:
 
     def get_answer(
         self,
-        timeout: float,
+        timeout: Optional[float],
         temperature: float = 1.0,
         rate_limit_wait: int = 10,
         max_trial: int = 3,
     ) -> str:
         """
         Wrapper for GPT API call.
+        Set `timeout=None` to disable timeout.
         """
         container = multiprocessing.Manager().dict()
 

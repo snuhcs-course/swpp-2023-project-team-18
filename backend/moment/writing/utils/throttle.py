@@ -8,7 +8,7 @@ class MomentReplyThrottle(ScopedRateThrottle):
     scope = "moment-reply"
 
     # Override
-    def allow_request(self, request, view):
+    def allow_request(self, request, view) -> bool:
         # We can only determine the scope once we're called by the view.
         self.scope = getattr(view, self.scope_attr, None)
 
