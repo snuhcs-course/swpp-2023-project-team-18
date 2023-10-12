@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from tqdm import tqdm
 import openai
 
@@ -16,6 +18,8 @@ OUTPUT_TXT_PATH = f"results/{TEST_NAME}.txt"
 agent = GPTAgent()
 results = []
 
+DUPLICATES = 2
+
 
 def run():
     dataset = load_jsonl(DATA_PATH)
@@ -25,14 +29,22 @@ def run():
         agent.reset_messages()
         agent.add_message(prompt)
 
-        reply = agent.get_answer(timeout=10)
-        entry["reply"] = reply
-        results.append(entry)
+        try:
+            for _ in range(DUPLICATES):
+                reply = agent.get_answer(timeout=20, max_trial=10)
+                print(reply)
+
+                entry_copy = deepcopy(entry)
+                entry_copy["reply"] = reply
+                results.append(entry_copy)
+
+        except GPTAgent.GPTError:
+            print("GPT call failed")
 
 
 def save():
     save_jsonl(OUTPUT_JSONL_PATH, results)
-    fpprint(OUTPUT_TXT_PATH, results)
+    fpprint(OUTPUT_TXT_PATH, results, width=50, iterate=True)
 
 
 def main():

@@ -22,9 +22,18 @@ def save_jsonl(path: str, data: list[dict[str, Any]]):
             f.write(json.dumps(line, ensure_ascii=False) + "\n")
 
 
-def fpprint(path: str, obj: Any):
+def fpprint(
+    path: str,
+    obj: Any,
+    width: int = 80,
+    iterate: bool = False,
+):
     """
     Pretty print an object to a file.
     """
     with open(path, "w") as f:
-        f.write(pformat(obj) + "\n")
+        if iterate:
+            for line in obj:
+                f.write(pformat(line, width=width) + "\n\n")
+        else:
+            f.write(pformat(obj) + "\n")
