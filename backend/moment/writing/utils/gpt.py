@@ -50,7 +50,13 @@ class GPTAgent:
     def reset_messages(self):
         self._messages = []
 
-    def get_answer(self, timeout: float, wait: int = 10, max_trial: int = 3) -> str:
+    def get_answer(
+        self,
+        timeout: float,
+        temperature: float = 1.0,
+        rate_limit_wait: int = 10,
+        max_trial: int = 3,
+    ) -> str:
         """
         Wrapper for GPT API call.
         """
@@ -58,13 +64,13 @@ class GPTAgent:
 
         for trial in range(max_trial):
             try:
-                self._call(container, timeout=timeout)
+                self._call(container, timeout=timeout, temperature=temperature)
 
             except TimeoutError:
                 print("Time out")
             except RateLimitError:
                 print("Rate limit error")
-                time.sleep(wait)
+                time.sleep(rate_limit_wait)
             except OpenAIError as e:
                 print(f"OpenAI error: {e}")
             except Exception as e:
@@ -76,11 +82,12 @@ class GPTAgent:
         raise GPTAgent.GPTError(f"GPT call failed after {max_trial} trials")
 
     @timeout
-    def _call(self, container: dict):
+    def _call(self, container: dict, **kwargs):
         messages = self._messages
         completion = openai.ChatCompletion.create(
             model=self.model,
             messages=messages,
+            **kwargs,
         )
 
         container["answer"] = completion.choices[0].message.content
