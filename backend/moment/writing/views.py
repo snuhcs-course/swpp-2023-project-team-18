@@ -46,6 +46,7 @@ class MomentView(GenericAPIView):
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
+        self.gpt_agent.reset_messages()
         self.gpt_agent.add_message(body.data["moment"])
 
         try:
