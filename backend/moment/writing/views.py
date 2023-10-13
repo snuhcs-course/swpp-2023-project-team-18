@@ -36,7 +36,7 @@ class MomentView(GenericAPIView):
         moment_pairs = MomentPair.objects.filter(
             moment_created_at__range=(start_date, end_date),
             user=user,
-        )
+        ).order_by("moment_created_at")
         serializer = self.get_serializer(moment_pairs, many=True)
 
         log(
