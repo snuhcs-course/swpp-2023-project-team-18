@@ -14,6 +14,7 @@ from .serializers import (
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
+from .utils.prompt import MomentReplyTemplate
 
 
 class MomentView(GenericAPIView):
@@ -54,10 +55,13 @@ class MomentView(GenericAPIView):
         user = User.objects.get(pk=request.user.id)
 
         self.gpt_agent.reset_messages()
-        self.gpt_agent.add_message(body.data["moment"])
+        prompt = MomentReplyTemplate.get_prompt(moment=body.data["moment"])
+        self.gpt_agent.add_message(prompt)
 
         try:
-            reply = self.gpt_agent.get_answer(timeout=5)  # TODO: 프롬프팅 처리 하기
+            reply = self.gpt_agent.get_answer(
+                timeout=10, max_trial=2
+            )  # TODO: 테스트 해보고 시간 파라미터 조절하기
 
         except GPTAgent.GPTError:
             log(f"Error while calling GPT API", tag="error", place="MomentView.post")
