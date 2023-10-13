@@ -5,7 +5,7 @@ import openai
 
 from writing.data.jsonl import load_jsonl, save_jsonl, fpprint
 from writing.utils.gpt import GPTAgent
-from writing.utils.prompt import ExamplePromptTemplate
+from writing.utils.prompt import MomentReplyTemplate
 
 
 openai.api_key = ""  # FIXME: API key here
@@ -24,8 +24,10 @@ DUPLICATES = 2
 def run():
     dataset = load_jsonl(DATA_PATH)
 
-    for entry in tqdm(dataset[:4]):
-        prompt = ExamplePromptTemplate.get_prompt(moment=entry["moment"])
+    for entry in tqdm(dataset):
+        prompt = MomentReplyTemplate.get_prompt(moment=entry["moment"])
+        print(prompt)
+
         agent.reset_messages()
         agent.add_message(prompt)
 
