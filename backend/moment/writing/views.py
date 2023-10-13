@@ -60,7 +60,7 @@ class MomentView(GenericAPIView):
 
         try:
             reply = self.gpt_agent.get_answer(
-                timeout=10, max_trial=2
+                timeout=15, max_trial=2
             )  # TODO: 테스트 해보고 시간 파라미터 조절하기
 
         except GPTAgent.GPTError:
