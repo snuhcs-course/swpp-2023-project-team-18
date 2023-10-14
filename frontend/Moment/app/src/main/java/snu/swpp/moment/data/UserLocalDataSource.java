@@ -41,10 +41,26 @@ public class UserLocalDataSource {
         // #TODO : createdAt, username은 오는데 저장은 따로 아직 안했음 (굳이?)
     }
 
+    public void saveToken(String token) {
+        editor.putString("access_token", token);
+        editor.apply();
+    }
+
     public Token getToken(){
         String accessToken = sharedPreferences.getString("access_token", DEFAULT_TOKEN);
         String refreshToken = sharedPreferences.getString("refresh_token", DEFAULT_TOKEN);
         return new Token(accessToken, refreshToken);
     }
 
+    public boolean hasToken() {
+        return sharedPreferences.contains("access_token") && sharedPreferences.contains("refresh_token");
+    }
+
+    public void logout() {
+        editor.remove("nickname");
+        editor.remove("access_token");
+        editor.remove("refresh_token");
+        editor.apply();
+        System.out.println("#DEBUG: " + getToken().getAccessToken());
+    }
 }

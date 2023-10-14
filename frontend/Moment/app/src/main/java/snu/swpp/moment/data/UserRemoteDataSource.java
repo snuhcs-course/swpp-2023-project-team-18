@@ -7,6 +7,10 @@ package snu.swpp.moment.data;
         import snu.swpp.moment.api.LoginResponse;
         import snu.swpp.moment.api.RetrofitClient;
         import snu.swpp.moment.api.ServiceApi;
+        import snu.swpp.moment.api.TokenRefreshRequest;
+        import snu.swpp.moment.api.TokenRefreshResponse;
+        import snu.swpp.moment.api.TokenVerifyRequest;
+        import snu.swpp.moment.api.TokenVerifyResponse;
         import snu.swpp.moment.data.model.LoggedInUser;
 
 /**
@@ -29,17 +33,17 @@ public class UserRemoteDataSource {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.code() == 400){
-                    loginCallBack.onFailure(response.message());
+                    loginCallBack.onLoginFailure(response.message());
                 }
                 else{
                     System.out.println("#Debug Login OnResponse ");
                     LoginResponse result = response.body();
-                    loginCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
+                    loginCallBack.onLoginSuccess(new LoggedInUser(result.getUser(), result.getToken()));
                 }
             }
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                loginCallBack.onFailure("NO INTERNET");
+                loginCallBack.onLoginFailure("NO INTERNET");
                 System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
             }
         });
@@ -53,6 +57,50 @@ public class UserRemoteDataSource {
             //return new Result.Error(new Exception("ddd"));
         }
         */
+    }
+
+    public void isTokenValid(String token, TokenCallBack callBack) {
+        service = RetrofitClient.getClient().create(ServiceApi.class);
+        //System.out.println("#Debug LoginRequest");
+        TokenVerifyRequest request = new TokenVerifyRequest(token);
+        service.tokenVerify(request).enqueue(new Callback<TokenVerifyResponse>() {
+            @Override
+            public void onResponse(Call<TokenVerifyResponse> call, Response<TokenVerifyResponse> response) {
+                if(response.code() == 401){
+                    callBack.onFailure();
+                }
+                else{
+                    System.out.println("#Debug Login OnResponse ");
+                    callBack.onSuccess();
+                }
+            }
+            @Override
+            public void onFailure(Call<TokenVerifyResponse> call, Throwable t) {
+                callBack.onFailure();
+                System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
+            }
+        });
+    }
+
+    public void refresh(String token, RefreshCallBack callBack) {
+        service = RetrofitClient.getClient().create(ServiceApi.class);
+        TokenRefreshRequest request = new TokenRefreshRequest(token);
+        service.tokenRefresh(request).enqueue(new Callback<TokenRefreshResponse>() {
+            @Override
+            public void onResponse(Call<TokenRefreshResponse> call, Response<TokenRefreshResponse> response) {
+                if (response.code() == 401) {
+                    callBack.onFailure();
+                } else {
+                    String access = response.body().getAccess();
+                    callBack.onSuccess(access);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TokenRefreshResponse> call, Throwable t) {
+
+            }
+        });
     }
 
 

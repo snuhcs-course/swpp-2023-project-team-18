@@ -6,4 +6,10 @@ public interface ServiceApi {
     @POST("/api/user/login")
     Call<LoginResponse> userLogin(@Body LoginRequest data);
 
+    @POST("/api/user/token/verify")
+    Call<TokenVerifyResponse> tokenVerify(@Body TokenVerifyRequest data);
+
+    @POST("api/user/token/refresh")
+    Call<TokenRefreshResponse> tokenRefresh(@Body TokenRefreshRequest data);
+
 }

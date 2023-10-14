@@ -5,8 +5,8 @@ import android.content.Context;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import snu.swpp.moment.api.LoginResponse;
 import snu.swpp.moment.data.model.LoggedInUser;
+import snu.swpp.moment.data.model.Token;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -37,12 +37,48 @@ public class AuthenticationRepository {
     }
 
     public boolean isLoggedIn() {
-        return user != null;
+        return localDataSource.hasToken();
+    }
+
+    public void isTokenValid(TokenCallBack callBack) {
+        Token token = localDataSource.getToken();
+        remoteDataSource.isTokenValid(token.getAccessToken(), new TokenCallBack() {
+
+            @Override
+            public void onSuccess() {
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure() {
+                remoteDataSource.isTokenValid(token.getRefreshToken(), new TokenCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        remoteDataSource.refresh(token.getRefreshToken(), new RefreshCallBack() {
+                            @Override
+                            public void onSuccess(String access) {
+                                localDataSource.saveToken(access);
+                                callBack.onSuccess();
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                callBack.onFailure();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        callBack.onFailure();
+                    }
+                });
+            }
+        });
     }
 
     public void logout() {
-        user = null;
-        remoteDataSource.logout();
+        localDataSource.logout();
     }
 
     private void setLoggedInUser(LoggedInUser user) {
@@ -59,14 +95,14 @@ public class AuthenticationRepository {
         // handle login
         remoteDataSource.login(username, password, new AuthenticationCallBack() {
             @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
+            public void onLoginSuccess(LoggedInUser loggedInUser) {
                 setLoggedInUser(loggedInUser);
                 System.out.println("#DEBUG Login Success");
-                loginCallBack.onSuccess(loggedInUser);
+                loginCallBack.onLoginSuccess(loggedInUser);
             }
             @Override
-            public void onFailure(String errorMessage) {
-                loginCallBack.onFailure(errorMessage);
+            public void onLoginFailure(String errorMessage) {
+                loginCallBack.onLoginFailure(errorMessage);
             }
         });
     }
