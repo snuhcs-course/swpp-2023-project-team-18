@@ -584,9 +584,6 @@ obj/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,java,kotlin,android,androidstudio,pycharm,visualstudiocode
 
-# VSCODE IDE setting
-.vscode/
-
 # Prompt evaluation data
 **/data/*.jsonl
 **/results/
