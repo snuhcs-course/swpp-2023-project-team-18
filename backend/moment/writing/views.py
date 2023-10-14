@@ -3,6 +3,7 @@ from datetime import datetime
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.request import Request
 
 from user.models import User
 from .models import MomentPair
@@ -11,7 +12,9 @@ from .serializers import (
     MomentPairSerializer,
     MomentPairCreateSerializer,
 )
-from .utils import GPTAgent
+from .utils.gpt import GPTAgent
+from .utils.log import log
+from .utils.prompt import MomentReplyTemplate
 
 
 class MomentView(GenericAPIView):
@@ -22,7 +25,7 @@ class MomentView(GenericAPIView):
         super().__init__(**kwargs)
         self.gpt_agent = GPTAgent()
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         params = MomentPairQuerySerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
@@ -33,25 +36,37 @@ class MomentView(GenericAPIView):
         moment_pairs = MomentPair.objects.filter(
             moment_created_at__range=(start_date, end_date),
             user=user,
-        )
+        ).order_by("moment_created_at")
         serializer = self.get_serializer(moment_pairs, many=True)
+
+        log(
+            f"Successfully queried moments (length: {len(serializer.data)})",
+            place="MomentView.get",
+        )
 
         return Response(
             data={"moments": serializer.data},
             status=200,
         )
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         body = MomentPairCreateSerializer(data=request.data)
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
         self.gpt_agent.reset_messages()
-        self.gpt_agent.add_message(body.data["moment"])
+        prompt = MomentReplyTemplate.get_prompt(moment=body.data["moment"])
+        self.gpt_agent.add_message(prompt)
 
         try:
-            reply = self.gpt_agent.get_answer(timeout=5)  # TODO: 프롬프팅 처리 하기
+            reply = self.gpt_agent.get_answer(
+                timeout=15, max_trial=2
+            )  # TODO: 테스트 해보고 시간 파라미터 조절하기
+
         except GPTAgent.GPTError:
+            log(f"Error while calling GPT API", tag="error", place="MomentView.post")
+
+            # Failure does not affect the user's quota
             for throttle in self.get_throttles():
                 history = throttle.cache.get(throttle.get_cache_key(request, self), [])
 
@@ -59,8 +74,9 @@ class MomentView(GenericAPIView):
                     throttle.get_cache_key(request, self),
                     history[1:],
                 )
+
             return Response(
-                data={"error": "GPT3 API call failed"},
+                data={"error": "GPT API call failed"},
                 status=500,
             )
 
@@ -73,6 +89,8 @@ class MomentView(GenericAPIView):
             reply_created_at=datetime.now(),
         )
         moment_pair.save()
+
+        log(f"Successfully created moment", place="MomentView.post")
 
         serializer = self.get_serializer(moment_pair)
 

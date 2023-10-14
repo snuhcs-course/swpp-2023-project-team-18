@@ -143,7 +143,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication"
     ],
     "DEFAULT_THROTTLE_CLASSES": [
-        "writing.utils.MomentReplyThrottle",
+        "writing.utils.throttle.MomentReplyThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "moment-reply": "2/hour",

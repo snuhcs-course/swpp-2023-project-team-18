@@ -586,3 +586,7 @@ obj/
 
 # VSCODE IDE setting
 .vscode/
+
+# Prompt evaluation data
+**/data/*.jsonl
+**/results/
