@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
+import android.widget.Toast;
 
-import snu.swpp.moment.data.AuthenticationCallBack;
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.LoginRepository;
+import snu.swpp.moment.data.Result;
 import snu.swpp.moment.data.model.LoggedInUser;
 import snu.swpp.moment.R;
 
@@ -15,9 +16,9 @@ public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private AuthenticationRepository loginRepository;
+    private LoginRepository loginRepository;
 
-    LoginViewModel(AuthenticationRepository loginRepository) {
+    LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
 
@@ -32,18 +33,14 @@ public class LoginViewModel extends ViewModel {
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
         System.out.println("#Debug from ViewModel || username : " + username + "password : " + password);
-        loginRepository.login(username, password, new AuthenticationCallBack(){
-            @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
-                System.out.println("#Debug from ViewModel HIHIHIHIHIHIHIHI");
-                loginResult.setValue(new LoginResult(new LoggedInUserView(loggedInUser.getNickName())));
-            }
+        Result<LoggedInUser> result = loginRepository.login(username, password);
 
-            @Override
-            public void onFailure(String errorMessage) {
-                loginResult.setValue(new LoginResult(R.string.login_failed));
-            }
-        });
+        if (result instanceof Result.Success) {
+            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            //loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        } else {
+            loginResult.setValue(new LoginResult(R.string.login_failed));
+        }
     }
 
     public void loginDataChanged(String username, String password) {

@@ -43,20 +43,14 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public void login(String username, String password, LoginCallBack loginCallBack) {
-        //System.out.println("#Debug from LoginRepository || username : " + username + "password : " + password);
+    public Result<LoggedInUser> login(String username, String password) {
+        System.out.println("#Debug from LoginRepository || username : " + username + "password : " + password);
         // handle login
-        dataSource.login(username, password, new LoginCallBack() {
-            @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
-                setLoggedInUser(loggedInUser);
-                System.out.println("#DEBUG #### Success");
-                loginCallBack.onSuccess(loggedInUser);
-            }
-            @Override
-            public void onFailure(String errorMessage) {
-                loginCallBack.onFailure(errorMessage);
-            }
-        });
+
+        Result<LoggedInUser> result = dataSource.login(username, password);
+        if (result instanceof Result.Success) {
+            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+        }
+        return result;
     }
 }

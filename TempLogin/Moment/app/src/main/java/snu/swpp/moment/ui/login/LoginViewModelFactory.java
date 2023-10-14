@@ -1,40 +1,24 @@
 package snu.swpp.moment.ui.login;
 
-import android.content.Context;
-
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
-import snu.swpp.moment.data.UserRemoteDataSource;
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.LoginDataSource;
+import snu.swpp.moment.data.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
-    private Context context;
-    public LoginViewModelFactory(Context context){
-        this.context = context;
-    }
-
 
     @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
-            try {
-                return (T) new LoginViewModel(AuthenticationRepository.getInstance(context));
-            } catch (GeneralSecurityException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            return (T) new LoginViewModel(LoginRepository.getInstance(new LoginDataSource()));
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

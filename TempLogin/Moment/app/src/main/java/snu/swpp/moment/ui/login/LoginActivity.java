@@ -5,8 +5,6 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Service;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -25,9 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import snu.swpp.moment.R;
-import snu.swpp.moment.TestPage;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.ui.login.LoginViewModel;
 import snu.swpp.moment.ui.login.LoginViewModelFactory;
 import snu.swpp.moment.databinding.ActivityLoginBinding;
@@ -37,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        try{
-            loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(getApplicationContext()))
-                    .get(LoginViewModel.class);
-        }catch (Exception e){
-            Toast.makeText(this, "보안용 파일을 만드는데 실패하였습니다. 개발자에게 연락하세요.", Toast.LENGTH_SHORT).show();
-        }
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+                .get(LoginViewModel.class);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -83,16 +75,12 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    System.out.println("#DEBUG : ACTIVITY HIHIHII");
                     updateUiWithUser(loginResult.getSuccess());
-                    Intent testLoginSuccess = new Intent(LoginActivity.this, TestPage.class);
-                    startActivity(testLoginSuccess);
-
                 }
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
-                //finish();
+                finish();
             }
         });
 
@@ -116,9 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                /*
-                 * Login
-                 */
+
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -136,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
                 //loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-
             }
         });
     }
