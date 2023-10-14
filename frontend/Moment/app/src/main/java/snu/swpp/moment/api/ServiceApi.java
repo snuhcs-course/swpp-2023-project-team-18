@@ -12,4 +12,6 @@ public interface ServiceApi {
     @POST("api/user/token/refresh")
     Call<TokenRefreshResponse> tokenRefresh(@Body TokenRefreshRequest data);
 
+    @POST("api/user/register")
+    Call<RegisterResponse> userRegister(@Body RegisterRequest data);
 }

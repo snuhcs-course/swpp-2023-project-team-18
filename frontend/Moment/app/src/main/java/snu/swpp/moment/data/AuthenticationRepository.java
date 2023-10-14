@@ -95,14 +95,33 @@ public class AuthenticationRepository {
         // handle login
         remoteDataSource.login(username, password, new AuthenticationCallBack() {
             @Override
-            public void onLoginSuccess(LoggedInUser loggedInUser) {
+            public void onSuccess(LoggedInUser loggedInUser) {
                 setLoggedInUser(loggedInUser);
                 System.out.println("#DEBUG Login Success");
-                loginCallBack.onLoginSuccess(loggedInUser);
+                loginCallBack.onSuccess(loggedInUser);
             }
             @Override
-            public void onLoginFailure(String errorMessage) {
-                loginCallBack.onLoginFailure(errorMessage);
+            public void onFailure(String errorMessage) {
+                loginCallBack.onFailure(errorMessage);
+            }
+        });
+    }
+
+
+
+    public void register(String username, String password, String nickname, AuthenticationCallBack registerCallBack) {
+        //System.out.println("#Debug from LoginRepository || username : " + username + "password : " + password);
+        // handle login
+        remoteDataSource.register(username, password, nickname, new AuthenticationCallBack() {
+            @Override
+            public void onSuccess(LoggedInUser loggedInUser) {
+                setLoggedInUser(loggedInUser);
+                System.out.println("#DEBUG Login Success");
+                registerCallBack.onSuccess(loggedInUser);
+            }
+            @Override
+            public void onFailure(String errorMessage) {
+                registerCallBack.onFailure(errorMessage);
             }
         });
     }

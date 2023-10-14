@@ -1,6 +1,7 @@
 package snu.swpp.moment.data.model;
 
 import snu.swpp.moment.api.LoginResponse;
+import snu.swpp.moment.api.RegisterResponse;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
@@ -12,6 +13,13 @@ public class LoggedInUser {
     private String createAt = null;
     private String AccessToken =null;
     private String RefreshToken=null;
+
+    public LoggedInUser(RegisterResponse.User user, RegisterResponse.Token token){
+        this.username = user.getUsername();
+        this.nickName = user.getNickname();
+        this.AccessToken = token.getAccessToken();
+        this.RefreshToken = token.getRefreshToken();
+    }
     public LoggedInUser(LoginResponse.User user, LoginResponse.Token token){
         this.username = user.getUsername();
         this.nickName = user.getNickname();
@@ -19,6 +27,7 @@ public class LoggedInUser {
         this.AccessToken = token.getAccessToken();
         this.RefreshToken = token.getRefreshToken();
     }
+
     public LoggedInUser(String username, String nickName, String createAt, String AccessToken, String RefreshToken) {
         this.username = username;
         this.nickName = nickName;

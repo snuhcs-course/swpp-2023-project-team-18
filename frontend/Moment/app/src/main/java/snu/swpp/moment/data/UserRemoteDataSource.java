@@ -5,6 +5,8 @@ package snu.swpp.moment.data;
         import retrofit2.Response;
         import snu.swpp.moment.api.LoginRequest;
         import snu.swpp.moment.api.LoginResponse;
+        import snu.swpp.moment.api.RegisterRequest;
+        import snu.swpp.moment.api.RegisterResponse;
         import snu.swpp.moment.api.RetrofitClient;
         import snu.swpp.moment.api.ServiceApi;
         import snu.swpp.moment.api.TokenRefreshRequest;
@@ -32,18 +34,18 @@ public class UserRemoteDataSource {
         service.userLogin(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if(response.code() == 400){
-                    loginCallBack.onLoginFailure(response.message());
-                }
-                else{
+                if(response.code() == 200){
                     System.out.println("#Debug Login OnResponse ");
                     LoginResponse result = response.body();
-                    loginCallBack.onLoginSuccess(new LoggedInUser(result.getUser(), result.getToken()));
+                    loginCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
+                }
+                else{
+                    loginCallBack.onFailure(response.message());
                 }
             }
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                loginCallBack.onLoginFailure("NO INTERNET");
+                loginCallBack.onFailure("NO INTERNET");
                 System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
             }
         });
@@ -57,6 +59,33 @@ public class UserRemoteDataSource {
             //return new Result.Error(new Exception("ddd"));
         }
         */
+    }
+    public void register(String username, String password, String nickname, AuthenticationCallBack registerCallBack) {
+        //System.out.println("#Debug from datasource || username : " + username + " password : " + password);
+        //System.out.println("#Debug service create");
+        service = RetrofitClient.getClient().create(ServiceApi.class);
+        //System.out.println("#Debug LoginRequest");
+        RegisterRequest request = new RegisterRequest(username, password, nickname);
+        service.userRegister(request).enqueue(new Callback<RegisterResponse>() {
+            @Override
+            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                if(response.code() == 201){
+                    System.out.println("#Debug Login OnResponse ");
+                    RegisterResponse result = response.body();
+                    registerCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
+
+                } else{
+                    registerCallBack.onFailure(response.message());
+                }
+                /* ## TODO code 받는 코드 전부 변경  */
+            }
+            @Override
+            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                registerCallBack.onFailure("NO INTERNET");
+                System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
+            }
+        });
+
     }
 
     public void isTokenValid(String token, TokenCallBack callBack) {
@@ -102,6 +131,8 @@ public class UserRemoteDataSource {
             }
         });
     }
+
+
 
 
     public void logout() {

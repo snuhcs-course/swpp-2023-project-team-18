@@ -9,4 +9,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"로그인에 실패했습니다."</string>
+    <string name="register_failed">"회원가입에 실패했습니다."</string>
+    <string name="register_username">Not a valid username</string>
+    <string name="register_password">Password must be >5 characters</string>
+    <string name="register_password_check">비밀번호가 다릅니다.</string>
 </resources>

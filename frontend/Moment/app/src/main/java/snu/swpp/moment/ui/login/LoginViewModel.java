@@ -34,13 +34,13 @@ public class LoginViewModel extends ViewModel {
         System.out.println("#Debug from ViewModel || username : " + username + "password : " + password);
         loginRepository.login(username, password, new AuthenticationCallBack(){
             @Override
-            public void onLoginSuccess(LoggedInUser loggedInUser) {
+            public void onSuccess(LoggedInUser loggedInUser) {
                 System.out.println("#Debug from ViewModel HIHIHIHIHIHIHIHI");
                 loginResult.setValue(new LoginResult(new LoggedInUserView(loggedInUser.getNickName())));
             }
 
             @Override
-            public void onLoginFailure(String errorMessage) {
+            public void onFailure(String errorMessage) {
                 loginResult.setValue(new LoginResult(R.string.login_failed));
             }
         });

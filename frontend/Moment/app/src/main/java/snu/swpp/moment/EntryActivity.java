@@ -30,7 +30,7 @@ public class EntryActivity extends AppCompatActivity {
 
         if (!authenticationRepository.isLoggedIn()) {
             System.out.println("#DEBUG: not logged in");
-            Intent entryIntent = new Intent(EntryActivity.this, LoginActivity.class);
+            Intent entryIntent = new Intent(EntryActivity.this, LoginRegisterActivity.class);
             startActivity(entryIntent);
         } else {
             System.out.println("#DEBUG: logged in");
