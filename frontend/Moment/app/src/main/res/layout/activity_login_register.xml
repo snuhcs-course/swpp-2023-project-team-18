@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".LoginRegisterActivity">
+
+
+    <!-- Wrapper layout for 10% margins -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="513dp"
+        android:layout_weight="0"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.15" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="166dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="0.7"
+            android:src="@drawable/text_logo" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.15" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/main_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/start_login"
+        android:fontFamily="@font/maruburi_light"
+        android:textSize="15sp"
+        android:elevation="0dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/offer_register"
+            android:fontFamily="@font/maruburi_light"
+            android:textSize="15sp"
+            />
+
+        <Button
+            android:id="@+id/main_register"
+            android:layout_width="69dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/maruburi_light"
+            android:textSize="15sp"
+            android:text="@string/start_register"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+
+</LinearLayout>
+
+    <!-- 원본
+    <?xml version="1.0" encoding="utf-8"?>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".LoginRegisterActivity">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:src="@drawable/text_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/main_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="로그인"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/offer_register"
+            app:layout_constraintTop_toBottomOf="@+id/main_login
+            />
+        <Button
+            android:id="@+id/main_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            app:layout_constraintTop_toBottomOf="@+id/main_login"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    -->
