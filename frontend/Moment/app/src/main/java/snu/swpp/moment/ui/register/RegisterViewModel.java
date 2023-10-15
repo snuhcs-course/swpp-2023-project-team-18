@@ -42,7 +42,16 @@ public class RegisterViewModel extends ViewModel {
 
             @Override
             public void onFailure(String errorMessage) {
-                registerResult.setValue(new RegisterResult(R.string.register_failed));
+                System.out.println("#MESSAGE: " + errorMessage);
+                if (errorMessage.equals("{\"username\":[\"A user with that username already exists.\"]}")) {
+                    registerResult.setValue(new RegisterResult(R.string.username_error));
+                } else if (errorMessage.equals("Server")) {
+                    registerResult.setValue(new RegisterResult(R.string.server_error));
+                } else if (errorMessage.equals("NO INTERNET")) {
+                    registerResult.setValue(new RegisterResult(R.string.internet_error));
+                }else {
+                    registerResult.setValue(new RegisterResult(R.string.unknown_error));
+                }
             }
         });
     }

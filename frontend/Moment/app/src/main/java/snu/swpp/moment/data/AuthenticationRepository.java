@@ -83,7 +83,7 @@ public class AuthenticationRepository {
 
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
-        System.out.println("#Debug AuthenticationRepository :: setLoggedInLuser");
+        //System.out.println("#Debug AuthenticationRepository :: setLoggedInLuser");
         localDataSource.saveUser(user);
 
         // If user credentials will be cached in local storage, it is recommended it be encrypted
@@ -97,7 +97,7 @@ public class AuthenticationRepository {
             @Override
             public void onSuccess(LoggedInUser loggedInUser) {
                 setLoggedInUser(loggedInUser);
-                System.out.println("#DEBUG Login Success");
+                //System.out.println("#DEBUG Login Success");
                 loginCallBack.onSuccess(loggedInUser);
             }
             @Override

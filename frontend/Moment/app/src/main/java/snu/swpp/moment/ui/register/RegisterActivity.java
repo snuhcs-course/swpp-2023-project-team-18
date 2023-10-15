@@ -151,15 +151,15 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
                 String password= passwordEditText.getText().toString();
-                String nickanme= nicknameEditText.getText().toString();
+                String nickname= nicknameEditText.getText().toString();
 
-                registerViewModel.register(username, password, nickanme);
+                registerViewModel.register(username, password, nickname);
             }
         });
     }
 
     private void updateUiWithUser(RegisterUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+        String welcome = model.getDisplayName() + "님 " + getString(R.string.welcome);
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }

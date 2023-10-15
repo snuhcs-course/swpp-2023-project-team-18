@@ -1,5 +1,7 @@
 package snu.swpp.moment.data;
 
+        import java.io.IOException;
+
         import retrofit2.Call;
         import retrofit2.Callback;
         import retrofit2.Response;
@@ -34,19 +36,27 @@ public class UserRemoteDataSource {
         service.userLogin(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if(response.code() == 200){
+                if(response.isSuccessful()){
                     System.out.println("#Debug Login OnResponse ");
                     LoginResponse result = response.body();
                     loginCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
                 }
                 else{
-                    loginCallBack.onFailure(response.message());
+                    String message = "";
+                    try {
+                        message = response.errorBody().string();
+                    } catch (IOException e) {
+                        message = "Server";
+                    } finally {
+                        loginCallBack.onFailure(message);
+                    }
+
                 }
             }
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 loginCallBack.onFailure("NO INTERNET");
-                System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
+                // System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
             }
         });
         /*
@@ -69,20 +79,27 @@ public class UserRemoteDataSource {
         service.userRegister(request).enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                if(response.code() == 201){
-                    System.out.println("#Debug Login OnResponse ");
+                if(response.isSuccessful()){
+                    //System.out.println("#Debug Login OnResponse ");
                     RegisterResponse result = response.body();
                     registerCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
 
                 } else{
-                    registerCallBack.onFailure(response.message());
+                    String message = "";
+                    try {
+                        message = response.errorBody().string();
+                    } catch (IOException e) {
+                        message = "Server";
+                    } finally {
+                        registerCallBack.onFailure(message);
+                    }
                 }
                 /* ## TODO code 받는 코드 전부 변경  */
             }
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
                 registerCallBack.onFailure("NO INTERNET");
-                System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
+                //System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
             }
         });
 
@@ -127,7 +144,6 @@ public class UserRemoteDataSource {
 
             @Override
             public void onFailure(Call<TokenRefreshResponse> call, Throwable t) {
-
             }
         });
     }
