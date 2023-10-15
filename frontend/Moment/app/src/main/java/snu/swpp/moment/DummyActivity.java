@@ -30,7 +30,6 @@ public class DummyActivity extends AppCompatActivity {
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getApplicationContext());
             System.out.println("#DEBUG: go home");
-            authenticationRepository.logout();
             logoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
