@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Moment</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_email">아이디</string>
+    <string name="prompt_password">비밀번호</string>
+    <string name="action_sign_in">로그인</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -13,4 +13,13 @@
     <string name="register_username">Not a valid username</string>
     <string name="register_password">Password must be >5 characters</string>
     <string name="register_password_check">비밀번호가 다릅니다.</string>
+    <string name="offer_register">처음이신가요?</string>
+    <string name="start_register"><u>회원가입</u></string>
+    <string name="start_login">로그인</string>
+
+    <string name="register_id">아이디</string>
+    <string name="register_nickname">닉네임</string>
+    <string name="password">비밀번호</string>
+    <string name="password_check">비밀번호 확인</string>
+
 </resources>

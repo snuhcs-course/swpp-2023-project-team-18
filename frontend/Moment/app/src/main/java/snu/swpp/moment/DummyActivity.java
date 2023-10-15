@@ -2,6 +2,7 @@ package snu.swpp.moment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,10 @@ public class DummyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy);
         binding = ActivityDummyBinding.inflate(getLayoutInflater());
+
+        //CAUTION : Button is clicked but nothing happen because of this. you should put below line
+        setContentView(binding.getRoot());
+
         final Button logoutButton = binding.logoutButton;
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getApplicationContext());
@@ -31,6 +36,8 @@ public class DummyActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     System.out.println("#DEBUG: logout button clicked");
                     authenticationRepository.logout();
+                    Intent logoutIntent= new Intent(DummyActivity.this, EntryActivity.class);
+                    startActivity(logoutIntent);
                 }
             });
         } catch (GeneralSecurityException e) {

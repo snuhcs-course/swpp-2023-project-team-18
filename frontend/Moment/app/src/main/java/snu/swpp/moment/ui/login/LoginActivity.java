@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import snu.swpp.moment.DummyActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.TestPage;
 import snu.swpp.moment.api.RetrofitClient;
@@ -85,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginResult.getSuccess() != null) {
                     System.out.println("#DEBUG : ACTIVITY HIHIHII");
                     updateUiWithUser(loginResult.getSuccess());
-                    Intent testLoginSuccess = new Intent(LoginActivity.this, TestPage.class);
+                    Intent testLoginSuccess = new Intent(LoginActivity.this, DummyActivity.class);
                     startActivity(testLoginSuccess);
 
                 }
