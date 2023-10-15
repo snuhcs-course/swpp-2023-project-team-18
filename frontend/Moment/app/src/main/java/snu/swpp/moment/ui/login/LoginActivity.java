@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -122,9 +123,11 @@ public class LoginActivity extends AppCompatActivity {
                  */
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
                     loginViewModel.login(usernameEditText.getText().toString(),
                             passwordEditText.getText().toString());
+                    return true;  // Consume the event
                 }
                 return false;
             }
