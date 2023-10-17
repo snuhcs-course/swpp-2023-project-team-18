@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/WriteView">
+
+    <fragment
+        android:id="@+id/WriteView"
+        android:name="snu.swpp.moment.ui.main_writeview.WriteViewFragment"
+        tools:layout="@layout/fragment_writeview" />
+    <!--android:label=""-->
+
+    <fragment
+        android:id="@+id/MonthView"
+        android:name="snu.swpp.moment.ui.main_monthview.MonthViewFragment"
+        android:label="한달보기"
+        tools:layout="@layout/fragment_monthview" />
+
+    <fragment
+        android:id="@+id/StatView"
+        android:name="snu.swpp.moment.ui.main_statview.StatViewFragment"
+        android:label="돌아보기"
+        tools:layout="@layout/fragment_statview" />
+
+
+    <fragment
+        android:id="@+id/SearchView"
+        android:name="snu.swpp.moment.ui.main_searchview.SearchViewFragment"
+        android:label="찾아보기"
+        tools:layout="@layout/fragment_searchview" />
+
+    <fragment
+        android:id="@+id/UserInfoView"
+        android:name="snu.swpp.moment.ui.main_userinfoview.UserInfoViewFragment"
+        android:label="내정보"
+        tools:layout="@layout/fragment_userinfoview" />
+</navigation>
