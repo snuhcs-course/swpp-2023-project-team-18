@@ -1,18 +1,15 @@
 package snu.swpp.moment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-
 import snu.swpp.moment.data.AuthenticationRepository;
-import snu.swpp.moment.ui.login.LoginActivity;
 
 public class EntryActivity extends AppCompatActivity {
+
     private AuthenticationRepository authenticationRepository;
 
     @Override
@@ -21,7 +18,8 @@ public class EntryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_entry);
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getApplicationContext());
+            authenticationRepository = AuthenticationRepository.getInstance(
+                getApplicationContext());
         } catch (GeneralSecurityException e) {
             Toast.makeText(this, "개발자에게 연락하세요", Toast.LENGTH_SHORT);
         } catch (IOException e) {
