@@ -27,4 +27,8 @@
     <string name="password">비밀번호</string>
     <string name="password_check">비밀번호 확인</string>
 
+    <string name="daySectionEmotion">이날의 감정</string>
+    <string name="daySectionTags">이날의 태그</string>
+    <string name="daySectionScore">이날의 점수</string>
+
 </resources>
