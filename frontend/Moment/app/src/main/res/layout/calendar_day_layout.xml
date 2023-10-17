@@ -1,38 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?><!-- 달력 날짜 한 칸 -->
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 달력 날짜 한 칸 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:weightSum="5">
-
-  <TextView
-    android:id="@+id/calendarDayText"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:paddingTop="5dp"
-    android:fontFamily="@font/maruburi_light"
-    android:gravity="center"
-    android:textColor="@color/black"
-    android:textSize="12sp"
-    tools:text="22" />
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="5">
 
-  <ImageView
-    android:id="@+id/calendarDayImage"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="4"
-    android:layout_margin="5dp"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp" />
-  <!-- 기본값으로 빈 이미지 넣어서 높이 맞추기 -->
+    <TextView
+        android:id="@+id/calendarDayText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="5dp"
+        android:fontFamily="@font/maruburi_light"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        tools:text="22" />
 
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="3dp"
-    android:background="#ABABAB" />
+    <ImageView
+        android:id="@+id/calendarDayImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:layout_margin="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+    <!-- 기본값으로 빈 이미지 넣어서 높이 맞추기 -->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#ABABAB" />
 
 </LinearLayout>
