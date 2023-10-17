@@ -23,12 +23,17 @@ android {
         }
     }
     compileOptions {
+        // Enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding true
     }
+//    kotlinOptions {
+//        jvmTarget = "1.8"
+//    }
 }
 
 
@@ -41,7 +46,6 @@ dependencies {
     // [Modified] EncryptedSharedPreference  23.10.13
     implementation "androidx.security:security-crypto:1.0.0-alpha02"
 
-
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.annotation:annotation:1.7.0'
@@ -51,5 +55,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // calendar
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    implementation("com.kizitonwose.calendar:view:2.4.0")
+    implementation("com.kizitonwose.calendar:compose:2.4.0")
 
 }
