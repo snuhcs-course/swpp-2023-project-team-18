@@ -10,7 +10,7 @@ class CalendarViewModel : ViewModel() {
     var selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
 
     var monthEmotions: MutableLiveData<List<Int>> = MutableLiveData(listOf())
-    var daySummaryState: MutableLiveData<DaySummaryState> = MutableLiveData<DaySummaryState>()
+    var daySummaryState: MutableLiveData<DaySummaryState?> = MutableLiveData<DaySummaryState?>()
 
     val emotionEnumMap: Map<String, Int> = mapOf(
         "excited1" to 0,
@@ -28,9 +28,13 @@ class CalendarViewModel : ViewModel() {
         monthEmotions.value = getMonthEmotionsMock(month)
     }
 
-    fun setSelectedDate(date: LocalDate) {
+    fun setSelectedDate(date: LocalDate?) {
         selectedDate.value = date
-        daySummaryState.value = getSummaryMock(date)
+        if (date == null) {
+            daySummaryState.value = null
+        } else {
+            daySummaryState.value = getSummaryMock(date)
+        }
     }
 
     // 서버에서 감정 리스트 가져오는 함수
