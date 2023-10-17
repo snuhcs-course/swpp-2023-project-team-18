@@ -47,6 +47,10 @@
             android:name=".ui.register.RegisterActivity"
             android:exported="true" /> <!-- Change exported value if needed -->
 
+        <activity
+          android:name=".ui.calendar.CalendarActivity"
+          android:exported="true" />
+
     </application>
 
 </manifest>
