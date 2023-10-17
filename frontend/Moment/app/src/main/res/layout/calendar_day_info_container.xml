@@ -14,6 +14,7 @@
     android:textSize="14sp"
     app:layout_constraintTop_toTopOf="parent"
     tools:layout_editor_absoluteX="10dp"
+    android:fontFamily="@font/maruburi_light"
     tools:text="date info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

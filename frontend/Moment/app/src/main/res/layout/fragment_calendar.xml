@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -10,8 +10,9 @@
     android:id="@+id/calendarView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    app:cv_daySize="square"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    app:cv_daySize="seventhWidth"
     app:cv_dayViewResource="@layout/calendar_day_layout"
     app:cv_monthHeaderResource="@layout/calendar_day_titles_container"
     app:cv_outDateStyle="endOfGrid"
@@ -21,4 +22,4 @@
     android:id="@+id/monthTitleTextView"
     layout="@layout/calendar_month_title_text" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

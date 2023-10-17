@@ -3,8 +3,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:weightSum="7"
-  android:orientation="horizontal">
+  android:paddingTop="5dp"
+  android:paddingBottom="5dp"
+  android:orientation="horizontal"
+  android:weightSum="7">
 
   <include layout="@layout/calendar_day_title_text" />
 

@@ -24,10 +24,9 @@ class DayViewContainer(view: View) : ViewContainer(view) {
 
             val currentSelection = viewModel.selectedDate.value
             if (currentSelection == day.date) {
-                // 날짜 선택 해제 후 reload
-                // FIXME: 선택 해제 뺄 거면 이 부분 뺴기
-                viewModel.setSelectedDate(null)
-                calendarView.notifyDateChanged(currentSelection)
+                // 한 번 더 눌러도 선택 해제 안 됨
+//                viewModel.setSelectedDate(null)
+//                calendarView.notifyDateChanged(currentSelection)
             } else {
                 // 날짜 선택
                 viewModel.setSelectedDate(day.date)

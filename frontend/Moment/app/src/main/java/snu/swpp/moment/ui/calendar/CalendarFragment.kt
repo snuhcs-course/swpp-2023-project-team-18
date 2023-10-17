@@ -1,11 +1,13 @@
 package snu.swpp.moment.ui.calendar
 
-import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -101,9 +103,20 @@ class CalendarFragment : Fragment() {
                 container.textView.text = data.date.dayOfMonth.toString()
                 if (data.date == viewModel.selectedDate.value) {
                     // 선택된 날짜는 빨간 색으로 표시
-                    container.textView.setTextColor(Color.RED)
+                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.red))
+                    val typeface: Typeface =
+                        ResourcesCompat.getFont(context!!, R.font.maruburi_bold)!!
+                    container.textView.typeface = typeface
                 } else {
-                    container.textView.setTextColor(Color.BLACK)
+                    container.textView.setTextColor(
+                        ContextCompat.getColor(
+                            context!!,
+                            R.color.black
+                        )
+                    )
+                    val typeface: Typeface =
+                        ResourcesCompat.getFont(context!!, R.font.maruburi_light)!!
+                    container.textView.typeface = typeface
                 }
 
                 if (data.position == DayPosition.MonthDate) {
@@ -113,34 +126,14 @@ class CalendarFragment : Fragment() {
                     }
                 } else {
                     // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
-                    container.textView.setTextColor(Color.LTGRAY)
+                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
                     container.imageView.visibility = View.INVISIBLE
                 }
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         return view
-
     }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
 
     // 요일 보여주는 부분
     inner class MonthViewContainer(view: View) : ViewContainer(view) {
