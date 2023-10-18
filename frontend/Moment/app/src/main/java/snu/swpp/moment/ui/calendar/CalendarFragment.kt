@@ -124,6 +124,7 @@ class CalendarFragment : Fragment() {
         // 달력 아래 요약 정보
         val daySummaryObserver = Observer<DaySummaryState?> { it ->
             if (it != null) {
+                binding.daySummaryContainer.root.visibility = View.VISIBLE
                 binding.daySummaryContainer.daySummaryDateText.text = "%d. %d. %d. %s".format(
                     it.date.year,
                     it.date.monthValue,
