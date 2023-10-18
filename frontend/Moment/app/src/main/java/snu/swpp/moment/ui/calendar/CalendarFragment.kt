@@ -135,16 +135,22 @@ class CalendarFragment : Fragment() {
 
                 if (data.position == DayPosition.MonthDate) {
                     // 감정 아이콘
-                    if (viewModel.monthEmotions.value != null) {
-                        container.imageView.setImageResource(emotionImageResources[viewModel.monthEmotions.value!![data.date.dayOfMonth - 1]])
+                    if (viewModel.monthState.value != null) {
+                        container.imageView.setImageResource(emotionImageResources[viewModel.monthState.value!![data.date.dayOfMonth - 1].emotion])
+                        container.completionView.visibility = if (viewModel.monthState.value!![data.date.dayOfMonth - 1].isAutoCompleted)  View.VISIBLE else View.GONE
                     }
                 } else {
                     // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
                     container.textView.setTextColor(Color.LTGRAY)
                     container.imageView.visibility = View.INVISIBLE
+                    container.completionView.visibility = View.GONE
                 }
             }
         }
+        viewModel.monthState.observe(viewLifecycleOwner){
+            binding.calendarView.notifyCalendarChanged()
+        }
+
 
 
 

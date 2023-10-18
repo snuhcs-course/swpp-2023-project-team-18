@@ -9,9 +9,9 @@ class CalendarViewModel : ViewModel() {
     var currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
     var selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
 
-    var monthEmotions: MutableLiveData<List<Int>> = MutableLiveData(listOf())
+  //  var monthEmotions: MutableLiveData<List<Int>> = MutableLiveData(listOf())
     var daySummaryState: MutableLiveData<DaySummaryState?> = MutableLiveData<DaySummaryState?>()
-
+    var monthState: MutableLiveData<List<CalendarDayState>> = MutableLiveData(listOf())
     val emotionEnumMap: Map<String, Int> = mapOf(
         "excited1" to 0,
         "excited2" to 1,
@@ -25,7 +25,9 @@ class CalendarViewModel : ViewModel() {
 
     fun setCurrentMonth(month: YearMonth) {
         currentMonth.value = month
-        monthEmotions.value = getMonthEmotionsMock(month)
+     //   monthEmotions.value = getMonthEmotionsMock(month)
+
+        monthState.value = getMonthStateMock(month)
     }
 
     fun setSelectedDate(date: LocalDate?) {
@@ -38,10 +40,16 @@ class CalendarViewModel : ViewModel() {
     }
 
     // 서버에서 감정 리스트 가져오는 함수
-    private fun getMonthEmotionsMock(month: YearMonth): List<Int> {
+   /* private fun getMonthEmotionsMock(month: YearMonth): List<Int> {
         // API call
         var apiResult: List<String> = List<String>(31, { it -> "normal1" })
         return apiResult.map { emotionEnumMap[it]!! }
+    }*/
+    private fun getMonthStateMock(month:YearMonth):List<CalendarDayState>{
+      return  List<CalendarDayState>(31){
+            CalendarDayState(emotionEnumMap.values.random(),it % 7 == 0)
+        }
+
     }
 
     // 서버에서 summary 받아오는 함수
