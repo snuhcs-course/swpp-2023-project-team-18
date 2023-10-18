@@ -2,21 +2,16 @@ package snu.swpp.moment.ui.calendar
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import snu.swpp.moment.R
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.Random
 
 class CalendarViewModel : ViewModel() {
     var currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
     var selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
+    var calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
+        MutableLiveData<CalendarDayInfoState?>()
+    var calendarDayStates: MutableLiveData<List<CalendarDayState>> = MutableLiveData(listOf())
 
-    private var monthEmotionStrings: List<String> = listOf()
-    var monthEmotionImages: MutableLiveData<List<Int>> = MutableLiveData(listOf())
-    var monthAutoFinished: MutableLiveData<List<Boolean>> = MutableLiveData(listOf())
-    var daySummaryState: MutableLiveData<DaySummaryState?> = MutableLiveData<DaySummaryState?>()
-
-    var monthState: MutableLiveData<List<CalendarDayState>> = MutableLiveData(listOf())
     private val emotionEnumMap: Map<String, Int> = mapOf(
         "excited1" to 0,
         "excited2" to 1,
@@ -31,90 +26,37 @@ class CalendarViewModel : ViewModel() {
         "null" to 10
     )
 
-    private val emotionImageMap: List<Int> = listOf(
-        R.drawable.icon_sunny,
-        R.drawable.icon_sunny,
-        R.drawable.icon_sun_cloud,
-        R.drawable.icon_sun_cloud,
-        R.drawable.icon_cloud,
-        R.drawable.icon_cloud,
-        R.drawable.icon_rain,
-        R.drawable.icon_rain,
-        R.drawable.icon_lightning,
-        R.drawable.icon_lightning,
-    )
-
     fun setCurrentMonth(month: YearMonth) {
         currentMonth.value = month
-     //   monthEmotions.value = getMonthEmotionsMock(month)
-
-        monthState.value = getMonthStateMock(month)
-
-        // 내 구현
-//        monthEmotionStrings = getMonthEmotionStringsMock()
-//        monthEmotionImages.value = monthEmotionStrings.map { emotionStringToImage(it) }
-//        monthAutoFinished.value = getMonthAutoFinishedMock(month)
+        calendarDayStates.value = getDayStatesMock(month)   // 한달 정보 로드
     }
 
     fun setSelectedDate(date: LocalDate?) {
         selectedDate.value = date
         if (date == null) {
-            daySummaryState.value = null
+            calendarDayInfoState.value = null
         } else {
-            daySummaryState.value = getSummaryMock(date)
-        }
-    }
-
-    fun emotionStringToImage(imageString: String): Int {
-        return if (emotionEnumMap.containsKey(imageString)) {
-            emotionImageMap[emotionEnumMap[imageString]!!]
-        } else {
-            -1
+            calendarDayInfoState.value = getSummaryMock(date)   // 아래쪽에 보여줄 정보 로드
         }
     }
 
     // 서버에서 감정 리스트 가져오는 함수
-    private fun getMonthStateMock(month:YearMonth):List<CalendarDayState>{
-      return  List<CalendarDayState>(31){
-            CalendarDayState(emotionEnumMap.values.random(),it % 7 == 0)
+    private fun getDayStatesMock(month: YearMonth): List<CalendarDayState> {
+        // FIXME: List 길이가 31이 아니면 IndexOutOfBound 에러가 남 (원인 불명)
+        val apiResult = List<CalendarDayState>(31) {
+            CalendarDayState(emotionEnumMap.values.random(), it % 7 == 0)
         }
-    }
-
-    private fun getMonthEmotionStringsMock(): List<String> {
-        val emotions: List<String> = listOf(
-            "excited1",
-            "excited2",
-            "happy1",
-            "happy2",
-            "normal1",
-            "normal2",
-            "sad1",
-            "sad2",
-            "angry1",
-            "angry2"
-        )
-        val random = Random()
-        return List<String>(31) { it ->
-            val emotionEnum = random.nextInt(emotions.size)
-            emotions[emotionEnum]
-        }
-    }
-
-    // 서버에서 자동마무리 여부 가져오는 함수
-    private fun getMonthAutoFinishedMock(month: YearMonth): List<Boolean> {
-        // API call
-        val apiResult: List<Boolean> = List<Boolean>(31) { it -> true }
         return apiResult
     }
 
     // 서버에서 summary 가져오는 함수
-    private fun getSummaryMock(date: LocalDate): DaySummaryState {
+    private fun getSummaryMock(date: LocalDate): CalendarDayInfoState {
         // API call
-        return DaySummaryState(
+        return CalendarDayInfoState(
             date = date,
             storyTitle = String.format("title %d", date.dayOfMonth),
             storyContent = "story",
-            emotion = monthEmotionStrings[date.dayOfMonth - 1],
+            emotion = calendarDayStates.value!![date.dayOfMonth - 1].emotion,
             tags = listOf("tag1", "tag2"),
             score = 0,
         )

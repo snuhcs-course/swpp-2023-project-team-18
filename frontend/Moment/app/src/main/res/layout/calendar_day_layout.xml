@@ -1,53 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?><!-- 달력 날짜 한 칸 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-  >
-
+    <!-- 날짜 숫자 -->
     <TextView
         android:id="@+id/calendarDayText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:fontFamily="@font/maruburi_light"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="22" />
 
-  <ImageView
-    android:id="@+id/calendarDayImage"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    app:layout_constraintDimensionRatio="1:1"
-    android:layout_margin="3dp"
-    android:padding="10dp"
-    app:layout_constraintTop_toBottomOf="@id/calendarDayText"
-    />
+    <ImageView
+        android:id="@+id/calendarDayImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="3dp"
+        android:padding="10dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/calendarDayText" />
 
-  <View
-    android:id = "@+id/divider"
-    android:layout_width="match_parent"
-    android:layout_height="3dp"
-    android:background="#ABABAB"
-    app:layout_constraintTop_toBottomOf="@id/calendarDayImage"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"/>
-  <View
-    android:id="@+id/completionView"
-    android:layout_width="3dp"
-    android:layout_height="3dp"
-    android:background="@drawable/circle"
-    android:layout_marginRight="3dp"
-    android:layout_marginTop="3dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintRight_toRightOf="parent"/>
+    <!-- 주 구분선 -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#ABABAB"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/calendarDayImage" />
 
+    <!-- 자동마무리 점 -->
+    <View
+        android:id="@+id/completionDot"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:background="@drawable/circle"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calendarDayText"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

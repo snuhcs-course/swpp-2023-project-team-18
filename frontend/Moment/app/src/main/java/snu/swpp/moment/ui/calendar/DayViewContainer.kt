@@ -14,12 +14,15 @@ import snu.swpp.moment.R
 class DayViewContainer(view: View) : ViewContainer(view) {
     val textView: TextView = view.findViewById(R.id.calendarDayText)
     val imageView: ImageView = view.findViewById(R.id.calendarDayImage)
-    val divider:View = view.findViewById(R.id.divider)
-    val completionView:View = view.findViewById(R.id.completionView)
+    val divider: View = view.findViewById(R.id.divider)
+    val completionDot: View = view.findViewById(R.id.completionDot)
+
     fun initialize(calendarView: CalendarView, viewModel: CalendarViewModel, day: CalendarDay) {
         // 날짜 선택 시 동작
         view.setOnClickListener {
             if (day.position != DayPosition.MonthDate) {
+                return@setOnClickListener
+            } else if (viewModel.calendarDayStates.value!![day.date.dayOfMonth - 1].emotion == NULL_EMOTION) {
                 return@setOnClickListener
             }
 

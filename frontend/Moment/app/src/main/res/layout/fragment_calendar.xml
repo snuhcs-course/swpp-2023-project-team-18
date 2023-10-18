@@ -27,7 +27,7 @@
 
     <include
         android:id="@+id/daySummaryContainer"
-        layout="@layout/calendar_day_summary_container"
+        layout="@layout/calendar_day_info_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"

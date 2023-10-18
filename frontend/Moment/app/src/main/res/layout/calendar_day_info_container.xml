@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 달력 밑에 뜨는 특정 날짜 정보 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
+
+    <Button
+        android:id="@+id/dayNavigateButton"
+        style="@style/BOLD_TEXT"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/maruburi_light"
+        android:text="@string/dayNavigateButtonString"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayScoreText" />
+    <!-- TODO: 버튼 색/크기 통일하기 -->
+
+    <ImageView
+        android:id="@+id/dayEmotionImage"
+        android:layout_width="25dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toStartOf="@id/dayEmotionText"
+        app:layout_constraintStart_toEndOf="@+id/daySectionEmotionText"
+        app:layout_constraintTop_toBottomOf="@+id/dayStoryContentText"
+        app:srcCompat="@drawable/icon_sunny" />
+
+    <TextView
+        android:id="@+id/daySummaryDateText"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textAlignment="textStart"
+        android:textColor="@color/darkgray"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="20dp"
+        tools:text="2023. 10. 3. 화" />
+
+    <TextView
+        android:id="@+id/dayStoryTitleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:fontFamily="@font/maruburi_bold"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@+id/daySummaryDateText"
+        tools:layout_editor_absoluteX="20dp"
+        tools:text="신나는 하루~" />
+
+    <TextView
+        android:id="@+id/dayStoryContentText"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/dayStoryUnderline"
+        tools:layout_editor_absoluteX="20dp"
+        tools:text="어쩌구 저쩌구도 하고 아주 신나는 하루를 보냈다. 내일도 오늘처럼 즐거운 일이 많이 일어나길! 너무 길면 알아서 줄여주렴 너무 길면 알아서 줄여주렴" />
+
+    <TextView
+        android:id="@+id/daySectionEmotionText"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:paddingEnd="20dp"
+        android:text="@string/daySectionEmotion"
+        android:textColor="@color/darkgray"
+        app:layout_constraintEnd_toStartOf="@id/dayEmotionImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayStoryContentText" />
+
+    <TextView
+        android:id="@+id/daySectionTagsText"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingEnd="20dp"
+        android:text="@string/daySectionTags"
+        android:textColor="@color/darkgray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daySectionEmotionText" />
+
+    <TextView
+        android:id="@+id/daySectionScoreText"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingEnd="20dp"
+        android:text="@string/daySectionScore"
+        android:textColor="@color/darkgray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daySectionTagsText" />
+
+    <TextView
+        android:id="@+id/dayEmotionText"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@id/dayEmotionImage"
+        app:layout_constraintTop_toBottomOf="@+id/dayStoryContentText"
+        tools:text="신남" />
+
+
+    <TextView
+        android:id="@+id/dayTagsText"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:minLines="1"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/daySectionTagsText"
+        app:layout_constraintTop_toBottomOf="@+id/dayEmotionText"
+        tools:text="#어쩌구저쩌구 #신난다 #너무길어지면알아서줄여줘줄여줘" />
+
+    <TextView
+        android:id="@+id/dayScoreText"
+        style="@style/BOLD_TEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@id/daySectionScoreText"
+        app:layout_constraintTop_toBottomOf="@+id/dayTagsText"
+        tools:text="5점" />
+
+    <View
+        android:id="@+id/dayStoryUnderline"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/dayStoryTitleText"
+        tools:layout_editor_absoluteX="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

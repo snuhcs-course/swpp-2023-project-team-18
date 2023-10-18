@@ -30,6 +30,6 @@
     <string name="daySectionEmotion">이날의 감정</string>
     <string name="daySectionTags">이날의 태그</string>
     <string name="daySectionScore">이날의 점수</string>
-    <string name="dayNavigateButton">이날의 기록 보기</string>
+    <string name="dayNavigateButtonString">이날의 기록 보기</string>
 
 </resources>
