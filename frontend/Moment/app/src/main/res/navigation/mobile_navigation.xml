@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/WriteView">
+
+    <fragment
+        android:id="@+id/WriteView"
+        android:name="snu.swpp.moment.ui.main_writeview.WriteViewFragment"
+        tools:layout="@layout/fragment_writeview" />
+    <!--android:label=""-->
+
+    <fragment
+        android:id="@+id/MonthView"
+        android:name="snu.swpp.moment.ui.main_monthview.MonthViewFragment"
+
+        tools:layout="@layout/fragment_monthview" />
+
+    <fragment
+        android:id="@+id/StatView"
+        android:name="snu.swpp.moment.ui.main_statview.StatViewFragment"
+
+        tools:layout="@layout/fragment_statview" />
+
+
+    <fragment
+        android:id="@+id/SearchView"
+        android:name="snu.swpp.moment.ui.main_searchview.SearchViewFragment"
+
+        tools:layout="@layout/fragment_searchview" />
+
+    <fragment
+        android:id="@+id/UserInfoView"
+        android:name="snu.swpp.moment.ui.main_userinfoview.UserInfoViewFragment"
+        tools:layout="@layout/fragment_userinfoview" />
+
+    <fragment
+        android:id="@+id/LogoutView"
+        android:name="snu.swpp.moment.ui.main_logout_temp.LogoutViewFragment"
+        tools:layout="@layout/fragment_logoutview" />
+
+</navigation>

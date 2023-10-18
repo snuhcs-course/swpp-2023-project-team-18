@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/WriteView"
+            android:title="하루쓰기" />
+        <item
+            android:id="@+id/MonthView"
+            android:title="한달보기" />
+        <item
+            android:id="@+id/StatView"
+            android:title="돌아보기" />
+        <item
+            android:id="@+id/SearchView"
+            android:title="찾아보기" />
+        <item
+            android:id="@+id/UserInfoView"
+            android:title="내 정보" />
+
+        <item
+            android:id="@+id/LogoutView"
+            android:title="로그아웃"
+            android:label=""/>
+    </group>
+</menu>

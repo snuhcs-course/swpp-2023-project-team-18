@@ -32,7 +32,7 @@ public class EntryActivity extends AppCompatActivity {
             startActivity(entryIntent);
         } else {
             System.out.println("#DEBUG: logged in");
-            Intent entryIntent = new Intent(EntryActivity.this, DummyActivity.class);
+            Intent entryIntent = new Intent(EntryActivity.this, MainActivity.class);
             startActivity(entryIntent);
         }
     }

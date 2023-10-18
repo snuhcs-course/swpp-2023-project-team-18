@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.DummyActivity;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.ActivityLoginBinding;
 
@@ -77,8 +78,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginResult.getSuccess() != null) {
                     System.out.println("#DEBUG : ACTIVITY HIHIHII");
                     updateUiWithUser(loginResult.getSuccess());
-                    Intent testLoginSuccess = new Intent(LoginActivity.this, DummyActivity.class);
+                    Intent testLoginSuccess = new Intent(LoginActivity.this, MainActivity.class);
+                    System.out.println("#DEBUG : ACTIVITY @@@@@@");
                     startActivity(testLoginSuccess);
+
 
                 }
                 setResult(Activity.RESULT_OK);

@@ -26,28 +26,40 @@
         <!--            </intent-filter>-->
         <!--        </activity>-->
         <activity
-            android:exported="false"
-            android:name=".DummyActivity" />
-        <activity
+            android:name=".MainActivity"
             android:exported="true"
-            android:name=".EntryActivity">
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.Moment.NoActionBar"/>
+        <activity
+            android:name=".DummyActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".EntryActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:exported="false"
-            android:name=".TestPage" />
+            android:name=".TestPage"
+            android:exported="false" />
+
         <activity
-            android:exported="true"
-            android:name=".ui.login.LoginActivity" /> <!-- Added LoginRegisterActivity and RegisterActivity -->
+            android:name=".ui.login.LoginActivity"
+            android:exported="true" />
+
+        <!-- Added LoginRegisterActivity and RegisterActivity -->
         <activity
-            android:exported="true"
-            android:name=".LoginRegisterActivity" /> <!-- Change exported value if needed -->
+            android:name=".LoginRegisterActivity"
+            android:exported="true" /> <!-- Change exported value if needed -->
+
         <activity
-            android:exported="true"
-            android:name=".ui.register.RegisterActivity" /> <!-- Change exported value if needed -->
+            android:name=".ui.register.RegisterActivity"
+            android:exported="true" /> <!-- Change exported value if needed -->
+
     </application>
+
 </manifest>
