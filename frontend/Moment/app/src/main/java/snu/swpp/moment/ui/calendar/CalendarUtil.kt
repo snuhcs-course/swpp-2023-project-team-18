@@ -25,7 +25,7 @@ private val emotionKoreanTextList: List<String> = listOf(
     "설렘", "신남", "기쁨", "행복", "평범", "모름", "슬픔", "우울", "짜증", "화남", "",
 )
 
-val NULL_EMOTION = 10
+const val NULL_EMOTION = 10
 
 fun convertEmotionImage(emotion: Int): Int {
     return emotionImageList[emotion]

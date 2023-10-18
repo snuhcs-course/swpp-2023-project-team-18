@@ -54,8 +54,9 @@ class CalendarFragment : Fragment() {
 
         viewModel.setCurrentMonth(currentMonth)
         binding.calendarView.scrollToMonth(currentMonth)
-        // 각 달 사이에 간격
-        binding.calendarView.monthMargins = MarginValues(5, 0, 5, 0)
+        // 스크롤 할 때 각 달 사이의 간격
+        val monthMargin = 10
+        binding.calendarView.monthMargins = MarginValues(monthMargin, 0, monthMargin, 0)
 
         // Month header (요일 보여주는 부분)
         val daysOfWeek = daysOfWeek(firstDayOfWeek)
