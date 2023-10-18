@@ -21,10 +21,14 @@
 
     <include
         android:id="@+id/monthTitleTextView"
-        layout="@layout/calendar_month_title_text" />
+        layout="@layout/calendar_month_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <include
         android:id="@+id/daySummaryContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         layout="@layout/calendar_day_summary_container"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
