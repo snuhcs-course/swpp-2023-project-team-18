@@ -9,6 +9,7 @@ class CalendarDayInfoState(
     val emotion: Int,
     val tags: List<String>,
     val score: Int = 0,
+    val isAutoCompleted: Boolean = false,
 ) {
     val emotionImage: Int = convertEmotionImage(emotion)
     val emotionKoreanText: String = convertEmotionKoreanText(emotion)

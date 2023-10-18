@@ -124,11 +124,11 @@ class CalendarFragment : Fragment() {
                     // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
                     container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
                     container.imageView.visibility = View.INVISIBLE
-                    container.completionDot.visibility = View.GONE
+                    container.autoCompletedDot.visibility = View.GONE
                 } else if (data.date.monthValue != viewModel.currentMonth.value!!.monthValue) {
                     // 스크롤 도중 이전/다음 달은 내용 안 보여줌
                     container.imageView.setImageResource(android.R.color.transparent)
-                    container.completionDot.visibility = View.GONE
+                    container.autoCompletedDot.visibility = View.GONE
                 } else {
                     // 감정 아이콘
                     if (viewModel.calendarDayStates.value != null) {
@@ -136,7 +136,7 @@ class CalendarFragment : Fragment() {
                             viewModel.calendarDayStates.value!![data.date.dayOfMonth - 1]
                         container.imageView.setImageResource(calendarDayState.emotionImage)
                         container.imageView.visibility = View.VISIBLE
-                        container.completionDot.visibility =
+                        container.autoCompletedDot.visibility =
                             if (calendarDayState.isAutoCompleted) View.VISIBLE else View.GONE
                     }
                 }
@@ -161,6 +161,14 @@ class CalendarFragment : Fragment() {
                 binding.daySummaryContainer.dayEmotionText.text = it.emotionKoreanText
                 binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
                 binding.daySummaryContainer.dayScoreText.text = it.score.toString()
+
+                if (it.isAutoCompleted) {
+                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.VISIBLE
+                    binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.VISIBLE
+                } else {
+                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.GONE
+                    binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
+                }
             }
         }
         viewModel.calendarDayInfoState.observe(viewLifecycleOwner, daySummaryObserver)

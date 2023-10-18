@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="10dp"
+    android:paddingTop="5dp"
     android:paddingBottom="10dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp">
@@ -18,12 +18,11 @@
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/maruburi_light"
-        android:text="@string/dayNavigateButtonString"
+        android:text="@string/day_navigate_button"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dayScoreText" />
-    <!-- TODO: 버튼 색/크기 통일하기 -->
 
     <ImageView
         android:id="@+id/dayEmotionImage"
@@ -33,6 +32,18 @@
         app:layout_constraintStart_toEndOf="@+id/daySectionEmotionText"
         app:layout_constraintTop_toBottomOf="@+id/dayStoryContentText"
         app:srcCompat="@drawable/icon_sunny" />
+    <!-- TODO: 버튼 색/크기 통일하기 -->
+
+    <TextView
+        android:id="@+id/infoAutoCompletedText"
+        style="@style/HELP_TEXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auto_completed_warning"
+        android:paddingTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayNavigateButton" />
 
     <TextView
         android:id="@+id/daySummaryDateText"
@@ -51,7 +62,7 @@
         android:id="@+id/dayStoryTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
+        android:paddingBottom="10dp"
         android:fontFamily="@font/maruburi_bold"
         android:textColor="@color/black"
         android:textSize="14sp"
@@ -82,7 +93,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="5dp"
         android:paddingEnd="20dp"
-        android:text="@string/daySectionEmotion"
+        android:text="@string/day_section_emotion"
         android:textColor="@color/darkgray"
         app:layout_constraintEnd_toStartOf="@id/dayEmotionImage"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +107,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingEnd="20dp"
-        android:text="@string/daySectionTags"
+        android:text="@string/day_section_tags"
         android:textColor="@color/darkgray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/daySectionEmotionText" />
@@ -109,7 +120,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingEnd="20dp"
-        android:text="@string/daySectionScore"
+        android:text="@string/day_section_score"
         android:textColor="@color/darkgray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/daySectionTagsText" />
@@ -148,15 +159,17 @@
     <TextView
         android:id="@+id/dayScoreText"
         style="@style/BOLD_TEXT"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/daySectionScoreText"
         app:layout_constraintTop_toBottomOf="@+id/dayTagsText"
         tools:text="5점" />
 
+    <!-- 제목 아래 구분선 -->
     <View
         android:id="@+id/dayStoryUnderline"
         android:layout_width="match_parent"
@@ -164,5 +177,15 @@
         android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/dayStoryTitleText"
         tools:layout_editor_absoluteX="20dp" />
+
+    <!-- 자동마무리 점 -->
+    <View
+        android:id="@+id/infoAutoCompletedDot"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/circle"
+        app:layout_constraintStart_toEndOf="@+id/dayNavigateButton"
+        app:layout_constraintTop_toBottomOf="@+id/dayScoreText" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

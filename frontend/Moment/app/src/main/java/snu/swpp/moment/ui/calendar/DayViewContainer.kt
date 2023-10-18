@@ -15,7 +15,7 @@ class DayViewContainer(view: View) : ViewContainer(view) {
     val textView: TextView = view.findViewById(R.id.calendarDayText)
     val imageView: ImageView = view.findViewById(R.id.calendarDayImage)
     val divider: View = view.findViewById(R.id.divider)
-    val completionDot: View = view.findViewById(R.id.completionDot)
+    val autoCompletedDot: View = view.findViewById(R.id.autoCompletedDot)
 
     fun initialize(calendarView: CalendarView, viewModel: CalendarViewModel, day: CalendarDay) {
         // 날짜 선택 시 동작

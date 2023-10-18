@@ -59,6 +59,7 @@ class CalendarViewModel : ViewModel() {
             emotion = calendarDayStates.value!![date.dayOfMonth - 1].emotion,
             tags = listOf("tag1", "tag2"),
             score = 0,
+            isAutoCompleted = calendarDayStates.value!![date.dayOfMonth - 1].isAutoCompleted,
         )
     }
 }

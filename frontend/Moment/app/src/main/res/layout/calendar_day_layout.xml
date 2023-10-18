@@ -45,7 +45,7 @@
 
     <!-- 자동마무리 점 -->
     <View
-        android:id="@+id/completionDot"
+        android:id="@+id/autoCompletedDot"
         android:layout_width="5dp"
         android:layout_height="5dp"
         android:layout_marginTop="3dp"
