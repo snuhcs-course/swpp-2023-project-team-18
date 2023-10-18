@@ -1,5 +1,6 @@
 package snu.swpp.moment;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,18 @@ public class LoginRegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        // If you have other actions for registerButton or other UI elements, initialize and set them up here.
+
+        // Login register activity, back press action
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Your custom back pressed logic here.
+                // If you want to terminate the app:
+                finishAffinity();
+                System.exit(0);
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 }

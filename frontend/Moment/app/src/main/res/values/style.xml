@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MaruBuriTextStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/maruburi_light</item>
+
+    </style>
+</resources>
+
+    <!--
+
+    <item name="android:textSize">20sp</item>
+
+
+
+    -->

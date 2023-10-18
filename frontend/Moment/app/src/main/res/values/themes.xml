@@ -23,6 +23,15 @@
         <item name="android:background">@drawable/custom_button_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="Theme.Moment.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Moment.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Moment.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
 
-<!--        <item name="android:buttonStyle">@style/CustomButton</item> -->
+    <!--        <item name="android:buttonStyle">@style/CustomButton</item> -->
