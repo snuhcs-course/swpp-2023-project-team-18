@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:padding="10dp"
+
   android:orientation="vertical"
   android:weightSum="5">
 
@@ -24,6 +24,7 @@
     android:layout_margin="5dp" />
 
   <View
+    android:id = "@+id/divider"
     android:layout_width="match_parent"
     android:layout_height="3dp"
     android:background="#ABABAB" />

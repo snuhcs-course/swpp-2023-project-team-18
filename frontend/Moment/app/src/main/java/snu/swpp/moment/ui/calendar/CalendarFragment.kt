@@ -1,7 +1,9 @@
 package snu.swpp.moment.ui.calendar
 
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +21,11 @@ import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.R
 import snu.swpp.moment.databinding.FragmentCalendarBinding
+import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.format.TextStyle
+import java.time.temporal.TemporalAdjuster
+import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
 class CalendarFragment : Fragment() {
@@ -44,7 +49,22 @@ class CalendarFragment : Fragment() {
         R.drawable.icon_lightning,
         R.drawable.icon_lightning,
     )
+    fun isLastWeek(day:CalendarDay):Boolean{
+        val date = day.date
+        if(day.position == DayPosition.InDate)return false;
 
+        if(day.position == DayPosition.OutDate){
+            val firstSat = date.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()).with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
+            return date.isAfter(firstSat.plusDays(28))
+
+        }
+        if(day.position == DayPosition.MonthDate){
+            val firstSat = date.with(TemporalAdjusters.firstDayOfMonth()).with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
+            return date.isAfter(firstSat.plusDays(28))
+
+        }
+    return false;
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,6 +116,13 @@ class CalendarFragment : Fragment() {
 
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.initialize(binding.calendarView, viewModel, data)
+                if(isLastWeek(data)){
+                    container.divider.visibility = View.GONE
+                }
+                else{
+
+                    container.divider.visibility = View.VISIBLE
+                }
 
                 // 날짜 text
                 container.textView.text = data.date.dayOfMonth.toString()
