@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -34,18 +35,6 @@ class CalendarFragment : Fragment() {
     private lateinit var viewModel: CalendarViewModel
     private lateinit var binding: FragmentCalendarBinding
 
-    private val emotionImageResources: List<Int> = listOf(
-        R.drawable.icon_sunny,
-        R.drawable.icon_sunny,
-        R.drawable.icon_sun_cloud,
-        R.drawable.icon_sun_cloud,
-        R.drawable.icon_cloud,
-        R.drawable.icon_cloud,
-        R.drawable.icon_rain,
-        R.drawable.icon_rain,
-        R.drawable.icon_lightning,
-        R.drawable.icon_lightning,
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,8 +110,8 @@ class CalendarFragment : Fragment() {
 
                 if (data.position == DayPosition.MonthDate) {
                     // 감정 아이콘
-                    if (viewModel.monthEmotions.value != null) {
-                        container.imageView.setImageResource(emotionImageResources[viewModel.monthEmotions.value!![data.date.dayOfMonth - 1]])
+                    if (viewModel.monthEmotionImages.value != null) {
+                        container.imageView.setImageResource(viewModel.monthEmotionImages.value!![data.date.dayOfMonth - 1])
                     }
                 } else {
                     // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
@@ -132,6 +121,29 @@ class CalendarFragment : Fragment() {
             }
         }
 
+        // 달력 아래 요약 정보
+        val daySummaryObserver = Observer<DaySummaryState?> { it ->
+            if (it != null) {
+                binding.daySummaryContainer.daySummaryDateText.text = "%d. %d. %d. %s".format(
+                    it.date.year,
+                    it.date.monthValue,
+                    it.date.dayOfMonth,
+                    it.date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
+                )
+                binding.daySummaryContainer.dayStoryTitleText.text = it.storyTitle
+                binding.daySummaryContainer.dayStoryContentText.text = it.storyContent
+                binding.daySummaryContainer.dayEmotionImage.setImageResource(
+                    viewModel.emotionStringToImage(
+                        it.emotion
+                    )
+                )
+                binding.daySummaryContainer.dayEmotionText.text = it.emotion
+                binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
+                binding.daySummaryContainer.dayScoreText.text = it.score.toString()
+            }
+        }
+        viewModel.daySummaryState.observe(viewLifecycleOwner, daySummaryObserver)
+
         return view
     }
 
@@ -139,6 +151,4 @@ class CalendarFragment : Fragment() {
     inner class MonthViewContainer(view: View) : ViewContainer(view) {
         val titlesContainer = view as ViewGroup
     }
-
-
 }
