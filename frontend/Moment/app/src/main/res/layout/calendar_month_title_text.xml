@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- 연도/월 표시줄 -->
-<TextView android:id="@+id/monthTitleText"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:textAlignment="center"
-  android:textSize="20sp"
-  tools:text="2023년 1월"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools" />
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/monthTitleText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:fontFamily="@font/maruburi_light"
+    android:textAlignment="center"
+    android:textColor="@color/black"
+    android:textSize="20sp"
+    tools:text="2023. 1." />

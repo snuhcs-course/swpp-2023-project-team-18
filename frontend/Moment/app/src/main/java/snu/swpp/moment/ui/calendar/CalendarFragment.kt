@@ -1,15 +1,19 @@
 package snu.swpp.moment.ui.calendar
 
+import android.graphics.Typeface
 import android.graphics.Color
-import android.opengl.Visibility
+import android.opengl.Visibility    // FIXME: wrong import?
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -66,6 +70,7 @@ class CalendarFragment : Fragment() {
         }
     return false;
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -129,9 +134,20 @@ class CalendarFragment : Fragment() {
                 container.textView.text = data.date.dayOfMonth.toString()
                 if (data.date == viewModel.selectedDate.value) {
                     // 선택된 날짜는 빨간 색으로 표시
-                    container.textView.setTextColor(Color.RED)
+                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.red))
+                    val typeface: Typeface =
+                        ResourcesCompat.getFont(context!!, R.font.maruburi_bold)!!
+                    container.textView.typeface = typeface
                 } else {
-                    container.textView.setTextColor(Color.BLACK)
+                    container.textView.setTextColor(
+                        ContextCompat.getColor(
+                            context!!,
+                            R.color.black
+                        )
+                    )
+                    val typeface: Typeface =
+                        ResourcesCompat.getFont(context!!, R.font.maruburi_light)!!
+                    container.textView.typeface = typeface
                 }
 
                 if (data.position == DayPosition.MonthDate) {
@@ -142,44 +158,47 @@ class CalendarFragment : Fragment() {
                     }
                 } else {
                     // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
-                    container.textView.setTextColor(Color.LTGRAY)
+                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
                     container.imageView.visibility = View.INVISIBLE
                     container.completionView.visibility = View.GONE
                 }
             }
         }
+        // TODO: 맞는지 체크
         viewModel.monthState.observe(viewLifecycleOwner){
             binding.calendarView.notifyCalendarChanged()
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+        // 달력 아래 요약 정보
+        val daySummaryObserver = Observer<DaySummaryState?> { it ->
+            if (it != null) {
+                binding.daySummaryContainer.root.visibility = View.VISIBLE
+                binding.daySummaryContainer.daySummaryDateText.text = "%d. %d. %d. %s".format(
+                    it.date.year,
+                    it.date.monthValue,
+                    it.date.dayOfMonth,
+                    it.date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
+                )
+                binding.daySummaryContainer.dayStoryTitleText.text = it.storyTitle
+                binding.daySummaryContainer.dayStoryContentText.text = it.storyContent
+                binding.daySummaryContainer.dayEmotionImage.setImageResource(
+                    viewModel.emotionStringToImage(
+                        it.emotion
+                    )
+                )
+                binding.daySummaryContainer.dayEmotionText.text = it.emotion
+                binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
+                binding.daySummaryContainer.dayScoreText.text = it.score.toString()
+            }
+        }
+        viewModel.daySummaryState.observe(viewLifecycleOwner, daySummaryObserver)
 
         return view
-
     }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
 
     // 요일 보여주는 부분
     inner class MonthViewContainer(view: View) : ViewContainer(view) {
         val titlesContainer = view as ViewGroup
     }
-
-
 }
