@@ -48,6 +48,7 @@ class CalendarFragment : Fragment() {
         R.drawable.icon_rain,
         R.drawable.icon_lightning,
         R.drawable.icon_lightning,
+        android.R.color.transparent
     )
     fun isLastWeek(day:CalendarDay):Boolean{
         val date = day.date
