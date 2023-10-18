@@ -14,11 +14,13 @@
     <fragment
         android:id="@+id/MonthView"
         android:name="snu.swpp.moment.ui.main_monthview.MonthViewFragment"
+
         tools:layout="@layout/fragment_monthview" />
 
     <fragment
         android:id="@+id/StatView"
         android:name="snu.swpp.moment.ui.main_statview.StatViewFragment"
+
         tools:layout="@layout/fragment_statview" />
 
 
