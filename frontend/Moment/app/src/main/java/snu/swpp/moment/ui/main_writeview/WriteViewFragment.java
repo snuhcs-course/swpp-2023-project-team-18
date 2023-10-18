@@ -31,10 +31,10 @@ public class WriteViewFragment extends Fragment {
         final TextView textView = binding.writeview;
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
-        //  Write view action bar에 날짜 찍히게
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-        String currentDate = sdf.format(new Date());
-        requireActivity().setTitle(currentDate);
+        //  Write view action bar에 날짜 찍히게  - 이 주석 지우고 프래그먼트 왔다갔다하면 무슨 코드인지 Write view 상단 actionbar에서 알 수 있음
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+//        String currentDate = sdf.format(new Date());
+//        requireActivity().setTitle(currentDate);
 
         return root;
     }
