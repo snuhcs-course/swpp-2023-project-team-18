@@ -119,7 +119,16 @@ class CalendarFragment : Fragment() {
                     container.textView.typeface = typeface
                 }
 
-                if (data.position == DayPosition.MonthDate) {
+                if (data.position != DayPosition.MonthDate) {
+                    // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
+                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
+                    container.imageView.visibility = View.INVISIBLE
+                    container.completionDot.visibility = View.GONE
+                } else if (data.date.monthValue != viewModel.currentMonth.value!!.monthValue) {
+                    // 스크롤 도중 이전/다음 달은 내용 안 보여줌
+                    container.imageView.setImageResource(android.R.color.transparent)
+                    container.completionDot.visibility = View.GONE
+                } else {
                     // 감정 아이콘
                     if (viewModel.calendarDayStates.value != null) {
                         val calendarDayState =
@@ -129,11 +138,6 @@ class CalendarFragment : Fragment() {
                         container.completionDot.visibility =
                             if (calendarDayState.isAutoCompleted) View.VISIBLE else View.GONE
                     }
-                } else {
-                    // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
-                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
-                    container.imageView.visibility = View.INVISIBLE
-                    container.completionDot.visibility = View.GONE
                 }
             }
         }
