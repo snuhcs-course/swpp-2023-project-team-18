@@ -60,17 +60,17 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("#Debug Mainactivity date ok");
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.WriteView) {
-                toolbarTitle.setText(currentDate);  // 날짜 설정
+                setToolbarTitle(currentDate);
             } else if (destination.getId() == R.id.MonthView) {
-                toolbarTitle.setText("한달보기");
+                setToolbarTitle("한달보기");
             } else if (destination.getId() == R.id.StatView) {
-                toolbarTitle.setText("돌아보기");
+                setToolbarTitle("돌아보기");
             } else if (destination.getId() == R.id.SearchView) {
-                toolbarTitle.setText("찾아보기");
+                setToolbarTitle("찾아보기");
             } else if (destination.getId() == R.id.UserInfoView) {
-                toolbarTitle.setText("내 정보");
+                setToolbarTitle("내 정보");
             } else if (destination.getId() == R.id.LogoutView) {
-                toolbarTitle.setText("로그아웃");
+                setToolbarTitle("로그아웃");
             }
         });
 
@@ -101,5 +101,9 @@ public class MainActivity extends AppCompatActivity {
             R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
             || super.onSupportNavigateUp();
+    }
+
+    public void setToolbarTitle(String title) {
+        toolbarTitle.setText(title);
     }
 }

@@ -21,6 +21,7 @@ import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import snu.swpp.moment.MainActivity
 import snu.swpp.moment.R
 import snu.swpp.moment.databinding.FragmentMonthviewBinding
 import java.time.YearMonth
@@ -80,11 +81,13 @@ class MonthViewFragment : Fragment() {
         // Month scroll listener (화면 위 연도/달 표시)
         binding.calendarView.monthScrollListener = { month ->
             // Update month title
-            binding.monthTitleTextView.monthTitleText.text =
-                "%d. %d.".format(month.yearMonth.year, month.yearMonth.monthValue)
             viewModel.setCurrentMonth(month.yearMonth)
-
             binding.calendarView.notifyCalendarChanged()
+
+            // main activity의 tool bar title 변경
+            val activity = activity as MainActivity
+            val yearMonthText = "%d. %d.".format(month.yearMonth.year, month.yearMonth.monthValue)
+            activity.setToolbarTitle(yearMonthText)
         }
 
         // 각 날짜 칸

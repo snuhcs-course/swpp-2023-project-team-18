@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
     tools:context=".ui.main_monthview.MonthViewFragment">
 
     <com.kizitonwose.calendar.view.CalendarView
@@ -17,13 +18,7 @@
         app:cv_monthHeaderResource="@layout/calendar_day_titles_container"
         app:cv_outDateStyle="endOfGrid"
         app:layout_constraintBottom_toTopOf="@+id/daySummaryContainer"
-        app:layout_constraintTop_toBottomOf="@+id/monthTitleTextView" />
-
-    <include
-        android:id="@+id/monthTitleTextView"
-        layout="@layout/calendar_month_title_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/daySummaryContainer"
