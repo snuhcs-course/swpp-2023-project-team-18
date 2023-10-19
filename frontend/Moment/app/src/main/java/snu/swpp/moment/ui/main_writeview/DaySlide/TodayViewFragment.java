@@ -95,7 +95,7 @@ public class TodayViewFragment extends Fragment {
                     // 1000자까지의 텍스트만 유지
                     inputEditText.setText(s.subSequence(0, MAX_LENGTH));
                     textCount.setTextColor(getResources().getColor(R.color.red)); // 수정된 부분
-                    // 커서를 텍스트 끝으로 이동
+                    inputEditText.requestFocus();
                     // 커서를 텍스트 끝으로 이동
                     inputEditText.setSelection(MAX_LENGTH);
                 }
@@ -122,9 +122,10 @@ public class TodayViewFragment extends Fragment {
                 inputEditText.setText("");
                 inputEditText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
-                textCount.setVisibility(View.GONE);
-                addButton.setVisibility(View.VISIBLE);
                 submitButtonInactivate.setVisibility(View.GONE);
+                textCount.setVisibility(View.GONE);
+
+                addButton.setVisibility(View.VISIBLE);
                 addButtonText.setVisibility(View.VISIBLE);
             }
         });
