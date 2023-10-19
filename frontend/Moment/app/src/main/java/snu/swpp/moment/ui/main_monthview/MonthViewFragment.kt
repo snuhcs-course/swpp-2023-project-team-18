@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.calendar
+package snu.swpp.moment.ui.main_monthview
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -22,26 +22,26 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.R
-import snu.swpp.moment.databinding.FragmentCalendarBinding
+import snu.swpp.moment.databinding.FragmentMonthviewBinding
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
-class CalendarFragment : Fragment() {
+class MonthViewFragment : Fragment() {
 
     companion object {
-        fun newInstance() = CalendarFragment()
+        fun newInstance() = MonthViewFragment()
     }
 
     private lateinit var viewModel: CalendarViewModel
-    private lateinit var binding: FragmentCalendarBinding
+    private lateinit var binding: FragmentMonthviewBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCalendarBinding.inflate(inflater, container, false)
+        binding = FragmentMonthviewBinding.inflate(inflater, container, false)
         val view = binding.root
 
         viewModel = ViewModelProvider(this)[CalendarViewModel::class.java]

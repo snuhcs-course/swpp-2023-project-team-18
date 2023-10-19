@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.calendar
+package snu.swpp.moment.ui.main_monthview
 
 import java.time.LocalDate
 

@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.calendar
+package snu.swpp.moment.ui.main_monthview
 
 import android.view.View
 import android.widget.ImageView

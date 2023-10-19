@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.calendar
+package snu.swpp.moment.ui.main_monthview
 
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
