@@ -8,9 +8,15 @@
     <EditText
         android:id="@+id/inputEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your text here"
-        android:visibility="gone"/>
+        android:layout_height="@dimen/editTextHeight"
+        android:layout_marginBottom="@dimen/editTextMarginBottom"
+        android:padding="@dimen/editTextPadding"
+        android:textSize="15sp"
+        android:gravity="top|start"
+        android:hint="@string/edit_text_message"
+        android:inputType="text|textMultiLine"
+        android:visibility="gone"
+        android:background="@drawable/box_border"/>
     <Button
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
@@ -25,30 +31,3 @@
         android:onClick="showInputFields"
         android:text="추가하기" />
 </LinearLayout>
-    <!-- 잘되는 코드 2
-    <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-        <EditText
-            android:id="@+id/inputEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your text here"/>
-        <Button
-            android:id="@+id/add_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add"/>
-    </LinearLayout>
-    -->
-    <!-- 잘되는 코드 1
-    <?xml version="1.0" encoding="utf-8"?>
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/add_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Item" />
-    -->

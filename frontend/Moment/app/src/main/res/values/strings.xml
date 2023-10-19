@@ -38,6 +38,9 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
+    <!-- 쓰기 탭 -->
+    <string name="edit_text_message">오늘의 모먼트를 기록해 주세요</string>
+
     <!-- 한달보기 탭 -->
     <string name="day_section_emotion">이날의 감정</string>
     <string name="day_section_tags">이날의 태그</string>

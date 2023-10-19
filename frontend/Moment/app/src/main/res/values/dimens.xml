@@ -13,5 +13,7 @@
     <dimen name="offset">0dp</dimen>
     <dimen name="pageMarginAndOffset">0dp</dimen>
     <dimen name="frameSize">700dp</dimen>
-
+    <dimen name="editTextHeight">150dp</dimen>
+    <dimen name="editTextMarginBottom">20dp</dimen>
+    <dimen name="editTextPadding">15dp</dimen>
 </resources>
