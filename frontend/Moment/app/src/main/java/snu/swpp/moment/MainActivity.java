@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             if (destination.getId() == R.id.WriteView) {
                 setToolbarTitle(currentDate);
             } else if (destination.getId() == R.id.MonthView) {
-                setToolbarTitle("한달보기");
+                // MonthViewFragment에서 설정해줌
             } else if (destination.getId() == R.id.StatView) {
                 setToolbarTitle("돌아보기");
             } else if (destination.getId() == R.id.SearchView) {
