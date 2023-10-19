@@ -5,15 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
 
 
@@ -22,9 +16,9 @@ public class WriteViewFragment extends Fragment {
     private FragmentWriteviewBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup container, Bundle savedInstanceState) {
         WriteViewModel homeViewModel =
-                new ViewModelProvider(this).get(WriteViewModel.class);
+            new ViewModelProvider(this).get(WriteViewModel.class);
 
         binding = FragmentWriteviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

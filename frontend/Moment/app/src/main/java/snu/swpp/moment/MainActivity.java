@@ -1,29 +1,19 @@
 package snu.swpp.moment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import com.google.android.material.navigation.NavigationView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import snu.swpp.moment.data.AuthenticationRepository;
 import snu.swpp.moment.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Toolbar text view - 날짜넣기위해
     private TextView toolbarTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         //toolbarTitle = findViewById(R.id.text_title);
         toolbarTitle = binding.appBarMain.textTitle;
 
-
         setSupportActionBar(binding.appBarMain.toolbar);
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -55,10 +45,12 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.WriteView, R.id.MonthView, R.id.StatView, R.id.SearchView, R.id.UserInfoView, R.id.LogoutView)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+            R.id.WriteView, R.id.MonthView, R.id.StatView, R.id.SearchView, R.id.UserInfoView,
+            R.id.LogoutView)
+            .setOpenableLayout(drawer)
+            .build();
+        NavController navController = Navigation.findNavController(this,
+            R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
@@ -81,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
                 toolbarTitle.setText("로그아웃");
             }
         });
-
 
         // MainActivity (frament 왔다갔다하는) 에서 뒤로가기 버튼이 눌린경우 로그인 화면으로 돌아가지 않도록
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -106,8 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavController navController = Navigation.findNavController(this,
+            R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+            || super.onSupportNavigateUp();
     }
 }

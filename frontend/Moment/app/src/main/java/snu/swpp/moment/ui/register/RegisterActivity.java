@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.DummyActivity;
-import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.ActivityRegisterBinding;
 
@@ -89,12 +88,14 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable RegisterResult registerResult) {
                 if (registerResult == null) {
-                    Toast.makeText(RegisterActivity.this, "*************", Toast.LENGTH_SHORT);
+                    Toast.makeText(RegisterActivity.this, "*************", Toast.LENGTH_SHORT)
+                        .show();
                     //return;
                 }
                 //loadingProgressBar.setVisibility(View.GONE);
                 if (registerResult.getError() != null) {
-                    Toast.makeText(RegisterActivity.this, "################", Toast.LENGTH_SHORT);
+                    Toast.makeText(RegisterActivity.this, "################", Toast.LENGTH_SHORT)
+                        .show();
                     showLoginFailed(registerResult.getError());
                 }
                 if (registerResult.getSuccess() != null) {

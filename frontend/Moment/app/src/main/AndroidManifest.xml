@@ -16,20 +16,11 @@
         android:theme="@style/Theme.Moment"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <!--        <activity-->
-        <!--            android:exported="true"-->
-        <!--            android:name=".ui.calendar.CalTestActivity">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.MAIN" />-->
-
-        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.Moment.NoActionBar"/>
+            android:theme="@style/Theme.Moment.NoActionBar" />
         <activity
             android:name=".DummyActivity"
             android:exported="false" />
