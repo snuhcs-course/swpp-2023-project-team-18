@@ -166,7 +166,7 @@ class MonthViewFragment : Fragment() {
                     binding.daySummaryContainer.infoAutoCompletedText.visibility = View.VISIBLE
                     binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.VISIBLE
                 } else {
-                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.GONE
+                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.INVISIBLE
                     binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
                 }
             }
