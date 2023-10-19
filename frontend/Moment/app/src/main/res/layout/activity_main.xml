@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <!-- 이게 가장 위에 있어야 함 -->
+    <!-- app bar가 가장 위에 있어야 함 -->
     <include
         android:id="@+id/app_bar_main"
         layout="@layout/app_bar_main"
@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:itemTextAppearance="@style/MaruBuriTextStyle"
+        android:fontFamily="@font/maruburi_light"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>
