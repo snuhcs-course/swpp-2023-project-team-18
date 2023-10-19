@@ -1,11 +1,9 @@
 package snu.swpp.moment.ui.register;
 
 import android.util.Patterns;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.AuthenticationCallBack;
 import snu.swpp.moment.data.AuthenticationRepository;
@@ -34,35 +32,41 @@ public class RegisterViewModel extends ViewModel {
 
     public void register(String username, String password, String nickname) {
         // can be launched in a separate asynchronous job
-        authenticationRepository.register(username, password, nickname, new AuthenticationCallBack() {
-            @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
-                registerResult.setValue(new RegisterResult(new RegisterUserView(loggedInUser.getNickName())));
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                System.out.println("#MESSAGE: " + errorMessage);
-                if (errorMessage.equals("{\"username\":[\"A user with that username already exists.\"]}")) {
-                    registerResult.setValue(new RegisterResult(R.string.username_error));
-                } else if (errorMessage.equals("Server")) {
-                    registerResult.setValue(new RegisterResult(R.string.server_error));
-                } else if (errorMessage.equals("NO INTERNET")) {
-                    registerResult.setValue(new RegisterResult(R.string.internet_error));
-                }else {
-                    registerResult.setValue(new RegisterResult(R.string.unknown_error));
+        authenticationRepository.register(username, password, nickname,
+            new AuthenticationCallBack() {
+                @Override
+                public void onSuccess(LoggedInUser loggedInUser) {
+                    registerResult.setValue(
+                        new RegisterResult(new RegisterUserView(loggedInUser.getNickName())));
                 }
-            }
-        });
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    System.out.println("#MESSAGE: " + errorMessage);
+                    if (errorMessage.equals(
+                        "{\"username\":[\"A user with that username already exists.\"]}")) {
+                        registerResult.setValue(new RegisterResult(R.string.username_error));
+                    } else if (errorMessage.equals("Server")) {
+                        registerResult.setValue(new RegisterResult(R.string.server_error));
+                    } else if (errorMessage.equals("NO INTERNET")) {
+                        registerResult.setValue(new RegisterResult(R.string.internet_error));
+                    } else {
+                        registerResult.setValue(new RegisterResult(R.string.unknown_error));
+                    }
+                }
+            });
     }
 
     public void registerDataChanged(String username, String password, String passwordCheck) {
         if (!isUserNameValid(username)) {
-            registerFormState.setValue(new RegisterFormState(R.string.register_username, null,null));
+            registerFormState.setValue(
+                new RegisterFormState(R.string.register_username, null, null));
         } else if (!isPasswordValid(password)) {
-            registerFormState.setValue(new RegisterFormState(null, R.string.register_password, null));
-        } else if (!isPasswordCheckValid(password, passwordCheck)){
-            registerFormState.setValue(new RegisterFormState(null, null, R.string.register_password_check));
+            registerFormState.setValue(
+                new RegisterFormState(null, R.string.register_password, null));
+        } else if (!isPasswordCheckValid(password, passwordCheck)) {
+            registerFormState.setValue(
+                new RegisterFormState(null, null, R.string.register_password_check));
         } else {
             registerFormState.setValue(new RegisterFormState(true));
         }
@@ -86,7 +90,7 @@ public class RegisterViewModel extends ViewModel {
     }
 
     //Password check
-    private boolean isPasswordCheckValid(String password, String passwordCheck){
+    private boolean isPasswordCheckValid(String password, String passwordCheck) {
         return (password.equals(passwordCheck));
     }
 }

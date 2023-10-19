@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Internet Permission, usesCleartextTraffic: [Modified] 23.10.11 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -19,10 +20,11 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.Moment.NoActionBar"/>
+            android:theme="@style/Theme.Moment.NoActionBar" />
         <activity
             android:name=".DummyActivity"
             android:exported="false" />
+
         <activity
             android:name=".EntryActivity"
             android:exported="true">
@@ -31,18 +33,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".TestPage"
             android:exported="false" />
+
         <activity
             android:name=".ui.login.LoginActivity"
-            android:exported="true" /> <!-- Added LoginRegisterActivity and RegisterActivity -->
+            android:exported="true" />
+
+        <!-- Added LoginRegisterActivity and RegisterActivity -->
         <activity
             android:name=".LoginRegisterActivity"
             android:exported="true" /> <!-- Change exported value if needed -->
+
         <activity
             android:name=".ui.register.RegisterActivity"
-            android:exported="true" />
+            android:exported="true" /> <!-- Change exported value if needed -->
+
     </application>
 
 </manifest>
