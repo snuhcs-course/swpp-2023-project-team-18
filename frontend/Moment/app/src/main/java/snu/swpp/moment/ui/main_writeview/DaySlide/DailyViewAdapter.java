@@ -18,7 +18,7 @@ public class DailyViewAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         int index = getRealPosition(position);
-        if (index == 3) return new DailyViewFragment();
+        if (index == 3) return new TodayViewFragment();
         else if (index == 1) return new DailyViewFragment();
         else if (index == 2) return new DailyViewFragment();
         else return new DailyViewFragment();
