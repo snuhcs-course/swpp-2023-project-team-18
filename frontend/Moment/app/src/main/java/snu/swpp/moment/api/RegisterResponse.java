@@ -19,6 +19,7 @@ public class RegisterResponse {
     }
 
     public static class User {
+
         @SerializedName("username")
         private String username;
 
@@ -36,6 +37,7 @@ public class RegisterResponse {
     }
 
     public static class Token {
+
         @SerializedName("access_token")
         private String accessToken;
 

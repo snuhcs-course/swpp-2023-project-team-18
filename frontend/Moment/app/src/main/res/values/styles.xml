@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NORMAL_TEXT">
+        <item name="android:fontFamily">@font/maruburi_light</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BOLD_TEXT">
+        <item name="android:fontFamily">@font/maruburi_bold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="HELP_TEXT">
+        <item name="android:fontFamily">@font/maruburi_light</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+</resources>

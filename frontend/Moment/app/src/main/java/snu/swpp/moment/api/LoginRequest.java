@@ -1,7 +1,9 @@
 package snu.swpp.moment.api;
+
 import com.google.gson.annotations.SerializedName;
 
 public class LoginRequest {
+
     @SerializedName("username")
     private String username;
     @SerializedName("password")

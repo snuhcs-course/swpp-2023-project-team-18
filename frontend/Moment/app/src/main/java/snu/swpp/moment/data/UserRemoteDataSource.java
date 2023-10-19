@@ -1,26 +1,26 @@
 package snu.swpp.moment.data;
 
-        import java.io.IOException;
-
-        import retrofit2.Call;
-        import retrofit2.Callback;
-        import retrofit2.Response;
-        import snu.swpp.moment.api.LoginRequest;
-        import snu.swpp.moment.api.LoginResponse;
-        import snu.swpp.moment.api.RegisterRequest;
-        import snu.swpp.moment.api.RegisterResponse;
-        import snu.swpp.moment.api.RetrofitClient;
-        import snu.swpp.moment.api.ServiceApi;
-        import snu.swpp.moment.api.TokenRefreshRequest;
-        import snu.swpp.moment.api.TokenRefreshResponse;
-        import snu.swpp.moment.api.TokenVerifyRequest;
-        import snu.swpp.moment.api.TokenVerifyResponse;
-        import snu.swpp.moment.data.model.LoggedInUser;
+import java.io.IOException;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import snu.swpp.moment.api.LoginRequest;
+import snu.swpp.moment.api.LoginResponse;
+import snu.swpp.moment.api.RegisterRequest;
+import snu.swpp.moment.api.RegisterResponse;
+import snu.swpp.moment.api.RetrofitClient;
+import snu.swpp.moment.api.ServiceApi;
+import snu.swpp.moment.api.TokenRefreshRequest;
+import snu.swpp.moment.api.TokenRefreshResponse;
+import snu.swpp.moment.api.TokenVerifyRequest;
+import snu.swpp.moment.api.TokenVerifyResponse;
+import snu.swpp.moment.data.model.LoggedInUser;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class UserRemoteDataSource {
+
     private ServiceApi service;
     LoggedInUser loggedInUser = null;
     Integer error;
@@ -36,12 +36,11 @@ public class UserRemoteDataSource {
         service.userLogin(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     System.out.println("#Debug Login OnResponse ");
                     LoginResponse result = response.body();
                     loginCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
-                }
-                else{
+                } else {
                     String message = "";
                     try {
                         message = response.errorBody().string();
@@ -53,6 +52,7 @@ public class UserRemoteDataSource {
 
                 }
             }
+
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 loginCallBack.onFailure("NO INTERNET");
@@ -70,7 +70,9 @@ public class UserRemoteDataSource {
         }
         */
     }
-    public void register(String username, String password, String nickname, AuthenticationCallBack registerCallBack) {
+
+    public void register(String username, String password, String nickname,
+        AuthenticationCallBack registerCallBack) {
         //System.out.println("#Debug from datasource || username : " + username + " password : " + password);
         //System.out.println("#Debug service create");
         service = RetrofitClient.getClient().create(ServiceApi.class);
@@ -78,13 +80,15 @@ public class UserRemoteDataSource {
         RegisterRequest request = new RegisterRequest(username, password, nickname);
         service.userRegister(request).enqueue(new Callback<RegisterResponse>() {
             @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                if(response.isSuccessful()){
+            public void onResponse(Call<RegisterResponse> call,
+                Response<RegisterResponse> response) {
+                if (response.isSuccessful()) {
                     //System.out.println("#Debug Login OnResponse ");
                     RegisterResponse result = response.body();
-                    registerCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
+                    registerCallBack.onSuccess(
+                        new LoggedInUser(result.getUser(), result.getToken()));
 
-                } else{
+                } else {
                     String message = "";
                     try {
                         message = response.errorBody().string();
@@ -96,6 +100,7 @@ public class UserRemoteDataSource {
                 }
                 /* ## TODO code 받는 코드 전부 변경  */
             }
+
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
                 registerCallBack.onFailure("NO INTERNET");
@@ -111,19 +116,21 @@ public class UserRemoteDataSource {
         TokenVerifyRequest request = new TokenVerifyRequest(token);
         service.tokenVerify(request).enqueue(new Callback<TokenVerifyResponse>() {
             @Override
-            public void onResponse(Call<TokenVerifyResponse> call, Response<TokenVerifyResponse> response) {
-                if(response.code() == 401){
+            public void onResponse(Call<TokenVerifyResponse> call,
+                Response<TokenVerifyResponse> response) {
+                if (response.code() == 401) {
                     callBack.onFailure();
-                }
-                else{
+                } else {
                     System.out.println("#Debug Login OnResponse ");
                     callBack.onSuccess();
                 }
             }
+
             @Override
             public void onFailure(Call<TokenVerifyResponse> call, Throwable t) {
                 callBack.onFailure();
-                System.out.println("#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
+                System.out.println(
+                    "#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
             }
         });
     }
@@ -133,7 +140,8 @@ public class UserRemoteDataSource {
         TokenRefreshRequest request = new TokenRefreshRequest(token);
         service.tokenRefresh(request).enqueue(new Callback<TokenRefreshResponse>() {
             @Override
-            public void onResponse(Call<TokenRefreshResponse> call, Response<TokenRefreshResponse> response) {
+            public void onResponse(Call<TokenRefreshResponse> call,
+                Response<TokenRefreshResponse> response) {
                 if (response.code() == 401) {
                     callBack.onFailure();
                 } else {
@@ -147,8 +155,6 @@ public class UserRemoteDataSource {
             }
         });
     }
-
-
 
 
     public void logout() {

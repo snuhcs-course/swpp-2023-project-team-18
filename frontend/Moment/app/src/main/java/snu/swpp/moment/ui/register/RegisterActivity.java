@@ -13,17 +13,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import snu.swpp.moment.DummyActivity;
-import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
-import snu.swpp.moment.api.RegisterResponse;
 import snu.swpp.moment.databinding.ActivityRegisterBinding;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -38,7 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        registerViewModel = new ViewModelProvider(this, new RegisterViewModelFactory(getApplicationContext())).get(RegisterViewModel.class);
+        registerViewModel = new ViewModelProvider(this,
+            new RegisterViewModelFactory(getApplicationContext())).get(RegisterViewModel.class);
 
         final EditText usernameEditText = binding.registerUsername;
         final EditText passwordEditText = binding.registerPassword;
@@ -60,8 +57,9 @@ public class RegisterActivity extends AppCompatActivity {
                 if (registerFormState.getPasswordError() != null) {
                     passwordEditText.setError(getString(registerFormState.getPasswordError()));
                 }
-                if(registerFormState.getPasswordDiffError() != null){
-                    passwordCheckEditText.setError(getString(registerFormState.getPasswordDiffError()));
+                if (registerFormState.getPasswordDiffError() != null) {
+                    passwordCheckEditText.setError(
+                        getString(registerFormState.getPasswordDiffError()));
                 }
             }
         });
@@ -79,8 +77,9 @@ public class RegisterActivity extends AppCompatActivity {
                 if (registerFormState.getPasswordError() != null) {
                     passwordCheckEditText.setError(getString(registerFormState.getPasswordError()));
                 }
-                if(registerFormState.getPasswordDiffError() != null){
-                    passwordCheckEditText.setError(getString(registerFormState.getPasswordDiffError()));
+                if (registerFormState.getPasswordDiffError() != null) {
+                    passwordCheckEditText.setError(
+                        getString(registerFormState.getPasswordDiffError()));
                 }
             }
         });
@@ -89,12 +88,14 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable RegisterResult registerResult) {
                 if (registerResult == null) {
-                    Toast.makeText(RegisterActivity.this, "*************", Toast.LENGTH_SHORT);
+                    Toast.makeText(RegisterActivity.this, "*************", Toast.LENGTH_SHORT)
+                        .show();
                     //return;
                 }
                 //loadingProgressBar.setVisibility(View.GONE);
                 if (registerResult.getError() != null) {
-                    Toast.makeText(RegisterActivity.this, "################", Toast.LENGTH_SHORT);
+                    Toast.makeText(RegisterActivity.this, "################", Toast.LENGTH_SHORT)
+                        .show();
                     showLoginFailed(registerResult.getError());
                 }
                 if (registerResult.getSuccess() != null) {
@@ -123,11 +124,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 registerViewModel.registerDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString(), passwordCheckEditText.getText().toString());
+                    passwordEditText.getText().toString(),
+                    passwordCheckEditText.getText().toString());
                 // Check if the password and password check are not the same
                 if (!passwordEditText.getText().toString().isEmpty() &&
-                        !passwordCheckEditText.getText().toString().isEmpty() &&
-                        !passwordEditText.getText().toString().equals(passwordCheckEditText.getText().toString())) {
+                    !passwordCheckEditText.getText().toString().isEmpty() &&
+                    !passwordEditText.getText().toString()
+                        .equals(passwordCheckEditText.getText().toString())) {
                     passwordCheckEditText.setError("Passwords do not match");
                 }
             }
@@ -141,7 +144,8 @@ public class RegisterActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     registerViewModel.register(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString(), nicknameEditText.getText().toString());
+                        passwordEditText.getText().toString(),
+                        nicknameEditText.getText().toString());
                 }
                 return false;
             }
@@ -151,8 +155,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
-                String password= passwordEditText.getText().toString();
-                String nickname= nicknameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                String nickname = nicknameEditText.getText().toString();
 
                 registerViewModel.register(username, password, nickname);
             }

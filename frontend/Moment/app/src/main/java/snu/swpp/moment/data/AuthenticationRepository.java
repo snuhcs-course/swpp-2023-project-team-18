@@ -1,16 +1,14 @@
 package snu.swpp.moment.data;
 
 import android.content.Context;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-
 import snu.swpp.moment.data.model.LoggedInUser;
 import snu.swpp.moment.data.model.Token;
 
 /**
- * Class that requests authentication and user information from the remote data source and
- * maintains an in-memory cache of login status and user credentials information.
+ * Class that requests authentication and user information from the remote data source and maintains
+ * an in-memory cache of login status and user credentials information.
  */
 public class AuthenticationRepository {
 
@@ -24,14 +22,17 @@ public class AuthenticationRepository {
     private LoggedInUser user = null;
 
     // private constructor : singleton access
-    private AuthenticationRepository(UserRemoteDataSource remoteDataSource, UserLocalDataSource localDataSource) {
+    private AuthenticationRepository(UserRemoteDataSource remoteDataSource,
+        UserLocalDataSource localDataSource) {
         this.remoteDataSource = remoteDataSource;
         this.localDataSource = localDataSource;
     }
 
-    public static AuthenticationRepository getInstance(Context context) throws GeneralSecurityException, IOException {
+    public static AuthenticationRepository getInstance(Context context)
+        throws GeneralSecurityException, IOException {
         if (instance == null) {
-            instance = new AuthenticationRepository(new UserRemoteDataSource(), new UserLocalDataSource(context));
+            instance = new AuthenticationRepository(new UserRemoteDataSource(),
+                new UserLocalDataSource(context));
         }
         return instance;
     }
@@ -100,6 +101,7 @@ public class AuthenticationRepository {
                 //System.out.println("#DEBUG Login Success");
                 loginCallBack.onSuccess(loggedInUser);
             }
+
             @Override
             public void onFailure(String errorMessage) {
                 loginCallBack.onFailure(errorMessage);
@@ -108,8 +110,8 @@ public class AuthenticationRepository {
     }
 
 
-
-    public void register(String username, String password, String nickname, AuthenticationCallBack registerCallBack) {
+    public void register(String username, String password, String nickname,
+        AuthenticationCallBack registerCallBack) {
         //System.out.println("#Debug from LoginRepository || username : " + username + "password : " + password);
         // handle login
         remoteDataSource.register(username, password, nickname, new AuthenticationCallBack() {
@@ -119,6 +121,7 @@ public class AuthenticationRepository {
                 System.out.println("#DEBUG Login Success");
                 registerCallBack.onSuccess(loggedInUser);
             }
+
             @Override
             public void onFailure(String errorMessage) {
                 registerCallBack.onFailure(errorMessage);

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 // According to LoginResponse (API) Login response includes user and token
 public class LoginResponse {
+
     @SerializedName("user")
     private User user;
 
@@ -20,6 +21,7 @@ public class LoginResponse {
     }
 
     public static class User {
+
         @SerializedName("username")
         private String username;
 
@@ -43,6 +45,7 @@ public class LoginResponse {
     }
 
     public static class Token {
+
         @SerializedName("access_token")
         private String accessToken;
 

@@ -3,6 +3,7 @@ package snu.swpp.moment.api;
 import com.google.gson.annotations.SerializedName;
 
 public class TokenRefreshResponse {
+
     @SerializedName("access")
     private String access;
 
@@ -10,5 +11,7 @@ public class TokenRefreshResponse {
         this.access = access;
     }
 
-    public String getAccess() { return access; }
+    public String getAccess() {
+        return access;
+    }
 }

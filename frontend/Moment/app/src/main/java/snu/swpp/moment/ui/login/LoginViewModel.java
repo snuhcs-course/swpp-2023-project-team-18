@@ -1,15 +1,13 @@
 package snu.swpp.moment.ui.login;
 
+import android.util.Patterns;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import android.util.Patterns;
-
+import snu.swpp.moment.R;
 import snu.swpp.moment.data.AuthenticationCallBack;
 import snu.swpp.moment.data.AuthenticationRepository;
 import snu.swpp.moment.data.model.LoggedInUser;
-import snu.swpp.moment.R;
 
 public class LoginViewModel extends ViewModel {
 
@@ -31,23 +29,26 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        System.out.println("#Debug from ViewModel || username : " + username + "password : " + password);
-        loginRepository.login(username, password, new AuthenticationCallBack(){
+        System.out.println(
+            "#Debug from ViewModel || username : " + username + "password : " + password);
+        loginRepository.login(username, password, new AuthenticationCallBack() {
             @Override
             public void onSuccess(LoggedInUser loggedInUser) {
                 System.out.println("#Debug from ViewModel HIHIHIHIHIHIHIHI");
-                loginResult.setValue(new LoginResult(new LoggedInUserView(loggedInUser.getNickName())));
+                loginResult.setValue(
+                    new LoginResult(new LoggedInUserView(loggedInUser.getNickName())));
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                if (errorMessage.equals("{\"error\":[\"Unable to log in with provided credentials.\"]}")) {
+                if (errorMessage.equals(
+                    "{\"error\":[\"Unable to log in with provided credentials.\"]}")) {
                     loginResult.setValue(new LoginResult(R.string.wrong_password));
                 } else if (errorMessage.equals("Server")) {
                     loginResult.setValue(new LoginResult(R.string.server_error));
                 } else if (errorMessage.equals("NO INTERNET")) {
                     loginResult.setValue(new LoginResult(R.string.internet_error));
-                }else {
+                } else {
                     loginResult.setValue(new LoginResult(R.string.unknown_error));
                 }
             }
