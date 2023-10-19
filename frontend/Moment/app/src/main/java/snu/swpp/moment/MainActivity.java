@@ -3,6 +3,8 @@ package snu.swpp.moment;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.databinding.ActivityMainBinding;
+import snu.swpp.moment.ui.main_writeview.WriteViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         toolbarTitle = binding.appBarMain.textTitle;
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -104,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setToolbarTitle(String title) {
+        System.out.println("#Debug called");
+        System.out.println("#Debug " + title);
         toolbarTitle.setText(title);
+        System.out.println("#Debug toolbarSet");
     }
 }

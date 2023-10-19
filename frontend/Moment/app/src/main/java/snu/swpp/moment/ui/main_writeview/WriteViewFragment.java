@@ -6,12 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Set;
+
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewAdapter;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
 
@@ -40,12 +48,12 @@ public class WriteViewFragment extends Fragment {
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         //  Write view action bar에 날짜 찍히게  - 이 주석 지우고 프래그먼트 왔다갔다하면 무슨 코드인지 Write view 상단 actionbar에서 알 수 있음
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-//        String currentDate = sdf.format(new Date());
-//        requireActivity().setTitle(currentDate);
-
-
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        String currentDate = sdf.format(new Date());
+//        MainActivity activity = (MainActivity) getActivity();
+//        System.out.println("#Debug: " + activity);
+//        System.out.println("#Debug onWriteViewFragment");
+//        activity.setToolbarTitle(currentDate);
 
         // TODO : 여기부터 slide가 가능해짐
         //ViewPager2
@@ -92,7 +100,6 @@ public class WriteViewFragment extends Fragment {
 
         return root;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

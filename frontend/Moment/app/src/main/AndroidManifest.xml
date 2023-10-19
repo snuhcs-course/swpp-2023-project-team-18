@@ -20,7 +20,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.Moment.NoActionBar" />
+            android:theme="@style/Theme.Moment.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".DummyActivity"
             android:exported="false" />
