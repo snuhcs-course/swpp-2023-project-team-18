@@ -1,7 +1,7 @@
 package snu.swpp.moment.data.model;
 
-import snu.swpp.moment.api.response.LoginResponse;
-import snu.swpp.moment.api.response.RegisterResponse;
+import snu.swpp.moment.api.LoginResponse;
+import snu.swpp.moment.api.RegisterResponse;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

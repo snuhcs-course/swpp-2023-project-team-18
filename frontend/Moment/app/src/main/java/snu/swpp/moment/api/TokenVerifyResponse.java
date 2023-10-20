@@ -1,4 +1,4 @@
-package snu.swpp.moment.api.response;
+package snu.swpp.moment.api;
 
 public class TokenVerifyResponse {
 
