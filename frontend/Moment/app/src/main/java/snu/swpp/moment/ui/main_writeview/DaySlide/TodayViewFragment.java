@@ -87,8 +87,10 @@ public class TodayViewFragment extends Fragment {
 
         binding = TodayItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        System.out.println("#DEBUG: before initializeListView");
         // Initialize ListView and related components
         initializeListView(root);
+        System.out.println("#DEBUG: after initializeListView");
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
         // 루트 뷰에 터치 리스너 설정

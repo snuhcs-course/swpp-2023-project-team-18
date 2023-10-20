@@ -39,8 +39,8 @@ public class WriteViewFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
-        WriteViewModel homeViewModel =
-            new ViewModelProvider(this).get(WriteViewModel.class);
+        //WriteViewModel homeViewModel =
+            //new ViewModelProvider(this).get(WriteViewModel.class);
 
         binding = FragmentWriteviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -95,6 +95,8 @@ public class WriteViewFragment extends Fragment {
                 //mIndicator.animatePageSelected(position % 4);
             }
         });
+
+        System.out.println("#DEBUG: end of write view fragment");
 
 
 
