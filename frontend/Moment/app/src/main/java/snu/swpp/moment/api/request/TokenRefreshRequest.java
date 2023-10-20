@@ -1,4 +1,4 @@
-package snu.swpp.moment.api;
+package snu.swpp.moment.api.request;
 
 import com.google.gson.annotations.SerializedName;
 

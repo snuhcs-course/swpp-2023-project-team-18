@@ -4,16 +4,16 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.LoginRequest;
-import snu.swpp.moment.api.LoginResponse;
-import snu.swpp.moment.api.RegisterRequest;
-import snu.swpp.moment.api.RegisterResponse;
+import snu.swpp.moment.api.request.LoginRequest;
+import snu.swpp.moment.api.response.LoginResponse;
+import snu.swpp.moment.api.request.RegisterRequest;
+import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.RetrofitClient;
 import snu.swpp.moment.api.ServiceApi;
-import snu.swpp.moment.api.TokenRefreshRequest;
-import snu.swpp.moment.api.TokenRefreshResponse;
-import snu.swpp.moment.api.TokenVerifyRequest;
-import snu.swpp.moment.api.TokenVerifyResponse;
+import snu.swpp.moment.api.request.TokenRefreshRequest;
+import snu.swpp.moment.api.response.TokenRefreshResponse;
+import snu.swpp.moment.api.request.TokenVerifyRequest;
+import snu.swpp.moment.api.response.TokenVerifyResponse;
 import snu.swpp.moment.data.model.LoggedInUser;
 
 /**
