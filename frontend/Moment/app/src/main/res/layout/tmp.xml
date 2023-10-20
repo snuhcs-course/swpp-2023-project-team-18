@@ -6,12 +6,9 @@
     android:gravity="center_horizontal"
     android:padding="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/box_border">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/inputEditText"
@@ -23,23 +20,15 @@
             android:hint="@string/edit_text_message"
             android:inputType="text|textMultiLine"
             android:visibility="gone"
-            android:backgroundTint="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/count_and_submit"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            android:background="@drawable/box_border"/>
         <!-- 버튼과 글자수를 수평으로 배열하는 LinearLayout -->
         <LinearLayout
-            android:id="@+id/count_and_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:orientation="horizontal"
             android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/inputEditText"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            android:layout_marginEnd="10dp">
 
             <!-- 글자수 실시간으로 보여줌 -->
             <TextView
@@ -74,7 +63,7 @@
                 android:gravity="center"
                 android:visibility="gone" />
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
     <Button
         android:id="@+id/add_button"
