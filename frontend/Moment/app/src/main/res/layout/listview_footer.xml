@@ -71,6 +71,7 @@
                 android:layout_marginStart="10dp"
                 android:background="@drawable/moment_write_inactivate"
                 android:onClick="submitInput"
+                android:enabled="false"
                 android:text=""
                 android:gravity="center"
                 android:visibility="gone" />
