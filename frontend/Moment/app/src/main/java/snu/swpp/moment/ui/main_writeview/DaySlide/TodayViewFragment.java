@@ -139,7 +139,7 @@ public class TodayViewFragment extends Fragment {
             // 아래 줄 있으면, 텍스트 입력이 박스 넘어가도 줄바꿈이 안됨
             //inputEditText.setSingleLine(true);
             //submitButton.setVisibility(View.VISIBLE);
-
+            listView.setSelection(items.size() - 1);
             // ScrollView를 ConstraintLayout의 하단으로 스크롤
 
 
