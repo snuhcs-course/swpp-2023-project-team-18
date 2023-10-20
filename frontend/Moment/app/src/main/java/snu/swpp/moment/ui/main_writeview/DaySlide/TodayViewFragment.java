@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class TodayViewFragment extends Fragment {
     private ListView listView;
     private EditText inputEditText;
     private TextView textCount, addButtonText;
+
+    private ConstraintLayout constraintLayout;
 
     private int MAX_LENGTH = 100;
     @Override
@@ -61,7 +64,7 @@ public class TodayViewFragment extends Fragment {
         inputEditText = footerView.findViewById(R.id.inputEditText);
         addButtonText = footerView.findViewById(R.id.add_button_text);
         textCount = footerView.findViewById(R.id.textCount);
-
+        constraintLayout = footerView.findViewById(R.id.testtest);
         // 초기 버튼 텍스트 설정
         textCount.setText("0/"+Integer.toString(MAX_LENGTH));
 
@@ -104,12 +107,12 @@ public class TodayViewFragment extends Fragment {
 
         addButton.setOnClickListener(v -> {
             inputEditText.setVisibility(View.VISIBLE);
-
             textCount.setVisibility(View.VISIBLE);
+
             addButton.setVisibility(View.GONE);
             addButtonText.setVisibility(View.GONE);
             submitButtonInactivate.setVisibility(View.VISIBLE);
-
+            constraintLayout.setVisibility(View.VISIBLE);
             // 아래 줄 있으면, 텍스트 입력이 박스 넘어가도 줄바꿈이 안됨
             //inputEditText.setSingleLine(true);
             //submitButton.setVisibility(View.VISIBLE);
@@ -127,6 +130,9 @@ public class TodayViewFragment extends Fragment {
 
                 addButton.setVisibility(View.VISIBLE);
                 addButtonText.setVisibility(View.VISIBLE);
+
+
+                constraintLayout.setVisibility(View.GONE);
             }
         });
     }
