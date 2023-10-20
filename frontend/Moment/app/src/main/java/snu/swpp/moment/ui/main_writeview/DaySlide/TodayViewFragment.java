@@ -1,18 +1,28 @@
 package snu.swpp.moment.ui.main_writeview.DaySlide;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +35,7 @@ import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListView_Adapter;
 import snu.swpp.moment.ui.main_writeview.ListView_Item;
+import snu.swpp.moment.utils.KeyboardUtils;
 
 public class TodayViewFragment extends Fragment {
     private TodayItemBinding binding;
@@ -38,6 +49,9 @@ public class TodayViewFragment extends Fragment {
     private ConstraintLayout constraintLayout;
 
     private int MAX_LENGTH = 100;
+    private ScrollView scrollView;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,6 +59,10 @@ public class TodayViewFragment extends Fragment {
         View root = binding.getRoot();
         // Initialize ListView and related components
         initializeListView(root);
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
+
+        // 루트 뷰에 터치 리스너 설정
+
         return root;
     }
 
@@ -67,6 +85,9 @@ public class TodayViewFragment extends Fragment {
         constraintLayout = footerView.findViewById(R.id.edit_text_wrapper);
         // 초기 버튼 텍스트 설정
         textCount.setText("0/"+Integer.toString(MAX_LENGTH));
+        scrollView = footerView.findViewById(R.id.listview_scroll);
+
+
 
         // EditText의 텍스트 변경을 감지
         inputEditText.addTextChangedListener(new TextWatcher() {
@@ -105,6 +126,8 @@ public class TodayViewFragment extends Fragment {
             }
         });
 
+        // 이건 submit button 누르면 키보드 사라지게
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         addButton.setOnClickListener(v -> {
             inputEditText.setVisibility(View.VISIBLE);
             textCount.setVisibility(View.VISIBLE);
@@ -116,10 +139,19 @@ public class TodayViewFragment extends Fragment {
             // 아래 줄 있으면, 텍스트 입력이 박스 넘어가도 줄바꿈이 안됨
             //inputEditText.setSingleLine(true);
             //submitButton.setVisibility(View.VISIBLE);
-        });
 
+            // ScrollView를 ConstraintLayout의 하단으로 스크롤
+
+
+        });
         submitButton.setOnClickListener(v -> {
             String text = inputEditText.getText().toString();
+            // 소프트 키보드 숨기기
+            if (imm != null && getActivity().getCurrentFocus() != null) {
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            }
+
+
             if (!text.isEmpty()) {
                 addItem(text);
                 inputEditText.setText("");
@@ -133,6 +165,7 @@ public class TodayViewFragment extends Fragment {
 
 
                 constraintLayout.setVisibility(View.GONE);
+
             }
         });
     }
