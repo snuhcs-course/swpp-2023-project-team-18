@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/listview_scroll"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:padding="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/edit_text_wrapper"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:background="@drawable/box_border">
+        android:layout_height="match_parent">
 
         <EditText
             android:id="@+id/inputEditText"
@@ -29,7 +22,7 @@
             android:hint="@string/edit_text_message"
             android:inputType="text|textMultiLine"
             android:visibility="gone"
-            android:backgroundTint="@android:color/transparent"
+            android:background="@drawable/box_border"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/count_and_submit"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -76,7 +69,6 @@
                 android:layout_marginStart="10dp"
                 android:background="@drawable/moment_write_inactivate"
                 android:onClick="submitInput"
-                android:enabled="false"
                 android:text=""
                 android:gravity="center"
                 android:visibility="gone" />
@@ -101,4 +93,3 @@
         />
 
 </LinearLayout>
-</ScrollView>
