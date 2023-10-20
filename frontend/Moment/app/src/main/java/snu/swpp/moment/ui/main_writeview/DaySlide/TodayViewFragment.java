@@ -3,6 +3,7 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,23 +19,35 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
+import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
+import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListView_Adapter;
 import snu.swpp.moment.ui.main_writeview.ListView_Item;
+import snu.swpp.moment.ui.main_writeview.WriteViewModel;
 import snu.swpp.moment.utils.KeyboardUtils;
 
 public class TodayViewFragment extends Fragment {
@@ -45,16 +58,33 @@ public class TodayViewFragment extends Fragment {
     private ListView listView;
     private EditText inputEditText;
     private TextView textCount, addButtonText;
+    private ScrollView scrollView;
 
     private ConstraintLayout constraintLayout;
 
     private int MAX_LENGTH = 100;
-    private ScrollView scrollView;
+    private final int NO_INTERNET = 0;
+    private final int ACCESS_TOKEN_EXPIRED = 1;
+    private WriteViewModel viewModel;
+    private MomentRemoteDataSource remoteDataSource;
+    private MomentRepository momentRepository;
+    private AuthenticationRepository authenticationRepository;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (remoteDataSource==null) remoteDataSource = new MomentRemoteDataSource();
+        if (momentRepository==null) momentRepository = new MomentRepository(remoteDataSource);
+        try {
+            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT);
+            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            startActivity(intent);
+        }
+        if (viewModel==null) viewModel = new ViewModelProvider(this).get(WriteViewModel.class);
+
         binding = TodayItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         // Initialize ListView and related components
@@ -72,6 +102,42 @@ public class TodayViewFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
         String formattedDate = sdf.format(calendar.getTime());
         items = new ArrayList<>();
+
+        viewModel.getErrorState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer error) {
+                if (error==NO_INTERNET) {
+                    Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT);
+                } else if (error==ACCESS_TOKEN_EXPIRED) {
+                    Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT);
+                    Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT);
+                }
+            }
+        });
+
+        viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<ArrayList<MomentPair>>() {
+            @Override
+            public void onChanged(ArrayList<MomentPair> arrayList) {
+                if (!arrayList.isEmpty()) {
+                    for (MomentPair momentPair: arrayList) {
+                        String userInput = momentPair.getMoment();
+                        String serverResponse = momentPair.getReply();
+                        String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(momentPair.getMomentCreatedTime());
+                        items.add(new ListView_Item(userInput, serverResponse, createdTime));
+                    }
+                }
+            }
+        });
+
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        int month = today.getMonthValue();
+        int date = today.getDayOfMonth();
+        viewModel.getMoment(year, month, date);
+
         mAdapter = new ListView_Adapter(getContext(), items);
         listView.setAdapter(mAdapter);
         View footerView = LayoutInflater.from(getContext()).inflate(R.layout.listview_footer, listView, false);

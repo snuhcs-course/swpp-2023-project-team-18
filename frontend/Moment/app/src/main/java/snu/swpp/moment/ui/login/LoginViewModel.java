@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
-import snu.swpp.moment.data.AuthenticationCallBack;
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.model.LoggedInUser;
 
 public class LoginViewModel extends ViewModel {

@@ -18,6 +18,10 @@ public class MomentPair {
         this.reply_created_at = convertTimestampToDate(reply_created_at);
     }
 
+    public String getMoment() { return moment; }
+    public String getReply() { return reply; }
+    public Date getMomentCreatedTime() { return moment_created_at; }
+
     private Date convertTimestampToDate(long timestamp) {
         return new Date(timestamp);
     }

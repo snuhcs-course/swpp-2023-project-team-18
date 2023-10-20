@@ -1,4 +1,4 @@
-package snu.swpp.moment.data;
+package snu.swpp.moment.data.callback;
 
 public interface TokenCallBack {
 

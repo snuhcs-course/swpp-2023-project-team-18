@@ -1,4 +1,4 @@
-package snu.swpp.moment.data;
+package snu.swpp.moment.data.source;
 
 import java.io.IOException;
 import retrofit2.Call;
@@ -14,6 +14,9 @@ import snu.swpp.moment.api.request.TokenRefreshRequest;
 import snu.swpp.moment.api.response.TokenRefreshResponse;
 import snu.swpp.moment.api.request.TokenVerifyRequest;
 import snu.swpp.moment.api.response.TokenVerifyResponse;
+import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.callback.RefreshCallBack;
+import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.LoggedInUser;
 
 /**

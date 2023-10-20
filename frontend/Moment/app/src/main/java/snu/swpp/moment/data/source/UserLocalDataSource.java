@@ -1,4 +1,4 @@
-package snu.swpp.moment.data;
+package snu.swpp.moment.data.source;
 // To use SharedPreferences, import Context
 
 import android.content.Context;

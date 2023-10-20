@@ -1,10 +1,16 @@
-package snu.swpp.moment.data;
+package snu.swpp.moment.data.repository;
 
 import android.content.Context;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+
+import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.callback.RefreshCallBack;
+import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.LoggedInUser;
 import snu.swpp.moment.data.model.Token;
+import snu.swpp.moment.data.source.UserLocalDataSource;
+import snu.swpp.moment.data.source.UserRemoteDataSource;
 
 /**
  * Class that requests authentication and user information from the remote data source and maintains
@@ -127,5 +133,9 @@ public class AuthenticationRepository {
                 registerCallBack.onFailure(errorMessage);
             }
         });
+    }
+
+    public Token getToken() {
+        return localDataSource.getToken();
     }
 }

@@ -3,6 +3,7 @@
     <string name="unknown_error">"알 수 없는 오류"</string>
     <string name="server_error">"서버 오류입니다."</string>
     <string name="internet_error">"인터넷 연결 오류입니다."</string>
+    <string name="token_expired_error">"토큰이 만료되었습니다."</string>
     <string name="username_error">"동일한 아이디가 이미 존재합니다."</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">아이디</string>

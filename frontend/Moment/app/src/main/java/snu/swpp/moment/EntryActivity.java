@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 public class EntryActivity extends AppCompatActivity {
 
