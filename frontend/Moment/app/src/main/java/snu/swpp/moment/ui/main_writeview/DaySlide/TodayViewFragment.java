@@ -64,7 +64,7 @@ public class TodayViewFragment extends Fragment {
         inputEditText = footerView.findViewById(R.id.inputEditText);
         addButtonText = footerView.findViewById(R.id.add_button_text);
         textCount = footerView.findViewById(R.id.textCount);
-        constraintLayout = footerView.findViewById(R.id.testtest);
+        constraintLayout = footerView.findViewById(R.id.edit_text_wrapper);
         // 초기 버튼 텍스트 설정
         textCount.setText("0/"+Integer.toString(MAX_LENGTH));
 
