@@ -30,7 +30,7 @@ public interface ServiceApi {
     @POST("api/user/register")
     Call<RegisterResponse> userRegister(@Body RegisterRequest data);
 
-    @GET("api/moments")
+    @GET("api/moments/")
     Call<MomentGetResponse> getMoments(@Header("Authorization") String bearerToken, @Query("start") long start, @Query("end") long end);
 
 

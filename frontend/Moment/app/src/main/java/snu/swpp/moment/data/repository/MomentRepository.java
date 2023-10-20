@@ -18,6 +18,7 @@ public class MomentRepository {
         remoteDataSource.getMoment(access_token, start, end, new MomentGetCallBack() {
             @Override
             public void onSuccess(ArrayList<MomentPair> momentPair) {
+                //System.out.println("#DEBUG: REPO " + momentPair.get(0).getMoment());
                 callback.onSuccess(momentPair);
             }
 

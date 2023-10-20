@@ -3,10 +3,10 @@ public class ListView_Item {
     private String userInput;
     private String serverResponse;
     private String inputTime;
-    public ListView_Item(String userInput, String inputTime, String s) {
+    public ListView_Item(String userInput, String inputTime, String serverResponse) {
         this.userInput = userInput;
         this.inputTime = inputTime;
-        this.serverResponse = ""; // 초기에는 서버 응답이 없기 때문에 빈 문자열로 설정
+        this.serverResponse = serverResponse; // 초기에는 서버 응답이 없기 때문에 빈 문자열로 설정
     }
     // 사용자 입력 getter 및 setter
     public String getUserInput() {

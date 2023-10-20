@@ -8,7 +8,6 @@ import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.model.MomentPair;
-import snu.swpp.moment.data.model.Token;
 
 public class MomentRemoteDataSource {
     private ServiceApi service;
@@ -19,6 +18,8 @@ public class MomentRemoteDataSource {
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
+        System.out.println("#DEBUG: " + start);
+        System.out.println("#DEBUG: " + end);
         service.getMoments(bearer, start, end).enqueue(new Callback<MomentGetResponse>() {
             @Override
             public void onResponse(Call<MomentGetResponse> call, Response<MomentGetResponse> response) {
@@ -27,6 +28,7 @@ public class MomentRemoteDataSource {
                     System.out.println("#DEBUG: " + result.getMomentList().get(0).getMoment());
                     callback.onSuccess(result.getMomentList());
                 } else {
+                    System.out.println("#DEBUG: " + response.code());
                     callback.onFailure(response.code());
                 }
             }

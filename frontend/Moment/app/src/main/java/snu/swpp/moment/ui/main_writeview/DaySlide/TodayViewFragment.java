@@ -48,6 +48,7 @@ import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListView_Adapter;
 import snu.swpp.moment.ui.main_writeview.ListView_Item;
 import snu.swpp.moment.ui.main_writeview.WriteViewModel;
+import snu.swpp.moment.ui.main_writeview.WriteViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
 
 public class TodayViewFragment extends Fragment {
@@ -83,7 +84,9 @@ public class TodayViewFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
-        if (viewModel==null) viewModel = new ViewModelProvider(this).get(WriteViewModel.class);
+        if (viewModel==null) viewModel = new ViewModelProvider(this,
+                new WriteViewModelFactory(authenticationRepository, momentRepository))
+                .get(WriteViewModel.class);
 
         binding = TodayItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -119,17 +122,22 @@ public class TodayViewFragment extends Fragment {
                 }
             }
         });
-
         viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<ArrayList<MomentPair>>() {
             @Override
             public void onChanged(ArrayList<MomentPair> arrayList) {
+                System.out.println("#DEBUG: ON CHANGED RUN");
                 if (!arrayList.isEmpty()) {
+                    //System.out.println("#DEBUG: ON CHANGED RUN 2");
                     for (MomentPair momentPair: arrayList) {
                         String userInput = momentPair.getMoment();
                         String serverResponse = momentPair.getReply();
                         String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(momentPair.getMomentCreatedTime());
-                        items.add(new ListView_Item(userInput, serverResponse, createdTime));
+                        items.add(new ListView_Item(userInput, createdTime, serverResponse));
+                        //System.out.println("#DEBUG: ON CHANGED RUN 3");
                     }
+                    //System.out.println("#DEBUG: array size " + arrayList.size());
+                    mAdapter.notifyDataSetChanged();
+                    listView.setSelection(items.size()-1);
                 }
             }
         });
