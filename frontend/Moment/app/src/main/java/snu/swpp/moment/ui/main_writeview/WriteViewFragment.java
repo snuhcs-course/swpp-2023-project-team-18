@@ -81,7 +81,6 @@ public class WriteViewFragment extends Fragment {
                         index = 0;
                         mPager.setCurrentItem(0, false);
                     }
-
                     LocalDate pageDate = TimeConverter.getToday().minusDays(num_page - index - 1);
                     String formattedDate = TimeConverter.formatDate(pageDate);
                     MainActivity activity = (MainActivity) getActivity();
@@ -103,7 +102,6 @@ public class WriteViewFragment extends Fragment {
         int hour;
         LocalDate created_at, today;
         String dateInString = authenticationRepository.getCreatedAt();
-
         if (dateInString.isBlank()) {
             return;
         }
@@ -114,6 +112,7 @@ public class WriteViewFragment extends Fragment {
 
         int dayDiff = (int) ChronoUnit.DAYS.between(created_at, today);
         this.num_page = dayDiff + 1;
+
     }
 
     @Override
