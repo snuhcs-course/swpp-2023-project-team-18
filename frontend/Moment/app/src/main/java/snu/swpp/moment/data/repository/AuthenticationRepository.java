@@ -132,5 +132,7 @@ public class AuthenticationRepository {
         return localDataSource.getToken();
     }
 
-    public String getCreatedAt() { return localDataSource.getCreatedAt(); }
+    public String getCreatedAt() {
+        return localDataSource.getCreatedAt();
+    }
 }

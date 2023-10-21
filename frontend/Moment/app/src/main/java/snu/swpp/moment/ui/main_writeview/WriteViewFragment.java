@@ -68,20 +68,21 @@ public class WriteViewFragment extends Fragment {
 
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset,
+                int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
 
                 if (positionOffsetPixels == 0) {
                     int index = position;
                     if (position >= num_page) { // 마지막 페이지에서 오른쪽으로 넘어갈 때 마지막 페이지로 고정
-                        index = num_page-1;
-                        mPager.setCurrentItem(num_page-1, false);
+                        index = num_page - 1;
+                        mPager.setCurrentItem(num_page - 1, false);
                     } else if (position < 0) { // 첫 페이지에서 왼쪽으로 넘어갈 때 첫 페이지로 고정
                         index = 0;
                         mPager.setCurrentItem(0, false);
                     }
 
-                    LocalDate pageDate = TimeConverter.getToday().minusDays(num_page-index-1);
+                    LocalDate pageDate = TimeConverter.getToday().minusDays(num_page - index - 1);
                     String formattedDate = TimeConverter.formatDate(pageDate);
                     MainActivity activity = (MainActivity) getActivity();
                     activity.setToolbarTitle(formattedDate);
@@ -103,14 +104,16 @@ public class WriteViewFragment extends Fragment {
         LocalDate created_at, today;
         String dateInString = authenticationRepository.getCreatedAt();
 
-        if (dateInString.isBlank()) return;
+        if (dateInString.isBlank()) {
+            return;
+        }
         today = TimeConverter.getToday();
         created_at = LocalDate.parse(dateInString.substring(0, 10));
         hour = Integer.parseInt(dateInString.substring(11, 13));
         created_at = TimeConverter.updateDateFromThree(created_at, hour);
 
         int dayDiff = (int) ChronoUnit.DAYS.between(created_at, today);
-        this.num_page = dayDiff+1;
+        this.num_page = dayDiff + 1;
     }
 
     @Override

@@ -13,6 +13,7 @@ import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.model.MomentPair;
 
 public class MomentRemoteDataSource {
+
     private ServiceApi service;
     private MomentPair momentPair;
     private Integer error;
@@ -23,7 +24,8 @@ public class MomentRemoteDataSource {
         service = RetrofitClient.getClient().create(ServiceApi.class);
         service.getMoments(bearer, start, end).enqueue(new Callback<MomentGetResponse>() {
             @Override
-            public void onResponse(Call<MomentGetResponse> call, Response<MomentGetResponse> response) {
+            public void onResponse(Call<MomentGetResponse> call,
+                Response<MomentGetResponse> response) {
                 if (response.isSuccessful()) {
                     MomentGetResponse result = response.body();
                     callback.onSuccess(result.getMomentList());
@@ -39,18 +41,18 @@ public class MomentRemoteDataSource {
         });
     }
 
-    public void writeMoment(String access_token, String moment, MomentWriteCallBack callback){
+    public void writeMoment(String access_token, String moment, MomentWriteCallBack callback) {
         String bearer = "Bearer " + access_token;
         MomentWriteRequest request = new MomentWriteRequest(moment);
         service = RetrofitClient.getClient().create(ServiceApi.class);
         service.writeMoment(bearer, request).enqueue(new Callback<MomentWriteResponse>() {
             @Override
-            public void onResponse(Call<MomentWriteResponse> call, Response<MomentWriteResponse> response) {
-                if(response.isSuccessful()){
+            public void onResponse(Call<MomentWriteResponse> call,
+                Response<MomentWriteResponse> response) {
+                if (response.isSuccessful()) {
                     MomentWriteResponse result = response.body();
                     callback.onSuccess(result.getMomentPair());
-                }
-                else{
+                } else {
                     callback.onFailure(response.code());
                 }
             }

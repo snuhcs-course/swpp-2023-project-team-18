@@ -33,9 +33,11 @@ public interface ServiceApi {
     Call<RegisterResponse> userRegister(@Body RegisterRequest data);
 
     @GET("api/moments/")
-    Call<MomentGetResponse> getMoments(@Header("Authorization") String bearerToken, @Query("start") long start, @Query("end") long end);
+    Call<MomentGetResponse> getMoments(@Header("Authorization") String bearerToken,
+        @Query("start") long start, @Query("end") long end);
 
     @POST("api/moments/")
-    Call<MomentWriteResponse> writeMoment(@Header("Authorization")String bearerToken, @Body MomentWriteRequest data);
+    Call<MomentWriteResponse> writeMoment(@Header("Authorization") String bearerToken,
+        @Body MomentWriteRequest data);
 
 }

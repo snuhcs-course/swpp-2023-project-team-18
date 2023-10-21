@@ -48,6 +48,7 @@ import snu.swpp.moment.ui.main_writeview.WriteViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
 
 public class TodayViewFragment extends Fragment {
+
     private TodayItemBinding binding;
     private List<ListViewItem> items;
     private ListViewAdapter mAdapter;
@@ -72,9 +73,13 @@ public class TodayViewFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        if (remoteDataSource==null) remoteDataSource = new MomentRemoteDataSource();
-        if (momentRepository==null) momentRepository = new MomentRepository(remoteDataSource);
+        Bundle savedInstanceState) {
+        if (remoteDataSource == null) {
+            remoteDataSource = new MomentRemoteDataSource();
+        }
+        if (momentRepository == null) {
+            momentRepository = new MomentRepository(remoteDataSource);
+        }
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
         } catch (Exception e) {
@@ -82,9 +87,11 @@ public class TodayViewFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
-        if (viewModel==null) viewModel = new ViewModelProvider(this,
+        if (viewModel == null) {
+            viewModel = new ViewModelProvider(this,
                 new WriteViewModelFactory(authenticationRepository, momentRepository))
                 .get(WriteViewModel.class);
+        }
 
         binding = TodayItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -105,7 +112,6 @@ public class TodayViewFragment extends Fragment {
         items = new ArrayList<>();
         System.out.println("#Debug items size" + items.size());
 
-
         viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<MomentUiState>() {
             @Override
             public void onChanged(MomentUiState momentUiState) {
@@ -118,30 +124,28 @@ public class TodayViewFragment extends Fragment {
                         for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
                             String userInput = momentPair.getMoment();
                             String serverResponse = momentPair.getReply();
-                            String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(momentPair.getMomentCreatedTime());
+                            String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(
+                                momentPair.getMomentCreatedTime());
                             items.add(new ListViewItem(userInput, createdTime, serverResponse));
                             //System.out.println("#DEBUG: ON CHANGED RUN 3");
                         }
 
-
-                        if(numMoments == 0){
+                        if (numMoments == 0) {
                             dayCompletionButton.setActivated(false);
-                        }
-                        else{
+                        } else {
                             dayCompletionButton.setActivated(true);
                         }
 
-
-                        System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
+                        //System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
                         mAdapter.notifyDataSetChanged();
                         listView.setSelection(items.size() - 1);
                     }
-                }
-                else{
-                    if (momentUiState.getError()==NO_INTERNET) {
+                } else {
+                    if (momentUiState.getError() == NO_INTERNET) {
                         Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT);
-                    } else if (momentUiState.getError()==ACCESS_TOKEN_EXPIRED) {
-                        Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT);
+                    } else if (momentUiState.getError() == ACCESS_TOKEN_EXPIRED) {
+                        Toast.makeText(getContext(), R.string.token_expired_error,
+                            Toast.LENGTH_SHORT);
                         Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
                         startActivity(intent);
                     } else {
@@ -155,12 +159,13 @@ public class TodayViewFragment extends Fragment {
         int year = today.getYear();
         int month = today.getMonthValue();
         int date = today.getDayOfMonth();
-        System.out.println("#DEBUG BEFORE REQUEST" + year+" "+month+" "+date);
+        System.out.println("#DEBUG BEFORE REQUEST" + year + " " + month + " " + date);
         viewModel.getMoment(year, month, date);
 
         mAdapter = new ListViewAdapter(getContext(), items);
         listView.setAdapter(mAdapter);
-        View footerView = LayoutInflater.from(getContext()).inflate(R.layout.listview_footer, listView, false);
+        View footerView = LayoutInflater.from(getContext())
+            .inflate(R.layout.listview_footer, listView, false);
         listView.addFooterView(footerView);
         addButton = footerView.findViewById(R.id.add_button);
         submitButton = footerView.findViewById(R.id.submit_button);
@@ -169,14 +174,13 @@ public class TodayViewFragment extends Fragment {
         //test
         dayCompletionButton = binding.dayCompleteButton;
 
-
         inputEditText = footerView.findViewById(R.id.inputEditText);
         addButtonText = footerView.findViewById(R.id.add_button_text);
         addButtonInactivateText = footerView.findViewById(R.id.add_button_inactivated_text);
         textCount = footerView.findViewById(R.id.textCount);
         constraintLayout = footerView.findViewById(R.id.edit_text_wrapper);
         // 초기 버튼 텍스트 설정
-        textCount.setText("0/"+Integer.toString(MAX_LENGTH));
+        textCount.setText("0/" + Integer.toString(MAX_LENGTH));
         scrollView = footerView.findViewById(R.id.listview_scroll);
 
         // EditText의 텍스트 변경을 감지
@@ -194,7 +198,7 @@ public class TodayViewFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 // 글자 수를 계산하고 버튼의 텍스트를 업데이트
-                textCount.setText(s.length() + "/"+Integer.toString(MAX_LENGTH));
+                textCount.setText(s.length() + "/" + Integer.toString(MAX_LENGTH));
                 // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
                 if (s.length() == 0) {
                     submitButton.setVisibility(View.GONE);
@@ -217,39 +221,42 @@ public class TodayViewFragment extends Fragment {
         });
 
         // 이건 submit button 누르면 키보드 사라지게
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-
-
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+            INPUT_METHOD_SERVICE);
 
         addButton.setOnClickListener(v -> {
 
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
-            if(numMoments >=2){
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
+                Locale.getDefault());
+            if (numMoments >= 2) {
 
                 System.out.println("#Debug addbuton test1");
-                String createdSecond = items.get(numMoments-2).getInputTime();
+                String createdSecond = items.get(numMoments - 2).getInputTime();
                 try {
                     System.out.println("#Debug addbuton test2");
                     Date createdDate = inputFormat.parse(createdSecond);
                     System.out.println("#Debug addbuton test3");
                     Calendar createdCalendar = Calendar.getInstance();
                     createdCalendar.setTime(createdDate);
-                    int createdHourValue = createdCalendar.get(Calendar.HOUR_OF_DAY); // This will give you the hour of createdSecond
+                    int createdHourValue = createdCalendar.get(
+                        Calendar.HOUR_OF_DAY); // This will give you the hour of createdSecond
 
                     System.out.println("#Debug addbuton test4");
                     Calendar currentCalendar = Calendar.getInstance();
-                    int currentHourValue = currentCalendar.get(Calendar.HOUR_OF_DAY); // This will give you the current hour
+                    int currentHourValue = currentCalendar.get(
+                        Calendar.HOUR_OF_DAY); // This will give you the current hour
 
                     System.out.println("#Debug addbuton test5");
-                    System.out.println("#Debug :: test :: current hour : " + currentHourValue + ", created hour: " + createdHourValue);
+                    System.out.println(
+                        "#Debug :: test :: current hour : " + currentHourValue + ", created hour: "
+                            + createdHourValue);
 
-                    if(createdHourValue == currentHourValue){
+                    if (createdHourValue == currentHourValue) {
                         addButton.setVisibility(View.GONE);
                         addButtonText.setVisibility(View.GONE);
                         addButtonInactivate.setVisibility(View.VISIBLE);
                         addButtonInactivateText.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         inputEditText.setVisibility(View.VISIBLE);
                         textCount.setVisibility(View.VISIBLE);
 
@@ -257,17 +264,13 @@ public class TodayViewFragment extends Fragment {
                         addButtonText.setVisibility(View.GONE);
                         submitButtonInactivate.setVisibility(View.VISIBLE);
                         constraintLayout.setVisibility(View.VISIBLE);
-                        // 아래 줄 있으면, 텍스트 입력이 박스 넘어가도 줄바꿈이 안됨
-                        //inputEditText.setSingleLine(true);
-                        //submitButton.setVisibility(View.VISIBLE);
                         listView.setSelection(items.size() - 1);
                         // ScrollView를 ConstraintLayout의 하단으로 스크롤
                     }
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            else {
+            } else {
                 inputEditText.setVisibility(View.VISIBLE);
                 textCount.setVisibility(View.VISIBLE);
 

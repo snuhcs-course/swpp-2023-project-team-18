@@ -8,9 +8,12 @@ import java.util.List;
 import snu.swpp.moment.data.model.MomentPair;
 
 public class MomentGetResponse {
+
     @SerializedName("moments")
     private List<Moment> momentList;
+
     private class Moment {
+
         @SerializedName("id")
         private int id;
         @SerializedName("moment")
@@ -22,22 +25,36 @@ public class MomentGetResponse {
         @SerializedName("reply_created_at")
         private long reply_created_at;
 
-        public int getId() { return id; }
-        public String getMoment() { return moment; }
-        public String getReply() { return reply; }
-        public Long getMomentCreatedAt() { return moment_created_at; }
-        public Long getReplyCreatedAt() {return reply_created_at; }
+        public int getId() {
+            return id;
+        }
+
+        public String getMoment() {
+            return moment;
+        }
+
+        public String getReply() {
+            return reply;
+        }
+
+        public Long getMomentCreatedAt() {
+            return moment_created_at;
+        }
+
+        public Long getReplyCreatedAt() {
+            return reply_created_at;
+        }
     }
 
     public ArrayList<MomentPair> getMomentList() {
         ArrayList<MomentPair> result = new ArrayList<>();
-        for (Moment moment: momentList) {
+        for (Moment moment : momentList) {
             result.add(new MomentPair(
-                    moment.getId(),
-                    moment.getMoment(),
-                    moment.getReply(),
-                    moment.moment_created_at,
-                    moment.reply_created_at)
+                moment.getId(),
+                moment.getMoment(),
+                moment.getReply(),
+                moment.moment_created_at,
+                moment.reply_created_at)
             );
         }
         return result;

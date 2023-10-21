@@ -10,12 +10,13 @@ import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 
 public class WriteViewModelFactory implements ViewModelProvider.Factory {
+
     private AuthenticationRepository authenticationRepository;
     private MomentRepository momentRepository;
 
     public WriteViewModelFactory(
-            AuthenticationRepository authenticationRepository,
-            MomentRepository momentRepository
+        AuthenticationRepository authenticationRepository,
+        MomentRepository momentRepository
     ) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;

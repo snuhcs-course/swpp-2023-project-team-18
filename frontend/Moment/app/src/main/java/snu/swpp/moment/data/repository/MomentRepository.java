@@ -10,6 +10,7 @@ import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.UserLocalDataSource;
 
 public class MomentRepository {
+
     private MomentRemoteDataSource remoteDataSource;
 
     public MomentRepository(MomentRemoteDataSource remoteDataSource) {
@@ -31,7 +32,7 @@ public class MomentRepository {
         });
     }
 
-    public void writeMoment(String access_token, String moment, MomentWriteCallBack callback){
+    public void writeMoment(String access_token, String moment, MomentWriteCallBack callback) {
         remoteDataSource.writeMoment(access_token, moment, new MomentWriteCallBack() {
             @Override
             public void onSuccess(MomentPair momentPair) {

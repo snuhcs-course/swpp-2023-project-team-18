@@ -21,13 +21,14 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public class WriteViewModel extends ViewModel {
 
-    private final long MILLIS_IN_A_DAY = 1000*60*60*24;
+    private final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
     private final int REFRESH_TOKEN_EXPIRED = 1;
     private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
     private AuthenticationRepository authenticationRepository;
     private MomentRepository momentRepository;
 
-    public WriteViewModel(AuthenticationRepository authenticationRepository, MomentRepository momentRepository) {
+    public WriteViewModel(AuthenticationRepository authenticationRepository,
+        MomentRepository momentRepository) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
     }
@@ -35,7 +36,10 @@ public class WriteViewModel extends ViewModel {
     public LiveData<MomentUiState> getMomentState() {
         return momentState;
     }
-    public void setMomentState(MomentUiState momentState){ this.momentState.setValue(momentState);}
+
+    public void setMomentState(MomentUiState momentState) {
+        this.momentState.setValue(momentState);
+    }
 
     public void getMoment(int year, int month, int date) {
         //Date startDate = new Date(year, month, date, 3, 0);
@@ -53,8 +57,7 @@ public class WriteViewModel extends ViewModel {
         long start = TimeConverter.convertDateToLong(startDate);
         long end = TimeConverter.convertDateToLong(endDate);
 
-        System.out.println("#Debug  start : "+ start + " end : "+end );
-
+        System.out.println("#Debug  start : " + start + " end : " + end);
 
         authenticationRepository.isTokenValid(new TokenCallBack() {
             @Override
@@ -65,7 +68,7 @@ public class WriteViewModel extends ViewModel {
                     public void onSuccess(ArrayList<MomentPair> momentPair) {
                         //System.out.println("#DEBUG: VIEWMODEL " + momentPair.size());
                         momentState.setValue(
-                                new MomentUiState(-1, momentPair)
+                            new MomentUiState(-1, momentPair)
                         );
                     }
 
@@ -73,7 +76,7 @@ public class WriteViewModel extends ViewModel {
                     public void onFailure(int error) {
 
                         momentState.setValue(
-                                new MomentUiState(error, new ArrayList<>())
+                            new MomentUiState(error, new ArrayList<>())
                         );
                     }
                 });
@@ -86,28 +89,30 @@ public class WriteViewModel extends ViewModel {
         });
     }
 
-    public void writeMoment(String moment){
+    public void writeMoment(String moment) {
         String writtenMoment = moment;
         authenticationRepository.isTokenValid(new TokenCallBack() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                momentRepository.writeMoment(access_token, writtenMoment, new MomentWriteCallBack() {
-                    @Override
-                    public void onSuccess(MomentPair momentPair) {
-                        ArrayList<MomentPair> reply = momentState.getValue().getMomentPairsList();
-                        reply.add(momentPair);
-                        momentState.setValue(new MomentUiState(-1, reply));
-                    }
+                momentRepository.writeMoment(access_token, writtenMoment,
+                    new MomentWriteCallBack() {
+                        @Override
+                        public void onSuccess(MomentPair momentPair) {
+                            ArrayList<MomentPair> reply = momentState.getValue()
+                                .getMomentPairsList();
+                            reply.add(momentPair);
+                            momentState.setValue(new MomentUiState(-1, reply));
+                        }
 
-                    @Override
-                    public void onFailure(int error) {
-                        momentState.setValue(
+                        @Override
+                        public void onFailure(int error) {
+                            momentState.setValue(
                                 //new MomentUiState(error, new ArrayList<>())
                                 new MomentUiState(error, null)
-                        );
-                    }
-                });
+                            );
+                        }
+                    });
             }
 
             @Override

@@ -89,7 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable RegisterResultState registerResult) {
                 if (registerResult == null) {
-                    Toast.makeText(RegisterActivity.this, R.string.unknown_error, Toast.LENGTH_SHORT)
+                    Toast.makeText(RegisterActivity.this, R.string.unknown_error,
+                            Toast.LENGTH_SHORT)
                         .show();
                 }
                 //loadingProgressBar.setVisibility(View.GONE);
