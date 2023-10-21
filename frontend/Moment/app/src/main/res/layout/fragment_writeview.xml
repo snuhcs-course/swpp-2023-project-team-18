@@ -8,16 +8,19 @@
     tools:context=".ui.main_writeview.WriteViewFragment">
 
     <FrameLayout
+        android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:clipToPadding="false"
+        android:clipChildren="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewpager"
-            android:clipToPadding="false"
-            android:clipChildren="false"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+</FrameLayout>
 
-    </FrameLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

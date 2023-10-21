@@ -46,7 +46,7 @@ public class TodayViewFragment extends Fragment {
     private TodayItemBinding binding;
     private List<ListViewItem> items;
     private ListViewAdapter mAdapter;
-    private Button addButton, submitButton, submitButtonInactivate;
+    private Button addButton, submitButton, submitButtonInactivate, dayCompletionButton;
     private ListView listView;
     private EditText inputEditText;
     private TextView textCount, addButtonText;
@@ -106,7 +106,7 @@ public class TodayViewFragment extends Fragment {
                     if (!momentUiState.getMomentPairsList().isEmpty()) {
                         //System.out.println("#DEBUG: ON CHANGED RUN 2");
                         items.clear();
-
+                        int numItems = momentUiState.getMomentPairsList().size();
                         for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
                             String userInput = momentPair.getMoment();
                             String serverResponse = momentPair.getReply();
@@ -114,6 +114,13 @@ public class TodayViewFragment extends Fragment {
                             items.add(new ListViewItem(userInput, createdTime, serverResponse));
                             //System.out.println("#DEBUG: ON CHANGED RUN 3");
                         }
+                        if(numItems == 0){
+                            dayCompletionButton.setActivated(false);
+                        }
+                        else{
+                            dayCompletionButton.setActivated(true);
+                        }
+
                         System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
                         mAdapter.notifyDataSetChanged();
                         listView.setSelection(items.size() - 1);
@@ -147,6 +154,11 @@ public class TodayViewFragment extends Fragment {
         addButton = footerView.findViewById(R.id.add_button);
         submitButton = footerView.findViewById(R.id.submit_button);
         submitButtonInactivate = footerView.findViewById(R.id.submit_button_inactivate);
+
+        //test
+        dayCompletionButton = binding.dayCompleteButton;
+
+
         inputEditText = footerView.findViewById(R.id.inputEditText);
         addButtonText = footerView.findViewById(R.id.add_button_text);
         textCount = footerView.findViewById(R.id.textCount);
@@ -209,7 +221,6 @@ public class TodayViewFragment extends Fragment {
             //submitButton.setVisibility(View.VISIBLE);
             listView.setSelection(items.size() - 1);
             // ScrollView를 ConstraintLayout의 하단으로 스크롤
-
 
         });
         submitButton.setOnClickListener(v -> {

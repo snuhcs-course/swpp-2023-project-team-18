@@ -41,6 +41,7 @@
 
     <!-- 쓰기 탭 -->
     <string name="edit_text_message">오늘의 모먼트를 기록해 주세요</string>
+    <string name="day_completetion_string">하루 마무리하기</string>
 
     <!-- 한달보기 탭 -->
     <string name="day_section_emotion">이날의 감정</string>
