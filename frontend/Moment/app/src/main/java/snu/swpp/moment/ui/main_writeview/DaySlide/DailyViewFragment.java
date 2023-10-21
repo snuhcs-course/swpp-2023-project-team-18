@@ -7,11 +7,16 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.DailyItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
@@ -21,6 +26,8 @@ public class DailyViewFragment extends Fragment {
     private List<ListViewItem> items;
     private ListViewAdapter mAdapter;
     private ListView listView;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -28,16 +35,14 @@ public class DailyViewFragment extends Fragment {
         //      R.layout.daily_item, container, false);
         binding = DailyItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        System.out.println("#DEBUG: OnCreateView");
         // Initialize ListView and related components
         initializeListView(root);
+        System.out.println("#DEBUG: Initialized list view");
         return root;
     }
+
     private void initializeListView(View root) {
         listView = root.findViewById(R.id.listview_list);
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-        String formattedDate = sdf.format(calendar.getTime());
         items = new ArrayList<>();
         mAdapter = new ListViewAdapter(getContext(), items);
         listView.setAdapter(mAdapter);

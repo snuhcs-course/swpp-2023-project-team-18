@@ -22,6 +22,7 @@ import java.util.Set;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewAdapter;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
+import snu.swpp.moment.utils.TimeConverter;
 
 
 public class WriteViewFragment extends Fragment {
@@ -70,9 +71,9 @@ public class WriteViewFragment extends Fragment {
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         // 최초의 페이지 설정은 이거로함 (numpage 보다 크면 마지막페이지가 세팅되는듯 - 아래 onPageChangeCallBack)
-        mPager.setCurrentItem(4);
+        mPager.setCurrentItem(num_page);
 
-        //offscree 몇페이지가 로드되어있을지 설정 (Latency 감소)
+        //offscreen 몇페이지가 로드되어있을지 설정 (Latency 감소)
         mPager.setOffscreenPageLimit(3);
 
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -81,11 +82,18 @@ public class WriteViewFragment extends Fragment {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
 
                 if (positionOffsetPixels == 0) {
-                    if (position > 3) { // 마지막 페이지 3으로 설정
-                        mPager.setCurrentItem(3, false);
+                    int index = position;
+                    if (position >= num_page) { // 마지막 페이지 3으로 설정
+                        index = num_page-1;
+                        mPager.setCurrentItem(num_page-1, false);
                     } else if (position < 0) { // 첫 페이지 0으로 설정
+                        index = 0;
                         mPager.setCurrentItem(0, false);
                     }
+
+                    String formattedDate = TimeConverter.getPageDate(num_page-index-1);
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.setToolbarTitle(formattedDate);
                 }
             }
 
@@ -95,10 +103,6 @@ public class WriteViewFragment extends Fragment {
                 //mIndicator.animatePageSelected(position % 4);
             }
         });
-
-        System.out.println("#DEBUG: end of write view fragment");
-
-
 
         return root;
     }
