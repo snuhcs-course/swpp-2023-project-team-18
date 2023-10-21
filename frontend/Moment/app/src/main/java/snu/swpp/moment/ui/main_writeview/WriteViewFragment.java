@@ -32,7 +32,7 @@ public class WriteViewFragment extends Fragment {
     private ViewPager2 mPager;
     // below tow indicator is not used. this is circle you can see in instagram
     private FragmentStateAdapter pagerAdapter;
-    private int num_page = 4;
+    private int num_page = 100;
     private Handler slideHandler = new Handler(); // 슬라이드를 자동으로 변경하는 Handler
     //private CircleIndicator3 mIndicator;
     // ViewPager variables end

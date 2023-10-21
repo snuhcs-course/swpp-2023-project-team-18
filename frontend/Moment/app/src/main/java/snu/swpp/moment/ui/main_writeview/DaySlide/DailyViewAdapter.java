@@ -7,18 +7,18 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class DailyViewAdapter extends FragmentStateAdapter {
 
-    public int mCount;
+    public int count;
 
     public DailyViewAdapter(Fragment fa, int count) {
         super(fa);
-        mCount = count;
+        this.count = count;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         int index = getRealPosition(position);
-        if (index == 3) return new TodayViewFragment();
+        if (index == count-1) return new TodayViewFragment();
         else return new DailyViewFragment();
 
 
@@ -27,10 +27,10 @@ public class DailyViewAdapter extends FragmentStateAdapter {
     // 전체 페이지수
     @Override
     public int getItemCount() {
-        return 4;
+        return count;
     }
 
     public int getRealPosition(int position) {
-        return position % mCount;
+        return position % count;
     }
 }
