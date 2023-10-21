@@ -64,7 +64,7 @@ public class TodayViewFragment extends Fragment {
 
     private ConstraintLayout constraintLayout;
 
-    private int MAX_LENGTH = 100;
+    private int MAX_LENGTH = 1000;
     private final int NO_INTERNET = 0;
     private final int ACCESS_TOKEN_EXPIRED = 1;
     private WriteViewModel viewModel;
@@ -233,6 +233,7 @@ public class TodayViewFragment extends Fragment {
             if (!text.isEmpty()) {
                 viewModel.writeMoment(text);
                 addItem(text);
+
                 inputEditText.setText("");
                 inputEditText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
