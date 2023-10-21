@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.DummyActivity;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.ActivityRegisterBinding;
 
@@ -100,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 if (registerResult.getSuccess() != null) {
                     updateUiWithUser(registerResult.getSuccess());
-                    Intent registerIntent = new Intent(RegisterActivity.this, DummyActivity.class);
+                    Intent registerIntent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(registerIntent);
                 }
                 setResult(Activity.RESULT_OK);

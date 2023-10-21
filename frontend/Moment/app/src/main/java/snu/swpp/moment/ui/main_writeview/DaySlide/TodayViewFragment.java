@@ -47,6 +47,7 @@ import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListView_Adapter;
 import snu.swpp.moment.ui.main_writeview.ListView_Item;
+import snu.swpp.moment.ui.main_writeview.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.WriteViewModel;
 import snu.swpp.moment.ui.main_writeview.WriteViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
@@ -90,6 +91,7 @@ public class TodayViewFragment extends Fragment {
 
         binding = TodayItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         System.out.println("#DEBUG: before initializeListView");
         // Initialize ListView and related components
         initializeListView(root);
@@ -103,41 +105,40 @@ public class TodayViewFragment extends Fragment {
 
     private void initializeListView(View root) {
         listView = root.findViewById(R.id.listview_list);
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-        String formattedDate = sdf.format(calendar.getTime());
         items = new ArrayList<>();
+        System.out.println("#Debug items size" + items.size());
 
-        viewModel.getErrorState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<MomentUiState>() {
             @Override
-            public void onChanged(Integer error) {
-                if (error==NO_INTERNET) {
-                    Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT);
-                } else if (error==ACCESS_TOKEN_EXPIRED) {
-                    Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT);
-                    Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT);
-                }
-            }
-        });
-        viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<ArrayList<MomentPair>>() {
-            @Override
-            public void onChanged(ArrayList<MomentPair> arrayList) {
+            public void onChanged(MomentUiState momentUiState) {
                 System.out.println("#DEBUG: ON CHANGED RUN");
-                if (!arrayList.isEmpty()) {
-                    //System.out.println("#DEBUG: ON CHANGED RUN 2");
-                    for (MomentPair momentPair: arrayList) {
-                        String userInput = momentPair.getMoment();
-                        String serverResponse = momentPair.getReply();
-                        String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(momentPair.getMomentCreatedTime());
-                        items.add(new ListView_Item(userInput, createdTime, serverResponse));
-                        //System.out.println("#DEBUG: ON CHANGED RUN 3");
+                if (momentUiState.getError() == -1) {
+                    if (!momentUiState.getMomentPairsList().isEmpty()) {
+                        //System.out.println("#DEBUG: ON CHANGED RUN 2");
+                        items.clear();
+
+                        for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
+                            String userInput = momentPair.getMoment();
+                            String serverResponse = momentPair.getReply();
+                            String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(momentPair.getMomentCreatedTime());
+                            items.add(new ListView_Item(userInput, createdTime, serverResponse));
+                            //System.out.println("#DEBUG: ON CHANGED RUN 3");
+                        }
+                        System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
+                        mAdapter.notifyDataSetChanged();
+                        listView.setSelection(items.size() - 1);
                     }
-                    //System.out.println("#DEBUG: array size " + arrayList.size());
-                    mAdapter.notifyDataSetChanged();
-                    listView.setSelection(items.size()-1);
+                }
+                else{
+                    if (momentUiState.getError()==NO_INTERNET) {
+                        Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT);
+                    } else if (momentUiState.getError()==ACCESS_TOKEN_EXPIRED) {
+                        Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT);
+                        Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT);
+                    }
                 }
             }
         });
@@ -146,6 +147,7 @@ public class TodayViewFragment extends Fragment {
         int year = today.getYear();
         int month = today.getMonthValue();
         int date = today.getDayOfMonth();
+        System.out.println("#DEBUG BEFORE REQUEST" + year+" "+month+" "+date);
         viewModel.getMoment(year, month, date);
 
         mAdapter = new ListView_Adapter(getContext(), items);
@@ -229,17 +231,15 @@ public class TodayViewFragment extends Fragment {
 
 
             if (!text.isEmpty()) {
+                viewModel.writeMoment(text);
                 addItem(text);
                 inputEditText.setText("");
                 inputEditText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
                 submitButtonInactivate.setVisibility(View.GONE);
                 textCount.setVisibility(View.GONE);
-
                 addButton.setVisibility(View.VISIBLE);
                 addButtonText.setVisibility(View.VISIBLE);
-
-
                 constraintLayout.setVisibility(View.GONE);
 
             }
