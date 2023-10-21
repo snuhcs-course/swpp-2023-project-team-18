@@ -21,7 +21,7 @@
             android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.Moment.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".DummyActivity"
             android:exported="false" />
