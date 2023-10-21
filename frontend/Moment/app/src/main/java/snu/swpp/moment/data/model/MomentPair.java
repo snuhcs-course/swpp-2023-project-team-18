@@ -2,6 +2,8 @@ package snu.swpp.moment.data.model;
 
 import java.util.Date;
 
+import snu.swpp.moment.utils.TimeConverter;
+
 
 public class MomentPair {
     private long id;
@@ -14,15 +16,12 @@ public class MomentPair {
         this.id = id;
         this.moment = moment;
         this.reply = reply;
-        this.moment_created_at = convertTimestampToDate(moment_created_at);
-        this.reply_created_at = convertTimestampToDate(reply_created_at);
+        this.moment_created_at = TimeConverter.convertLongToDate(moment_created_at);
+        this.reply_created_at = TimeConverter.convertLongToDate(reply_created_at);
     }
 
     public String getMoment() { return moment; }
     public String getReply() { return reply; }
     public Date getMomentCreatedTime() { return moment_created_at; }
-
-    private Date convertTimestampToDate(long timestamp) {
-        return new Date(timestamp);
-    }
+    public Date getReplyCreatedTime() { return reply_created_at; }
 }

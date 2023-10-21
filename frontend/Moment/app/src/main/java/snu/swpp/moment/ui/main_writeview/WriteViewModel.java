@@ -17,6 +17,7 @@ import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPair;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.utils.TimeConverter;
 
 public class WriteViewModel extends ViewModel {
 
@@ -49,8 +50,8 @@ public class WriteViewModel extends ViewModel {
 
         calendar.add(Calendar.MILLISECOND, (int) (MILLIS_IN_A_DAY - 1));
         Date endDate = calendar.getTime();
-        long start = startDate.getTime()/1000;
-        long end = endDate.getTime()/1000;
+        long start = TimeConverter.convertDateToLong(startDate);
+        long end = TimeConverter.convertDateToLong(endDate);
 
         System.out.println("#Debug  start : "+ start + " end : "+end );
 
@@ -62,7 +63,7 @@ public class WriteViewModel extends ViewModel {
                 momentRepository.getMoment(access_token, start, end, new MomentGetCallBack() {
                     @Override
                     public void onSuccess(ArrayList<MomentPair> momentPair) {
-                        System.out.println("#DEBUG: VIEWMODEL " + momentPair.size());
+                        //System.out.println("#DEBUG: VIEWMODEL " + momentPair.size());
                         momentState.setValue(
                                 new MomentUiState(-1, momentPair)
                         );
