@@ -40,7 +40,7 @@ public class UserRemoteDataSource {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-                    System.out.println("#Debug Login OnResponse ");
+                    //System.out.println("#Debug Login OnResponse ");
                     LoginResponse result = response.body();
                     loginCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
                 } else {

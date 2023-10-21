@@ -35,9 +35,7 @@ public class UserLocalDataSource {
         editor.putString("nickname", user.getNickName());
         editor.putString("access_token", user.getAccessToken());
         editor.putString("refresh_token", user.getRefreshToken());
-        if (sharedPreferences.getString("created_at", DEFAULT_STRING).isEmpty()) {
-            editor.putString("created_at", LocalDateTime.now().toString()); //YYYY-MM-DDTHH:SS:...
-        }
+        editor.putString("created_at", user.getCreateAt()); //YYYY-MM-DDTHH:SS:...
         editor.apply(); // 이거 해야 적용됨
         // username은 오는데 저장은 따로 아직 안했음 (굳이?)
     }

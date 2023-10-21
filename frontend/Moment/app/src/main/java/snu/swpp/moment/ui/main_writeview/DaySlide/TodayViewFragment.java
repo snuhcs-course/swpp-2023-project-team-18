@@ -159,7 +159,6 @@ public class TodayViewFragment extends Fragment {
         int year = today.getYear();
         int month = today.getMonthValue();
         int date = today.getDayOfMonth();
-        System.out.println("#DEBUG BEFORE REQUEST" + year + " " + month + " " + date);
         viewModel.getMoment(year, month, date);
 
         mAdapter = new ListViewAdapter(getContext(), items);
