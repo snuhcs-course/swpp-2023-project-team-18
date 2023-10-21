@@ -89,14 +89,11 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable RegisterResultState registerResult) {
                 if (registerResult == null) {
-                    Toast.makeText(RegisterActivity.this, "*************", Toast.LENGTH_SHORT)
+                    Toast.makeText(RegisterActivity.this, R.string.unknown_error, Toast.LENGTH_SHORT)
                         .show();
-                    //return;
                 }
                 //loadingProgressBar.setVisibility(View.GONE);
                 if (registerResult.getError() != null) {
-                    Toast.makeText(RegisterActivity.this, "################", Toast.LENGTH_SHORT)
-                        .show();
                     showLoginFailed(registerResult.getError());
                 }
                 if (registerResult.getSuccess() != null) {
