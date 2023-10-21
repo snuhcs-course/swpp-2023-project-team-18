@@ -2,17 +2,13 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,28 +21,22 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import snu.swpp.moment.LoginRegisterActivity;
-import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.model.MomentPair;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
-import snu.swpp.moment.ui.main_writeview.ListView_Adapter;
-import snu.swpp.moment.ui.main_writeview.ListView_Item;
+import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
+import snu.swpp.moment.ui.main_writeview.ListViewItem;
 import snu.swpp.moment.ui.main_writeview.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.WriteViewModel;
 import snu.swpp.moment.ui.main_writeview.WriteViewModelFactory;
@@ -54,8 +44,8 @@ import snu.swpp.moment.utils.KeyboardUtils;
 
 public class TodayViewFragment extends Fragment {
     private TodayItemBinding binding;
-    private List<ListView_Item> items;
-    private ListView_Adapter mAdapter;
+    private List<ListViewItem> items;
+    private ListViewAdapter mAdapter;
     private Button addButton, submitButton, submitButtonInactivate;
     private ListView listView;
     private EditText inputEditText;
@@ -121,7 +111,7 @@ public class TodayViewFragment extends Fragment {
                             String userInput = momentPair.getMoment();
                             String serverResponse = momentPair.getReply();
                             String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(momentPair.getMomentCreatedTime());
-                            items.add(new ListView_Item(userInput, createdTime, serverResponse));
+                            items.add(new ListViewItem(userInput, createdTime, serverResponse));
                             //System.out.println("#DEBUG: ON CHANGED RUN 3");
                         }
                         System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
@@ -150,7 +140,7 @@ public class TodayViewFragment extends Fragment {
         System.out.println("#DEBUG BEFORE REQUEST" + year+" "+month+" "+date);
         viewModel.getMoment(year, month, date);
 
-        mAdapter = new ListView_Adapter(getContext(), items);
+        mAdapter = new ListViewAdapter(getContext(), items);
         listView.setAdapter(mAdapter);
         View footerView = LayoutInflater.from(getContext()).inflate(R.layout.listview_footer, listView, false);
         listView.addFooterView(footerView);
@@ -249,7 +239,7 @@ public class TodayViewFragment extends Fragment {
 
     private void addItem(String userInput) {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(new Date());
-        items.add(new ListView_Item(userInput, currentTime, ""));
+        items.add(new ListViewItem(userInput, currentTime, ""));
         mAdapter.notifyDataSetChanged();
         listView.setSelection(items.size() - 1);
     }

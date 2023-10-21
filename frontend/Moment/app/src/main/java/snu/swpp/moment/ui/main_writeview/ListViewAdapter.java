@@ -7,10 +7,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import java.util.List;
 import snu.swpp.moment.R;
-public class ListView_Adapter extends BaseAdapter {
-    private List<ListView_Item> items = null;
+public class ListViewAdapter extends BaseAdapter {
+    private List<ListViewItem> items = null;
     private Context context;
-    public ListView_Adapter(Context context, List<ListView_Item> items) {
+    public ListViewAdapter(Context context, List<ListViewItem> items) {
         this.items = items;
         this.context = context;
     }
@@ -22,7 +22,7 @@ public class ListView_Adapter extends BaseAdapter {
         return items.size();
     }
     @Override
-    public ListView_Item getItem(int position) {
+    public ListViewItem getItem(int position) {
         return items.get(position);
     }
     @Override
@@ -38,7 +38,7 @@ public class ListView_Adapter extends BaseAdapter {
         TextView userInput = convertView.findViewById(R.id.listitem_userInput);
         TextView inputTime = convertView.findViewById(R.id.listitem_inputTime);
         TextView serverResponse = convertView.findViewById(R.id.listitem_serverResponse);
-        ListView_Item item = items.get(position);
+        ListViewItem item = items.get(position);
         userInput.setText(item.getUserInput());
         inputTime.setText(item.getInputTime());
         serverResponse.setText(item.getServerResponse().isEmpty() ? "Waiting for server response..." : item.getServerResponse());

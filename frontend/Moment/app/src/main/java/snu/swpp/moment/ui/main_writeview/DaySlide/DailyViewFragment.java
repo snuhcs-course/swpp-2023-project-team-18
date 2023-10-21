@@ -3,10 +3,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,12 +14,12 @@ import java.util.List;
 import java.util.Locale;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.DailyItemBinding;
-import snu.swpp.moment.ui.main_writeview.ListView_Adapter;
-import snu.swpp.moment.ui.main_writeview.ListView_Item;
+import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
+import snu.swpp.moment.ui.main_writeview.ListViewItem;
 public class DailyViewFragment extends Fragment {
     private DailyItemBinding binding;
-    private List<ListView_Item> items;
-    private ListView_Adapter mAdapter;
+    private List<ListViewItem> items;
+    private ListViewAdapter mAdapter;
     private ListView listView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,12 +39,12 @@ public class DailyViewFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
         String formattedDate = sdf.format(calendar.getTime());
         items = new ArrayList<>();
-        mAdapter = new ListView_Adapter(getContext(), items);
+        mAdapter = new ListViewAdapter(getContext(), items);
         listView.setAdapter(mAdapter);
     }
     private void addItem(String userInput) {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(new Date());
-        items.add(new ListView_Item(userInput, currentTime, ""));
+        items.add(new ListViewItem(userInput, currentTime, ""));
         mAdapter.notifyDataSetChanged();
         listView.setSelection(items.size() - 1);
     }

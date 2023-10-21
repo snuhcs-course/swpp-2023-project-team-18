@@ -1,9 +1,9 @@
 package snu.swpp.moment.ui.main_writeview;
-public class ListView_Item {
+public class ListViewItem {
     private String userInput;
     private String serverResponse;
     private String inputTime;
-    public ListView_Item(String userInput, String inputTime, String serverResponse) {
+    public ListViewItem(String userInput, String inputTime, String serverResponse) {
         this.userInput = userInput;
         this.inputTime = inputTime;
         this.serverResponse = serverResponse; // 초기에는 서버 응답이 없기 때문에 빈 문자열로 설정
