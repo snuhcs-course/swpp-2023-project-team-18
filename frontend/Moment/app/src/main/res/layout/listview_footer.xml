@@ -90,7 +90,20 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/moment_add_button"
         android:onClick="showInputFields"
+        android:clickable="true"
         />
+    <Button
+        android:id="@+id/add_button_inactivated"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        android:clickable="false"
+        android:background="@drawable/moment_add_button_inactivated"
+        android:onClick="showInputFields"
+        />
+
+
     <TextView
         android:id="@+id/add_button_text"
         android:layout_width="wrap_content"
@@ -98,6 +111,16 @@
         android:fontFamily="@font/maruburi_light"
         android:text="새 모먼트 추가"
         android:textColor="@color/gray"
+        />
+
+    <TextView
+        android:id="@+id/add_button_inactivated_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/maruburi_light"
+        android:text="모먼트는 1시간에 2개만 쓸 수 있어요."
+        android:visibility="gone"
+        android:textColor="@color/red"
         />
 
 </LinearLayout>
