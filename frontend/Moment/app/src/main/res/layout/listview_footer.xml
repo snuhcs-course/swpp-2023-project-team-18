@@ -22,7 +22,8 @@
         <EditText
             android:id="@+id/inputEditText"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/editTextHeight"
+            android:layout_height="wrap_content"
+            android:minLines="5"
             android:padding="@dimen/editTextPadding"
             android:textSize="15sp"
             android:gravity="top|start"
