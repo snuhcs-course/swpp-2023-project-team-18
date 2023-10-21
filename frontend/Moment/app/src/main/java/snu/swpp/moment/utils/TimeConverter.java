@@ -12,15 +12,20 @@ public class TimeConverter {
     public static Date convertLongToDate(Long timestamp) {
         return new Date(timestamp * 1000);
     }
-    public static String getPageDate(int position) {
-        LocalDate today = LocalDate.now();
-        int currentHour = LocalTime.now().getHour();
-        if (currentHour < 3) {
-            today = today.minusDays(1);
+    public static LocalDate updateDateFromThree(LocalDate date, int hour) {
+        if (hour < 3) {
+            date = date.minusDays(1);
         }
-        LocalDate pageDate = today.minusDays(position);
+        return date;
+    }
+    public static LocalDate getToday() {
+        LocalDate today = LocalDate.now();
+        int hour = LocalTime.now().getHour();
+        return updateDateFromThree(today, hour);
+    }
 
+    public static String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd");
-        return pageDate.format(formatter);
+        return date.format(formatter);
     }
 }

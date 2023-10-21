@@ -1,25 +1,24 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
+import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewAdapter;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
 import snu.swpp.moment.utils.TimeConverter;
@@ -27,52 +26,43 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public class WriteViewFragment extends Fragment {
 
+    private final int DEFAULT_PAGE = 100;
+    private int num_page = DEFAULT_PAGE;
     private FragmentWriteviewBinding binding;
     // ViewPager variables
     private ViewPager2 mPager;
     // below tow indicator is not used. this is circle you can see in instagram
     private FragmentStateAdapter pagerAdapter;
-    private int num_page = 100;
     private Handler slideHandler = new Handler(); // 슬라이드를 자동으로 변경하는 Handler
+    private AuthenticationRepository authenticationRepository;
     //private CircleIndicator3 mIndicator;
     // ViewPager variables end
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
-        //WriteViewModel homeViewModel =
-            //new ViewModelProvider(this).get(WriteViewModel.class);
+
+        try {
+            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT);
+            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            startActivity(intent);
+        }
+
+        initializeNumPage();
 
         binding = FragmentWriteviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        //final TextView textView = binding.writeview;
-        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
-        //  Write view action bar에 날짜 찍히게  - 이 주석 지우고 프래그먼트 왔다갔다하면 무슨 코드인지 Write view 상단 actionbar에서 알 수 있음
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-        String currentDate = sdf.format(new Date());
-//        MainActivity activity = (MainActivity) getActivity();
-//        System.out.println("#Debug: " + activity);
-//        System.out.println("#Debug onWriteViewFragment");
-//        activity.setToolbarTitle(currentDate);
-
-        // TODO : 여기부터 slide가 가능해짐
+        // 여기부터 slide가 가능해짐
         //ViewPager2
         mPager = binding.viewpager;
-        //Adapter
         pagerAdapter = new DailyViewAdapter(WriteViewFragment.this, num_page);
         mPager.setAdapter(pagerAdapter);
-        //Indicator
-        //        mIndicator = binding.indicator;
-        //        mIndicator.setViewPager(mPager);
-        //        mIndicator.createIndicators(num_page,0);
-        //ViewPager Setting
-
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-
         // 최초의 페이지 설정은 이거로함 (numpage 보다 크면 마지막페이지가 세팅되는듯 - 아래 onPageChangeCallBack)
         mPager.setCurrentItem(num_page);
-
         //offscreen 몇페이지가 로드되어있을지 설정 (Latency 감소)
         mPager.setOffscreenPageLimit(3);
 
@@ -83,15 +73,16 @@ public class WriteViewFragment extends Fragment {
 
                 if (positionOffsetPixels == 0) {
                     int index = position;
-                    if (position >= num_page) { // 마지막 페이지 3으로 설정
+                    if (position >= num_page) { // 마지막 페이지에서 오른쪽으로 넘어갈 때 마지막 페이지로 고정
                         index = num_page-1;
                         mPager.setCurrentItem(num_page-1, false);
-                    } else if (position < 0) { // 첫 페이지 0으로 설정
+                    } else if (position < 0) { // 첫 페이지에서 왼쪽으로 넘어갈 때 첫 페이지로 고정
                         index = 0;
                         mPager.setCurrentItem(0, false);
                     }
 
-                    String formattedDate = TimeConverter.getPageDate(num_page-index-1);
+                    LocalDate pageDate = TimeConverter.getToday().minusDays(num_page-index-1);
+                    String formattedDate = TimeConverter.formatDate(pageDate);
                     MainActivity activity = (MainActivity) getActivity();
                     activity.setToolbarTitle(formattedDate);
                 }
@@ -106,6 +97,22 @@ public class WriteViewFragment extends Fragment {
 
         return root;
     }
+
+    private void initializeNumPage() {
+        int hour;
+        LocalDate created_at, today;
+        String dateInString = authenticationRepository.getCreatedAt();
+
+        if (dateInString.isBlank()) return;
+        today = TimeConverter.getToday();
+        created_at = LocalDate.parse(dateInString.substring(0, 10));
+        hour = Integer.parseInt(dateInString.substring(11, 13));
+        created_at = TimeConverter.updateDateFromThree(created_at, hour);
+
+        int dayDiff = (int) ChronoUnit.DAYS.between(created_at, today);
+        this.num_page = dayDiff+1;
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -7,6 +7,8 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import snu.swpp.moment.data.model.LoggedInUser;
 import snu.swpp.moment.data.model.Token;
 
@@ -14,7 +16,7 @@ public class UserLocalDataSource {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private final String DEFAULT_TOKEN = "";
+    private final String DEFAULT_STRING = "";
 
     public UserLocalDataSource(Context context) throws GeneralSecurityException, IOException {
         String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
@@ -30,17 +32,13 @@ public class UserLocalDataSource {
     }
 
     public void saveUser(LoggedInUser user) { //이거 있으면 회원가입, 로그인 다 access token으로 접근해야하니까
-
-        System.out.println("#Debug UserLocalDataSource :: saveUser");
         editor.putString("nickname", user.getNickName());
         editor.putString("access_token", user.getAccessToken());
         editor.putString("refresh_token", user.getRefreshToken());
+        editor.putString("created_at", LocalDateTime.now().toString()); //YYYY-MM-DDTHH:SS:...
         editor.apply(); // 이거 해야 적용됨
-        System.out.println(
-            "#Debug UserLocalDataSource :: AccessToken : " + getToken().getAccessToken()
-                + "  RefreshToken : " + getToken().getRefreshToken());
 
-        // #TODO : createdAt, username은 오는데 저장은 따로 아직 안했음 (굳이?)
+        // username은 오는데 저장은 따로 아직 안했음 (굳이?)
     }
 
     public void saveToken(String token) {
@@ -49,14 +47,18 @@ public class UserLocalDataSource {
     }
 
     public Token getToken() {
-        String accessToken = sharedPreferences.getString("access_token", DEFAULT_TOKEN);
-        String refreshToken = sharedPreferences.getString("refresh_token", DEFAULT_TOKEN);
+        String accessToken = sharedPreferences.getString("access_token", DEFAULT_STRING);
+        String refreshToken = sharedPreferences.getString("refresh_token", DEFAULT_STRING);
         return new Token(accessToken, refreshToken);
     }
 
     public boolean hasToken() {
         return sharedPreferences.contains("access_token") && sharedPreferences.contains(
             "refresh_token");
+    }
+
+    public String getCreatedAt() {
+        return sharedPreferences.getString("created_at", DEFAULT_STRING);
     }
 
     public void logout() {

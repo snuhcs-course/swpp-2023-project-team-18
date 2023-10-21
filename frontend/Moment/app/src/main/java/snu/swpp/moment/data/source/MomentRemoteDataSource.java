@@ -21,17 +21,13 @@ public class MomentRemoteDataSource {
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        System.out.println("#DEBUG: " + start);
-        System.out.println("#DEBUG: " + end);
         service.getMoments(bearer, start, end).enqueue(new Callback<MomentGetResponse>() {
             @Override
             public void onResponse(Call<MomentGetResponse> call, Response<MomentGetResponse> response) {
                 if (response.isSuccessful()) {
                     MomentGetResponse result = response.body();
-                        System.out.println("#DEBUG: ################## size " + result.getMomentList().size());
                     callback.onSuccess(result.getMomentList());
                 } else {
-                    System.out.println("#DEBUG: " + response.code());
                     callback.onFailure(response.code());
                 }
             }
@@ -51,12 +47,10 @@ public class MomentRemoteDataSource {
             @Override
             public void onResponse(Call<MomentWriteResponse> call, Response<MomentWriteResponse> response) {
                 if(response.isSuccessful()){
-                    System.out.println("#Debug writemoment onSuccess");
                     MomentWriteResponse result = response.body();
                     callback.onSuccess(result.getMomentPair());
                 }
                 else{
-                    System.out.println("#DEBUG writeMoment: " + response.code());
                     callback.onFailure(response.code());
                 }
             }
