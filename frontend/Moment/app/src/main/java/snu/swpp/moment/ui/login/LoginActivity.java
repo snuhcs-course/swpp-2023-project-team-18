@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.MainActivity;
-import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.ActivityLoginBinding;
 
 
@@ -64,9 +63,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        loginViewModel.getLoginResult().observe(this, new Observer<LoginResultState>() {
             @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
+            public void onChanged(@Nullable LoginResultState loginResult) {
                 if (loginResult == null) {
                     return;
                 }
@@ -76,7 +75,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     System.out.println("#DEBUG : ACTIVITY HIHIHII");
-                    updateUiWithUser(loginResult.getSuccess());
+
+                    //updateUiWithUser(loginResult.getSuccess());
+
                     Intent testLoginSuccess = new Intent(LoginActivity.this, MainActivity.class);
                     System.out.println("#DEBUG : ACTIVITY @@@@@@");
                     startActivity(testLoginSuccess);
@@ -138,11 +139,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = model.getDisplayName() + "님 " + getString(R.string.welcome);
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
+
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
