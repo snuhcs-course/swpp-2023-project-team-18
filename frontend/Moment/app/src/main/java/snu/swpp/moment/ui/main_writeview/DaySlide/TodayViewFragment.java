@@ -48,7 +48,6 @@ public class TodayViewFragment extends Fragment {
     private List<ListViewItem> items;
     private ListViewAdapter mAdapter;
     private Button addButton, addButtonInactivate, submitButton, submitButtonInactivate, dayCompletionButton;
-    private ListView listView;
     private EditText inputEditText;
     private TextView textCount, addButtonText, addButtonInactivateText;
     private ScrollView scrollView;
@@ -104,7 +103,6 @@ public class TodayViewFragment extends Fragment {
     }
 
     private void initializeListView(View root) {
-        listView = root.findViewById(R.id.listview_list);
         items = new ArrayList<>();
         System.out.println("#Debug items size" + items.size());
 
@@ -130,7 +128,7 @@ public class TodayViewFragment extends Fragment {
 
                         //System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
                         mAdapter.notifyDataSetChanged();
-                        listView.setSelection(items.size() - 1);
+                        binding.listviewList.setSelection(items.size() - 1);
                     }
                 } else {
                     if (momentUiState.getError() == NO_INTERNET) {
@@ -156,15 +154,14 @@ public class TodayViewFragment extends Fragment {
         viewModel.getMoment(year, month, date);
 
         mAdapter = new ListViewAdapter(getContext(), items);
-        listView.setAdapter(mAdapter);
+        binding.listviewList.setAdapter(mAdapter);
         View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, listView, false);
-        listView.addFooterView(footerView);
+            .inflate(R.layout.listview_footer, binding.listviewList, false);
+        binding.listviewList.addFooterView(footerView);
         addButton = footerView.findViewById(R.id.add_button);
         submitButton = footerView.findViewById(R.id.submit_button);
         submitButtonInactivate = footerView.findViewById(R.id.submit_button_inactivate);
         addButtonInactivate = footerView.findViewById(R.id.add_button_inactivated);
-        //test
         dayCompletionButton = binding.dayCompleteButton;
 
         inputEditText = footerView.findViewById(R.id.inputEditText);
@@ -257,7 +254,7 @@ public class TodayViewFragment extends Fragment {
                         addButtonText.setVisibility(View.GONE);
                         submitButtonInactivate.setVisibility(View.VISIBLE);
                         constraintLayout.setVisibility(View.VISIBLE);
-                        listView.setSelection(items.size() - 1);
+                        binding.listviewList.setSelection(items.size() - 1);
                         // ScrollView를 ConstraintLayout의 하단으로 스크롤
                     }
                 } catch (ParseException e) {
@@ -274,7 +271,7 @@ public class TodayViewFragment extends Fragment {
                 // 아래 줄 있으면, 텍스트 입력이 박스 넘어가도 줄바꿈이 안됨
                 //inputEditText.setSingleLine(true);
                 //submitButton.setVisibility(View.VISIBLE);
-                listView.setSelection(items.size() - 1);
+                binding.listviewList.setSelection(items.size() - 1);
                 // ScrollView를 ConstraintLayout의 하단으로 스크롤
             }
         });
@@ -309,7 +306,7 @@ public class TodayViewFragment extends Fragment {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
         items.add(new ListViewItem(userInput, currentTime, ""));
         mAdapter.notifyDataSetChanged();
-        listView.setSelection(items.size() - 1);
+        binding.listviewList.setSelection(items.size() - 1);
     }
 
     @Override
