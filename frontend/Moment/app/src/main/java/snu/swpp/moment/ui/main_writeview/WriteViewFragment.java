@@ -2,25 +2,22 @@ package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import android.os.Handler;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewAdapter;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
+import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewAdapter;
 import snu.swpp.moment.utils.TimeConverter;
 
 
@@ -33,7 +30,7 @@ public class WriteViewFragment extends Fragment {
     private ViewPager2 mPager;
     // below tow indicator is not used. this is circle you can see in instagram
     private FragmentStateAdapter pagerAdapter;
-    private Handler slideHandler = new Handler(); // 슬라이드를 자동으로 변경하는 Handler
+    private final Handler slideHandler = new Handler(); // 슬라이드를 자동으로 변경하는 Handler
     private AuthenticationRepository authenticationRepository;
     //private CircleIndicator3 mIndicator;
     // ViewPager variables end

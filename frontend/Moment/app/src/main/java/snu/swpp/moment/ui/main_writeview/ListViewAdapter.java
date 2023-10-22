@@ -12,7 +12,7 @@ import snu.swpp.moment.R;
 public class ListViewAdapter extends BaseAdapter {
 
     private List<ListViewItem> items = null;
-    private Context context;
+    private final Context context;
 
     public ListViewAdapter(Context context, List<ListViewItem> items) {
         this.items = items;

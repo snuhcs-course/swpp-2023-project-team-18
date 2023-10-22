@@ -1,17 +1,14 @@
 package snu.swpp.moment.data.repository;
 
 import java.util.ArrayList;
-
-import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.model.MomentPair;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
-import snu.swpp.moment.data.source.UserLocalDataSource;
 
 public class MomentRepository {
 
-    private MomentRemoteDataSource remoteDataSource;
+    private final MomentRemoteDataSource remoteDataSource;
 
     public MomentRepository(MomentRemoteDataSource remoteDataSource) {
         this.remoteDataSource = remoteDataSource;

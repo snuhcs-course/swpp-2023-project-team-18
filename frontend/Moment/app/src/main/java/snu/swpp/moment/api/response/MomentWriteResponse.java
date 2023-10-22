@@ -1,7 +1,6 @@
 package snu.swpp.moment.api.response;
 
 import com.google.gson.annotations.SerializedName;
-
 import snu.swpp.moment.data.model.MomentPair;
 
 public class MomentWriteResponse {

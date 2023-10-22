@@ -14,7 +14,7 @@ import snu.swpp.moment.data.repository.AuthenticationRepository;
  */
 public class RegisterViewModelFactory implements ViewModelProvider.Factory {
 
-    private Context context;
+    private final Context context;
 
     public RegisterViewModelFactory(Context context) {
         this.context = context;

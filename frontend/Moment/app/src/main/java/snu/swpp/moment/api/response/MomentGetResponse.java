@@ -1,10 +1,8 @@
 package snu.swpp.moment.api.response;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import snu.swpp.moment.data.model.MomentPair;
 
 public class MomentGetResponse {

@@ -7,15 +7,13 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import snu.swpp.moment.data.model.LoggedInUser;
 import snu.swpp.moment.data.model.Token;
 
 public class UserLocalDataSource {
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences.Editor editor;
     private final String DEFAULT_STRING = "";
 
     public UserLocalDataSource(Context context) throws GeneralSecurityException, IOException {

@@ -4,11 +4,9 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -18,12 +16,10 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -32,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.model.MomentPair;
@@ -60,15 +55,16 @@ public class TodayViewFragment extends Fragment {
 
     private ConstraintLayout constraintLayout;
 
-    private int MAX_LENGTH = 1000;
-    private final int NO_INTERNET = 0;
-    private final int ACCESS_TOKEN_EXPIRED = 1;
     private WriteViewModel viewModel;
     private MomentRemoteDataSource remoteDataSource;
     private MomentRepository momentRepository;
     private AuthenticationRepository authenticationRepository;
 
     private int numMoments;
+
+    private final int MAX_LENGTH = 1000;
+    private final int NO_INTERNET = 0;
+    private final int ACCESS_TOKEN_EXPIRED = 1;
 
 
     @Override
@@ -83,7 +79,7 @@ public class TodayViewFragment extends Fragment {
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
@@ -130,11 +126,7 @@ public class TodayViewFragment extends Fragment {
                             //System.out.println("#DEBUG: ON CHANGED RUN 3");
                         }
 
-                        if (numMoments == 0) {
-                            dayCompletionButton.setActivated(false);
-                        } else {
-                            dayCompletionButton.setActivated(true);
-                        }
+                        dayCompletionButton.setActivated(numMoments != 0);
 
                         //System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
                         mAdapter.notifyDataSetChanged();

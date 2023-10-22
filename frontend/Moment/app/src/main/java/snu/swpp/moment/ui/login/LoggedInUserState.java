@@ -5,7 +5,7 @@ package snu.swpp.moment.ui.login;
  */
 class LoggedInUserState {
 
-    private String nickname;
+    private final String nickname;
     //... other data fields that may be accessible to the UI
 
     LoggedInUserState(String nickname) {

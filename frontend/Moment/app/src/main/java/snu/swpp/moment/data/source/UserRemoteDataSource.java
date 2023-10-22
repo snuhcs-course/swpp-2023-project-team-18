@@ -4,15 +4,15 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.request.LoginRequest;
-import snu.swpp.moment.api.response.LoginResponse;
-import snu.swpp.moment.api.request.RegisterRequest;
-import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.RetrofitClient;
 import snu.swpp.moment.api.ServiceApi;
+import snu.swpp.moment.api.request.LoginRequest;
+import snu.swpp.moment.api.request.RegisterRequest;
 import snu.swpp.moment.api.request.TokenRefreshRequest;
-import snu.swpp.moment.api.response.TokenRefreshResponse;
 import snu.swpp.moment.api.request.TokenVerifyRequest;
+import snu.swpp.moment.api.response.LoginResponse;
+import snu.swpp.moment.api.response.RegisterResponse;
+import snu.swpp.moment.api.response.TokenRefreshResponse;
 import snu.swpp.moment.api.response.TokenVerifyResponse;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
@@ -133,7 +133,7 @@ public class UserRemoteDataSource {
             public void onFailure(Call<TokenVerifyResponse> call, Throwable t) {
                 callBack.onFailure();
                 System.out.println(
-                    "#Debug  :: If not connected ::  " + t.getMessage().toString() + " HERE???");
+                    "#Debug  :: If not connected ::  " + t.getMessage() + " HERE???");
             }
         });
     }

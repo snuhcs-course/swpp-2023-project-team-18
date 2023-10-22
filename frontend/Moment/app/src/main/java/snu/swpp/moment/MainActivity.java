@@ -1,16 +1,8 @@
 package snu.swpp.moment;
 
-import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.databinding.ActivityMainBinding;
-import snu.swpp.moment.ui.main_writeview.WriteViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 

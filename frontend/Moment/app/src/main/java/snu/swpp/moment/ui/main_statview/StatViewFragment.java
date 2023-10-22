@@ -8,12 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-
-import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.databinding.FragmentStatviewBinding;
 
 public class StatViewFragment extends Fragment {
