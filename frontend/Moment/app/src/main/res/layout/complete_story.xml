@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
+
+    <TextView
+        android:id="@+id/completeTimeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/maruburi_light"
+        android:textColor="@color/darkgray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="16:48" />
+
+    <EditText
+        android:id="@+id/storyTitleEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/maruburi_bold"
+        android:hint="@string/story_title_hint"
+        android:inputType="text"
+        android:lines="1"
+        android:textColor="@color/black"
+        android:textColorHint="@color/darkgray"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completeTimeText" />
+
+    <View
+        android:id="@+id/storySeparator"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/storyTitleEditText"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <EditText
+        android:id="@+id/storyContextEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/maruburi_light"
+        android:hint="@string/story_content_hint"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        android:textColor="@color/black"
+        android:textColorHint="@color/darkgray"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storySeparator" />
+
+    <TextView
+        android:id="@+id/storyLengthText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/maruburi_light"
+        android:gravity="end"
+        android:textColor="@color/darkgray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storyContextEditText"
+        tools:text="N/Limit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

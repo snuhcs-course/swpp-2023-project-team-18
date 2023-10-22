@@ -45,6 +45,8 @@
     <string name="day_complete_popup">하루를 마무리하면 더 이상 모먼트를 작성할 수 없어요. 지금 마무리하실래요?</string>
     <string name="day_complete_popup_yes">네</string>
     <string name="day_complete_popup_no">아니요</string>
+    <string name="story_title_hint">스토리 제목</string>
+    <string name="story_content_hint">오늘 하루를 마무리하는 스토리를 써보세요.\n작성 완료 후에는 다시 수정할 수 없어요.</string>
 
     <!-- 한달보기 탭 -->
     <string name="day_section_emotion">이날의 감정</string>
