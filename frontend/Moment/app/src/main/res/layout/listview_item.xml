@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/maruburi_light"
+            android:textColor="@color/black"
             android:textSize="15sp"
             tools:text="User Input" />
         <ImageView
@@ -58,6 +59,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/maruburi_light"
             android:foregroundTint="@color/white"
+            android:textColor="@color/black"
             android:textSize="15sp"
             tools:text="Server Response" />
     </LinearLayout>
