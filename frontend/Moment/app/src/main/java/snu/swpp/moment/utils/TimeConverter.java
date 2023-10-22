@@ -29,7 +29,7 @@ public class TimeConverter {
     }
 
     public static String formatDate(LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd.");
         return date.format(formatter);
     }
 }
