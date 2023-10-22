@@ -117,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/maruburi_light"
-            android:text="새 모먼트 추가"
+            android:text="@string/add_moment_help_text"
             android:textColor="@color/gray" />
 
 
@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/maruburi_light"
-            android:text="모먼트는 1시간에 2개만 쓸 수 있어요."
+            android:text="@string/moment_limit_help_text"
             android:textColor="@color/red"
             android:visibility="gone"
             tools:visibility="visible" />
