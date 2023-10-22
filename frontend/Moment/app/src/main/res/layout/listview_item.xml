@@ -1,0 +1,65 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/margin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="30dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="0dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/card_background"
+        android:orientation="vertical">
+        <!-- Timestamp TextView -->
+        <TextView
+            android:id="@+id/listitem_inputTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/maruburi_light"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            tools:text="Input Time" />
+        <TextView
+            android:id="@+id/listitem_userInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/maruburi_light"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            tools:text="User Input" />
+        <ImageView
+            android:id="@+id/dot_line"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:layerType="software"
+            android:src="@drawable/dotted_line" />
+        <TextView
+            android:id="@+id/ai_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/maruburi_light"
+            android:text="AI의 답글"
+            android:textColor="#808080"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/listitem_serverResponse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/maruburi_light"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            tools:text="Server Response" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

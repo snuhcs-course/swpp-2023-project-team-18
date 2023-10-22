@@ -1,19 +1,22 @@
-package snu.swpp.moment.data;
+package snu.swpp.moment.data.source;
 
 import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.LoginRequest;
-import snu.swpp.moment.api.LoginResponse;
-import snu.swpp.moment.api.RegisterRequest;
-import snu.swpp.moment.api.RegisterResponse;
+import snu.swpp.moment.api.request.LoginRequest;
+import snu.swpp.moment.api.response.LoginResponse;
+import snu.swpp.moment.api.request.RegisterRequest;
+import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.RetrofitClient;
 import snu.swpp.moment.api.ServiceApi;
-import snu.swpp.moment.api.TokenRefreshRequest;
-import snu.swpp.moment.api.TokenRefreshResponse;
-import snu.swpp.moment.api.TokenVerifyRequest;
-import snu.swpp.moment.api.TokenVerifyResponse;
+import snu.swpp.moment.api.request.TokenRefreshRequest;
+import snu.swpp.moment.api.response.TokenRefreshResponse;
+import snu.swpp.moment.api.request.TokenVerifyRequest;
+import snu.swpp.moment.api.response.TokenVerifyResponse;
+import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.callback.RefreshCallBack;
+import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.LoggedInUser;
 
 /**
@@ -37,7 +40,7 @@ public class UserRemoteDataSource {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-                    System.out.println("#Debug Login OnResponse ");
+                    //System.out.println("#Debug Login OnResponse ");
                     LoginResponse result = response.body();
                     loginCallBack.onSuccess(new LoggedInUser(result.getUser(), result.getToken()));
                 } else {

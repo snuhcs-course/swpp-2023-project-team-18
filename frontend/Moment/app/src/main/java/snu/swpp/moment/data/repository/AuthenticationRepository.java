@@ -1,10 +1,16 @@
-package snu.swpp.moment.data;
+package snu.swpp.moment.data.repository;
 
 import android.content.Context;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+
+import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.callback.RefreshCallBack;
+import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.LoggedInUser;
 import snu.swpp.moment.data.model.Token;
+import snu.swpp.moment.data.source.UserLocalDataSource;
+import snu.swpp.moment.data.source.UserRemoteDataSource;
 
 /**
  * Class that requests authentication and user information from the remote data source and maintains
@@ -84,7 +90,6 @@ public class AuthenticationRepository {
 
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
-        //System.out.println("#Debug AuthenticationRepository :: setLoggedInLuser");
         localDataSource.saveUser(user);
 
         // If user credentials will be cached in local storage, it is recommended it be encrypted
@@ -92,13 +97,10 @@ public class AuthenticationRepository {
     }
 
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
-        //System.out.println("#Debug from LoginRepository || username : " + username + "password : " + password);
-        // handle login
         remoteDataSource.login(username, password, new AuthenticationCallBack() {
             @Override
             public void onSuccess(LoggedInUser loggedInUser) {
                 setLoggedInUser(loggedInUser);
-                //System.out.println("#DEBUG Login Success");
                 loginCallBack.onSuccess(loggedInUser);
             }
 
@@ -112,13 +114,10 @@ public class AuthenticationRepository {
 
     public void register(String username, String password, String nickname,
         AuthenticationCallBack registerCallBack) {
-        //System.out.println("#Debug from LoginRepository || username : " + username + "password : " + password);
-        // handle login
         remoteDataSource.register(username, password, nickname, new AuthenticationCallBack() {
             @Override
             public void onSuccess(LoggedInUser loggedInUser) {
                 setLoggedInUser(loggedInUser);
-                System.out.println("#DEBUG Login Success");
                 registerCallBack.onSuccess(loggedInUser);
             }
 
@@ -127,5 +126,13 @@ public class AuthenticationRepository {
                 registerCallBack.onFailure(errorMessage);
             }
         });
+    }
+
+    public Token getToken() {
+        return localDataSource.getToken();
+    }
+
+    public String getCreatedAt() {
+        return localDataSource.getCreatedAt();
     }
 }

@@ -1,4 +1,4 @@
-package snu.swpp.moment.data;
+package snu.swpp.moment.data.callback;
 
 import snu.swpp.moment.data.model.LoggedInUser;
 

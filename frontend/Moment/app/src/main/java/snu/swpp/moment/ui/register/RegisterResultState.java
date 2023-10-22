@@ -1,27 +1,27 @@
-package snu.swpp.moment.ui.login;
+package snu.swpp.moment.ui.register;
 
 import androidx.annotation.Nullable;
 
 /**
  * Authentication result : success (user details) or error message.
  */
-class LoginResult {
+class RegisterResultState {
 
     @Nullable
-    private LoggedInUserView success;
+    private RegisterUserState success;
     @Nullable
     private Integer error;
 
-    LoginResult(@Nullable Integer error) {
+    RegisterResultState(@Nullable Integer error) {
         this.error = error;
     }
 
-    LoginResult(@Nullable LoggedInUserView success) {
+    RegisterResultState(@Nullable RegisterUserState success) {
         this.success = success;
     }
 
     @Nullable
-    LoggedInUserView getSuccess() {
+    RegisterUserState getSuccess() {
         return success;
     }
 

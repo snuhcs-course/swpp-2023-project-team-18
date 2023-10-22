@@ -7,7 +7,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.ActivityDummyBinding;
 
 public class DummyActivity extends AppCompatActivity {

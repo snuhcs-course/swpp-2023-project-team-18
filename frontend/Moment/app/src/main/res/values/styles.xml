@@ -16,4 +16,6 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/red</item>
     </style>
+
+
 </resources>

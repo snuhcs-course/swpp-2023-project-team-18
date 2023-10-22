@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import snu.swpp.moment.EntryActivity;
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentLogoutviewBinding;
 
 

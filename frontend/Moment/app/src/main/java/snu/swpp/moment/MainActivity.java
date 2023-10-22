@@ -1,8 +1,16 @@
 package snu.swpp.moment;
 
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.databinding.ActivityMainBinding;
+import snu.swpp.moment.ui.main_writeview.WriteViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +33,32 @@ public class MainActivity extends AppCompatActivity {
 
     // Toolbar text view - 날짜넣기위해
     private TextView toolbarTitle;
+
+
+/*
+    // Edit text 외부 화면 터치하면 키보드 사라짐
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+
+ */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //Wirte View의 타이틀이 항상 날짜로 나오도록 NavController의 타이틀 업데이트 비활성화:
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd.", Locale.getDefault());
         String currentDate = sdf.format(new Date());
         System.out.println("#Debug Mainactivity date ok");
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
@@ -88,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -104,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setToolbarTitle(String title) {
+        System.out.println("#Debug called");
+        System.out.println("#Debug " + title);
         toolbarTitle.setText(title);
+        System.out.println("#Debug toolbarSet");
     }
 }

@@ -5,15 +5,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
-import snu.swpp.moment.data.AuthenticationCallBack;
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.model.LoggedInUser;
 
 
 public class RegisterViewModel extends ViewModel {
 
     private MutableLiveData<RegisterFormState> registerFormState = new MutableLiveData<>();
-    private MutableLiveData<RegisterResult> registerResult = new MutableLiveData<>();
+    private MutableLiveData<RegisterResultState> registerResult = new MutableLiveData<>();
 
     //Repository
     private AuthenticationRepository authenticationRepository;
@@ -26,7 +26,7 @@ public class RegisterViewModel extends ViewModel {
         return registerFormState;
     }
 
-    LiveData<RegisterResult> getRegisterResult() {
+    LiveData<RegisterResultState> getRegisterResult() {
         return registerResult;
     }
 
@@ -37,7 +37,7 @@ public class RegisterViewModel extends ViewModel {
                 @Override
                 public void onSuccess(LoggedInUser loggedInUser) {
                     registerResult.setValue(
-                        new RegisterResult(new RegisterUserView(loggedInUser.getNickName())));
+                        new RegisterResultState(new RegisterUserState(loggedInUser.getNickName())));
                 }
 
                 @Override
@@ -45,13 +45,13 @@ public class RegisterViewModel extends ViewModel {
                     System.out.println("#MESSAGE: " + errorMessage);
                     if (errorMessage.equals(
                         "{\"username\":[\"A user with that username already exists.\"]}")) {
-                        registerResult.setValue(new RegisterResult(R.string.username_error));
+                        registerResult.setValue(new RegisterResultState(R.string.username_error));
                     } else if (errorMessage.equals("Server")) {
-                        registerResult.setValue(new RegisterResult(R.string.server_error));
+                        registerResult.setValue(new RegisterResultState(R.string.server_error));
                     } else if (errorMessage.equals("NO INTERNET")) {
-                        registerResult.setValue(new RegisterResult(R.string.internet_error));
+                        registerResult.setValue(new RegisterResultState(R.string.internet_error));
                     } else {
-                        registerResult.setValue(new RegisterResult(R.string.unknown_error));
+                        registerResult.setValue(new RegisterResultState(R.string.unknown_error));
                     }
                 }
             });

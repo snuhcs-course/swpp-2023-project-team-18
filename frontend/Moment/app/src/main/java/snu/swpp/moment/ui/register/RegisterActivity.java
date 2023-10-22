@@ -18,7 +18,8 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import snu.swpp.moment.DummyActivity;
+
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.ActivityRegisterBinding;
 
@@ -84,23 +85,21 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        registerViewModel.getRegisterResult().observe(this, new Observer<RegisterResult>() {
+        registerViewModel.getRegisterResult().observe(this, new Observer<RegisterResultState>() {
             @Override
-            public void onChanged(@Nullable RegisterResult registerResult) {
+            public void onChanged(@Nullable RegisterResultState registerResult) {
                 if (registerResult == null) {
-                    Toast.makeText(RegisterActivity.this, "*************", Toast.LENGTH_SHORT)
+                    Toast.makeText(RegisterActivity.this, R.string.unknown_error,
+                            Toast.LENGTH_SHORT)
                         .show();
-                    //return;
                 }
                 //loadingProgressBar.setVisibility(View.GONE);
                 if (registerResult.getError() != null) {
-                    Toast.makeText(RegisterActivity.this, "################", Toast.LENGTH_SHORT)
-                        .show();
                     showLoginFailed(registerResult.getError());
                 }
                 if (registerResult.getSuccess() != null) {
                     updateUiWithUser(registerResult.getSuccess());
-                    Intent registerIntent = new Intent(RegisterActivity.this, DummyActivity.class);
+                    Intent registerIntent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(registerIntent);
                 }
                 setResult(Activity.RESULT_OK);
@@ -163,8 +162,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUiWithUser(RegisterUserView model) {
-        String welcome = model.getDisplayName() + "님 " + getString(R.string.welcome);
+    private void updateUiWithUser(RegisterUserState model) {
+        String welcome = getString(R.string.welcome);
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
