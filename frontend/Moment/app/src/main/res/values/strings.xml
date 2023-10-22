@@ -41,7 +41,10 @@
 
     <!-- 쓰기 탭 -->
     <string name="edit_text_message">오늘의 모먼트를 기록해 주세요</string>
-    <string name="day_completetion_string">하루 마무리하기</string>
+    <string name="day_complete_string">하루 마무리하기</string>
+    <string name="day_complete_popup">하루를 마무리하면 더 이상 모먼트를 작성할 수 없어요. 지금 마무리하실래요?</string>
+    <string name="day_complete_popup_yes">네</string>
+    <string name="day_complete_popup_no">아니요</string>
 
     <!-- 한달보기 탭 -->
     <string name="day_section_emotion">이날의 감정</string>

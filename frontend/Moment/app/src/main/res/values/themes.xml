@@ -32,6 +32,26 @@
     <style name="Theme.Moment.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Moment.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:textAppearanceSmall">@style/DialogMessageStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="DialogMessageStyle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/maruburi_light</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:fontFamily">@font/maruburi_bold</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:fontFamily">@font/maruburi_bold</item>
+    </style>
 </resources>
 
     <!--        <item name="android:buttonStyle">@style/CustomButton</item> -->

@@ -24,7 +24,7 @@
         android:layout_marginRight="20dp"
         android:shadowColor="@color/white"
         android:background="@drawable/day_completion_button"
-        android:text="@string/day_completetion_string"
+        android:text="@string/day_complete_string"
         android:fontFamily="@font/maruburi_light"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp" />
 </LinearLayout>

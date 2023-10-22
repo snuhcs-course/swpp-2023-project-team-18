@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -96,6 +96,21 @@ public class TodayViewFragment extends Fragment {
         initializeListView(root);
         System.out.println("#DEBUG: after initializeListView");
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
+
+        // 마무리하기 버튼
+        binding.dayCompleteButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),
+                R.style.DialogTheme);
+            builder.setMessage(R.string.day_complete_popup);
+            builder.setPositiveButton(R.string.day_complete_popup_yes, (dialog, id) -> {
+                // 네 -> 하루 마무리 시작
+                // TODO
+            });
+            builder.setNegativeButton(R.string.day_complete_popup_no, (dialog, id) -> {
+                // 아니요 -> Do nothing
+            });
+            builder.create().show();
+        });
 
         // 루트 뷰에 터치 리스너 설정
 
