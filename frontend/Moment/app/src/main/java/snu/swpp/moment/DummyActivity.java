@@ -1,19 +1,17 @@
 package snu.swpp.moment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
+import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-
-import snu.swpp.moment.data.AuthenticationRepository;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.ActivityDummyBinding;
 
 public class DummyActivity extends AppCompatActivity {
+
     private ActivityDummyBinding binding;
     private AuthenticationRepository authenticationRepository;
 
@@ -28,14 +26,15 @@ public class DummyActivity extends AppCompatActivity {
 
         final Button logoutButton = binding.logoutButton;
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getApplicationContext());
+            authenticationRepository = AuthenticationRepository.getInstance(
+                getApplicationContext());
             System.out.println("#DEBUG: go home");
             logoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     System.out.println("#DEBUG: logout button clicked");
                     authenticationRepository.logout();
-                    Intent logoutIntent= new Intent(DummyActivity.this, EntryActivity.class);
+                    Intent logoutIntent = new Intent(DummyActivity.this, EntryActivity.class);
                     startActivity(logoutIntent);
                 }
             });

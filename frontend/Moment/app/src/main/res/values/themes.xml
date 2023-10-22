@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/red</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">#999999</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/white</item>
         <!-- Button style -->
@@ -23,6 +23,15 @@
         <item name="android:background">@drawable/custom_button_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="Theme.Moment.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Moment.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Moment.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
 
-<!--        <item name="android:buttonStyle">@style/CustomButton</item> -->
+    <!--        <item name="android:buttonStyle">@style/CustomButton</item> -->

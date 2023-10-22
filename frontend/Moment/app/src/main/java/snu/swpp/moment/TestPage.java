@@ -1,8 +1,7 @@
 package snu.swpp.moment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class TestPage extends AppCompatActivity {
 

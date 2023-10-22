@@ -1,19 +1,8 @@
 package snu.swpp.moment.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -24,14 +13,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import snu.swpp.moment.DummyActivity;
-import snu.swpp.moment.R;
-import snu.swpp.moment.TestPage;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
-import snu.swpp.moment.ui.login.LoginViewModel;
-import snu.swpp.moment.ui.login.LoginViewModelFactory;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.databinding.ActivityLoginBinding;
 
 
@@ -39,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +34,11 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        try{
-            loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(getApplicationContext()))
-                    .get(LoginViewModel.class);
-        }catch (Exception e){
+        try {
+            loginViewModel = new ViewModelProvider(this,
+                new LoginViewModelFactory(getApplicationContext()))
+                .get(LoginViewModel.class);
+        } catch (Exception e) {
             Toast.makeText(this, "보안용 파일을 만드는데 실패하였습니다. 개발자에게 연락하세요.", Toast.LENGTH_SHORT).show();
         }
 
@@ -74,9 +63,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        loginViewModel.getLoginResult().observe(this, new Observer<LoginResultState>() {
             @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
+            public void onChanged(@Nullable LoginResultState loginResult) {
                 if (loginResult == null) {
                     return;
                 }
@@ -86,9 +75,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     System.out.println("#DEBUG : ACTIVITY HIHIHII");
-                    updateUiWithUser(loginResult.getSuccess());
-                    Intent testLoginSuccess = new Intent(LoginActivity.this, DummyActivity.class);
+
+                    //updateUiWithUser(loginResult.getSuccess());
+
+                    Intent testLoginSuccess = new Intent(LoginActivity.this, MainActivity.class);
+                    System.out.println("#DEBUG : ACTIVITY @@@@@@");
                     startActivity(testLoginSuccess);
+
 
                 }
                 setResult(Activity.RESULT_OK);
@@ -112,21 +105,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                    passwordEditText.getText().toString());
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                /*
-                 * Login
-                 */
+            /*
+             * Login
+             */
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE
-                        || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                    || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                    && event.getAction() == KeyEvent.ACTION_DOWN)) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                        passwordEditText.getText().toString());
                     return true;  // Consume the event
                 }
                 return false;
@@ -139,17 +133,12 @@ public class LoginActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Debug", Toast.LENGTH_LONG).show();
                 //loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                    passwordEditText.getText().toString());
 
             }
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = model.getDisplayName() + "님 " + getString(R.string.welcome);
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();

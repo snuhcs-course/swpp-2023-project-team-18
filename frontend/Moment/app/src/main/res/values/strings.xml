@@ -3,6 +3,7 @@
     <string name="unknown_error">"알 수 없는 오류"</string>
     <string name="server_error">"서버 오류입니다."</string>
     <string name="internet_error">"인터넷 연결 오류입니다."</string>
+    <string name="token_expired_error">"토큰이 만료되었습니다."</string>
     <string name="username_error">"동일한 아이디가 이미 존재합니다."</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">아이디</string>
@@ -12,11 +13,11 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"환영합니다! "</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">비밀번호는 6자 이상이어야 합니다.</string>
     <string name="wrong_password">"아이디 혹은 비밀번호 오류입니다."</string>
     <string name="register_failed">"회원가입에 실패했습니다."</string>
     <string name="register_username">Not a valid username</string>
-    <string name="register_password">Password must be >5 characters</string>
+    <string name="register_password">비밀번호는 6자 이상이어야 합니다.</string>
     <string name="register_password_check">비밀번호가 다릅니다.</string>
     <string name="offer_register">처음이신가요?</string>
     <string name="start_register"><u>회원가입</u></string>
@@ -26,5 +27,27 @@
     <string name="register_nickname">닉네임</string>
     <string name="password">비밀번호</string>
     <string name="password_check">비밀번호 확인</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <!-- 쓰기 탭 -->
+    <string name="edit_text_message">오늘의 모먼트를 기록해 주세요</string>
+    <string name="day_completetion_string">하루 마무리하기</string>
+
+    <!-- 한달보기 탭 -->
+    <string name="day_section_emotion">이날의 감정</string>
+    <string name="day_section_tags">이날의 태그</string>
+    <string name="day_section_score">이날의 점수</string>
+    <string name="day_navigate_button">이날의 기록 보기</string>
+    <string name="auto_completed_warning">직접 하루를 마무리하지 않았어요</string>
 
 </resources>
