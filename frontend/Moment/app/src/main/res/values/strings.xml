@@ -13,11 +13,11 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"환영합니다! "</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">비밀번호는 6자 이상이어야 합니다.</string>
     <string name="wrong_password">"아이디 혹은 비밀번호 오류입니다."</string>
     <string name="register_failed">"회원가입에 실패했습니다."</string>
     <string name="register_username">Not a valid username</string>
-    <string name="register_password">Password must be >5 characters</string>
+    <string name="register_password">비밀번호는 6자 이상이어야 합니다.</string>
     <string name="register_password_check">비밀번호가 다릅니다.</string>
     <string name="offer_register">처음이신가요?</string>
     <string name="start_register"><u>회원가입</u></string>
