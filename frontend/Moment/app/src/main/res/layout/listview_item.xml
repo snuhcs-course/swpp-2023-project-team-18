@@ -26,14 +26,14 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/maruburi_light"
             android:textColor="#808080"
-            android:textSize="15sp"
+            android:textSize="12sp"
             tools:text="Input Time" />
         <TextView
             android:id="@+id/listitem_userInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/maruburi_light"
-            android:textSize="18sp"
+            android:textSize="15sp"
             tools:text="User Input" />
         <ImageView
             android:id="@+id/dot_line"
@@ -50,7 +50,7 @@
             android:fontFamily="@font/maruburi_light"
             android:text="AI의 답글"
             android:textColor="#808080"
-            android:textSize="15sp" />
+            android:textSize="12sp" />
         <TextView
             android:id="@+id/listitem_serverResponse"
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/maruburi_light"
             android:foregroundTint="@color/white"
-            android:textSize="18sp"
+            android:textSize="15sp"
             tools:text="Server Response" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
