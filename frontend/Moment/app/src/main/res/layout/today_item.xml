@@ -18,13 +18,14 @@
         android:id="@+id/day_complete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="end"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:layout_marginRight="20dp"
-        android:shadowColor="@color/white"
         android:background="@drawable/day_completion_button"
-        android:text="@string/day_complete_string"
-        android:fontFamily="@font/maruburi_light"
-        android:layout_marginBottom="10dp" />
+        android:fontFamily="@font/maruburi_bold"
+        android:shadowColor="@color/white"
+        android:text="@string/day_complete_string" />
 </LinearLayout>
