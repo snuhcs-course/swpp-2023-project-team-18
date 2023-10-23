@@ -6,14 +6,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
-import com.kizitonwose.calendar.view.ViewContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import snu.swpp.moment.R;
 
-public class TagBoxContainer extends ViewContainer {
+public class TagBoxContainer {
 
     private final EditText tagBox;
     private final TextView limitHelpText;
@@ -22,8 +21,6 @@ public class TagBoxContainer extends ViewContainer {
     private final int MAX_TAGS = 10;
 
     public TagBoxContainer(View view) {
-        super(view);
-
         tagBox = view.findViewById(R.id.tagsEditText);
         limitHelpText = view.findViewById(R.id.tagLimitHelpText);
 
