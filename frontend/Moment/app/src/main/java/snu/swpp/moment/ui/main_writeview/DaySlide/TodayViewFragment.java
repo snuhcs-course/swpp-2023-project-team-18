@@ -313,7 +313,7 @@ public class TodayViewFragment extends Fragment {
 
 
     private void addItem(String userInput) {
-        String currentTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(new Date());
+        String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
         items.add(new ListViewItem(userInput, currentTime, ""));
         mAdapter.notifyDataSetChanged();
         listView.setSelection(items.size() - 1);
