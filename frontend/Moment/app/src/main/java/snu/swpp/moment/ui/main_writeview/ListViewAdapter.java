@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,15 @@ public class ListViewAdapter extends BaseAdapter {
         ListViewItem item = items.get(position);
         userInput.setText(item.getUserInput());
         inputTime.setText(item.getInputTime());
-        serverResponse.setText(item.getServerResponse().isEmpty() ? "Waiting for server response..."
-            : item.getServerResponse());
-        //serverResponse.setText("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
+        if (item.getServerResponse().isEmpty()) {
+            serverResponse.setText("\u2026\n\nAI가 일기를 읽고 있어요");
+            serverResponse.setGravity(Gravity.CENTER);
+            serverResponse.setAlpha(0.5f);
+        } else {
+            serverResponse.setText(item.getServerResponse());
+            serverResponse.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
+            serverResponse.setAlpha(1);
+        }
         return convertView;
     }
 }

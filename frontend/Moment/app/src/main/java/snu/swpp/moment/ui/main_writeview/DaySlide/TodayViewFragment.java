@@ -4,17 +4,16 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -255,13 +254,22 @@ public class TodayViewFragment extends Fragment {
                         addButtonInactivate.setVisibility(View.VISIBLE);
                         addButtonInactivateText.setVisibility(View.VISIBLE);
                     } else {
-                        inputEditText.setVisibility(View.VISIBLE);
-                        textCount.setVisibility(View.VISIBLE);
+                        Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+                        inputEditText.startAnimation(fadeIn);
+                        textCount.startAnimation(fadeIn);
+                        //inputEditText.setVisibility(View.VISIBLE);
+                        //textCount.setVisibility(View.VISIBLE);
 
-                        addButton.setVisibility(View.GONE);
-                        addButtonText.setVisibility(View.GONE);
-                        submitButtonInactivate.setVisibility(View.VISIBLE);
-                        constraintLayout.setVisibility(View.VISIBLE);
+                        Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
+                        addButton.startAnimation(fadeOut);
+                        addButtonText.startAnimation(fadeOut);
+                        //addButton.setVisibility(View.GONE);
+                        //addButtonText.setVisibility(View.GONE);
+
+                        submitButtonInactivate.startAnimation(fadeIn);
+                        submitButtonInactivate.startAnimation(fadeIn);
+                        //submitButtonInactivate.setVisibility(View.VISIBLE);
+                        //constraintLayout.setVisibility(View.VISIBLE);
                         binding.listviewList.setSelection(items.size() - 1);
                         // ScrollView를 ConstraintLayout의 하단으로 스크롤
                     }
@@ -269,13 +277,22 @@ public class TodayViewFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             } else {
+                Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
                 inputEditText.setVisibility(View.VISIBLE);
                 textCount.setVisibility(View.VISIBLE);
+                inputEditText.startAnimation(fadeIn);
+                textCount.startAnimation(fadeIn);
 
+                Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
+                addButton.startAnimation(fadeOut);
+                addButtonText.startAnimation(fadeOut);
                 addButton.setVisibility(View.GONE);
                 addButtonText.setVisibility(View.GONE);
+
                 submitButtonInactivate.setVisibility(View.VISIBLE);
                 constraintLayout.setVisibility(View.VISIBLE);
+                submitButtonInactivate.startAnimation(fadeIn);
+                constraintLayout.startAnimation(fadeIn);
                 // 아래 줄 있으면, 텍스트 입력이 박스 넘어가도 줄바꿈이 안됨
                 //inputEditText.setSingleLine(true);
                 //submitButton.setVisibility(View.VISIBLE);
