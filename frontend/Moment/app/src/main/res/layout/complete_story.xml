@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingVertical="15dp">
 
     <Button
         android:id="@+id/storyAiButton"
@@ -18,7 +17,7 @@
         app:layout_constraintTop_toBottomOf="@+id/storyLengthText" />
 
     <EditText
-        android:id="@+id/storyContextEditText"
+        android:id="@+id/storyContentEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
@@ -26,6 +25,7 @@
         android:background="@android:color/transparent"
         android:ems="10"
         android:fontFamily="@font/maruburi_light"
+        android:gravity="start|top"
         android:hint="@string/story_content_hint"
         android:importantForAutofill="no"
         android:inputType="text|textMultiLine"
@@ -68,7 +68,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storyContextEditText"
+        app:layout_constraintTop_toBottomOf="@+id/storyContentEditText"
         tools:text="N/Limit" />
 
     <TextView

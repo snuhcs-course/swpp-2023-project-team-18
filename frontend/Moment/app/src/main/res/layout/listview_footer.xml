@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
 
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -120,6 +120,12 @@
         android:fontFamily="@font/maruburi_light"
         android:text="@string/moment_limit_help_text"
         android:textColor="@color/red"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/story_wrapper"
+        layout="@layout/complete_story"
         android:visibility="gone"
         tools:visibility="visible" />
 

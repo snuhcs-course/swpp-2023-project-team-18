@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,8 +41,8 @@ public class TodayViewFragment extends Fragment {
     private List<ListViewItem> items;
     private ListViewAdapter mAdapter;
 
+    private BottomButtonContainer bottomButtonContainer;
     private ListFooterContainer listFooterContainer;
-    private Button dayCompletionButton;
 
     private WriteViewModel viewModel;
     private MomentRemoteDataSource remoteDataSource;
@@ -86,20 +84,9 @@ public class TodayViewFragment extends Fragment {
         initializeListView(root);
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
-        // 마무리하기 버튼
-        binding.dayCompleteButton.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),
-                R.style.DialogTheme);
-            builder.setMessage(R.string.day_complete_popup);
-            builder.setPositiveButton(R.string.day_complete_popup_yes, (dialog, id) -> {
-                // 네 -> 하루 마무리 시작
-                // TODO
-            });
-            builder.setNegativeButton(R.string.day_complete_popup_no, (dialog, id) -> {
-                // 아니요 -> Do nothing
-            });
-            builder.create().show();
-        });
+        // 하단 버튼 관리 객체 초기화
+        bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
+        bottomButtonContainer.writingMoment();
 
         // 루트 뷰에 터치 리스너 설정
 
@@ -126,7 +113,7 @@ public class TodayViewFragment extends Fragment {
                             items.add(new ListViewItem(userInput, createdTime, serverResponse));
                         }
 
-                        dayCompletionButton.setActivated(numMoments != 0);
+                        bottomButtonContainer.setActivated(numMoments != 0);
 
                         mAdapter.notifyDataSetChanged();
                         binding.listviewList.setSelection(items.size() - 1);
@@ -161,7 +148,6 @@ public class TodayViewFragment extends Fragment {
         binding.listviewList.addFooterView(footerView);
 
         listFooterContainer = new ListFooterContainer(footerView);
-        dayCompletionButton = binding.dayCompleteButton;
 
         // 이건 submit button 누르면 키보드 사라지게
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
@@ -185,9 +171,9 @@ public class TodayViewFragment extends Fragment {
                         Calendar.HOUR_OF_DAY); // This will give you the current hour
 
                     if (createdHourValue == currentHourValue) {
-                        listFooterContainer.setUiMomentLimitExceeded();
+                        listFooterContainer.setUiLimitExceeded();
                     } else {
-                        listFooterContainer.setUiWriting();
+                        listFooterContainer.setUiWritingMoment();
                         binding.listviewList.setSelection(items.size() - 1);
                         // ScrollView를 ConstraintLayout의 하단으로 스크롤
                     }
@@ -195,7 +181,7 @@ public class TodayViewFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             } else {
-                listFooterContainer.setUiWriting();
+                listFooterContainer.setUiWritingMoment();
                 // ScrollView를 ConstraintLayout의 하단으로 스크롤
                 binding.listviewList.setSelection(items.size() - 1);
             }
