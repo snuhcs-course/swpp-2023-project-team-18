@@ -17,7 +17,7 @@
         tools:visibility="visible">
 
         <EditText
-            android:id="@+id/inputEditText"
+            android:id="@+id/input_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/editTextPadding"
@@ -47,11 +47,11 @@
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputEditText">
+            app:layout_constraintTop_toBottomOf="@+id/input_edit_text">
 
             <!-- 글자수 실시간으로 보여줌 -->
             <TextView
-                android:id="@+id/textCount"
+                android:id="@+id/text_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -97,7 +97,7 @@
         android:clickable="true" />
 
     <Button
-        android:id="@+id/add_button_inactivated"
+        android:id="@+id/add_button_inactivate"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginBottom="5dp"
@@ -114,7 +114,7 @@
         android:textColor="@color/gray" />
 
     <TextView
-        android:id="@+id/add_button_inactivated_text"
+        android:id="@+id/add_limit_warn_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/maruburi_light"
