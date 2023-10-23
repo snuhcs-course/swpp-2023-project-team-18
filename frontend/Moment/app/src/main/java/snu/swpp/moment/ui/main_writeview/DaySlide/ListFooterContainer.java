@@ -15,7 +15,7 @@ public class ListFooterContainer {
 
     private final ConstraintLayout editTextWrapper;
     private final EditText momentEditText;
-    private final TextView textCount;
+    private final TextView momentLengthText;
     private final TextView addButtonText;
     private final TextView addLimitWarnText;
     private final Button submitButton;
@@ -38,7 +38,7 @@ public class ListFooterContainer {
         // 모먼트 쓰기
         editTextWrapper = view.findViewById(R.id.edit_text_wrapper);
         momentEditText = view.findViewById(R.id.input_edit_text);
-        textCount = view.findViewById(R.id.text_count);
+        momentLengthText = view.findViewById(R.id.moment_length_text);
         addButtonText = view.findViewById(R.id.add_button_text);
         addLimitWarnText = view.findViewById(R.id.add_limit_warn_text);
         submitButton = view.findViewById(R.id.submit_button);
@@ -55,7 +55,7 @@ public class ListFooterContainer {
         aiButtonHelpText = view.findViewById(R.id.aiButtonHelpText);
         storyAiButton = view.findViewById(R.id.storyAiButton);
 
-        setTextCount(0);
+        setMomentLengthText(0);
 
         // inputEditText 입력 감지
         momentEditText.addTextChangedListener(new TextWatcher() {
@@ -70,7 +70,7 @@ public class ListFooterContainer {
             @Override
             public void afterTextChanged(Editable s) {
                 // 글자 수를 계산하고 버튼의 텍스트를 업데이트
-                setTextCount(s.length());
+                setMomentLengthText(s.length());
                 // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
                 if (s.length() == 0) {
                     submitButton.setVisibility(View.GONE);
@@ -84,7 +84,8 @@ public class ListFooterContainer {
                 if (s.length() > MOMENT_MAX_LENGTH) {
                     // 1000자까지의 텍스트만 유지
                     momentEditText.setText(s.subSequence(0, MOMENT_MAX_LENGTH));
-                    textCount.setTextColor(ContextCompat.getColor(view.getContext(), R.color.red));
+                    momentLengthText.setTextColor(
+                        ContextCompat.getColor(view.getContext(), R.color.red));
                     momentEditText.requestFocus();
                     // 커서를 텍스트 끝으로 이동
                     momentEditText.setSelection(MOMENT_MAX_LENGTH);
@@ -111,7 +112,7 @@ public class ListFooterContainer {
     public void setUiWritingMoment() {
         editTextWrapper.setVisibility(View.VISIBLE);
         momentEditText.setVisibility(View.VISIBLE);
-        textCount.setVisibility(View.VISIBLE);
+        momentLengthText.setVisibility(View.VISIBLE);
         submitButtonInactivate.setVisibility(View.VISIBLE);
 
         addButton.setVisibility(View.GONE);
@@ -126,7 +127,7 @@ public class ListFooterContainer {
         momentEditText.setVisibility(View.GONE);
         submitButton.setVisibility(View.GONE);
         submitButtonInactivate.setVisibility(View.GONE);
-        textCount.setVisibility(View.GONE);
+        momentLengthText.setVisibility(View.GONE);
         editTextWrapper.setVisibility(View.GONE);
     }
 
@@ -145,13 +146,14 @@ public class ListFooterContainer {
         addLimitWarnText.setVisibility(View.GONE);
         editTextWrapper.setVisibility(View.GONE);
         momentEditText.setVisibility(View.GONE);
-        textCount.setVisibility(View.GONE);
+        momentLengthText.setVisibility(View.GONE);
         submitButtonInactivate.setVisibility(View.GONE);
-        
+
         storyWrapper.setVisibility(View.VISIBLE);
     }
 
-    private void setTextCount(int count) {
-        textCount.setText(String.format(Locale.getDefault(), "%d/%d", count, MOMENT_MAX_LENGTH));
+    private void setMomentLengthText(int count) {
+        momentLengthText.setText(
+            String.format(Locale.getDefault(), "%d/%d", count, MOMENT_MAX_LENGTH));
     }
 }
