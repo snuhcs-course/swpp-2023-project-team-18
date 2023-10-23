@@ -12,11 +12,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -50,7 +51,6 @@ public class TodayViewFragment extends Fragment {
     private Button addButton, addButtonInactivate, submitButton, submitButtonInactivate, dayCompletionButton;
     private EditText inputEditText;
     private TextView textCount, addButtonText, addButtonInactivateText;
-    private ScrollView scrollView;
 
     private ConstraintLayout constraintLayout;
 
@@ -67,7 +67,7 @@ public class TodayViewFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         if (remoteDataSource == null) {
             remoteDataSource = new MomentRemoteDataSource();
@@ -185,8 +185,7 @@ public class TodayViewFragment extends Fragment {
         textCount = footerView.findViewById(R.id.textCount);
         constraintLayout = footerView.findViewById(R.id.edit_text_wrapper);
         // 초기 버튼 텍스트 설정
-        textCount.setText("0/" + Integer.toString(MAX_LENGTH));
-        scrollView = footerView.findViewById(R.id.listview_scroll);
+        textCount.setText("0/" + MAX_LENGTH);
 
         // EditText의 텍스트 변경을 감지
         inputEditText.addTextChangedListener(new TextWatcher() {
@@ -203,7 +202,7 @@ public class TodayViewFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 // 글자 수를 계산하고 버튼의 텍스트를 업데이트
-                textCount.setText(s.length() + "/" + Integer.toString(MAX_LENGTH));
+                textCount.setText(s.length() + "/" + MAX_LENGTH);
                 // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
                 if (s.length() == 0) {
                     submitButton.setVisibility(View.GONE);
@@ -217,7 +216,7 @@ public class TodayViewFragment extends Fragment {
                 if (s.length() > MAX_LENGTH) {
                     // 1000자까지의 텍스트만 유지
                     inputEditText.setText(s.subSequence(0, MAX_LENGTH));
-                    textCount.setTextColor(getResources().getColor(R.color.red)); // 수정된 부분
+                    textCount.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                     inputEditText.requestFocus();
                     // 커서를 텍스트 끝으로 이동
                     inputEditText.setSelection(MAX_LENGTH);

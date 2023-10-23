@@ -1,133 +1,126 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listview_scroll"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+<?xml version="1.0" encoding="utf-8"?><!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
 
-    <LinearLayout
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/edit_text_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:background="@drawable/box_border"
+        android:visibility="gone"
+        tools:visibility="visible">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/edit_text_wrapper"
+        <EditText
+            android:id="@+id/inputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/box_border"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <EditText
-                android:id="@+id/inputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/editTextPadding"
-                android:backgroundTint="@android:color/transparent"
-                android:fontFamily="@font/maruburi_light"
-                android:gravity="top|start"
-                android:hint="@string/edit_text_message"
-                android:importantForAutofill="no"
-                android:inputType="text|textMultiLine"
-                android:minLines="5"
-                android:textSize="15sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/count_and_submit"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
-
-            <!-- 버튼과 글자수를 수평으로 배열하는 LinearLayout -->
-            <LinearLayout
-                android:id="@+id/count_and_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_gravity="bottom|end"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputEditText">
-
-                <!-- 글자수 실시간으로 보여줌 -->
-                <TextView
-                    android:id="@+id/textCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:background="@color/white"
-                    android:fontFamily="@font/maruburi_light"
-                    android:text=""
-                    android:textColor="@color/gray"
-                    android:visibility="gone"
-                    tools:text="0/1000"
-                    tools:visibility="visible" />
-
-                <Button
-                    android:id="@+id/submit_button"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/moment_write_button"
-                    android:gravity="center"
-                    android:text=""
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/submit_button_inactivate"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/moment_write_inactivate"
-                    android:enabled="false"
-                    android:gravity="center"
-                    android:text=""
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/add_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/moment_add_button"
-            android:clickable="true" />
-
-        <Button
-            android:id="@+id/add_button_inactivated"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/moment_add_button_inactivated"
-            android:clickable="false"
-            android:visibility="gone" />
-        <TextView
-            android:id="@+id/add_button_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:padding="@dimen/editTextPadding"
+            android:backgroundTint="@android:color/transparent"
             android:fontFamily="@font/maruburi_light"
-            android:text="@string/add_moment_help_text"
-            android:textColor="@color/gray" />
-
-
-        <TextView
-            android:id="@+id/add_button_inactivated_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/maruburi_light"
-            android:text="@string/moment_limit_help_text"
-            android:textColor="@color/red"
+            android:gravity="top|start"
+            android:hint="@string/edit_text_message"
+            android:importantForAutofill="no"
+            android:inputType="text|textMultiLine"
+            android:minLines="5"
+            android:textSize="15sp"
             android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/count_and_submit"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-    </LinearLayout>
-</ScrollView>
+        <!-- 버튼과 글자수를 수평으로 배열하는 LinearLayout -->
+        <LinearLayout
+            android:id="@+id/count_and_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="bottom|end"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputEditText">
+
+            <!-- 글자수 실시간으로 보여줌 -->
+            <TextView
+                android:id="@+id/textCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/white"
+                android:fontFamily="@font/maruburi_light"
+                android:text=""
+                android:textColor="@color/gray"
+                android:visibility="gone"
+                tools:text="0/1000"
+                tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/submit_button"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/moment_write_button"
+                android:gravity="center"
+                android:text=""
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/submit_button_inactivate"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/moment_write_inactivate"
+                android:enabled="false"
+                android:gravity="center"
+                android:text=""
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/moment_add_button"
+        android:clickable="true" />
+
+    <Button
+        android:id="@+id/add_button_inactivated"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/moment_add_button_inactivated"
+        android:clickable="false"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/add_button_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/maruburi_light"
+        android:text="@string/add_moment_help_text"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/add_button_inactivated_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/maruburi_light"
+        android:text="@string/moment_limit_help_text"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>
