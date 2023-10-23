@@ -85,13 +85,11 @@
 
     <TextView
         android:id="@+id/aiButtonHelpText"
+        style="@style/HELP_TEXT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/maruburi_light"
         android:gravity="center"
         android:text="@string/ai_button_help_text"
-        android:textColor="@color/darkgray"
-        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/storyAiButton" />
