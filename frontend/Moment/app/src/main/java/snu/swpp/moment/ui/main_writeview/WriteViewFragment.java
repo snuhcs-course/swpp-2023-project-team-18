@@ -42,7 +42,7 @@ public class WriteViewFragment extends Fragment {
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }

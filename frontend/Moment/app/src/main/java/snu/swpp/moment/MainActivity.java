@@ -131,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setToolbarTitle(String title) {
-        System.out.println("#Debug called");
-        System.out.println("#Debug " + title);
+        if (toolbarTitle == null) {
+            return;
+        }
         toolbarTitle.setText(title);
-        System.out.println("#Debug toolbarSet");
     }
 }

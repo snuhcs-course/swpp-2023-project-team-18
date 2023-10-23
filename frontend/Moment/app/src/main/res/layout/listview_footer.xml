@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/listview_scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/edit_text_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,6 +31,7 @@
                 android:fontFamily="@font/maruburi_light"
                 android:gravity="top|start"
                 android:hint="@string/edit_text_message"
+                android:importantForAutofill="no"
                 android:inputType="text|textMultiLine"
                 android:minLines="5"
                 android:textSize="15sp"
@@ -40,6 +41,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />
+
             <!-- 버튼과 글자수를 수평으로 배열하는 LinearLayout -->
             <LinearLayout
                 android:id="@+id/count_and_submit"
@@ -74,7 +76,6 @@
                     android:layout_marginStart="10dp"
                     android:background="@drawable/moment_write_button"
                     android:gravity="center"
-                    android:onClick="submitInput"
                     android:text=""
                     android:visibility="gone" />
 
@@ -86,7 +87,6 @@
                     android:background="@drawable/moment_write_inactivate"
                     android:enabled="false"
                     android:gravity="center"
-                    android:onClick="submitInput"
                     android:text=""
                     android:visibility="gone"
                     tools:visibility="visible" />
@@ -100,8 +100,7 @@
             android:layout_height="30dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/moment_add_button"
-            android:clickable="true"
-            android:onClick="showInputFields" />
+            android:clickable="true" />
 
         <Button
             android:id="@+id/add_button_inactivated"
@@ -110,7 +109,6 @@
             android:layout_marginBottom="5dp"
             android:background="@drawable/moment_add_button_inactivated"
             android:clickable="false"
-            android:onClick="showInputFields"
             android:visibility="gone" />
         <TextView
             android:id="@+id/add_button_text"
