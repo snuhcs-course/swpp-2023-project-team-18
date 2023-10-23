@@ -57,6 +57,7 @@
     <string name="emotion_help_text">오늘 하루를 가장 잘 나타내는 감정을 골라주세요</string>
     <string name="tag_help_text">오늘 하루를 표현하는 태그를 달아주세요</string>
     <string name="tag_limit_help_text">태그는 10개까지 사용할 수 있어요</string>
+    <string name="tag_hint">#태그를 #적어주세요</string>
     <string name="score_help_text">마지막으로 오늘 하루에 점수를 매겨주세요</string>
     <string name="completed_day">마무리된 하루</string>
 
