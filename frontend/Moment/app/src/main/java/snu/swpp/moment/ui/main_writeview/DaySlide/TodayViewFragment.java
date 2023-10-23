@@ -142,14 +142,15 @@ public class TodayViewFragment extends Fragment {
                     }
                 } else {
                     if (momentUiState.getError() == NO_INTERNET) {
-                        Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                            .show();
                     } else if (momentUiState.getError() == ACCESS_TOKEN_EXPIRED) {
                         Toast.makeText(getContext(), R.string.token_expired_error,
-                            Toast.LENGTH_SHORT);
+                            Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
