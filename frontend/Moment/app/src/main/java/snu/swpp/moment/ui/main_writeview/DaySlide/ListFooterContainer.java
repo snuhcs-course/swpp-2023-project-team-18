@@ -260,7 +260,7 @@ public class ListFooterContainer {
         setBottomButtonState(true);
     }
 
-    public void setUiWritingStory() {
+    public void setUiWritingStory(String completeTime) {
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
         addButtonInactivate.setVisibility(View.GONE);
@@ -271,6 +271,7 @@ public class ListFooterContainer {
         submitButtonInactivate.setVisibility(View.GONE);
 
         storyWrapper.setVisibility(View.VISIBLE);
+        completeTimeText.setText(completeTime);
 
         setBottomButtonState(true);
     }

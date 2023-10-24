@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import snu.swpp.moment.R;
 
 public class BottomButtonContainer {
@@ -43,7 +45,10 @@ public class BottomButtonContainer {
 
             builder.setPositiveButton(R.string.day_complete_popup_yes, (dialog, id) -> {
                 // 네 -> 하루 마무리 시작
-                writingStory();
+                long completeTime = System.currentTimeMillis();
+                String completeTimeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(
+                    completeTime);
+                writingStory(completeTimeText);
                 // TODO: API 호출해서 마무리 시점 기록
             });
             builder.setNegativeButton(R.string.day_complete_popup_no, (dialog, id) -> {
@@ -53,14 +58,14 @@ public class BottomButtonContainer {
     }
 
     /* 스토리 작성 중: 다음 단계로 이동 버튼 */
-    public void writingStory() {
+    public void writingStory(String completeTimeText) {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
             // TODO: 스토리 저장 API 호출
             selectingEmotion();
         });
 
-        listFooterContainer.setUiWritingStory();
+        listFooterContainer.setUiWritingStory(completeTimeText);
     }
 
     /* 감정 선택 중: 다음 단계로 이동 버튼 */
