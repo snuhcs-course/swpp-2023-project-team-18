@@ -115,6 +115,32 @@ public class ListFooterContainer {
         addButtonInactivate.setOnClickListener(v -> {
         });
 
+        // storyTitleEditText 입력 감지
+        storyTitleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > STORY_TITLE_MAX_LENGTH) {
+                    // 글자수 제한 초과
+                    storyTitleEditText.setText(s.subSequence(0, STORY_TITLE_MAX_LENGTH));
+                    storyTitleEditText.setTextColor(
+                        ContextCompat.getColor(view.getContext(), R.color.red));
+                    storyTitleEditText.requestFocus();
+                    storyTitleEditText.setSelection(STORY_TITLE_MAX_LENGTH);
+                } else {
+                    storyTitleEditText.setTextColor(
+                        ContextCompat.getColor(view.getContext(), R.color.black));
+                }
+            }
+        });
+
         // storyContentEditText 입력 감지
         storyContentEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -127,23 +153,15 @@ public class ListFooterContainer {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // 글자 수를 계산하고 버튼의 텍스트를 업데이트
                 setStoryContentLengthText(s.length());
 
-                // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
-                if (s.length() == 0) {
-                    submitButton.setVisibility(View.GONE);
-                    submitButtonInactivate.setVisibility(View.VISIBLE);
-                } else if (s.length() > STORY_CONTENT_MAX_LENGTH) {
-                    // 글자 수가 1000자를 초과하면 1000자까지의 텍스트만 유지
+                if (s.length() > STORY_CONTENT_MAX_LENGTH) {
+                    // 글자수 제한 초과
                     storyContentEditText.setText(s.subSequence(0, STORY_CONTENT_MAX_LENGTH));
                     storyContentEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.red));
                     storyContentEditText.requestFocus();
-                    // 커서를 텍스트 끝으로 이동
                     storyContentEditText.setSelection(STORY_CONTENT_MAX_LENGTH);
-
-                    // TODO: 버튼 활성화 상태 관리
                 } else {
                     storyContentEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
