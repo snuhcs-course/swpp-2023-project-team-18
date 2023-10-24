@@ -67,10 +67,21 @@ public class BottomButtonContainer {
     public void selectingEmotion() {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
-            // TODO: 감정 검사 (아무것도 선택 안 한 경우 block)
+            // TODO: 감정 저장 API 호출
+            writingTags();
         });
 
         listFooterContainer.setUiSelectingEmotion();
         listFooterContainer.freezeStoryEditText();
+    }
+
+    public void writingTags() {
+        button.setText(R.string.next_stage_button);
+        button.setOnClickListener(v -> {
+            // TODO: 태그 저장 API 호출
+        });
+
+        listFooterContainer.setUiWritingTags();
+        listFooterContainer.freezeEmotionSelector();
     }
 }

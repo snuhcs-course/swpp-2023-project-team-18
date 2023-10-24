@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -14,17 +16,17 @@ import snu.swpp.moment.R;
 
 public class TagBoxContainer {
 
-    private final EditText tagBox;
+    private final EditText tagEditText;
     private final TextView limitHelpText;
-    private boolean isLimitExceeded = false;
+    private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
 
     private final int MAX_TAGS = 10;
 
     public TagBoxContainer(View view) {
-        tagBox = view.findViewById(R.id.tagsEditText);
+        tagEditText = view.findViewById(R.id.tagsEditText);
         limitHelpText = view.findViewById(R.id.tagLimitHelpText);
 
-        tagBox.addTextChangedListener(new TextWatcher() {
+        tagEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Do nothing
@@ -39,21 +41,36 @@ public class TagBoxContainer {
             public void afterTextChanged(Editable s) {
                 List<String> currentTags = parseTags(s.toString());
                 if (currentTags.size() > MAX_TAGS) {
-                    isLimitExceeded = true;
+                    // 개수 제한 초과
+                    isLimitExceeded.setValue(true);
                     limitHelpText.setVisibility(View.VISIBLE);
-                    tagBox.setTextColor(
-                        ContextCompat.getColor(tagBox.getContext(), R.color.darkgray));
+                    tagEditText.setTextColor(
+                        ContextCompat.getColor(tagEditText.getContext(), R.color.red));
                 } else {
-                    isLimitExceeded = false;
+                    isLimitExceeded.setValue(false);
                     limitHelpText.setVisibility(View.GONE);
-                    tagBox.setTextColor(ContextCompat.getColor(tagBox.getContext(), R.color.black));
+                    tagEditText.setTextColor(
+                        ContextCompat.getColor(tagEditText.getContext(), R.color.black));
                 }
             }
         });
     }
 
+    public List<String> getTags() {
+        return parseTags(tagEditText.getText().toString());
+    }
+
     public boolean isLimitExceeded() {
-        return isLimitExceeded;
+        Boolean value = isLimitExceeded.getValue();
+        if (value != null) {
+            return value;
+        } else {
+            return false;
+        }
+    }
+
+    public void setLimitObserver(Observer<Boolean> observer) {
+        isLimitExceeded.observeForever(observer);
     }
 
     private static List<String> parseTags(String s) {

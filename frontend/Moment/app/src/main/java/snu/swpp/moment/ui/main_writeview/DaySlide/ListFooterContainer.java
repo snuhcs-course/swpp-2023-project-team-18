@@ -40,8 +40,12 @@ public class ListFooterContainer {
     // 감정 선택
     private final ConstraintLayout emotionWrapper;
     private final TextView emotionHelpText;
-    private final View emotionSelector;
     private final EmotionGridContainer emotionGridContainer;
+
+    // 태그 입력
+    private final ConstraintLayout tagWrapper;
+    private final TextView tagHelpText;
+    private final TagBoxContainer tagBoxContainer;
 
     // 하단 버튼 활성화 상태
     private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>(false);
@@ -74,8 +78,12 @@ public class ListFooterContainer {
         // 감정 선택
         emotionWrapper = view.findViewById(R.id.emotion_wrapper);
         emotionHelpText = view.findViewById(R.id.emotion_help_text);
-        emotionSelector = view.findViewById(R.id.emotion_selector);
-        emotionGridContainer = new EmotionGridContainer(emotionSelector);
+        emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
+
+        // 태그 입력
+        tagWrapper = view.findViewById(R.id.tag_wrapper);
+        tagHelpText = view.findViewById(R.id.tag_help_text);
+        tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_box));
 
         setMomentLengthText(0);
 
@@ -180,6 +188,11 @@ public class ListFooterContainer {
                 setBottomButtonState(false);
             }
         });
+
+        // 태그 개수 제한 감지
+        tagBoxContainer.setLimitObserver((Boolean isLimitExceeded) -> {
+            setBottomButtonState(!isLimitExceeded);
+        });
     }
 
     public String getInputText() {
@@ -205,6 +218,10 @@ public class ListFooterContainer {
     public void freezeStoryEditText() {
         storyTitleEditText.setEnabled(false);
         storyContentEditText.setEnabled(false);
+    }
+
+    public void freezeEmotionSelector() {
+        emotionGridContainer.freeze();
     }
 
     public void setUiWritingMoment() {
@@ -266,6 +283,10 @@ public class ListFooterContainer {
         emotionWrapper.setVisibility(View.VISIBLE);
 
         setBottomButtonState(false);
+    }
+
+    public void setUiWritingTags() {
+        tagWrapper.setVisibility(View.VISIBLE);
     }
 
     private void setMomentLengthText(int count) {
