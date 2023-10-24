@@ -84,10 +84,6 @@ public class TodayViewFragment extends Fragment {
         initializeListView(root);
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
-        // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root);
-        bottomButtonContainer.writingMoment();
-
         // 루트 뷰에 터치 리스너 설정
 
         return root;
@@ -148,11 +144,11 @@ public class TodayViewFragment extends Fragment {
             .inflate(R.layout.listview_footer, binding.listviewList, false);
         binding.listviewList.addFooterView(footerView);
 
-        listFooterContainer = new ListFooterContainer(footerView);
-
-        // 이건 submit button 누르면 키보드 사라지게
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-            INPUT_METHOD_SERVICE);
+        // 하단 버튼 관리 객체 초기화
+        bottomButtonContainer = new BottomButtonContainer(root);
+        bottomButtonContainer.writingMoment();
+        // list footer 관리 객체 초기화
+        listFooterContainer = new ListFooterContainer(footerView, bottomButtonContainer);
 
         listFooterContainer.setAddButtonOnClickListener(v -> {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
@@ -188,6 +184,8 @@ public class TodayViewFragment extends Fragment {
             }
         });
 
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+            INPUT_METHOD_SERVICE);
         listFooterContainer.setSubmitButtonOnClickListener(v -> {
             String text = listFooterContainer.getInputText();
 

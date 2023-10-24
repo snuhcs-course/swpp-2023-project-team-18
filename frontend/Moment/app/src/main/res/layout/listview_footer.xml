@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="false"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -128,5 +129,32 @@
         layout="@layout/complete_story"
         android:visibility="gone"
         tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/emotion_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/emotion_help_text"
+            style="@style/HELP_TEXT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingVertical="15dp"
+            android:text="@string/emotion_help_text"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/emotion_selector"
+            layout="@layout/emotion_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/emotion_help_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

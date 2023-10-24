@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,9 +11,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import java.util.Locale;
 import snu.swpp.moment.R;
+import snu.swpp.moment.ui.main_writeview.EmotionGridContainer;
 
 public class ListFooterContainer {
 
+    // 모먼트 작성
     private final ConstraintLayout editTextWrapper;
     private final EditText momentEditText;
     private final TextView momentLengthText;
@@ -23,6 +26,7 @@ public class ListFooterContainer {
     private final Button addButton;
     private final Button addButtonInactivate;
 
+    // 스토리 작성
     private final ConstraintLayout storyWrapper;
     private final EditText storyTitleEditText;
     private final EditText storyContentEditText;
@@ -31,6 +35,12 @@ public class ListFooterContainer {
     private final TextView aiButtonHelpText;
     private final Button storyAiButton;
 
+    // 감정 선택
+    private final ConstraintLayout emotionWrapper;
+    private final TextView emotionHelpText;
+    private final View emotionSelector;
+    private final EmotionGridContainer emotionGridContainer;
+
     private final BottomButtonContainer bottomButtonContainer;
 
 
@@ -38,8 +48,8 @@ public class ListFooterContainer {
     private final int STORY_TITLE_MAX_LENGTH = 100;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
 
-    public ListFooterContainer(View view) {
-        // 모먼트 쓰기
+    public ListFooterContainer(View view, BottomButtonContainer bottomButtonContainer) {
+        // 모먼트 작성
         editTextWrapper = view.findViewById(R.id.edit_text_wrapper);
         momentEditText = view.findViewById(R.id.input_edit_text);
         momentLengthText = view.findViewById(R.id.moment_length_text);
@@ -50,7 +60,7 @@ public class ListFooterContainer {
         addButton = view.findViewById(R.id.add_button);
         addButtonInactivate = view.findViewById(R.id.add_button_inactivate);
 
-        // 하루 마무리
+        // 스토리 작성
         storyWrapper = view.findViewById(R.id.story_wrapper);
         storyTitleEditText = view.findViewById(R.id.storyTitleEditText);
         storyContentEditText = view.findViewById(R.id.storyContentEditText);
@@ -59,8 +69,14 @@ public class ListFooterContainer {
         aiButtonHelpText = view.findViewById(R.id.aiButtonHelpText);
         storyAiButton = view.findViewById(R.id.storyAiButton);
 
+        // 감정 선택
+        emotionWrapper = view.findViewById(R.id.emotion_wrapper);
+        emotionHelpText = view.findViewById(R.id.emotion_help_text);
+        emotionSelector = view.findViewById(R.id.emotion_selector);
+        emotionGridContainer = new EmotionGridContainer(emotionSelector);
+
         // 하단 버튼
-        bottomButtonContainer = new BottomButtonContainer(view);
+        this.bottomButtonContainer = bottomButtonContainer;
 
         setMomentLengthText(0);
 
@@ -92,6 +108,8 @@ public class ListFooterContainer {
                     // 커서를 텍스트 끝으로 이동
                     momentEditText.setSelection(MOMENT_MAX_LENGTH);
                 } else {
+                    momentLengthText.setTextColor(
+                        ContextCompat.getColor(view.getContext(), R.color.black));
                     submitButton.setVisibility(View.VISIBLE);
                     submitButtonInactivate.setVisibility(View.GONE);
                 }
@@ -131,18 +149,26 @@ public class ListFooterContainer {
 
                     // TODO: 버튼 활성화 상태 관리
                 } else {
-
+                    storyContentEditText.setTextColor(
+                        ContextCompat.getColor(view.getContext(), R.color.black));
                 }
             }
         });
 
+        // 하단 버튼 누를 때 UI 자동 변화
         bottomButtonContainer.setStateObserver(buttonState -> {
             switch (buttonState) {
-                case WRITING_MOMENT:
-                    setUiWritingMoment();
+                case VIEWING_MOMENT:
+                    Log.d("ListFooterContainer", "state converted to VIEWING_MOMENT");
                     break;
                 case WRITING_STORY:
                     setUiWritingStory();
+                    Log.d("ListFooterContainer", "state converted to WRITING_STORY");
+                    break;
+                case SELECTING_EMOTION:
+                    freezeStoryEditText();
+                    setUiSelectingEmotion();
+                    Log.d("ListFooterContainer", "state converted to SELECTING_EMOTION");
                     break;
             }
         });
@@ -158,6 +184,11 @@ public class ListFooterContainer {
 
     public void setSubmitButtonOnClickListener(View.OnClickListener listener) {
         submitButton.setOnClickListener(listener);
+    }
+
+    public void freezeStoryEditText() {
+        storyTitleEditText.setEnabled(false);
+        storyContentEditText.setEnabled(false);
     }
 
     public void setUiWritingMoment() {
@@ -201,6 +232,14 @@ public class ListFooterContainer {
         submitButtonInactivate.setVisibility(View.GONE);
 
         storyWrapper.setVisibility(View.VISIBLE);
+    }
+
+    public void setUiSelectingEmotion() {
+        storyContentLengthText.setVisibility(View.GONE);
+        aiButtonHelpText.setVisibility(View.GONE);
+        storyAiButton.setVisibility(View.GONE);
+
+        emotionWrapper.setVisibility(View.VISIBLE);
     }
 
     private void setMomentLengthText(int count) {
