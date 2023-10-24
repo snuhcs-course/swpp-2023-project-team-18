@@ -2,7 +2,6 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import java.util.Locale;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.EmotionGridContainer;
@@ -42,6 +43,8 @@ public class ListFooterContainer {
     private final View emotionSelector;
     private final EmotionGridContainer emotionGridContainer;
 
+    // 하단 버튼 활성화 상태
+    private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>(false);
 
     private final int MOMENT_MAX_LENGTH = 1000;
     private final int STORY_TITLE_MAX_LENGTH = 100;
@@ -88,7 +91,7 @@ public class ListFooterContainer {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // 글자 수를 계산하고 버튼의 텍스트를 업데이트
+                // 글자 수를 계산
                 setMomentLengthText(s.length());
 
                 // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
@@ -168,10 +171,23 @@ public class ListFooterContainer {
                 }
             }
         });
+
+        // 감정 선택 감지
+        emotionGridContainer.setSelectedEmotionObserver((Integer emotion) -> {
+            if (emotion > -1) {
+                setBottomButtonState(true);
+            } else {
+                setBottomButtonState(false);
+            }
+        });
     }
 
     public String getInputText() {
         return momentEditText.getText().toString();
+    }
+
+    public void setBottomButtonState(boolean state) {
+        bottomButtonState.setValue(state);
     }
 
     public void setAddButtonOnClickListener(View.OnClickListener listener) {
@@ -180,6 +196,10 @@ public class ListFooterContainer {
 
     public void setSubmitButtonOnClickListener(View.OnClickListener listener) {
         submitButton.setOnClickListener(listener);
+    }
+
+    public void setBottomButtonStateObserver(Observer<Boolean> observer) {
+        bottomButtonState.observeForever(observer);
     }
 
     public void freezeStoryEditText() {
@@ -195,6 +215,8 @@ public class ListFooterContainer {
 
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
+
+        setBottomButtonState(false);
     }
 
     public void setUiReadyToAdd() {
@@ -207,14 +229,18 @@ public class ListFooterContainer {
         submitButtonInactivate.setVisibility(View.GONE);
         momentLengthText.setVisibility(View.GONE);
         editTextWrapper.setVisibility(View.GONE);
+
+        setBottomButtonState(true);
     }
 
-    public void setUiLimitExceeded() {
+    public void setUiAddLimitExceeded() {
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
 
         addButtonInactivate.setVisibility(View.VISIBLE);
         addLimitWarnText.setVisibility(View.VISIBLE);
+
+        setBottomButtonState(true);
     }
 
     public void setUiWritingStory() {
@@ -228,6 +254,8 @@ public class ListFooterContainer {
         submitButtonInactivate.setVisibility(View.GONE);
 
         storyWrapper.setVisibility(View.VISIBLE);
+
+        setBottomButtonState(true);
     }
 
     public void setUiSelectingEmotion() {
@@ -236,6 +264,8 @@ public class ListFooterContainer {
         storyAiButton.setVisibility(View.GONE);
 
         emotionWrapper.setVisibility(View.VISIBLE);
+
+        setBottomButtonState(false);
     }
 
     private void setMomentLengthText(int count) {

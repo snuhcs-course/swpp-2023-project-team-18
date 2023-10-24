@@ -18,6 +18,11 @@ public class BottomButtonContainer {
 
         this.view = view;
         this.listFooterContainer = listFooterContainer;
+
+        this.listFooterContainer.setBottomButtonStateObserver((Boolean state) -> {
+            setActivated(state);
+            Log.d("BottomButtonContainer", "setBottomButtonStateObserver: " + state);
+        });
     }
 
     public void setActivated(boolean activated) {
@@ -51,8 +56,7 @@ public class BottomButtonContainer {
     public void writingStory() {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
-            // TODO: 작성한 내용 검사 (아무것도 안 썼어도 통과인가?)
-            //  스토리 저장 API 호출
+            // TODO: 스토리 저장 API 호출
             selectingEmotion();
         });
 

@@ -169,7 +169,7 @@ public class TodayViewFragment extends Fragment {
                         Calendar.HOUR_OF_DAY); // This will give you the current hour
 
                     if (createdHourValue == currentHourValue) {
-                        listFooterContainer.setUiLimitExceeded();
+                        listFooterContainer.setUiAddLimitExceeded();
                     } else {
                         listFooterContainer.setUiWritingMoment();
                         binding.listviewList.setSelection(items.size() - 1);
