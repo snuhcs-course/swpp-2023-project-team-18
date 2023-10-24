@@ -85,7 +85,7 @@ public class TodayViewFragment extends Fragment {
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
         // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
+        bottomButtonContainer = new BottomButtonContainer(root);
         bottomButtonContainer.writingMoment();
 
         // 루트 뷰에 터치 리스너 설정
@@ -114,6 +114,7 @@ public class TodayViewFragment extends Fragment {
                         }
 
                         bottomButtonContainer.setActivated(numMoments != 0);
+                        // TODO: 버튼 활성화 조건 점검 -- 이 부분은 언제 진입하게 되는가?
 
                         mAdapter.notifyDataSetChanged();
                         binding.listviewList.setSelection(items.size() - 1);

@@ -14,7 +14,7 @@
         android:background="@drawable/story_ai_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storyLengthText" />
+        app:layout_constraintTop_toBottomOf="@+id/storyContentLengthText" />
 
     <EditText
         android:id="@+id/storyContentEditText"
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/completeTimeText" />
 
     <TextView
-        android:id="@+id/storyLengthText"
+        android:id="@+id/storyContentLengthText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

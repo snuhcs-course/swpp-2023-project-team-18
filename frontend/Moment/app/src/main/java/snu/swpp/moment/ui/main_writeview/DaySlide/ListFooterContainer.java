@@ -27,12 +27,16 @@ public class ListFooterContainer {
     private final EditText storyTitleEditText;
     private final EditText storyContentEditText;
     private final TextView completeTimeText;
-    private final TextView storyLengthText;
+    private final TextView storyContentLengthText;
     private final TextView aiButtonHelpText;
     private final Button storyAiButton;
 
+    private final BottomButtonContainer bottomButtonContainer;
+
 
     private final int MOMENT_MAX_LENGTH = 1000;
+    private final int STORY_TITLE_MAX_LENGTH = 100;
+    private final int STORY_CONTENT_MAX_LENGTH = 1000;
 
     public ListFooterContainer(View view) {
         // 모먼트 쓰기
@@ -51,13 +55,16 @@ public class ListFooterContainer {
         storyTitleEditText = view.findViewById(R.id.storyTitleEditText);
         storyContentEditText = view.findViewById(R.id.storyContentEditText);
         completeTimeText = view.findViewById(R.id.completeTimeText);
-        storyLengthText = view.findViewById(R.id.storyLengthText);
+        storyContentLengthText = view.findViewById(R.id.storyContentLengthText);
         aiButtonHelpText = view.findViewById(R.id.aiButtonHelpText);
         storyAiButton = view.findViewById(R.id.storyAiButton);
 
+        // 하단 버튼
+        bottomButtonContainer = new BottomButtonContainer(view);
+
         setMomentLengthText(0);
 
-        // inputEditText 입력 감지
+        // momentEditText 입력 감지
         momentEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -71,29 +78,73 @@ public class ListFooterContainer {
             public void afterTextChanged(Editable s) {
                 // 글자 수를 계산하고 버튼의 텍스트를 업데이트
                 setMomentLengthText(s.length());
+
                 // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
                 if (s.length() == 0) {
                     submitButton.setVisibility(View.GONE);
                     submitButtonInactivate.setVisibility(View.VISIBLE);
-                } else {
-                    submitButton.setVisibility(View.VISIBLE);
-                    submitButtonInactivate.setVisibility(View.GONE);
-                }
-
-                // 글자 수가 1000자를 초과하면
-                if (s.length() > MOMENT_MAX_LENGTH) {
-                    // 1000자까지의 텍스트만 유지
+                } else if (s.length() > MOMENT_MAX_LENGTH) {
+                    // 글자 수가 1000자를 초과하면 1000자까지의 텍스트만 유지
                     momentEditText.setText(s.subSequence(0, MOMENT_MAX_LENGTH));
                     momentLengthText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.red));
                     momentEditText.requestFocus();
                     // 커서를 텍스트 끝으로 이동
                     momentEditText.setSelection(MOMENT_MAX_LENGTH);
+                } else {
+                    submitButton.setVisibility(View.VISIBLE);
+                    submitButtonInactivate.setVisibility(View.GONE);
                 }
             }
         });
 
         addButtonInactivate.setOnClickListener(v -> {
+        });
+
+        // storyContentEditText 입력 감지
+        storyContentEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // 글자 수를 계산하고 버튼의 텍스트를 업데이트
+                setStoryContentLengthText(s.length());
+
+                // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
+                if (s.length() == 0) {
+                    submitButton.setVisibility(View.GONE);
+                    submitButtonInactivate.setVisibility(View.VISIBLE);
+                } else if (s.length() > STORY_CONTENT_MAX_LENGTH) {
+                    // 글자 수가 1000자를 초과하면 1000자까지의 텍스트만 유지
+                    storyContentEditText.setText(s.subSequence(0, STORY_CONTENT_MAX_LENGTH));
+                    storyContentEditText.setTextColor(
+                        ContextCompat.getColor(view.getContext(), R.color.red));
+                    storyContentEditText.requestFocus();
+                    // 커서를 텍스트 끝으로 이동
+                    storyContentEditText.setSelection(STORY_CONTENT_MAX_LENGTH);
+
+                    // TODO: 버튼 활성화 상태 관리
+                } else {
+
+                }
+            }
+        });
+
+        bottomButtonContainer.setStateObserver(buttonState -> {
+            switch (buttonState) {
+                case WRITING_MOMENT:
+                    setUiWritingMoment();
+                    break;
+                case WRITING_STORY:
+                    setUiWritingStory();
+                    break;
+            }
         });
     }
 
@@ -154,6 +205,11 @@ public class ListFooterContainer {
 
     private void setMomentLengthText(int count) {
         momentLengthText.setText(
-            String.format(Locale.getDefault(), "%d/%d", count, MOMENT_MAX_LENGTH));
+            String.format(Locale.getDefault(), "%d / %d", count, MOMENT_MAX_LENGTH));
+    }
+
+    private void setStoryContentLengthText(int count) {
+        storyContentLengthText.setText(
+            String.format(Locale.getDefault(), "%d / %d", count, STORY_CONTENT_MAX_LENGTH));
     }
 }
