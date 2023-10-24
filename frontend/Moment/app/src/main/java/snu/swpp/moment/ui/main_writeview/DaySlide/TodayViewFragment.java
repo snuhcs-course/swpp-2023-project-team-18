@@ -84,6 +84,10 @@ public class TodayViewFragment extends Fragment {
         initializeListView(root);
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
+        // 하단 버튼 관리 객체 초기화
+        bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
+        bottomButtonContainer.viewingMoment();
+
         // 루트 뷰에 터치 리스너 설정
 
         return root;
@@ -144,11 +148,8 @@ public class TodayViewFragment extends Fragment {
             .inflate(R.layout.listview_footer, binding.listviewList, false);
         binding.listviewList.addFooterView(footerView);
 
-        // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root);
-        bottomButtonContainer.writingMoment();
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView, bottomButtonContainer);
+        listFooterContainer = new ListFooterContainer(footerView);
 
         listFooterContainer.setAddButtonOnClickListener(v -> {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
@@ -195,7 +196,8 @@ public class TodayViewFragment extends Fragment {
             }
 
             if (!text.isEmpty()) {
-                viewModel.writeMoment(text);
+                // FIXME: commented out for test (no GPT API call)
+                // viewModel.writeMoment(text);
                 addItem(text);
                 listFooterContainer.setUiReadyToAdd();
             }

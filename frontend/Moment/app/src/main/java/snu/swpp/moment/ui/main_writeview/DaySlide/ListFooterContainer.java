@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import java.util.Locale;
@@ -41,14 +42,12 @@ public class ListFooterContainer {
     private final View emotionSelector;
     private final EmotionGridContainer emotionGridContainer;
 
-    private final BottomButtonContainer bottomButtonContainer;
-
 
     private final int MOMENT_MAX_LENGTH = 1000;
     private final int STORY_TITLE_MAX_LENGTH = 100;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
 
-    public ListFooterContainer(View view, BottomButtonContainer bottomButtonContainer) {
+    public ListFooterContainer(@NonNull View view) {
         // 모먼트 작성
         editTextWrapper = view.findViewById(R.id.edit_text_wrapper);
         momentEditText = view.findViewById(R.id.input_edit_text);
@@ -74,9 +73,6 @@ public class ListFooterContainer {
         emotionHelpText = view.findViewById(R.id.emotion_help_text);
         emotionSelector = view.findViewById(R.id.emotion_selector);
         emotionGridContainer = new EmotionGridContainer(emotionSelector);
-
-        // 하단 버튼
-        this.bottomButtonContainer = bottomButtonContainer;
 
         setMomentLengthText(0);
 
@@ -152,24 +148,6 @@ public class ListFooterContainer {
                     storyContentEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
                 }
-            }
-        });
-
-        // 하단 버튼 누를 때 UI 자동 변화
-        bottomButtonContainer.setStateObserver(buttonState -> {
-            switch (buttonState) {
-                case VIEWING_MOMENT:
-                    Log.d("ListFooterContainer", "state converted to VIEWING_MOMENT");
-                    break;
-                case WRITING_STORY:
-                    setUiWritingStory();
-                    Log.d("ListFooterContainer", "state converted to WRITING_STORY");
-                    break;
-                case SELECTING_EMOTION:
-                    freezeStoryEditText();
-                    setUiSelectingEmotion();
-                    Log.d("ListFooterContainer", "state converted to SELECTING_EMOTION");
-                    break;
             }
         });
     }
