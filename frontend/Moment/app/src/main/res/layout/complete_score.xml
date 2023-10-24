@@ -23,7 +23,6 @@
         android:layout_marginHorizontal="50dp"
         android:max="5"
         android:min="1"
-        android:progress="3"
         android:progressDrawable="@drawable/seekbar_background"
         android:splitTrack="false"
         android:thumb="@drawable/seekbar_thumb"

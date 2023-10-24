@@ -186,6 +186,8 @@
 
     <include
         android:id="@+id/score_wrapper"
-        layout="@layout/complete_score" />
+        layout="@layout/complete_score"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </LinearLayout>

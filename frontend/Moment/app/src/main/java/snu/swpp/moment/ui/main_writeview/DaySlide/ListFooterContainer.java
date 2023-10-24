@@ -41,6 +41,9 @@ public class ListFooterContainer {
     private final TextView tagHelpText;
     private final TagBoxContainer tagBoxContainer;
 
+    // 점수 선택
+    private final ScoreContainer scoreContainer;
+
     // 하단 버튼 활성화 상태
     private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>(false);
 
@@ -70,6 +73,9 @@ public class ListFooterContainer {
         tagWrapper = view.findViewById(R.id.tag_wrapper);
         tagHelpText = view.findViewById(R.id.tag_help_text);
         tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_box));
+
+        // 점수 선택
+        scoreContainer = new ScoreContainer(view.findViewById(R.id.score_wrapper));
 
         setMomentLengthText(0);
 
@@ -151,6 +157,10 @@ public class ListFooterContainer {
         emotionGridContainer.freeze();
     }
 
+    public void freezeTagEditText() {
+        tagBoxContainer.freeze();
+    }
+
     public void setUiWritingMoment() {
         editTextWrapper.setVisibility(View.VISIBLE);
         momentEditText.setVisibility(View.VISIBLE);
@@ -212,6 +222,10 @@ public class ListFooterContainer {
 
     public void setUiWritingTags() {
         tagWrapper.setVisibility(View.VISIBLE);
+    }
+
+    public void setUiSelectingScore() {
+        scoreContainer.setVisibility(View.VISIBLE);
     }
 
     private void setMomentLengthText(int count) {

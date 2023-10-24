@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import snu.swpp.moment.R;
@@ -62,11 +63,11 @@ public class TagBoxContainer {
 
     public boolean isLimitExceeded() {
         Boolean value = isLimitExceeded.getValue();
-        if (value != null) {
-            return value;
-        } else {
-            return false;
-        }
+        return Objects.requireNonNullElse(value, false);
+    }
+
+    public void freeze() {
+        tagEditText.setEnabled(false);
     }
 
     public void setLimitObserver(Observer<Boolean> observer) {

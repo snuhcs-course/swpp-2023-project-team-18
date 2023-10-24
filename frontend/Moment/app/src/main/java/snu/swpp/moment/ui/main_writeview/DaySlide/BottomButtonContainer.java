@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import snu.swpp.moment.R;
@@ -84,9 +85,21 @@ public class BottomButtonContainer {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
             // TODO: 태그 저장 API 호출
+            completionDone();
         });
 
         listFooterContainer.setUiWritingTags();
         listFooterContainer.freezeEmotionSelector();
+    }
+
+    public void completionDone() {
+        button.setText(R.string.completed_day);
+        button.setBackgroundColor(
+            ContextCompat.getColor(view.getContext(), android.R.color.transparent));
+        button.setTextColor(ContextCompat.getColor(view.getContext(), R.color.black));
+        button.setEnabled(false);
+
+        listFooterContainer.setUiSelectingScore();
+        listFooterContainer.freezeTagEditText();
     }
 }
