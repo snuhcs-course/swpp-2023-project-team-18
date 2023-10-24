@@ -179,6 +179,9 @@ public class TodayViewFragment extends Fragment {
         // 초기 버튼 텍스트 설정
         textCount.setText("0/" + Integer.toString(MAX_LENGTH));
         scrollView = footerView.findViewById(R.id.listview_scroll);
+        // 애니메이션
+        Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
 
         // EditText의 텍스트 변경을 감지
         inputEditText.addTextChangedListener(new TextWatcher() {
@@ -254,22 +257,20 @@ public class TodayViewFragment extends Fragment {
                         addButtonInactivate.setVisibility(View.VISIBLE);
                         addButtonInactivateText.setVisibility(View.VISIBLE);
                     } else {
-                        Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+                        inputEditText.setVisibility(View.VISIBLE);
+                        textCount.setVisibility(View.VISIBLE);
                         inputEditText.startAnimation(fadeIn);
                         textCount.startAnimation(fadeIn);
-                        //inputEditText.setVisibility(View.VISIBLE);
-                        //textCount.setVisibility(View.VISIBLE);
 
-                        Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
                         addButton.startAnimation(fadeOut);
                         addButtonText.startAnimation(fadeOut);
-                        //addButton.setVisibility(View.GONE);
-                        //addButtonText.setVisibility(View.GONE);
+                        addButton.setVisibility(View.GONE);
+                        addButtonText.setVisibility(View.GONE);
 
+                        submitButtonInactivate.setVisibility(View.VISIBLE);
+                        constraintLayout.setVisibility(View.VISIBLE);
                         submitButtonInactivate.startAnimation(fadeIn);
                         submitButtonInactivate.startAnimation(fadeIn);
-                        //submitButtonInactivate.setVisibility(View.VISIBLE);
-                        //constraintLayout.setVisibility(View.VISIBLE);
                         binding.listviewList.setSelection(items.size() - 1);
                         // ScrollView를 ConstraintLayout의 하단으로 스크롤
                     }
@@ -277,13 +278,11 @@ public class TodayViewFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             } else {
-                Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
                 inputEditText.setVisibility(View.VISIBLE);
                 textCount.setVisibility(View.VISIBLE);
                 inputEditText.startAnimation(fadeIn);
                 textCount.startAnimation(fadeIn);
 
-                Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
                 addButton.startAnimation(fadeOut);
                 addButtonText.startAnimation(fadeOut);
                 addButton.setVisibility(View.GONE);
@@ -293,11 +292,7 @@ public class TodayViewFragment extends Fragment {
                 constraintLayout.setVisibility(View.VISIBLE);
                 submitButtonInactivate.startAnimation(fadeIn);
                 constraintLayout.startAnimation(fadeIn);
-                // 아래 줄 있으면, 텍스트 입력이 박스 넘어가도 줄바꿈이 안됨
-                //inputEditText.setSingleLine(true);
-                //submitButton.setVisibility(View.VISIBLE);
                 binding.listviewList.setSelection(items.size() - 1);
-                // ScrollView를 ConstraintLayout의 하단으로 스크롤
             }
         });
         addButtonInactivate.setOnClickListener(v -> {
@@ -314,13 +309,22 @@ public class TodayViewFragment extends Fragment {
                 viewModel.writeMoment(text);
                 addItem(text);
                 inputEditText.setText("");
+                inputEditText.startAnimation(fadeOut);
+                submitButton.startAnimation(fadeOut);
+                submitButtonInactivate.startAnimation(fadeOut);
+                textCount.startAnimation(fadeOut);
+                constraintLayout.startAnimation(fadeOut);
+
                 inputEditText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
                 submitButtonInactivate.setVisibility(View.GONE);
                 textCount.setVisibility(View.GONE);
+                constraintLayout.setVisibility(View.GONE);
+
                 addButton.setVisibility(View.VISIBLE);
                 addButtonText.setVisibility(View.VISIBLE);
-                constraintLayout.setVisibility(View.GONE);
+                addButton.startAnimation(fadeIn);
+                addButtonText.startAnimation(fadeIn);
 
             }
         });
