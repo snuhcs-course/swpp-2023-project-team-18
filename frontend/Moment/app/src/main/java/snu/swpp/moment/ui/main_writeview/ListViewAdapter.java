@@ -61,7 +61,7 @@ public class ListViewAdapter extends BaseAdapter {
         if (item.getServerResponse().isEmpty()) {
             setWaitingResponse(serverResponse);
         } else {
-            if (position>=size) {
+            if (position >= size) {
                 size = items.size();
                 showUpdatedResponse(item.getServerResponse(), serverResponse);
             } else {
@@ -97,7 +97,8 @@ public class ListViewAdapter extends BaseAdapter {
         textView.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
         textView.setAlpha(0.5f);
         textView.clearAnimation();
-        Animation fadeInOut = AnimationUtils.loadAnimation(textView.getContext(), R.anim.fade_in_out);
+        Animation fadeInOut = AnimationUtils.loadAnimation(textView.getContext(),
+            R.anim.fade_in_out);
         textView.startAnimation(fadeInOut);
     }
 }

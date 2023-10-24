@@ -147,7 +147,8 @@ public class TodayViewFragment extends Fragment {
                         Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                            .show();
                     }
                 }
             }
