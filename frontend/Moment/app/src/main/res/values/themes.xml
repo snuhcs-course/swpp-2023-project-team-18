@@ -34,6 +34,8 @@
     <style name="Theme.Moment.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textAppearanceSmall">@style/DialogMessageStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>

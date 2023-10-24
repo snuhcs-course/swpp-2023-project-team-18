@@ -6,9 +6,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import snu.swpp.moment.R;
 
 public class StoryContainer {
@@ -86,6 +89,43 @@ public class StoryContainer {
                 }
             }
         });
+
+        // AI에게 부탁하기 버튼
+        storyAiButton.setOnClickListener(v -> {
+            if (getStoryContent().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),
+                    R.style.DialogTheme);
+                builder.setMessage(R.string.ai_story_popup);
+
+                builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
+                    // TODO: API 호출해서 AI 요약 받아오기
+                    Map<String, String> result = new HashMap<>() {{
+                        put("title", "AI 요약 제목");
+                        put("content", "AI 요약 내용");
+                    }};
+                    setStoryText(result.get("title"), result.get("content"));
+                });
+                builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
+                });
+                builder.create().show();
+            } else {
+                // 내용을 이미 작성했으면 AI 요약 불가
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),
+                    R.style.DialogTheme);
+                builder.setMessage(R.string.ai_story_unavailable_popup);
+                builder.setPositiveButton(R.string.popup_ok, (dialog, id) -> {
+                });
+                builder.create().show();
+            }
+        });
+    }
+
+    public String getStoryTitle() {
+        return storyTitleEditText.getText().toString();
+    }
+
+    public String getStoryContent() {
+        return storyContentEditText.getText().toString();
     }
 
     public void freeze() {
@@ -102,6 +142,11 @@ public class StoryContainer {
         storyContentLengthText.setVisibility(View.GONE);
         aiButtonHelpText.setVisibility(View.GONE);
         storyAiButton.setVisibility(View.GONE);
+    }
+
+    private void setStoryText(String title, String content) {
+        storyTitleEditText.setText(title);
+        storyContentEditText.setText(content);
     }
 
     private void setStoryContentLengthText(int count) {

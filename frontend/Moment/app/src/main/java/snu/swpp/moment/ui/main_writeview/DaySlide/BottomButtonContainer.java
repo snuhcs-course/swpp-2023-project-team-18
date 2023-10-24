@@ -43,7 +43,7 @@ public class BottomButtonContainer {
                 R.style.DialogTheme);
             builder.setMessage(R.string.day_complete_popup);
 
-            builder.setPositiveButton(R.string.day_complete_popup_yes, (dialog, id) -> {
+            builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
                 // 네 -> 하루 마무리 시작
                 long completeTime = System.currentTimeMillis();
                 String completeTimeText = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(
@@ -51,7 +51,7 @@ public class BottomButtonContainer {
                 writingStory(completeTimeText);
                 // TODO: API 호출해서 마무리 시점 기록
             });
-            builder.setNegativeButton(R.string.day_complete_popup_no, (dialog, id) -> {
+            builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
             });
             builder.create().show();
         });
