@@ -184,4 +184,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <include
+        android:id="@+id/score_wrapper"
+        layout="@layout/complete_score" />
+
 </LinearLayout>
