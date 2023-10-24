@@ -10,9 +10,7 @@ public class ScoreContainer {
 
     private final ConstraintLayout scoreWrapper;
     private final SeekBar scoreSeekBar;
-    private final TextView scoreHelpText;
     private final TextView scoreText;
-    private final TextView scoreUnitText;
 
     private int score;
     private final int DEFAULT_SCORE = 3;
@@ -20,9 +18,7 @@ public class ScoreContainer {
     public ScoreContainer(View view) {
         scoreWrapper = (ConstraintLayout) view;
         scoreSeekBar = view.findViewById(R.id.scoreSeekBar);
-        scoreHelpText = view.findViewById(R.id.scoreHelpText);
         scoreText = view.findViewById(R.id.scoreText);
-        scoreUnitText = view.findViewById(R.id.scoreUnitText);
 
         scoreSeekBar.setProgress(DEFAULT_SCORE);
         score = DEFAULT_SCORE;

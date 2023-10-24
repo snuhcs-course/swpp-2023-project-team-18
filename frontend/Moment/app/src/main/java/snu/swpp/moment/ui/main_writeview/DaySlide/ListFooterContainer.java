@@ -33,12 +33,9 @@ public class ListFooterContainer {
 
     // 감정 선택
     private final ConstraintLayout emotionWrapper;
-    private final TextView emotionHelpText;
     private final EmotionGridContainer emotionGridContainer;
 
     // 태그 입력
-    private final ConstraintLayout tagWrapper;
-    private final TextView tagHelpText;
     private final TagBoxContainer tagBoxContainer;
 
     // 점수 선택
@@ -66,13 +63,10 @@ public class ListFooterContainer {
 
         // 감정 선택
         emotionWrapper = view.findViewById(R.id.emotion_wrapper);
-        emotionHelpText = view.findViewById(R.id.emotion_help_text);
         emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
 
         // 태그 입력
-        tagWrapper = view.findViewById(R.id.tag_wrapper);
-        tagHelpText = view.findViewById(R.id.tag_help_text);
-        tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_box));
+        tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_wrapper));
 
         // 점수 선택
         scoreContainer = new ScoreContainer(view.findViewById(R.id.score_wrapper));
@@ -221,7 +215,7 @@ public class ListFooterContainer {
     }
 
     public void setUiWritingTags() {
-        tagWrapper.setVisibility(View.VISIBLE);
+        tagBoxContainer.setVisibility(View.VISIBLE);
     }
 
     public void setUiSelectingScore() {

@@ -157,32 +157,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
         android:id="@+id/tag_wrapper"
+        layout="@layout/complete_tag_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="10dp"
         android:visibility="gone"
-        tools:visibility="visible">
-
-        <TextView
-            android:id="@+id/tag_help_text"
-            style="@style/HELP_TEXT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingVertical="15dp"
-            android:text="@string/tag_help_text"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/tag_box"
-            layout="@layout/complete_tag_box"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tag_help_text" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/score_wrapper"

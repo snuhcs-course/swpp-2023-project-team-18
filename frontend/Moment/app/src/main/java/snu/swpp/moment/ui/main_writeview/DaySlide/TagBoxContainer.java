@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -17,6 +18,7 @@ import snu.swpp.moment.R;
 
 public class TagBoxContainer {
 
+    private final ConstraintLayout tagWrapper;
     private final EditText tagEditText;
     private final TextView limitHelpText;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
@@ -24,6 +26,7 @@ public class TagBoxContainer {
     private final int MAX_TAGS = 10;
 
     public TagBoxContainer(View view) {
+        tagWrapper = (ConstraintLayout) view;
         tagEditText = view.findViewById(R.id.tagsEditText);
         limitHelpText = view.findViewById(R.id.tagLimitHelpText);
 
@@ -64,6 +67,10 @@ public class TagBoxContainer {
     public boolean isLimitExceeded() {
         Boolean value = isLimitExceeded.getValue();
         return Objects.requireNonNullElse(value, false);
+    }
+
+    public void setVisibility(int visibility) {
+        tagWrapper.setVisibility(visibility);
     }
 
     public void freeze() {
