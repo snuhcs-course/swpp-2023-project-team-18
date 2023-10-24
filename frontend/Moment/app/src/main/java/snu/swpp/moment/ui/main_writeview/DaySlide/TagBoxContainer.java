@@ -68,6 +68,7 @@ public class TagBoxContainer {
 
     public void freeze() {
         tagEditText.setEnabled(false);
+        tagEditText.setHint("");
     }
 
     public void setLimitObserver(Observer<Boolean> observer) {

@@ -130,7 +130,9 @@ public class StoryContainer {
 
     public void freeze() {
         storyTitleEditText.setEnabled(false);
+        storyTitleEditText.setHint("");
         storyContentEditText.setEnabled(false);
+        storyContentEditText.setHint("");
     }
 
     public void setUiWritingStory(String completeTime) {
