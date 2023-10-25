@@ -50,4 +50,5 @@ class StoryCreateSerializer(serializers.Serializer):
 
 
 class DayCompletionSerializer(serializers.Serializer):
-    created_at = serializers.IntegerField()
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()

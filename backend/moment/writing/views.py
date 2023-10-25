@@ -175,12 +175,27 @@ class DayCompletionView(GenericAPIView):
         body = DayCompletionSerializer(data=request.data)
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
-        created_at = datetime.fromtimestamp(body.validated_data["created_at"])
+
+        start = body.validated_data["start"]
+        end = body.validated_data["end"]
+
+        curr_time = int(datetime.now().timestamp())
+
+        log(
+            f"{curr_time}",
+            place="DayCompletionView.post",
+        )
+
+        if curr_time >= end:
+            return Response(
+                data={"message": "Current time exceeded intended time"},
+                status=400,
+            )
+
         story = Story.objects.create(
             user=user,
             title="",
             content="",
-            created_at=created_at,
             is_point_completed=True,
         )
         story.save()
