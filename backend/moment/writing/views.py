@@ -175,7 +175,12 @@ class StoryGenerateView(GenericAPIView):
     def get(self, request: Request) -> Response:
         user = User.objects.get(pk=request.user.id)
 
-        curr_date = (datetime.now() - timedelta(hours=3)).date()
+        story = Story.objects.filter(
+            user=user,
+        ).latest("created_at")
+
+        story_date = story.created_at
+        curr_date = (story_date - timedelta(hours=3)).date()
 
         log(f"curr_date: {curr_date}", place="StoryGenerateView.get")
 
