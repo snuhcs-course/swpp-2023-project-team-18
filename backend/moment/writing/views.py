@@ -150,6 +150,7 @@ class StoryView(GenericAPIView):
         start_date = datetime.fromtimestamp(body.validated_data["start"])
         end_date = datetime.fromtimestamp(body.validated_data["end"])
         content = body.validated_data["content"]
+        title = body.validated_data["title"]
 
         # `stories` should only contain one element.
         stories = (
@@ -158,7 +159,7 @@ class StoryView(GenericAPIView):
                 user=user,
             )
             .order_by("created_at")
-            .update(content=content)
+            .update(content=content, title=title)
         )
 
         return Response(
