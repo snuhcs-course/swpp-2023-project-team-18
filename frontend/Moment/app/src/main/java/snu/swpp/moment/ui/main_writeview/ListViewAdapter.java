@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.BaseAdapter;
@@ -58,6 +59,7 @@ public class ListViewAdapter extends BaseAdapter {
         userInput.setText(item.getUserInput());
         inputTime.setText(item.getInputTime());
 
+
         if (item.getServerResponse().isEmpty()) {
             setWaitingResponse(serverResponse);
         } else {
@@ -72,16 +74,11 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     private void showUpdatedResponse(String response, TextView textView) {
-        float initialHeight = textView.getMeasuredHeight();
         textView.setText(response);
-        float scaleY = textView.getMeasuredHeight() / initialHeight;
-        ScaleAnimation scale = new ScaleAnimation(1, 1, 1, scaleY);
-        Animation fadeIn = AnimationUtils.loadAnimation(textView.getContext(), R.anim.fade_in);
-        scale.setDuration((long) (1000 * scaleY));
         textView.setGravity(Gravity.START);
         textView.setAlpha(1);
         textView.clearAnimation();
-        textView.startAnimation(scale);
+        Animation fadeIn = AnimationUtils.loadAnimation(textView.getContext(), R.anim.fade_in);
         textView.startAnimation(fadeIn);
     }
 
@@ -99,7 +96,7 @@ public class ListViewAdapter extends BaseAdapter {
         textView.setAlpha(0.5f);
         textView.clearAnimation();
         Animation fadeInOut = AnimationUtils.loadAnimation(textView.getContext(),
-            R.anim.fade_in_out);
+           R.anim.fade_in_out);
         textView.startAnimation(fadeInOut);
     }
 }
