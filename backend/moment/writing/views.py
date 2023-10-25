@@ -12,12 +12,14 @@ from .serializers import (
     MomentPairSerializer,
     MomentPairCreateSerializer,
     DayCompletionSerializer,
+    StorySerializer,
+    StoryQuerySerializer,
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
 from .utils.prompt import MomentReplyTemplate
 
-
+# View related to moments
 class MomentView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = MomentPairSerializer
@@ -107,6 +109,36 @@ class MomentView(GenericAPIView):
 
         return super().get_throttles()
 
+# View related to Stories
+class StoryView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = StorySerializer
+
+    def get(self, request: Request) -> Response:
+        params = StoryQuerySerializer(data=request.query_params)
+        params.is_valid(raise_exception=True)
+        user = User.objects.get(pk=request.user.id)
+
+        start_date = datetime.fromtimestamp(params.validated_data["start"])
+        end_date = datetime.fromtimestamp(params.validated_data["end"])
+
+        stories = Story.objects.filter(
+            created_at__range=(start_date, end_date),
+            user=user,
+        ).order_by("created_at")
+
+        serializer = self.get_serializer(stories, many=True)
+
+        log(
+            f"Successfully queried stories (length: {len(serializer.data)})",
+            place="StoryView.get",
+        )
+
+        return Response(
+            data={"stories": serializer.data},
+            status=200,
+        )
+
 
 class DayCompletionView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -126,3 +158,4 @@ class DayCompletionView(GenericAPIView):
             data={"message": "Success!"},
             status=201,
         )
+

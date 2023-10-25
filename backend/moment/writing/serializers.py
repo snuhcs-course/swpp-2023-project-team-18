@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import MomentPair
+from .models import MomentPair, Story
 from .constants import MOMENT_MAX_LENGTH
 
 
@@ -27,5 +27,19 @@ class MomentPairCreateSerializer(serializers.Serializer):
 
 
 # Serializer for stories
+class StorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Story
+        fields = ["id", "emotion", "score", "title", "content", "created_at"]
+
+    def to_representation(self, instance: Story):
+        res = super().to_representation(instance)
+        res["created_at"] = int(instance.created_at.timestamp())
+        return res
+
+class StoryQuerySerializer(serializers.Serializer):
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
+
 class DayCompletionSerializer(serializers.Serializer):
     created_at = serializers.IntegerField()
