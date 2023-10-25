@@ -3,6 +3,8 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,6 +27,8 @@ public class StoryContainer {
     private final TextView aiButtonHelpText;
     private final Button storyAiButton;
 
+    private final Animation fadeIn;
+
     private final int STORY_TITLE_MAX_LENGTH = 100;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
 
@@ -36,6 +40,8 @@ public class StoryContainer {
         storyContentLengthText = view.findViewById(R.id.storyContentLengthText);
         aiButtonHelpText = view.findViewById(R.id.aiButtonHelpText);
         storyAiButton = view.findViewById(R.id.storyAiButton);
+
+        fadeIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
 
         // storyTitleEditText 입력 감지
         storyTitleEditText.addTextChangedListener(new TextWatcher() {
@@ -139,6 +145,7 @@ public class StoryContainer {
     public void setUiWritingStory(String completeTime) {
         storyWrapper.setVisibility(View.VISIBLE);
         completeTimeText.setText(completeTime);
+        storyWrapper.startAnimation(fadeIn);
     }
 
     public void setUiCompleteStory() {

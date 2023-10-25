@@ -3,6 +3,8 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -70,8 +72,10 @@ public class TagBoxContainer {
         return Objects.requireNonNullElse(value, false);
     }
 
-    public void setVisibility(int visibility) {
-        tagWrapper.setVisibility(visibility);
+    public void setUiVisible() {
+        tagWrapper.setVisibility(View.VISIBLE);
+        Animation fadeIn = AnimationUtils.loadAnimation(tagWrapper.getContext(), R.anim.fade_in);
+        tagWrapper.startAnimation(fadeIn);
     }
 
     public void freeze() {

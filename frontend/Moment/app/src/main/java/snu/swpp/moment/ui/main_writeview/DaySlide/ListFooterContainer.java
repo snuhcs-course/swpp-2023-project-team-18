@@ -3,6 +3,8 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,6 +43,10 @@ public class ListFooterContainer {
     // 점수 선택
     private final ScoreContainer scoreContainer;
 
+    // 애니메이션 개체
+    private final Animation fadeIn;
+    private final Animation fadeOut;
+
     // 하단 버튼 활성화 상태
     private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>(false);
 
@@ -70,6 +76,10 @@ public class ListFooterContainer {
 
         // 점수 선택
         scoreContainer = new ScoreContainer(view.findViewById(R.id.score_wrapper));
+
+        // 애니메이션 개체
+        fadeIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
+        fadeOut = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out);
 
         setMomentLengthText(0);
 
@@ -156,27 +166,28 @@ public class ListFooterContainer {
     }
 
     public void setUiWritingMoment() {
-        editTextWrapper.setVisibility(View.VISIBLE);
-        momentEditText.setVisibility(View.VISIBLE);
-        momentLengthText.setVisibility(View.VISIBLE);
-        submitButtonInactivate.setVisibility(View.VISIBLE);
-
+        addButton.startAnimation(fadeOut);
+        addButtonText.startAnimation(fadeOut);
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
+
+        editTextWrapper.setVisibility(View.VISIBLE);
+        editTextWrapper.startAnimation(fadeIn);
 
         setBottomButtonState(false);
     }
 
-    public void setUiReadyToAdd() {
+    public void setUiReadyToAddMoment() {
+        momentEditText.setText("");
+        submitButton.setVisibility(View.GONE);
+        submitButtonInactivate.setVisibility(View.VISIBLE);
+        editTextWrapper.setVisibility(View.GONE);
+
+        addButton.startAnimation(fadeIn);
+        addButtonText.startAnimation(fadeIn);
         addButton.setVisibility(View.VISIBLE);
         addButtonText.setVisibility(View.VISIBLE);
-
-        momentEditText.setText("");
-        momentEditText.setVisibility(View.GONE);
-        submitButton.setVisibility(View.GONE);
-        submitButtonInactivate.setVisibility(View.GONE);
-        momentLengthText.setVisibility(View.GONE);
-        editTextWrapper.setVisibility(View.GONE);
+        addButtonInactivate.setVisibility(View.GONE);
 
         setBottomButtonState(true);
     }
@@ -194,12 +205,10 @@ public class ListFooterContainer {
     public void setUiWritingStory(String completeTime) {
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
-        addButtonInactivate.setVisibility(View.GONE);
         addLimitWarnText.setVisibility(View.GONE);
+
+        submitButtonInactivate.setVisibility(View.VISIBLE);
         editTextWrapper.setVisibility(View.GONE);
-        momentEditText.setVisibility(View.GONE);
-        momentLengthText.setVisibility(View.GONE);
-        submitButtonInactivate.setVisibility(View.GONE);
 
         storyContainer.setUiWritingStory(completeTime);
 
@@ -210,16 +219,17 @@ public class ListFooterContainer {
         storyContainer.setUiCompleteStory();
 
         emotionWrapper.setVisibility(View.VISIBLE);
+        emotionWrapper.startAnimation(fadeIn);
 
         setBottomButtonState(false);
     }
 
     public void setUiWritingTags() {
-        tagBoxContainer.setVisibility(View.VISIBLE);
+        tagBoxContainer.setUiVisible();
     }
 
     public void setUiSelectingScore() {
-        scoreContainer.setVisibility(View.VISIBLE);
+        scoreContainer.setUiVisible();
     }
 
     private void setMomentLengthText(int count) {

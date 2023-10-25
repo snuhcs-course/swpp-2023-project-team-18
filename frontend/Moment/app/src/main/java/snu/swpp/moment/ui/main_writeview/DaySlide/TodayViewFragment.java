@@ -199,7 +199,7 @@ public class TodayViewFragment extends Fragment {
                 // FIXME: commented out for test (no GPT API call)
                 // viewModel.writeMoment(text);
                 addItem(text);
-                listFooterContainer.setUiReadyToAdd();
+                listFooterContainer.setUiReadyToAddMoment();
             }
         });
     }

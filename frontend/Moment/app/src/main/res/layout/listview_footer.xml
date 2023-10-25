@@ -30,12 +30,10 @@
             android:inputType="text|textMultiLine"
             android:minLines="5"
             android:textSize="15sp"
-            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/count_and_submit"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- 버튼과 글자수를 수평으로 배열하는 LinearLayout -->
         <LinearLayout
@@ -60,9 +58,7 @@
                 android:fontFamily="@font/maruburi_light"
                 android:text=""
                 android:textColor="@color/gray"
-                android:visibility="gone"
-                tools:text="0/1000"
-                tools:visibility="visible" />
+                tools:text="0/1000" />
 
             <Button
                 android:id="@+id/submit_button"
@@ -82,9 +78,7 @@
                 android:background="@drawable/moment_write_inactivate"
                 android:enabled="false"
                 android:gravity="center"
-                android:text=""
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:text="" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

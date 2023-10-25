@@ -1,6 +1,8 @@
 package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -46,7 +48,9 @@ public class ScoreContainer {
         return score;
     }
 
-    public void setVisibility(int visibility) {
-        scoreWrapper.setVisibility(visibility);
+    public void setUiVisible() {
+        scoreWrapper.setVisibility(View.VISIBLE);
+        Animation fadeIn = AnimationUtils.loadAnimation(scoreWrapper.getContext(), R.anim.fade_in);
+        scoreWrapper.startAnimation(fadeIn);
     }
 }
