@@ -6,11 +6,12 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 
 from user.models import User
-from .models import MomentPair
+from .models import MomentPair, Story
 from .serializers import (
     MomentPairQuerySerializer,
     MomentPairSerializer,
     MomentPairCreateSerializer,
+    DayCompletionSerializer,
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
@@ -105,3 +106,23 @@ class MomentView(GenericAPIView):
             self.throttle_scope = "moment-reply"
 
         return super().get_throttles()
+
+
+class DayCompletionView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = DayCompletionSerializer
+
+    def post(self, request: Request) -> Response:
+        body = DayCompletionSerializer(data=request.data)
+        body.is_valid(raise_exception=True)
+        user = User.objects.get(pk=request.user.id)
+        created_at = datetime.fromtimestamp(body.validated_data["created_at"])
+        story = Story.objects.create(
+            user=user, title="", content="", created_at=created_at
+        )
+        story.save()
+
+        return Response(
+            data={"message": "Success!"},
+            status=201,
+        )

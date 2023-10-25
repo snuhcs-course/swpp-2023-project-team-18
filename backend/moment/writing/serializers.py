@@ -4,6 +4,7 @@ from .models import MomentPair
 from .constants import MOMENT_MAX_LENGTH
 
 
+# Serializer for moments
 class MomentPairSerializer(serializers.ModelSerializer):
     class Meta:
         model = MomentPair
@@ -23,3 +24,8 @@ class MomentPairQuerySerializer(serializers.Serializer):
 
 class MomentPairCreateSerializer(serializers.Serializer):
     moment = serializers.CharField(max_length=MOMENT_MAX_LENGTH)
+
+
+# Serializer for stories
+class DayCompletionSerializer(serializers.Serializer):
+    created_at = serializers.IntegerField()
