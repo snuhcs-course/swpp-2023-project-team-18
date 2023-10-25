@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
@@ -173,13 +173,19 @@ class StoryGenerateView(GenericAPIView):
         self.gpt_agent = GPTAgent()
 
     def get(self, request: Request) -> Response:
-        params = StoryQuerySerializer(data=request.query_params)
-
-        params.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
-        start_date = datetime.fromtimestamp(params.validated_data["start"])
-        end_date = datetime.fromtimestamp(params.validated_data["end"])
+        curr_date = (datetime.now() - timedelta(hours=3)).date()
+
+        log(f"curr_date: {curr_date}", place="StoryGenerateView.get")
+
+        start_date = datetime(curr_date.year, curr_date.month, curr_date.day, 3)
+        end_date = start_date + timedelta(hours=24)
+
+        log(
+            f"start and end date: {start_date}, {end_date}",
+            place="StoryGenerateView.get",
+        )
 
         moment_pairs = MomentPair.objects.filter(
             moment_created_at__range=(start_date, end_date),
