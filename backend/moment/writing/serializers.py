@@ -43,7 +43,7 @@ class StoryQuerySerializer(serializers.Serializer):
     end = serializers.IntegerField()
 
 
-class StorySaveSerializer(serializers.Serializer):
+class StoryCreateSerializer(serializers.Serializer):
     start = serializers.IntegerField()
     end = serializers.IntegerField()
     content = serializers.CharField(max_length=STORY_MAX_LENGTH)
