@@ -2,17 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/white">
+    android:paddingHorizontal="16dp">
 
     <ListView
         android:id="@+id/listview_list"
         android:layout_width="match_parent"
         android:layout_height="665dp"
-        android:layout_marginBottom="20dp"
         android:layout_weight="1"
         android:divider="#FFFFFF"
         android:dividerHeight="15dp" />
+
+    <!-- 스크롤 시 맨 밑이 보이게 하기 위한 padding -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 </LinearLayout>

@@ -165,4 +165,9 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
+    <!-- 스크롤 시 맨 밑이 보이게 하기 위한 padding -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
 </LinearLayout>

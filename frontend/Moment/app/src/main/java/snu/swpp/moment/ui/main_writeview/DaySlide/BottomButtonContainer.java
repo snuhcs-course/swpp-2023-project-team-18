@@ -94,10 +94,7 @@ public class BottomButtonContainer {
 
     public void completionDone() {
         button.setText(R.string.completed_day);
-        button.setBackgroundColor(
-            ContextCompat.getColor(view.getContext(), android.R.color.transparent));
-        button.setTextColor(ContextCompat.getColor(view.getContext(), R.color.black));
-        button.setEnabled(false);
+        setActivated(false);
 
         listFooterContainer.setUiSelectingScore();
         listFooterContainer.freezeTagEditText();
