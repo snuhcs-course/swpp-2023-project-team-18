@@ -9,7 +9,7 @@ from user.models import User
 from writing.models import MomentPair, Story
 from writing.utils.gpt import GPTAgent
 from writing.utils.prompt import StoryGenerateTemplate
-from writing.views import DayCompletionView, StoryView, StoryGenerateView
+from writing.views import DayCompletionView, StoryView, StoryGenerateView, ScoreView
 
 
 # Create your tests here.
@@ -18,6 +18,66 @@ intended_day = datetime.datetime(
 )  # class field not usable in decorators
 ai_sample_title = "ai_sample_title"
 ai_sample_story = "ai_sample_story"
+
+
+class SaveScoreTest(TestCase):
+    default_score = 3
+    new_score = 5
+    wrong_score = 10
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        other_user = User.objects.create(username="otheruser", nickname="otheruser")
+        other_user.set_password("123456")
+        story1 = Story.objects.create(user=test_user, created_at=intended_day)
+        self.story1_pk = story1.pk
+        story2 = Story.objects.create(
+            user=test_user, created_at=intended_day - datetime.timedelta(days=1)
+        )
+        self.story2_pk = story2.pk
+        story1.save()
+        story2.save()
+
+    def test_save_score_success(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = ScoreView.as_view()
+
+        data = {"story_id": self.story1_pk, "score": self.new_score}
+        request = factory.post("/writing/score/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Story.objects.get(pk=self.story1_pk).score, self.new_score)
+        self.assertEqual(Story.objects.get(pk=self.story2_pk).score, self.default_score)
+
+    def test_save_others_score_fail(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="otheruser")
+        view = ScoreView.as_view()
+
+        data = {"story_id": self.story1_pk, "score": self.new_score}
+        request = factory.post("/writing/score/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Story.objects.get(pk=self.story1_pk).score, self.default_score)
+
+    def test_save_wrong_score_fail(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = ScoreView.as_view()
+
+        data = {"story_id": self.story1_pk, "score": self.wrong_score}
+        request = factory.post("/writing/score/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Story.objects.get(pk=self.story1_pk).score, self.default_score)
 
 
 class StoryGenerateTest(TestCase):
