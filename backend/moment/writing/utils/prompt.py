@@ -48,5 +48,20 @@ Avoid referring to yourself as "I" or "me" and don't ask users too many question
 """
 
 
+STORY_GENERATE = """\
+Generate a diary based on the inputs. You should generate the output in Korean. \
+Please make the diary as short as possible.
+
+[User inputs]
+{moments}
+
+[Output]
+"""
+
+
 class MomentReplyTemplate(PromptTemplate):
     template = MOMENT_REPLY
+
+
+class StoryGenerateTemplate(PromptTemplate):
+    template = STORY_GENERATE

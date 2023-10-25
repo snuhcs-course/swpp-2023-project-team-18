@@ -18,7 +18,7 @@ from .serializers import (
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
-from .utils.prompt import MomentReplyTemplate
+from .utils.prompt import MomentReplyTemplate, StoryGenerateTemplate
 
 
 # View related to moments
@@ -163,6 +163,55 @@ class StoryView(GenericAPIView):
 
         return Response(
             data={"message": "Success!"},
+            status=201,
+        )
+
+
+class StoryGenerateView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    # serializer_class = StoryCreateSerializer
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.gpt_agent = GPTAgent()
+
+    def get(self, request: Request) -> Response:
+        params = StoryQuerySerializer(data=request.query_params)
+
+        params.is_valid(raise_exception=True)
+        user = User.objects.get(pk=request.user.id)
+
+        start_date = datetime.fromtimestamp(params.validated_data["start"])
+        end_date = datetime.fromtimestamp(params.validated_data["end"])
+
+        moment_pairs = MomentPair.objects.filter(
+            moment_created_at__range=(start_date, end_date),
+            user=user,
+        ).order_by("moment_created_at")
+
+        moment_contents = [moment_pair.moment for moment_pair in moment_pairs]
+
+        log(f"Moments: {moment_contents}", place="StoryGenerateView.get")
+
+        self.gpt_agent.reset_messages()
+        prompt = StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
+        self.gpt_agent.add_message(prompt)
+
+        log(f"Prompt: {prompt}", place="StoryGenerateView.get")
+
+        try:
+            story = self.gpt_agent.get_answer(timeout=15, max_trial=2)
+
+        except GPTAgent.GPTError:
+            log(f"Error while calling GPT API", tag="error", place="MomentView.post")
+
+            return Response(
+                data={"error": "GPT API call failed"},
+                status=500,
+            )
+
+        return Response(
+            data={"story": story},
             status=201,
         )
 
