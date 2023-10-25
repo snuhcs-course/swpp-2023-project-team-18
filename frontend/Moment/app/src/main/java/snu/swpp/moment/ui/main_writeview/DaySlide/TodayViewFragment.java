@@ -93,12 +93,10 @@ public class TodayViewFragment extends Fragment {
 
     private void initializeListView(View root) {
         items = new ArrayList<>();
-        System.out.println("#Debug items size" + items.size());
 
         viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<MomentUiState>() {
             @Override
             public void onChanged(MomentUiState momentUiState) {
-                System.out.println("#DEBUG: ON CHANGED RUN");
                 if (momentUiState.getError() == -1) {
                     // 모먼트가 하나도 없으면 하단 버튼 비활성화
                     int numMoments = momentUiState.getMomentPairsListSize();
@@ -115,7 +113,7 @@ public class TodayViewFragment extends Fragment {
                         }
 
                         mAdapter.notifyDataSetChanged();
-                        binding.listviewList.setSelection(items.size() - 1);
+                        scrollToBottom();
                     }
                 } else {
                     if (momentUiState.getError() == NO_INTERNET) {
@@ -172,14 +170,12 @@ public class TodayViewFragment extends Fragment {
                         listFooterContainer.setUiAddLimitExceeded();
                     } else {
                         listFooterContainer.setUiWritingMoment();
-                        binding.listviewList.setSelection(items.size() - 1);
                     }
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
             } else {
                 listFooterContainer.setUiWritingMoment();
-                binding.listviewList.setSelection(items.size() - 1);
             }
         });
 
@@ -200,12 +196,22 @@ public class TodayViewFragment extends Fragment {
                 listFooterContainer.setUiReadyToAddMoment();
             }
         });
+
+        listFooterContainer.setScrollToBottomSwitchObserver(isSet -> {
+            if (isSet) {
+                scrollToBottom();
+            }
+        });
     }
 
     private void addItem(String userInput) {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
         items.add(new ListViewItem(userInput, currentTime, ""));
         mAdapter.notifyDataSetChanged();
+        scrollToBottom();
+    }
+
+    private void scrollToBottom() {
         binding.listviewList.setSelection(items.size() - 1);
     }
 

@@ -50,6 +50,9 @@ public class ListFooterContainer {
     // 하단 버튼 활성화 상태
     private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>(false);
 
+    // 새 요소 추가 시 하단으로 스크롤 하기 위한 스위치
+    private final MutableLiveData<Boolean> scrollToBottomSwitch = new MutableLiveData<>(false);
+
     private final int MOMENT_MAX_LENGTH = 1000;
 
     public ListFooterContainer(@NonNull View view) {
@@ -142,10 +145,6 @@ public class ListFooterContainer {
         return momentEditText.getText().toString();
     }
 
-    public void setBottomButtonState(boolean state) {
-        bottomButtonState.setValue(state);
-    }
-
     public void setAddButtonOnClickListener(View.OnClickListener listener) {
         addButton.setOnClickListener(listener);
     }
@@ -156,6 +155,10 @@ public class ListFooterContainer {
 
     public void setBottomButtonStateObserver(Observer<Boolean> observer) {
         bottomButtonState.observeForever(observer);
+    }
+
+    public void setScrollToBottomSwitchObserver(Observer<Boolean> observer) {
+        scrollToBottomSwitch.observeForever(observer);
     }
 
     public void freezeStoryEditText() {
@@ -180,6 +183,7 @@ public class ListFooterContainer {
         editTextWrapper.startAnimation(fadeIn);
 
         setBottomButtonState(false);
+        setScrollToBottomSwitch();
     }
 
     public void setUiReadyToAddMoment() {
@@ -195,6 +199,7 @@ public class ListFooterContainer {
         addButtonInactivate.setVisibility(View.GONE);
 
         setBottomButtonState(true);
+        setScrollToBottomSwitch();
     }
 
     public void setUiAddLimitExceeded() {
@@ -205,6 +210,7 @@ public class ListFooterContainer {
         addLimitWarnText.setVisibility(View.VISIBLE);
 
         setBottomButtonState(true);
+        setScrollToBottomSwitch();
     }
 
     public void setUiWritingStory(String completeTime) {
@@ -218,6 +224,7 @@ public class ListFooterContainer {
         storyContainer.setUiWritingStory(completeTime);
 
         setBottomButtonState(true);
+        setScrollToBottomSwitch();
     }
 
     public void setUiSelectingEmotion() {
@@ -227,18 +234,30 @@ public class ListFooterContainer {
         emotionWrapper.startAnimation(fadeIn);
 
         setBottomButtonState(false);
+        setScrollToBottomSwitch();
     }
 
     public void setUiWritingTags() {
         tagBoxContainer.setUiVisible();
+        setScrollToBottomSwitch();
     }
 
     public void setUiSelectingScore() {
         scoreContainer.setUiVisible();
+        setScrollToBottomSwitch();
     }
 
     private void setMomentLengthText(int count) {
         momentLengthText.setText(
             String.format(Locale.getDefault(), "%d / %d", count, MOMENT_MAX_LENGTH));
+    }
+
+    private void setBottomButtonState(boolean activated) {
+        bottomButtonState.setValue(activated);
+    }
+
+    private void setScrollToBottomSwitch() {
+        scrollToBottomSwitch.setValue(true);
+        scrollToBottomSwitch.setValue(false);
     }
 }
