@@ -208,7 +208,7 @@ class StoryGenerateView(GenericAPIView):
         log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
-            story = self.gpt_agent.get_answer(timeout=15, max_trial=2)
+            story = self.gpt_agent.get_answer(timeout=15, max_trial=2) #TODO: need more testing
 
         except GPTAgent.GPTError:
             log(f"Error while calling GPT API", tag="error", place="MomentView.post")
