@@ -14,7 +14,7 @@ from .serializers import (
     DayCompletionSerializer,
     StorySerializer,
     StoryQuerySerializer,
-    StoryCreateSerializer
+    StoryCreateSerializer,
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
@@ -141,7 +141,7 @@ class StoryView(GenericAPIView):
             data={"stories": serializer.data},
             status=200,
         )
-    
+
     def post(self, request: Request) -> Response:
         body = StoryCreateSerializer(data=request.data)
         body.is_valid(raise_exception=True)
@@ -152,16 +152,19 @@ class StoryView(GenericAPIView):
         content = body.validated_data["content"]
 
         # `stories` should only contain one element.
-        stories = Story.objects.filter(
-            created_at__range=(start_date, end_date),
-            user=user,
-        ).order_by("created_at").update(content=content)
+        stories = (
+            Story.objects.filter(
+                created_at__range=(start_date, end_date),
+                user=user,
+            )
+            .order_by("created_at")
+            .update(content=content)
+        )
 
         return Response(
             data={"message": "Success!"},
             status=201,
         )
-
 
 
 class DayCompletionView(GenericAPIView):
@@ -174,7 +177,11 @@ class DayCompletionView(GenericAPIView):
         user = User.objects.get(pk=request.user.id)
         created_at = datetime.fromtimestamp(body.validated_data["created_at"])
         story = Story.objects.create(
-            user=user, title="", content="", created_at=created_at, is_point_completed=True
+            user=user,
+            title="",
+            content="",
+            created_at=created_at,
+            is_point_completed=True,
         )
         story.save()
 

@@ -42,6 +42,7 @@ class StoryQuerySerializer(serializers.Serializer):
     start = serializers.IntegerField()
     end = serializers.IntegerField()
 
+
 class StoryCreateSerializer(serializers.Serializer):
     start = serializers.IntegerField()
     end = serializers.IntegerField()
