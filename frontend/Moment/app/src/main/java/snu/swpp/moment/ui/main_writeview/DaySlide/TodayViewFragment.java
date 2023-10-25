@@ -49,8 +49,6 @@ public class TodayViewFragment extends Fragment {
     private MomentRepository momentRepository;
     private AuthenticationRepository authenticationRepository;
 
-    private int numMoments;
-
     private final int NO_INTERNET = 0;
     private final int ACCESS_TOKEN_EXPIRED = 1;
 
@@ -102,9 +100,12 @@ public class TodayViewFragment extends Fragment {
             public void onChanged(MomentUiState momentUiState) {
                 System.out.println("#DEBUG: ON CHANGED RUN");
                 if (momentUiState.getError() == -1) {
-                    if (!momentUiState.getMomentPairsList().isEmpty()) {
+                    // 모먼트가 하나도 없으면 하단 버튼 비활성화
+                    int numMoments = momentUiState.getMomentPairsListSize();
+                    bottomButtonContainer.setActivated(numMoments != 0);
+
+                    if (numMoments > 0) {
                         items.clear();
-                        numMoments = momentUiState.getMomentPairsList().size();
                         for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
                             String userInput = momentPair.getMoment();
                             String serverResponse = momentPair.getReply();
@@ -112,9 +113,6 @@ public class TodayViewFragment extends Fragment {
                                 momentPair.getMomentCreatedTime());
                             items.add(new ListViewItem(userInput, createdTime, serverResponse));
                         }
-
-                        bottomButtonContainer.setActivated(numMoments != 0);
-                        // TODO: 버튼 활성화 조건 점검 -- 이 부분은 언제 진입하게 되는가?
 
                         mAdapter.notifyDataSetChanged();
                         binding.listviewList.setSelection(items.size() - 1);
@@ -154,6 +152,8 @@ public class TodayViewFragment extends Fragment {
         listFooterContainer.setAddButtonOnClickListener(v -> {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
                 Locale.getDefault());
+
+            int numMoments = viewModel.getMomentState().getValue().getMomentPairsListSize();
             if (numMoments >= 2) {
                 String createdSecond = items.get(numMoments - 2).getInputTime();
 
@@ -173,14 +173,12 @@ public class TodayViewFragment extends Fragment {
                     } else {
                         listFooterContainer.setUiWritingMoment();
                         binding.listviewList.setSelection(items.size() - 1);
-                        // ScrollView를 ConstraintLayout의 하단으로 스크롤
                     }
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
             } else {
                 listFooterContainer.setUiWritingMoment();
-                // ScrollView를 ConstraintLayout의 하단으로 스크롤
                 binding.listviewList.setSelection(items.size() - 1);
             }
         });
