@@ -23,7 +23,7 @@
         style="@style/NORMAL_TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:padding="10dp"
         android:background="@drawable/box_border"
         android:ems="10"
         android:gravity="start|top"
