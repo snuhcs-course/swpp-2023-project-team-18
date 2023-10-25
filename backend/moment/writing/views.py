@@ -227,7 +227,13 @@ class StoryGenerateView(GenericAPIView):
             log(f"Error while calling GPT API", tag="error", place="MomentView.post")
 
             return Response(
-                data={"error": "GPT API call failed. Please try again."},
+                data={"error": "GPT API call failed."},
+                status=500,
+            )
+
+        except ValueError:
+            return Response(
+                data={"error": "Please try again."},
                 status=500,
             )
 
