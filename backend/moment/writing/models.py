@@ -31,7 +31,7 @@ class Story(models.Model):
         Hashtag,
     )
 
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_created=False)
 
 
 class MomentPair(models.Model):
