@@ -15,6 +15,8 @@ from .serializers import (
     StorySerializer,
     StoryQuerySerializer,
     StoryCreateSerializer,
+    EmotionCreateSerializer,
+    EmotionQuerySerializer,
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
@@ -208,7 +210,9 @@ class StoryGenerateView(GenericAPIView):
         log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
-            story = self.gpt_agent.get_answer(timeout=15, max_trial=2) #TODO: need more testing
+            story = self.gpt_agent.get_answer(
+                timeout=15, max_trial=2
+            )  # TODO: need more testing
 
         except GPTAgent.GPTError:
             log(f"Error while calling GPT API", tag="error", place="MomentView.post")
@@ -261,4 +265,33 @@ class DayCompletionView(GenericAPIView):
         return Response(
             data={"message": "Success!"},
             status=201,
+        )
+
+
+class EmotionView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = EmotionCreateSerializer
+
+    def get(self, request: Request) -> Response:
+        params = EmotionQuerySerializer(data=request.query_params)
+        params.is_valid(raise_exception=True)
+        user = User.objects.get(pk=request.user.id)
+
+        start_date = datetime.fromtimestamp(params.validated_data["start"])
+        end_date = datetime.fromtimestamp(params.validated_data["end"])
+
+        stories = Story.objects.filter(
+            created_at__range=(start_date, end_date),
+            user=user,
+        ).order_by("created_at")
+        serializer = self.get_serializer(stories, many=True)
+
+        log(
+            f"Successfully queried emotions (length: {len(serializer.data)})",
+            place="EmotionView.get",
+        )
+
+        return Response(
+            data={"emotions": serializer.data},
+            status=200,
         )

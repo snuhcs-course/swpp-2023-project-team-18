@@ -51,3 +51,12 @@ class StoryCreateSerializer(serializers.Serializer):
 class DayCompletionSerializer(serializers.Serializer):
     start = serializers.IntegerField()
     end = serializers.IntegerField()
+
+
+class EmotionQuerySerializer(serializers.Serializer):
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
+
+
+class EmotionCreateSerializer(serializers.Serializer):
+    emotion = serializers.CharField()
