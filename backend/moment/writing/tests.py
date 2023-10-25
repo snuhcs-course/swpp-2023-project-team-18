@@ -6,7 +6,7 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 from freezegun import freeze_time
 
 from user.models import User
-from writing.models import MomentPair, Story
+from writing.models import MomentPair, Story, Hashtag
 from writing.utils.gpt import GPTAgent
 from writing.utils.prompt import StoryGenerateTemplate
 from writing.views import (
@@ -15,6 +15,7 @@ from writing.views import (
     StoryGenerateView,
     ScoreView,
     EmotionView,
+    HashtagView,
 )
 
 
@@ -24,6 +25,102 @@ intended_day = datetime.datetime(
 )  # class field not usable in decorators
 ai_sample_title = "ai_sample_title"
 ai_sample_story = "ai_sample_story"
+
+
+class GetHashtagTest(TestCase):
+    hashtag1 = "h2"
+    hashtag2 = "h1"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        other_user = User.objects.create(username="other_user", nickname="other_user")
+        other_user.set_password("123456")
+        story = Story.objects.create(created_at=intended_day, user=test_user)
+        self.story_pk = story.pk
+        hashtag1 = Hashtag(content=self.hashtag1)
+        hashtag1.save()
+        hashtag2 = Hashtag(content=self.hashtag2)
+        hashtag2.save()
+        story.hashtags.add(hashtag1)
+        story.hashtags.add(hashtag2)
+        story.save()
+
+    def test_get_hashtag_success(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = HashtagView.as_view()
+
+        params = {"story_id": self.story_pk}
+        request = factory.get("writing/hashtags/", params)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.data["hashtags"][0]["content"], self.hashtag1)
+        self.assertEqual(response.data["hashtags"][1]["content"], self.hashtag2)
+
+    """  def test_get_hashtag_wrong_story(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = HashtagView.as_view()
+
+        params = {"story_id": self.story_pk + 1}
+        request = factory.get("writing/hashtags/", params)
+        force_authenticate(request, user)
+        response = view(request)
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_hashtag_other_user(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="other_user")
+        view = HashtagView.as_view() 
+
+        params = {"story_id": self.story_pk}
+        request = factory.get("writing/hashtags/", params)
+        force_authenticate(request, user)
+        response = view(request)
+        self.assertEqual(response.status_code, 400)"""
+
+
+class SaveHashtagTest(TestCase):
+    hashtag_string = "# h2#h1 ##"
+    hashtag1 = "h2"
+    hashtag2 = "h1"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        story = Story.objects.create(created_at=intended_day, user=test_user)
+        self.story_pk = story.pk
+        story.save()
+
+    def test_post_hashtag_success(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = HashtagView.as_view()
+        data = {"story_id": self.story_pk, "content": self.hashtag_string}
+        request = factory.post("writing/hashtags/", data=data)
+        force_authenticate(request, user=user)
+        response = view(request)
+        added_hashtags = Story.objects.get(pk=self.story_pk).hashtags.all()
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(added_hashtags), 2)
+        self.assertEqual(added_hashtags[0].content, self.hashtag1)
+        self.assertEqual(added_hashtags[1].content, self.hashtag2)
+
+    def test_post_hashtag_wrong_story_id(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = EmotionView.as_view()
+
+        data = {"story_id": self.story_pk, "content": self.hashtag_string}
+        request = factory.post("writing/hashtags/", data=data)
+        force_authenticate(request, user=user)
+        response = view(request)
+        added_hashtags = Story.objects.get(pk=self.story_pk).hashtags.all()
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(added_hashtags), 0)
 
 
 class GetEmotionTest(TestCase):
