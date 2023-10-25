@@ -124,6 +124,8 @@ public class StoryContainer {
                 builder.setMessage(R.string.ai_story_popup);
 
                 builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
+                    hideAiButton();
+
                     // TODO: API 호출해서 AI 요약 받아오기
                     Map<String, String> result = new HashMap<>() {{
                         put("title", "AI 요약 제목");
@@ -189,5 +191,10 @@ public class StoryContainer {
     private void setStoryContentLengthText(int count) {
         storyContentLengthText.setText(
             String.format(Locale.getDefault(), "%d / %d", count, STORY_CONTENT_MAX_LENGTH));
+    }
+
+    private void hideAiButton() {
+        storyAiButton.setVisibility(View.INVISIBLE);
+        aiButtonHelpText.setVisibility(View.INVISIBLE);
     }
 }
