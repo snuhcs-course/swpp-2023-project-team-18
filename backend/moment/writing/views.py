@@ -197,6 +197,7 @@ class DayCompletionView(GenericAPIView):
             title="",
             content="",
             is_point_completed=True,
+            created_at=datetime.fromtimestamp(curr_time),
         )
         story.save()
 
