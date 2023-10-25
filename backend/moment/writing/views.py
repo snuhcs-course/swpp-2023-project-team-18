@@ -19,6 +19,7 @@ from .utils.gpt import GPTAgent
 from .utils.log import log
 from .utils.prompt import MomentReplyTemplate
 
+
 # View related to moments
 class MomentView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -109,6 +110,7 @@ class MomentView(GenericAPIView):
 
         return super().get_throttles()
 
+
 # View related to Stories
 class StoryView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -158,4 +160,3 @@ class DayCompletionView(GenericAPIView):
             data={"message": "Success!"},
             status=201,
         )
-

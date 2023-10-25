@@ -37,9 +37,11 @@ class StorySerializer(serializers.ModelSerializer):
         res["created_at"] = int(instance.created_at.timestamp())
         return res
 
+
 class StoryQuerySerializer(serializers.Serializer):
     start = serializers.IntegerField()
     end = serializers.IntegerField()
+
 
 class DayCompletionSerializer(serializers.Serializer):
     created_at = serializers.IntegerField()
