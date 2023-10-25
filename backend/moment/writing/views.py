@@ -14,7 +14,7 @@ from .serializers import (
     DayCompletionSerializer,
     StorySerializer,
     StoryQuerySerializer,
-    StoryCreateSerializer,
+    StorySaveSerializer,
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
@@ -143,7 +143,7 @@ class StoryView(GenericAPIView):
         )
 
     def post(self, request: Request) -> Response:
-        body = StoryCreateSerializer(data=request.data)
+        body = StorySaveSerializer(data=request.data)
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
