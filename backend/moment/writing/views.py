@@ -278,7 +278,7 @@ class DayCompletionView(GenericAPIView):
         story.save()
 
         return Response(
-            data={"message": "Success!"},
+            data={"id": story.id, "message": "Success!"},
             status=201,
         )
 
