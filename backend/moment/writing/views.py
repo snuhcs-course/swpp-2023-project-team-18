@@ -17,6 +17,7 @@ from .serializers import (
     StoryCreateSerializer,
     EmotionCreateSerializer,
     EmotionQuerySerializer,
+    ScoreCreateSerializer,
 )
 from .constants import (
     Emotions,
@@ -319,6 +320,38 @@ class EmotionView(GenericAPIView):
         ).latest("created_at")
 
         story.emotion = emotion
+        story.save()
+
+        return Response(
+            data={"message": "Success!"},
+            status=201,
+        )
+
+
+class ScoreView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        body = ScoreCreateSerializer(data=request.data)
+        body.is_valid(raise_exception=True)
+        user = User.objects.get(pk=request.user.id)
+
+        score = body.validated_data["score"]
+        story_id = body.validated_data["story_id"]
+
+        # filter with user also to prevent others modifying irrelevant scores
+        try:
+            story = Story.objects.filter(
+                id=story_id,
+                user=user,
+            ).latest("created_at")
+        except Story.DoesNotExist:
+            return Response(
+                data={"message": "Cannot modify this score"},
+                status=400,
+            )
+
+        story.score = score
         story.save()
 
         return Response(

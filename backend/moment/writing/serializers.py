@@ -60,3 +60,8 @@ class EmotionQuerySerializer(serializers.Serializer):
 
 class EmotionCreateSerializer(serializers.Serializer):
     emotion = serializers.CharField()
+
+
+class ScoreCreateSerializer(serializers.Serializer):
+    story_id = serializers.IntegerField()
+    score = serializers.IntegerField()

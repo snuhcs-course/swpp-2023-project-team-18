@@ -6,6 +6,7 @@ from .views import (
     StoryView,
     StoryGenerateView,
     EmotionView,
+    ScoreView,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("stories/", StoryView.as_view()),
     path("ai-story/", StoryGenerateView.as_view()),
     path("emotions/", EmotionView.as_view()),
+    path("score/", ScoreView.as_view()),
 ]
