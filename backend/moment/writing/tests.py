@@ -1,17 +1,113 @@
 import datetime
+from unittest.mock import patch
+
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
 from freezegun import freeze_time
 
 from user.models import User
 from writing.models import MomentPair, Story
-from writing.views import DayCompletionView, StoryView
+from writing.utils.gpt import GPTAgent
+from writing.utils.prompt import StoryGenerateTemplate
+from writing.views import DayCompletionView, StoryView, StoryGenerateView
 
 
 # Create your tests here.
 intended_day = datetime.datetime(
     year=2023, month=10, day=25, hour=3, minute=0, second=0
 )  # class field not usable in decorators
+ai_sample_title = "ai_sample_title"
+ai_sample_story = "ai_sample_story"
+
+
+class StoryGenerateTest(TestCase):
+    moment1_content = "moment1"
+    moment2_content = "moment2"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        other_user = User.objects.create(username="otheruser", nickname="otheruser")
+        other_user.set_password("123456")
+
+        moment1 = MomentPair.objects.create(
+            user=test_user,
+            moment=self.moment1_content,
+            moment_created_at=intended_day + datetime.timedelta(hours=12),
+            reply_created_at=intended_day,
+        )
+        moment2 = MomentPair.objects.create(
+            user=test_user,
+            moment=self.moment2_content,
+            moment_created_at=intended_day,
+            reply_created_at=intended_day,
+        )
+        previous_moment = MomentPair.objects.create(
+            user=test_user,
+            moment="moment3",
+            moment_created_at=intended_day - datetime.timedelta(hours=1),
+            reply_created_at=intended_day,
+        )
+        other_user_moment = MomentPair.objects.create(
+            user=other_user,
+            moment="moment4",
+            moment_created_at=intended_day,
+            reply_created_at=intended_day,
+        )
+        story = Story.objects.create(
+            user=test_user, created_at=intended_day + datetime.timedelta(hours=21)
+        )
+        moment1.save()
+        moment2.save()
+        previous_moment.save()
+        other_user_moment.save()
+
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value=f"{ai_sample_title};{ai_sample_story}",
+    )
+    @patch("writing.utils.gpt.GPTAgent.add_message")
+    def test_story_generate_success(self, mock_add, mock_get):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = StoryGenerateView.as_view()
+
+        request = factory.get("/writing/ai-story/")
+        force_authenticate(request, user)
+        response = view(request)
+
+        mock_add.assert_called_with(
+            StoryGenerateTemplate.get_prompt(
+                moments=f"{self.moment2_content};{self.moment1_content}"
+            )
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data["title"], ai_sample_title)
+        self.assertEqual(response.data["story"], ai_sample_story)
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value=ai_sample_title)
+    def test_story_generate_wrong_format(self, mock_get):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = StoryGenerateView.as_view()
+
+        request = factory.get("/writing/ai-story/")
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 500)
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", side_effect=GPTAgent.GPTError())
+    def test_story_generate_api_fail(self, mock_get):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = StoryGenerateView.as_view()
+
+        request = factory.get("/writing/ai-story/")
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 500)
 
 
 class SaveStoryTest(TestCase):
