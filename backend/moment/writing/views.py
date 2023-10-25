@@ -340,6 +340,11 @@ class ScoreView(GenericAPIView):
         story_id = body.validated_data["story_id"]
 
         # filter with user also to prevent others modifying irrelevant scores
+        if score < 1 or score > 5:
+            return Response(
+                data={"message": "Invalid score"},
+                status=400,
+            )
         try:
             story = Story.objects.filter(
                 id=story_id,
