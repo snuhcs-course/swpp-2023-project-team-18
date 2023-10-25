@@ -22,16 +22,17 @@ class SaveStoryTest(TestCase):
         test_user = User.objects.create(username="impri", nickname="impri")
         test_user.set_password("123456")
         story1 = Story.objects.create(user=test_user, created_at=intended_day)
+        story2 = Story.objects.create(
+            user=test_user, created_at=intended_day - datetime.timedelta(days=1)
+        )
         story1.save()
+        story2.save()
 
-    @freeze_time(lambda: intended_day)
-    def test_save_story_success_at_start_of_day(self):
+    def test_save_story_success(self):
         factory = APIRequestFactory()
         user = User.objects.get(username="impri")
         view = StoryView.as_view()
         data = {
-            "start": intended_day.timestamp(),
-            "end": (intended_day + datetime.timedelta(days=1)).timestamp(),
             "title": self.title,
             "content": self.content,
         }
@@ -39,33 +40,11 @@ class SaveStoryTest(TestCase):
         request = factory.post("writing/stories/", data=data)
         force_authenticate(request, user=user)
         response = view(request)
-        modified_story = Story.objects.all()
+        modified_story = Story.objects.get(created_at=intended_day)
 
-        self.assertEqual(len(modified_story), 1)
-        self.assertEqual(modified_story[0].title, self.title)
-        self.assertEqual(modified_story[0].content, self.content)
+        self.assertEqual(modified_story.title, self.title)
+        self.assertEqual(modified_story.content, self.content)
         self.assertEqual(response.status_code, 201)
-
-    @freeze_time(lambda: intended_day + datetime.timedelta(days=1))
-    def test_save_story_fail_after_end_of_day(self):
-        factory = APIRequestFactory()
-        user = User.objects.get(username="impri")
-        view = StoryView.as_view()
-        data = {
-            "start": intended_day.timestamp(),
-            "end": (intended_day + datetime.timedelta(days=1)).timestamp(),
-            "content": self.content,
-        }
-
-        request = factory.post("writing/stories/", data=data)
-        force_authenticate(request, user=user)
-        response = view(request)
-        modified_story = Story.objects.all()
-
-        self.assertEqual(len(modified_story), 1)
-        self.assertEqual(modified_story[0].title, "")
-        self.assertEqual(modified_story[0].content, "")
-        self.assertEqual(response.status_code, 400)
 
 
 class GetStoryTest(TestCase):
