@@ -100,8 +100,6 @@ public class TodayViewFragment extends Fragment {
         System.out.println("#DEBUG: after initializeListView");
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
-        // 루트 뷰에 터치 리스너 설정
-
         return root;
     }
 
@@ -134,8 +132,8 @@ public class TodayViewFragment extends Fragment {
                         }
 
                         //System.out.println("#DEBUG: array size " + momentUiState.getMomentPairsList().size());
-                        mAdapter.notifyDataSetChanged();
-                        binding.listviewList.setSelection(items.size() - 1);
+                        mAdapter.notifyChange();
+                        binding.listviewList.smoothScrollToPosition(items.size() - 1);
                     }
                 } else {
                     if (momentUiState.getError() == NO_INTERNET) {
@@ -182,6 +180,7 @@ public class TodayViewFragment extends Fragment {
         scrollView = footerView.findViewById(R.id.listview_scroll);
         // 애니메이션
         Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        fadeIn.setStartOffset(500);
         Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
 
         // EditText의 텍스트 변경을 감지
@@ -253,10 +252,15 @@ public class TodayViewFragment extends Fragment {
                             + createdHourValue);
 
                     if (createdHourValue == currentHourValue) {
-                        addButton.setVisibility(View.GONE);
-                        addButtonText.setVisibility(View.GONE);
                         addButtonInactivate.setVisibility(View.VISIBLE);
                         addButtonInactivateText.setVisibility(View.VISIBLE);
+                        addButtonInactivate.startAnimation(fadeIn);
+                        addButtonInactivateText.startAnimation(fadeIn);
+
+                        addButton.startAnimation(fadeOut);
+                        addButtonText.startAnimation(fadeOut);
+                        addButton.setVisibility(View.GONE);
+                        addButtonText.setVisibility(View.GONE);
                     } else {
                         inputEditText.setVisibility(View.VISIBLE);
                         textCount.setVisibility(View.VISIBLE);
@@ -272,7 +276,7 @@ public class TodayViewFragment extends Fragment {
                         constraintLayout.setVisibility(View.VISIBLE);
                         submitButtonInactivate.startAnimation(fadeIn);
                         submitButtonInactivate.startAnimation(fadeIn);
-                        binding.listviewList.setSelection(items.size() - 1);
+                        binding.listviewList.smoothScrollToPosition(items.size() - 1);
                         // ScrollView를 ConstraintLayout의 하단으로 스크롤
                     }
                 } catch (ParseException e) {
@@ -293,7 +297,7 @@ public class TodayViewFragment extends Fragment {
                 constraintLayout.setVisibility(View.VISIBLE);
                 submitButtonInactivate.startAnimation(fadeIn);
                 constraintLayout.startAnimation(fadeIn);
-                binding.listviewList.setSelection(items.size() - 1);
+                binding.listviewList.smoothScrollToPosition(items.size() - 1);
             }
         });
         addButtonInactivate.setOnClickListener(v -> {
@@ -324,8 +328,10 @@ public class TodayViewFragment extends Fragment {
 
                 addButton.setVisibility(View.VISIBLE);
                 addButtonText.setVisibility(View.VISIBLE);
-                addButton.startAnimation(fadeIn);
-                addButtonText.startAnimation(fadeIn);
+
+                Animation fadeInWithoutDelay = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+                addButton.startAnimation(fadeInWithoutDelay);
+                addButtonText.startAnimation(fadeInWithoutDelay);
 
             }
         });
@@ -335,8 +341,8 @@ public class TodayViewFragment extends Fragment {
     private void addItem(String userInput) {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
         items.add(new ListViewItem(userInput, currentTime, ""));
-        mAdapter.notifyDataSetChanged();
-        binding.listviewList.setSelection(items.size() - 1);
+        mAdapter.notifyChange();
+        binding.listviewList.smoothScrollToPosition(items.size() - 1);
     }
 
     @Override

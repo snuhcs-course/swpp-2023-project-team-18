@@ -59,7 +59,6 @@ public class ListViewAdapter extends BaseAdapter {
         userInput.setText(item.getUserInput());
         inputTime.setText(item.getInputTime());
 
-
         if (item.getServerResponse().isEmpty()) {
             setWaitingResponse(serverResponse);
         } else {
