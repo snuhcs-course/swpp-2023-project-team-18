@@ -50,12 +50,14 @@ Avoid referring to yourself as "I" or "me" and don't ask users too many question
 
 STORY_GENERATE = """\
 Generate a diary based on the inputs. You should generate the output in Korean. \
-Please make the diary as short as possible.
+Please make the diary as short as possible. You should also provide the title. \
+The title and content should be delimited with a semicolon(;).
 
 [User inputs]
 {moments}
 
 [Output]
+[title]; [content] 
 """
 
 
