@@ -174,7 +174,7 @@ class DayCompletionView(GenericAPIView):
         user = User.objects.get(pk=request.user.id)
         created_at = datetime.fromtimestamp(body.validated_data["created_at"])
         story = Story.objects.create(
-            user=user, title="", content="", created_at=created_at
+            user=user, title="", content="", created_at=created_at, is_point_completed=True
         )
         story.save()
 
