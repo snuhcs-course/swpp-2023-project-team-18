@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 
 from user.models import User
-from .models import MomentPair, Story
+from .models import MomentPair, Story, Hashtag
 from .serializers import (
     MomentPairQuerySerializer,
     MomentPairSerializer,
@@ -18,6 +18,9 @@ from .serializers import (
     EmotionCreateSerializer,
     EmotionQuerySerializer,
     ScoreCreateSerializer,
+    HashtagSerializer,
+    HashtagCreateSerializer,
+    HashtagQuerySerializer,
 )
 from .constants import (
     Emotions,
@@ -339,12 +342,12 @@ class ScoreView(GenericAPIView):
         score = body.validated_data["score"]
         story_id = body.validated_data["story_id"]
 
-        # filter with user also to prevent others modifying irrelevant scores
         if score < 1 or score > 5:
             return Response(
                 data={"message": "Invalid score"},
                 status=400,
             )
+        # filter with user also to prevent others modifying irrelevant scores
         try:
             story = Story.objects.filter(
                 id=story_id,
@@ -357,6 +360,66 @@ class ScoreView(GenericAPIView):
             )
 
         story.score = score
+        story.save()
+
+        return Response(
+            data={"message": "Success!"},
+            status=201,
+        )
+
+
+class HashtagView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = HashtagSerializer
+
+    def get(self, request: Request) -> Response:
+        params = HashtagQuerySerializer(data=request.query_params)
+        params.is_valid(raise_exception=True)
+
+        story_id = params.validated_data["story_id"]
+
+        story = Story.objects.get(id=story_id)
+
+        hashtags = story.hashtags.all()
+
+        serializer = self.get_serializer(hashtags, many=True)
+
+        log(
+            f"Successfully queried hashtags (length: {len(serializer.data)})",
+            place="HashtagView.get",
+        )
+
+        return Response(
+            data={"hashtags": serializer.data},
+            status=200,
+        )
+
+    def post(self, request: Request) -> Response:
+        body = HashtagCreateSerializer(data=request.data)
+        body.is_valid(raise_exception=True)
+
+        content = body.validated_data["content"]
+        story_id = body.validated_data["story_id"]
+
+        try:
+            story = Story.objects.get(
+                id=story_id,
+            )
+        except Story.DoesNotExist:
+            return Response(
+                data={"message": "Cannot update this hashtag"},
+                status=400,
+            )
+
+        hashtags = [
+            hashtag.strip()
+            for hashtag in content.split("#")
+            if hashtag.strip() is not ""
+        ]
+        for hashtag in hashtags:
+            curr_hashtag = Hashtag(content=hashtag)
+            curr_hashtag.save()
+            story.hashtags.add(curr_hashtag)
         story.save()
 
         return Response(

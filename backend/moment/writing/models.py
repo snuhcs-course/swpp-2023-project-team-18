@@ -12,7 +12,6 @@ from .constants import (
 
 class Hashtag(models.Model):
     content = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_created=False)
 
 
 class Story(models.Model):

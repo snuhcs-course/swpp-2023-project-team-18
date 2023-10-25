@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import MomentPair, Story
+from .models import MomentPair, Story, Hashtag
 from .constants import MOMENT_MAX_LENGTH, STORY_MAX_LENGTH, STORY_TITLE_MAX_LENGTH
 
 
@@ -65,3 +65,19 @@ class EmotionCreateSerializer(serializers.Serializer):
 class ScoreCreateSerializer(serializers.Serializer):
     story_id = serializers.IntegerField()
     score = serializers.IntegerField()
+
+
+# serializer for hashtag
+class HashtagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hashtag
+        fields = ["id", "content"]
+
+
+class HashtagQuerySerializer(serializers.Serializer):
+    story_id = serializers.IntegerField()
+
+
+class HashtagCreateSerializer(serializers.Serializer):
+    story_id = serializers.IntegerField()
+    content = serializers.CharField()
