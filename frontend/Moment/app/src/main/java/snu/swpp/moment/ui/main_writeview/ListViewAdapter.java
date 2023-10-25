@@ -79,6 +79,7 @@ public class ListViewAdapter extends BaseAdapter {
         Animation fadeIn = AnimationUtils.loadAnimation(textView.getContext(), R.anim.fade_in);
         scale.setDuration((long) (1000 * scaleY));
         textView.setGravity(Gravity.START);
+        textView.setAlpha(1);
         textView.clearAnimation();
         textView.startAnimation(scale);
         textView.startAnimation(fadeIn);
