@@ -147,20 +147,16 @@ class StoryView(GenericAPIView):
         body.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
-        start_date = datetime.fromtimestamp(body.validated_data["start"])
-        end_date = datetime.fromtimestamp(body.validated_data["end"])
         content = body.validated_data["content"]
         title = body.validated_data["title"]
 
-        # `stories` should only contain one element.
-        stories = (
-            Story.objects.filter(
-                created_at__range=(start_date, end_date),
-                user=user,
-            )
-            .order_by("created_at")
-            .update(content=content, title=title)
-        )
+        story = Story.objects.filter(
+            user=user,
+        ).latest("created_at")
+
+        story.title = title
+        story.content = content
+        story.save()
 
         return Response(
             data={"message": "Success!"},
