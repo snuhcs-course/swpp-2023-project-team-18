@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import MomentPair, Story
-from .constants import MOMENT_MAX_LENGTH
+from .constants import MOMENT_MAX_LENGTH, STORY_MAX_LENGTH
 
 
 # Serializer for moments
@@ -41,6 +41,11 @@ class StorySerializer(serializers.ModelSerializer):
 class StoryQuerySerializer(serializers.Serializer):
     start = serializers.IntegerField()
     end = serializers.IntegerField()
+
+class StoryCreateSerializer(serializers.Serializer):
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
+    content = serializers.CharField(max_length=STORY_MAX_LENGTH)
 
 
 class DayCompletionSerializer(serializers.Serializer):
