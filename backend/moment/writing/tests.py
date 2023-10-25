@@ -9,7 +9,13 @@ from user.models import User
 from writing.models import MomentPair, Story
 from writing.utils.gpt import GPTAgent
 from writing.utils.prompt import StoryGenerateTemplate
-from writing.views import DayCompletionView, StoryView, StoryGenerateView, ScoreView
+from writing.views import (
+    DayCompletionView,
+    StoryView,
+    StoryGenerateView,
+    ScoreView,
+    EmotionView,
+)
 
 
 # Create your tests here.
@@ -18,6 +24,61 @@ intended_day = datetime.datetime(
 )  # class field not usable in decorators
 ai_sample_title = "ai_sample_title"
 ai_sample_story = "ai_sample_story"
+
+
+class SaveEmotionTest(TestCase):
+    default_emotion = "normal1"
+    new_emotion = "happy1"
+    wrong_emotion = "something"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        other_user = User.objects.create(username="otheruser", nickname="otheruser")
+        other_user.set_password("123456")
+        story1 = Story.objects.create(user=test_user, created_at=intended_day)
+        self.story1_pk = story1.pk
+        story2 = Story.objects.create(
+            user=test_user, created_at=intended_day - datetime.timedelta(days=1)
+        )
+        self.story2_pk = story2.pk
+        other_user_story = Story.objects.create(
+            user=other_user, created_at=intended_day + datetime.timedelta(hours=21)
+        )
+        story1.save()
+        story2.save()
+        other_user_story.save()
+
+    def test_save_emotion_success(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = EmotionView.as_view()
+
+        data = {"emotion": self.new_emotion}
+        request = factory.post("/writing/emotions/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Story.objects.get(pk=self.story1_pk).emotion, self.new_emotion)
+        self.assertEqual(
+            Story.objects.get(pk=self.story2_pk).emotion, self.default_emotion
+        )
+
+    def test_save_wrong_emotion_fail(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = ScoreView.as_view()
+
+        data = {"emotion": self.wrong_emotion}
+        request = factory.post("/writing/emotions/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            Story.objects.get(pk=self.story1_pk).emotion, self.default_emotion
+        )
 
 
 class SaveScoreTest(TestCase):
