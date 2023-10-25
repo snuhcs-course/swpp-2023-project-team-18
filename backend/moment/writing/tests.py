@@ -26,6 +26,88 @@ ai_sample_title = "ai_sample_title"
 ai_sample_story = "ai_sample_story"
 
 
+class GetEmotionTest(TestCase):
+    emotion1 = "happy1"
+    emotion2 = "sad2"
+    emotion3 = "angry1"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        other_user = User.objects.create(username="otheruser", nickname="impri")
+        other_user.set_password("123456")
+        story3 = Story.objects.create(
+            created_at=intended_day,
+            user=test_user,
+            emotion=self.emotion3,
+        )
+        story1 = Story.objects.create(
+            created_at=intended_day - datetime.timedelta(days=2),
+            user=test_user,
+            emotion=self.emotion1,
+        )
+        story2 = Story.objects.create(
+            created_at=intended_day - datetime.timedelta(days=1),
+            user=test_user,
+            emotion=self.emotion2,
+        )
+
+        story3.save()
+        story1.save()
+        story2.save()
+
+    def test_get_emotions_without_time(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = EmotionView.as_view()
+
+        request = factory.get("writing/emotions/")
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_stories_success(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = EmotionView.as_view()
+        params = {
+            "start": (intended_day - datetime.timedelta(days=2)).timestamp(),
+            "end": intended_day.timestamp(),
+        }
+
+        request = factory.get("writing/emotions/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(response.data["emotions"][0]["emotion"], self.emotion1)
+        self.assertEqual(response.data["emotions"][1]["emotion"], self.emotion2)
+        self.assertEqual(response.data["emotions"][2]["emotion"], self.emotion3)
+
+    def test_get_only_one_story(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = EmotionView.as_view()
+        params = {"start": intended_day.timestamp(), "end": intended_day.timestamp()}
+
+        request = factory.get("writing/emotions/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(response.data["emotions"][0]["emotion"], self.emotion3)
+        self.assertEqual(len(response.data["emotions"]), 1)
+
+    def test_not_get_others_stories(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="otheruser")
+        view = EmotionView.as_view()
+        params = {
+            "start": (intended_day - datetime.timedelta(days=2)).timestamp(),
+            "end": intended_day.timestamp(),
+        }
+        request = factory.get("writing/emotions/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(len(response.data["emotions"]), 0)
+
+
 class SaveEmotionTest(TestCase):
     default_emotion = "normal1"
     new_emotion = "happy1"
