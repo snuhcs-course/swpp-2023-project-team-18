@@ -67,11 +67,6 @@ public class TagBoxContainer {
         return parseTags(tagEditText.getText().toString());
     }
 
-    public boolean isLimitExceeded() {
-        Boolean value = isLimitExceeded.getValue();
-        return Objects.requireNonNullElse(value, false);
-    }
-
     public void setUiVisible() {
         tagWrapper.setVisibility(View.VISIBLE);
         Animation fadeIn = AnimationUtils.loadAnimation(tagWrapper.getContext(), R.anim.fade_in);

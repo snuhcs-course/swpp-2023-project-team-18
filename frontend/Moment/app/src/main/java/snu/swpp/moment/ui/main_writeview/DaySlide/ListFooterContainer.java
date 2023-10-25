@@ -122,6 +122,11 @@ public class ListFooterContainer {
         addButtonInactivate.setOnClickListener(v -> {
         });
 
+        // 스토리 자수 제한 감지
+        storyContainer.setLimitObserver((Boolean isLimitExceeded) -> {
+            setBottomButtonState(!isLimitExceeded);
+        });
+
         // 감정 선택 감지
         emotionGridContainer.setSelectedEmotionObserver((Integer emotion) -> {
             setBottomButtonState(emotion > -1);

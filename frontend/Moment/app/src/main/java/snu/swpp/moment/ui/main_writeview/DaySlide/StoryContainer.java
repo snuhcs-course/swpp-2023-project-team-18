@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -28,6 +30,11 @@ public class StoryContainer {
     private final Button storyAiButton;
 
     private final Animation fadeIn;
+
+    // 글자수 제한 초과 검사
+    private boolean isTitleLimitExceeded = false;
+    private boolean isContentLimitExceeded = false;
+    private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
 
     private final int STORY_TITLE_MAX_LENGTH = 100;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
@@ -62,9 +69,15 @@ public class StoryContainer {
                         ContextCompat.getColor(view.getContext(), R.color.red));
                     storyTitleEditText.requestFocus();
                     storyTitleEditText.setSelection(STORY_TITLE_MAX_LENGTH);
+
+                    isTitleLimitExceeded = true;
+                    checkLimitExceeded();
                 } else {
                     storyTitleEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
+
+                    isTitleLimitExceeded = false;
+                    checkLimitExceeded();
                 }
             }
         });
@@ -90,9 +103,15 @@ public class StoryContainer {
                         ContextCompat.getColor(view.getContext(), R.color.red));
                     storyContentEditText.requestFocus();
                     storyContentEditText.setSelection(STORY_CONTENT_MAX_LENGTH);
+
+                    isContentLimitExceeded = true;
+                    checkLimitExceeded();
                 } else {
                     storyContentEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
+
+                    isContentLimitExceeded = false;
+                    checkLimitExceeded();
                 }
             }
         });
@@ -142,6 +161,10 @@ public class StoryContainer {
         storyContentEditText.setHint("");
     }
 
+    public void setLimitObserver(Observer<Boolean> observer) {
+        isLimitExceeded.observeForever(observer);
+    }
+
     public void setUiWritingStory(String completeTime) {
         storyWrapper.setVisibility(View.VISIBLE);
         completeTimeText.setText(completeTime);
@@ -152,6 +175,10 @@ public class StoryContainer {
         storyContentLengthText.setVisibility(View.GONE);
         aiButtonHelpText.setVisibility(View.GONE);
         storyAiButton.setVisibility(View.GONE);
+    }
+
+    private void checkLimitExceeded() {
+        isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);
     }
 
     private void setStoryText(String title, String content) {
