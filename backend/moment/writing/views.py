@@ -18,6 +18,9 @@ from .serializers import (
     EmotionCreateSerializer,
     EmotionQuerySerializer,
 )
+from .constants import (
+    Emotions,
+)
 from .utils.gpt import GPTAgent
 from .utils.log import log
 from .utils.prompt import MomentReplyTemplate, StoryGenerateTemplate
@@ -296,4 +299,29 @@ class EmotionView(GenericAPIView):
         return Response(
             data={"emotions": serializer.data},
             status=200,
+        )
+
+    def post(self, request: Request) -> Response:
+        body = EmotionCreateSerializer(data=request.data)
+        body.is_valid(raise_exception=True)
+        user = User.objects.get(pk=request.user.id)
+
+        emotion = body.validated_data["emotion"]
+
+        if not emotion in Emotions:
+            return Response(
+                data={"message": "Provided emotion string is invalid!"},
+                status=400,
+            )
+
+        story = Story.objects.filter(
+            user=user,
+        ).latest("created_at")
+
+        story.emotion = emotion
+        story.save()
+
+        return Response(
+            data={"message": "Success!"},
+            status=201,
         )
