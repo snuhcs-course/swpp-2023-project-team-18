@@ -36,12 +36,10 @@ public class TagBoxContainer {
         tagEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Do nothing
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Do nothing
             }
 
             @Override
@@ -89,7 +87,7 @@ public class TagBoxContainer {
         Matcher matcher = pattern.matcher(s);
 
         while (matcher.find()) {
-            // Add the matched hashtag (without the '#' symbol) to the list
+            // '#' 제거 후 태그 저장
             String hashtag = matcher.group().substring(1);
             hashtags.add(hashtag);
         }

@@ -86,8 +86,6 @@ public class TodayViewFragment extends Fragment {
         bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
         bottomButtonContainer.viewingMoment();
 
-        // 루트 뷰에 터치 리스너 설정
-
         return root;
     }
 

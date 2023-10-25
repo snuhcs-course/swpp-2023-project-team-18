@@ -37,12 +37,6 @@ public class WriteViewModel extends ViewModel {
     }
 
     public void getMoment(int year, int month, int date) {
-        //Date startDate = new Date(year, month, date, 3, 0);
-        //Date endDate = new Date(startDate.getTime()+MILLIS_IN_A_DAY-1);
-        //long start = new Timestamp(startDate.getTime()).getTime();
-        //long end = new Timestamp(endDate.getTime()).getTime();
-        //long start = 1697808500;
-        //long end = 1697808999;
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
         Date startDate = calendar.getTime();

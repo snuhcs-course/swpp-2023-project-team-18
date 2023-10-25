@@ -26,13 +26,13 @@ public class DailyViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        //ViewGroup rootView = (ViewGroup) inflater.inflate(
-        //      R.layout.daily_item, container, false);
         binding = DailyItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         // Initialize ListView and related components
         initializeListView(root);
         System.out.println("#DEBUG: Initialized list view");
+
         return root;
     }
 

@@ -27,11 +27,7 @@ class DayViewContainer(view: View) : ViewContainer(view) {
             }
 
             val currentSelection = viewModel.selectedDate.value
-            if (currentSelection == day.date) {
-                // 한 번 더 눌러도 선택 해제 안 됨
-//                viewModel.setSelectedDate(null)
-//                calendarView.notifyDateChanged(currentSelection)
-            } else {
+            if (currentSelection != day.date) {
                 // 날짜 선택
                 viewModel.setSelectedDate(day.date)
                 calendarView.notifyDateChanged(day.date)

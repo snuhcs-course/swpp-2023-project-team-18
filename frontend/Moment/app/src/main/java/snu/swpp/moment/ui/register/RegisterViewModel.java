@@ -89,7 +89,7 @@ public class RegisterViewModel extends ViewModel {
         return password != null && password.trim().length() > 5;
     }
 
-    //Password check
+    // Password check
     private boolean isPasswordCheckValid(String password, String passwordCheck) {
         return (password.equals(passwordCheck));
     }

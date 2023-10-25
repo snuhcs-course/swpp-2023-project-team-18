@@ -29,11 +29,11 @@ public class UserLocalDataSource {
         // read : shared prefernce, write : editor  -> secret_tokens에
     }
 
-    public void saveUser(LoggedInUser user) { //이거 있으면 회원가입, 로그인 다 access token으로 접근해야하니까
+    public void saveUser(LoggedInUser user) { // 이거 있으면 회원가입, 로그인 다 access token으로 접근해야하니까
         editor.putString("nickname", user.getNickName());
         editor.putString("access_token", user.getAccessToken());
         editor.putString("refresh_token", user.getRefreshToken());
-        editor.putString("created_at", user.getCreateAt()); //YYYY-MM-DDTHH:SS:...
+        editor.putString("created_at", user.getCreateAt()); // YYYY-MM-DDTHH:SS:...
         editor.apply(); // 이거 해야 적용됨
         // username은 오는데 저장은 따로 아직 안했음 (굳이?)
     }
