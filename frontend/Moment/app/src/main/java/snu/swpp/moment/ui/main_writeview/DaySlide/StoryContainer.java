@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -27,7 +28,7 @@ public class StoryContainer {
     private final int STORY_TITLE_MAX_LENGTH = 100;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
 
-    public StoryContainer(View view) {
+    public StoryContainer(@NonNull View view) {
         storyWrapper = (ConstraintLayout) view;
         storyTitleEditText = view.findViewById(R.id.storyTitleEditText);
         storyContentEditText = view.findViewById(R.id.storyContentEditText);

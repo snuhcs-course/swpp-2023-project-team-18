@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
@@ -25,7 +26,7 @@ public class TagBoxContainer {
 
     private final int MAX_TAGS = 10;
 
-    public TagBoxContainer(View view) {
+    public TagBoxContainer(@NonNull View view) {
         tagWrapper = (ConstraintLayout) view;
         tagEditText = view.findViewById(R.id.tagsEditText);
         limitHelpText = view.findViewById(R.id.tagLimitHelpText);
