@@ -12,7 +12,6 @@ from .constants import (
 
 class Hashtag(models.Model):
     content = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_created=True)
 
 
 class Story(models.Model):
@@ -31,7 +30,7 @@ class Story(models.Model):
         Hashtag,
     )
 
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_now_add=False)
 
 
 class MomentPair(models.Model):
@@ -50,4 +49,4 @@ class Nudge(models.Model):
     content = models.CharField(max_length=1000)
     is_completed = models.BooleanField(default=False)
 
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_created=False)

@@ -1,13 +1,26 @@
 import os
-from enum import Enum
+from enum import Enum, EnumMeta
 
 
-MOMENT_MAX_LENGTH = 1000
-STORY_MAX_LENGTH = 10000
-STORY_TITLE_MAX_LENGTH = 100
+MOMENT_MAX_LENGTH = 100
+STORY_MAX_LENGTH = 1000
+STORY_TITLE_MAX_LENGTH = 20
 
 
-class Emotions(str, Enum):
+class MetaEnum(EnumMeta):
+    def __contains__(cls, item):
+        try:
+            cls(item)
+        except ValueError:
+            return False
+        return True
+
+
+class BaseEnum(Enum, metaclass=MetaEnum):
+    pass
+
+
+class Emotions(str, BaseEnum):
     EXCITED1 = "excited1"
     EXCITED2 = "excited2"
     HAPPY1 = "happy1"
@@ -18,6 +31,7 @@ class Emotions(str, Enum):
     SAD2 = "sad2"
     ANGRY1 = "angry1"
     ANGRY2 = "angry2"
+    INVALID = "invalid"
 
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

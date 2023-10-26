@@ -6,3 +6,4 @@ django-environ==0.11.2
 pymysql==1.1.0
 tzdata==2023.3
 openai==0.28.1
+freezegun==1.2.2
