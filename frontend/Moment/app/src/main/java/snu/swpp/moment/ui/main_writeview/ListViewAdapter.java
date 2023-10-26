@@ -1,9 +1,12 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import java.util.List;
@@ -13,10 +16,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     private List<ListViewItem> items = null;
     private final Context context;
+    private int size;
 
     public ListViewAdapter(Context context, List<ListViewItem> items) {
         this.items = items;
         this.context = context;
+        this.size = items.size();
     }
 
     public void notifyChange() {
@@ -51,12 +56,46 @@ public class ListViewAdapter extends BaseAdapter {
         ListViewItem item = items.get(position);
         userInput.setText(item.getUserInput());
         inputTime.setText(item.getInputTime());
-        serverResponse.setText(
-            item.getServerResponse().isEmpty() ? convertView.getResources()
-                .getString(R.string.moment_reply_loading)
-                : item.getServerResponse());
-        //serverResponse.setText("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
+
+        if (item.getServerResponse().isEmpty()) {
+            setWaitingResponse(serverResponse);
+        } else {
+            if (position >= size) {
+                size = items.size();
+                showUpdatedResponse(item.getServerResponse(), serverResponse);
+            } else {
+                showServerResponse(item.getServerResponse(), serverResponse);
+            }
+        }
+
         return convertView;
+    }
+
+    private void showUpdatedResponse(String response, TextView textView) {
+        textView.setText(response);
+        textView.setGravity(Gravity.START);
+        textView.setAlpha(1);
+        textView.clearAnimation();
+        Animation fadeIn = AnimationUtils.loadAnimation(textView.getContext(), R.anim.fade_in);
+        textView.startAnimation(fadeIn);
+    }
+
+
+    private void showServerResponse(String response, TextView textView) {
+        textView.setText(response);
+        textView.setGravity(Gravity.START);
+        textView.setAlpha(1);
+        textView.clearAnimation();
+    }
+
+    private void setWaitingResponse(TextView textView) {
+        textView.setText("\u00B7  \u00B7  \u00B7 \nAI가 일기를 읽고 있어요");    // 가운뎃점
+        textView.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
+        textView.setAlpha(0.5f);
+        textView.clearAnimation();
+        Animation fadeInOut = AnimationUtils.loadAnimation(textView.getContext(),
+            R.anim.fade_in_out);
+        textView.startAnimation(fadeInOut);
     }
 }
 

@@ -209,7 +209,8 @@ public class TodayViewFragment extends Fragment {
     }
 
     private void scrollToBottom() {
-        binding.listviewList.setSelection(items.size() - 1);
+        binding.listviewList.post(() -> binding.listviewList.smoothScrollToPosition(
+            binding.listviewList.getCount() - 1));
     }
 
     @Override

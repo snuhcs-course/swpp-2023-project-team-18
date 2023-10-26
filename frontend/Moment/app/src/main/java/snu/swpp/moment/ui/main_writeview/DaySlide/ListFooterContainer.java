@@ -45,6 +45,7 @@ public class ListFooterContainer {
 
     // 애니메이션 개체
     private final Animation fadeIn;
+    private final Animation delayedFadeIn;
     private final Animation fadeOut;
 
     // 하단 버튼 활성화 상태
@@ -82,6 +83,8 @@ public class ListFooterContainer {
 
         // 애니메이션 개체
         fadeIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
+        delayedFadeIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
+        delayedFadeIn.setStartOffset(500);
         fadeOut = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out);
 
         setMomentLengthText(0);
@@ -174,19 +177,24 @@ public class ListFooterContainer {
     }
 
     public void setUiWritingMoment() {
+        // add 누르고 입력창 뜨는 동작
         addButton.startAnimation(fadeOut);
         addButtonText.startAnimation(fadeOut);
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
 
         editTextWrapper.setVisibility(View.VISIBLE);
-        editTextWrapper.startAnimation(fadeIn);
+        editTextWrapper.startAnimation(delayedFadeIn);
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
     }
 
     public void setUiReadyToAddMoment() {
+        // submit 버튼 눌렀을 때 입력창 사라지고 add 버튼 표시되는 동작
+        submitButton.startAnimation(fadeOut);
+        editTextWrapper.startAnimation(fadeOut);
+
         momentEditText.setText("");
         submitButton.setVisibility(View.GONE);
         submitButtonInactivate.setVisibility(View.VISIBLE);
@@ -203,6 +211,7 @@ public class ListFooterContainer {
     }
 
     public void setUiAddLimitExceeded() {
+        // 모먼트 한 시간 2개 제한 초과했을 때
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
 
@@ -214,6 +223,7 @@ public class ListFooterContainer {
     }
 
     public void setUiWritingStory(String completeTime) {
+        // 스토리 작성 칸 나올 때
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
         addLimitWarnText.setVisibility(View.GONE);
