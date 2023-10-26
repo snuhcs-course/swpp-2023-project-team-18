@@ -11,7 +11,7 @@ from .utils.log import log
 
 def auto_completion_job():
     users = User.objects.all()
-    now = datetime.now()
+    now = datetime.datetime.now()
     gpt_agent = GPTAgent()
     log(message="starting auto completion job...", place="auto_completion_job")
     for user in users:
@@ -35,7 +35,7 @@ def auto_completion_job():
                 emotion=Emotions.INVALID,
                 created_at=datetime.datetime(
                     year=now.year,
-                    month=now.year,
+                    month=now.month,
                     day=now.day,
                     hour=2,
                     minute=59,
@@ -57,7 +57,7 @@ def auto_completion_job():
                 content=ai_story,
                 created_at=datetime.datetime(
                     year=now.year,
-                    month=now.year,
+                    month=now.month,
                     day=now.day,
                     hour=2,
                     minute=59,
@@ -69,7 +69,7 @@ def auto_completion_job():
 
 def get_last_days_moment_contents(user: User, now: datetime.datetime) -> List[str]:
     last_day_end = datetime.datetime(
-        year=now.year, month=now.year, day=now.day, hour=2, minute=59, second=59
+        year=now.year, month=now.month, day=now.day, hour=2, minute=59, second=59
     )
     last_day_start = (
         last_day_end - datetime.timedelta(days=1) + datetime.timedelta(seconds=1)
@@ -83,14 +83,14 @@ def get_last_days_moment_contents(user: User, now: datetime.datetime) -> List[st
 
 def get_last_days_story(user: User, now: datetime.datetime) -> Story:
     last_day_end = datetime.datetime(
-        year=now.year, month=now.year, day=now.day, hour=2, minute=59, second=59
+        year=now.year, month=now.month, day=now.day, hour=2, minute=59, second=59
     )
     last_day_start = (
         last_day_end - datetime.timedelta(days=1) + datetime.timedelta(seconds=1)
     )
     try:
         return Story.objects.filter(
-            moment_created_at__range=(last_day_start, last_day_end), user=user
+            created_at__range=(last_day_start, last_day_end), user=user
         )[0]
     except:
         return None
@@ -101,13 +101,17 @@ def get_ai_title_and_story_from_moments(
 ) -> Tuple[str, str]:
     gpt_agent.reset_messages()
     gpt_agent.add_message(
-        content=StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
+        StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
     )
     try:
         title_and_story = gpt_agent.get_answer(
-            timeout=15, max_trial=2
+            timeout=15, max_trial=5
         )  # TODO: need more testing
-        return title_and_story.split(";")
-    except:
+        title, story = title_and_story.split(";")
+        return title, story
+    except GPTAgent.GPTError:
         log("Error while calling GPT API", place="auto_completion_job")
+        return ("", "")
+    except ValueError:
+        log("Invalid format", place="auto_completion_job")
         return ("", "")
