@@ -16,6 +16,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/swpp-2023-project-team-18/backend/
+            git clean -f
             git pull origin backend/release
             pip install -r config/requirements.txt
             cd moment
