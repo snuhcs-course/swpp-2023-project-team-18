@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -32,10 +33,6 @@ public class WriteViewModel extends ViewModel {
         return momentState;
     }
 
-    public void setMomentState(MomentUiState momentState) {
-        this.momentState.setValue(momentState);
-    }
-
     public void getMoment(int year, int month, int date) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
@@ -46,16 +43,15 @@ public class WriteViewModel extends ViewModel {
         long start = TimeConverter.convertDateToLong(startDate);
         long end = TimeConverter.convertDateToLong(endDate);
 
-        System.out.println("#Debug  start : " + start + " end : " + end);
+        Log.d("WriteViewModel", String.format("start : %d, end : %d", start, end));
 
-        authenticationRepository.isTokenValid(new TokenCallBack() {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
                 momentRepository.getMoment(access_token, start, end, new MomentGetCallBack() {
                     @Override
                     public void onSuccess(ArrayList<MomentPair> momentPair) {
-                        //System.out.println("#DEBUG: VIEWMODEL " + momentPair.size());
                         momentState.setValue(
                             new MomentUiState(-1, momentPair)
                         );
@@ -63,28 +59,21 @@ public class WriteViewModel extends ViewModel {
 
                     @Override
                     public void onFailure(int error) {
-
                         momentState.setValue(
                             new MomentUiState(error, new ArrayList<>())
                         );
                     }
                 });
             }
-
-            @Override
-            public void onFailure() {
-                momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
-            }
         });
     }
 
     public void writeMoment(String moment) {
-        String writtenMoment = moment;
-        authenticationRepository.isTokenValid(new TokenCallBack() {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                momentRepository.writeMoment(access_token, writtenMoment,
+                momentRepository.writeMoment(access_token, moment,
                     new MomentWriteCallBack() {
                         @Override
                         public void onSuccess(MomentPair momentPair) {
@@ -97,18 +86,19 @@ public class WriteViewModel extends ViewModel {
                         @Override
                         public void onFailure(int error) {
                             momentState.setValue(
-                                //new MomentUiState(error, new ArrayList<>())
                                 new MomentUiState(error, null)
                             );
                         }
                     });
             }
-
-            @Override
-            public void onFailure() {
-                momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
-            }
         });
+    }
 
+    abstract class WriteViewTokenCallback implements TokenCallBack {
+
+        @Override
+        public void onFailure() {
+            momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
+        }
     }
 }
