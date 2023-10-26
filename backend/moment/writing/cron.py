@@ -30,7 +30,18 @@ def auto_completion_job():
                 place="auto_completion_job",
             )
 
-            story = Story.objects.create(user=user, emotion=Emotions.INVALID)
+            story = Story.objects.create(
+                user=user,
+                emotion=Emotions.INVALID,
+                created_at=datetime.datetime(
+                    year=now.year,
+                    month=now.year,
+                    day=now.day,
+                    hour=2,
+                    minute=59,
+                    second=59,
+                ),
+            )
             story.save()
         else:
             ai_title, ai_story = get_ai_title_and_story_from_moments(
@@ -40,7 +51,19 @@ def auto_completion_job():
                 message="generated story for user {user.username}",
                 place="auto_completion_job",
             )
-            story = Story.objects.create(user=user, title=ai_title, content=ai_story)
+            story = Story.objects.create(
+                user=user,
+                title=ai_title,
+                content=ai_story,
+                created_at=datetime.datetime(
+                    year=now.year,
+                    month=now.year,
+                    day=now.day,
+                    hour=2,
+                    minute=59,
+                    second=59,
+                ),
+            )
             story.save()
 
 
