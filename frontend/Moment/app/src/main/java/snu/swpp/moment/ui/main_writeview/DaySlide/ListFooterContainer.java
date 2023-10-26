@@ -192,9 +192,6 @@ public class ListFooterContainer {
 
     public void setUiReadyToAddMoment() {
         // submit 버튼 눌렀을 때 입력창 사라지고 add 버튼 표시되는 동작
-        submitButton.startAnimation(fadeOut);
-        editTextWrapper.startAnimation(fadeOut);
-
         momentEditText.setText("");
         submitButton.setVisibility(View.GONE);
         submitButtonInactivate.setVisibility(View.VISIBLE);
