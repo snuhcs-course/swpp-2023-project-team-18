@@ -53,7 +53,7 @@ public class ListFooterContainer {
     // 새 요소 추가 시 하단으로 스크롤 하기 위한 스위치
     private final MutableLiveData<Boolean> scrollToBottomSwitch = new MutableLiveData<>(false);
 
-    private final int MOMENT_MAX_LENGTH = 1000;
+    private final int MOMENT_MAX_LENGTH = 100;
 
     public ListFooterContainer(@NonNull View view) {
         // 모먼트 작성

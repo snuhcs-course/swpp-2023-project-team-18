@@ -36,7 +36,7 @@ public class StoryContainer {
     private boolean isContentLimitExceeded = false;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
 
-    private final int STORY_TITLE_MAX_LENGTH = 100;
+    private final int STORY_TITLE_MAX_LENGTH = 20;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
 
     public StoryContainer(@NonNull View view) {
