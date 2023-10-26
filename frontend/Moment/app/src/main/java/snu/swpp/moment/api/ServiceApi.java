@@ -32,11 +32,11 @@ public interface ServiceApi {
     @POST("api/user/register")
     Call<RegisterResponse> userRegister(@Body RegisterRequest data);
 
-    @GET("api/moments/")
+    @GET("api/writing/moments/")
     Call<MomentGetResponse> getMoments(@Header("Authorization") String bearerToken,
         @Query("start") long start, @Query("end") long end);
 
-    @POST("api/moments/")
+    @POST("api/writing/moments/")
     Call<MomentWriteResponse> writeMoment(@Header("Authorization") String bearerToken,
         @Body MomentWriteRequest data);
 
