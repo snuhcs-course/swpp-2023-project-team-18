@@ -1,7 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import java.util.ArrayList;
-
 import snu.swpp.moment.data.model.MomentPair;
 
 public class MomentUiState {
@@ -15,11 +14,15 @@ public class MomentUiState {
     }
 
     public int getError() {
-        return this.error;
+        return error;
     }
 
     public ArrayList<MomentPair> getMomentPairsList() {
-        return this.momentPairsList;
+        return momentPairsList;
+    }
+
+    public int getMomentPairsListSize() {
+        return momentPairsList.size();
     }
 
     public void addMomentPair(MomentPair momentPair) {

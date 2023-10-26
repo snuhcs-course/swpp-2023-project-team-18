@@ -3,7 +3,6 @@ package snu.swpp.moment.data.repository;
 import android.content.Context;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -20,8 +19,8 @@ public class AuthenticationRepository {
 
     private static volatile AuthenticationRepository instance;
 
-    private UserRemoteDataSource remoteDataSource;
-    private UserLocalDataSource localDataSource;
+    private final UserRemoteDataSource remoteDataSource;
+    private final UserLocalDataSource localDataSource;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore

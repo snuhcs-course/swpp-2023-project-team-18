@@ -1,10 +1,8 @@
 package snu.swpp.moment.data.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
-import snu.swpp.moment.utils.TimeConverter;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

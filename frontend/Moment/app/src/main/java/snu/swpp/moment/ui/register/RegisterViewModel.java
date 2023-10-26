@@ -6,17 +6,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
-import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.model.LoggedInUser;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 
 public class RegisterViewModel extends ViewModel {
 
-    private MutableLiveData<RegisterFormState> registerFormState = new MutableLiveData<>();
-    private MutableLiveData<RegisterResultState> registerResult = new MutableLiveData<>();
+    private final MutableLiveData<RegisterFormState> registerFormState = new MutableLiveData<>();
+    private final MutableLiveData<RegisterResultState> registerResult = new MutableLiveData<>();
 
     //Repository
-    private AuthenticationRepository authenticationRepository;
+    private final AuthenticationRepository authenticationRepository;
 
     RegisterViewModel(AuthenticationRepository authenticationRepository) {
         this.authenticationRepository = authenticationRepository;
@@ -89,7 +89,7 @@ public class RegisterViewModel extends ViewModel {
         return password != null && password.trim().length() > 5;
     }
 
-    //Password check
+    // Password check
     private boolean isPasswordCheckValid(String password, String passwordCheck) {
         return (password.equals(passwordCheck));
     }

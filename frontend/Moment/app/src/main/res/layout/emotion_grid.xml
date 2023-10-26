@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:alignmentMode="alignBounds"
+    android:columnCount="5"
+    android:orientation="horizontal"
+    android:rowCount="3"
+    tools:layout_height="100dp">
+
+    <ImageView
+        android:id="@+id/emotionSun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_row="0"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        app:srcCompat="@drawable/icon_sunny" />
+    <ImageView
+        android:id="@+id/emotionSunCloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        app:srcCompat="@drawable/icon_sun_cloud" />
+    <ImageView
+        android:id="@+id/emotionCloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        app:srcCompat="@drawable/icon_cloud" />
+    <ImageView
+        android:id="@+id/emotionRain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="5dp"
+        app:srcCompat="@drawable/icon_rain" />
+    <ImageView
+        android:id="@+id/emotionLightning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        app:srcCompat="@drawable/icon_lightning" />
+
+    <TextView
+        android:id="@+id/excited1Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_row="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="설렘"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/happy1Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="기쁨"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/normal1Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="평범"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/sad1Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="슬픔"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/angry1Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="짜증"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/excited2Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="신남"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/happy2Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="행복"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/normal2Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="모름"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/sad2Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="우울"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/angry2Button"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="화남"
+        android:textColor="@color/black" />
+
+</GridLayout>

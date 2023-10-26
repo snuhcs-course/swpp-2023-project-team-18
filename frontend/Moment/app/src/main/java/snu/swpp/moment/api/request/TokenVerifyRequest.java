@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class TokenVerifyRequest {
 
     @SerializedName("token")
-    private String token;
+    private final String token;
 
     public TokenVerifyRequest(String token) {
         this.token = token;

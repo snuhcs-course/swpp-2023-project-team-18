@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingVertical="15dp">
+
+    <Button
+        android:id="@+id/storyAiButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/story_ai_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storyContentLengthText" />
+
+    <EditText
+        android:id="@+id/storyContentEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/maruburi_light"
+        android:gravity="start|top"
+        android:hint="@string/story_content_hint"
+        android:importantForAutofill="no"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        android:textColor="@color/black"
+        android:textColorHint="@color/darkgray"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storySeparator" />
+
+    <EditText
+        android:id="@+id/storyTitleEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/maruburi_bold"
+        android:hint="@string/story_title_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:lines="1"
+        android:textColor="@color/black"
+        android:textColorHint="@color/darkgray"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completeTimeText" />
+
+    <TextView
+        android:id="@+id/storyContentLengthText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/maruburi_light"
+        android:gravity="end"
+        android:textColor="@color/darkgray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storyContentEditText"
+        tools:text="N/Limit" />
+
+    <TextView
+        android:id="@+id/completeTimeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/maruburi_light"
+        android:textColor="@color/darkgray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="16:48" />
+
+    <TextView
+        android:id="@+id/aiButtonHelpText"
+        style="@style/HELP_TEXT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ai_button_help_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storyAiButton" />
+
+    <View
+        android:id="@+id/storySeparator"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/storyTitleEditText"
+        tools:layout_editor_absoluteX="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

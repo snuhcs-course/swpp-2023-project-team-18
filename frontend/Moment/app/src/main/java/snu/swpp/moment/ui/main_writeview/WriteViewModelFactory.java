@@ -1,18 +1,15 @@
 package snu.swpp.moment.ui.main_writeview;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 
 public class WriteViewModelFactory implements ViewModelProvider.Factory {
 
-    private AuthenticationRepository authenticationRepository;
-    private MomentRepository momentRepository;
+    private final AuthenticationRepository authenticationRepository;
+    private final MomentRepository momentRepository;
 
     public WriteViewModelFactory(
         AuthenticationRepository authenticationRepository,

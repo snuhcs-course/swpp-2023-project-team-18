@@ -1,7 +1,7 @@
 package snu.swpp.moment.data.callback;
 
-import snu.swpp.moment.data.model.MomentPair;
 import java.util.ArrayList;
+import snu.swpp.moment.data.model.MomentPair;
 
 public interface MomentGetCallBack {
 

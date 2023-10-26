@@ -20,8 +20,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login_register);
         System.out.println("#DEBUG loginregister start");
         // Initialize the loginButton by referencing the XML layout
-        loginButton = findViewById(
-            R.id.main_login);  // make sure the ID matches the button ID in your XML layout
+        loginButton = findViewById(R.id.main_login);
         registerButton = findViewById(R.id.main_register);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -44,8 +43,6 @@ public class LoginRegisterActivity extends AppCompatActivity {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // Your custom back pressed logic here.
-                // If you want to terminate the app:
                 finishAffinity();
                 System.exit(0);
             }

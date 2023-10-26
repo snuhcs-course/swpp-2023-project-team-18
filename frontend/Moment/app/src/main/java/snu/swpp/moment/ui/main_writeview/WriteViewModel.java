@@ -1,16 +1,11 @@
 package snu.swpp.moment.ui.main_writeview;
 
-import android.content.Intent;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -24,8 +19,8 @@ public class WriteViewModel extends ViewModel {
     private final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
     private final int REFRESH_TOKEN_EXPIRED = 1;
     private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
-    private AuthenticationRepository authenticationRepository;
-    private MomentRepository momentRepository;
+    private final AuthenticationRepository authenticationRepository;
+    private final MomentRepository momentRepository;
 
     public WriteViewModel(AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository) {
@@ -42,12 +37,6 @@ public class WriteViewModel extends ViewModel {
     }
 
     public void getMoment(int year, int month, int date) {
-        //Date startDate = new Date(year, month, date, 3, 0);
-        //Date endDate = new Date(startDate.getTime()+MILLIS_IN_A_DAY-1);
-        //long start = new Timestamp(startDate.getTime()).getTime();
-        //long end = new Timestamp(endDate.getTime()).getTime();
-        //long start = 1697808500;
-        //long end = 1697808999;
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
         Date startDate = calendar.getTime();
