@@ -28,8 +28,6 @@ public class UserRemoteDataSource {
     LoggedInUser loggedInUser = null;
     Integer error;
 
-    // Access Token 확인하는 로직도 여기에
-
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
         service = RetrofitClient.getClient().create(ServiceApi.class);
         LoginRequest loginRequest = new LoginRequest(username, password);
@@ -86,7 +84,6 @@ public class UserRemoteDataSource {
                         registerCallBack.onFailure(message);
                     }
                 }
-                /* ## TODO code 받는 코드 전부 변경  */
             }
 
             @Override
@@ -142,9 +139,5 @@ public class UserRemoteDataSource {
             public void onFailure(Call<TokenRefreshResponse> call, Throwable t) {
             }
         });
-    }
-
-    public void logout() {
-        // TODO: revoke authentication
     }
 }

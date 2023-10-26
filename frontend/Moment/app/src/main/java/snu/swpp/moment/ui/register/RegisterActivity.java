@@ -163,7 +163,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void updateUiWithUser(RegisterUserState model) {
         String welcome = getString(R.string.welcome);
-        // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
