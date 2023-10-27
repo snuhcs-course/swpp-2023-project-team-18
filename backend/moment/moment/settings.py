@@ -180,6 +180,6 @@ CRONJOBS = [
     (
         "0 3 * * *",
         "writing.cron.auto_completion_job",
-        ">> " + os.path.join(BASE_DIR, "config/log/cron.log") + " 2>&1 ",
+        ">> " + os.path.join(BASE_DIR, "cron.log") + " 2>&1 ",
     )
 ]
