@@ -8,7 +8,7 @@
     android:paddingHorizontal="16dp">
 
     <ListView
-        android:id="@+id/listview_list"
+        android:id="@+id/dailyMomentList"
         android:layout_width="match_parent"
         android:layout_height="665dp"
         android:layout_weight="1"

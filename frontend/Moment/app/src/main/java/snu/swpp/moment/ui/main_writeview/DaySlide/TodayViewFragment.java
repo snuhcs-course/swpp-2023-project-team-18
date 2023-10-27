@@ -38,8 +38,8 @@ import snu.swpp.moment.utils.KeyboardUtils;
 public class TodayViewFragment extends Fragment {
 
     private TodayItemBinding binding;
-    private List<ListViewItem> items;
-    private ListViewAdapter mAdapter;
+    private List<ListViewItem> listViewItems;
+    private ListViewAdapter listViewAdapter;
 
     private BottomButtonContainer bottomButtonContainer;
     private ListFooterContainer listFooterContainer;
@@ -90,7 +90,7 @@ public class TodayViewFragment extends Fragment {
     }
 
     private void initializeListView(View root) {
-        items = new ArrayList<>();
+        listViewItems = new ArrayList<>();
 
         viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<MomentUiState>() {
             @Override
@@ -101,16 +101,17 @@ public class TodayViewFragment extends Fragment {
                     bottomButtonContainer.setActivated(numMoments != 0);
 
                     if (numMoments > 0) {
-                        items.clear();
+                        listViewItems.clear();
                         for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
                             String userInput = momentPair.getMoment();
                             String serverResponse = momentPair.getReply();
                             String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(
                                 momentPair.getMomentCreatedTime());
-                            items.add(new ListViewItem(userInput, createdTime, serverResponse));
+                            listViewItems.add(
+                                new ListViewItem(userInput, createdTime, serverResponse));
                         }
 
-                        mAdapter.notifyDataSetChanged();
+                        listViewAdapter.notifyDataSetChanged();
                         scrollToBottom();
                     }
                 } else {
@@ -136,11 +137,11 @@ public class TodayViewFragment extends Fragment {
         int date = today.getDayOfMonth();
         viewModel.getMoment(year, month, date);
 
-        mAdapter = new ListViewAdapter(getContext(), items);
-        binding.listviewList.setAdapter(mAdapter);
+        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        binding.todayMomentList.setAdapter(listViewAdapter);
         View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, binding.listviewList, false);
-        binding.listviewList.addFooterView(footerView);
+            .inflate(R.layout.listview_footer, binding.todayMomentList, false);
+        binding.todayMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
         listFooterContainer = new ListFooterContainer(footerView);
@@ -151,7 +152,7 @@ public class TodayViewFragment extends Fragment {
 
             int numMoments = viewModel.getMomentState().getValue().getMomentPairsListSize();
             if (numMoments >= 2) {
-                String createdSecond = items.get(numMoments - 2).getInputTime();
+                String createdSecond = listViewItems.get(numMoments - 2).getInputTime();
 
                 try {
                     Date createdDate = inputFormat.parse(createdSecond);
@@ -203,14 +204,14 @@ public class TodayViewFragment extends Fragment {
 
     private void addItem(String userInput) {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
-        items.add(new ListViewItem(userInput, currentTime, ""));
-        mAdapter.notifyDataSetChanged();
+        listViewItems.add(new ListViewItem(userInput, currentTime, ""));
+        listViewAdapter.notifyDataSetChanged();
         scrollToBottom();
     }
 
     private void scrollToBottom() {
-        binding.listviewList.post(() -> binding.listviewList.smoothScrollToPosition(
-            binding.listviewList.getCount() - 1));
+        binding.todayMomentList.post(() -> binding.todayMomentList.smoothScrollToPosition(
+            binding.todayMomentList.getCount() - 1));
     }
 
     @Override

@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import snu.swpp.moment.R;
@@ -17,7 +16,7 @@ public class BottomButtonContainer {
     private final ListFooterContainer listFooterContainer;
 
     public BottomButtonContainer(@NonNull View view, ListFooterContainer listFooterContainer) {
-        button = view.findViewById(R.id.bottom_button);
+        button = view.findViewById(R.id.bottomButton);
 
         this.view = view;
         this.listFooterContainer = listFooterContainer;

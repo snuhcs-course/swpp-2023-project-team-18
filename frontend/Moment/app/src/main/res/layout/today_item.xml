@@ -8,7 +8,7 @@
     android:paddingHorizontal="16dp">
 
     <ListView
-        android:id="@+id/listview_list"
+        android:id="@+id/todayMomentList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -16,7 +16,7 @@
         android:dividerHeight="15dp" />
 
     <Button
-        android:id="@+id/bottom_button"
+        android:id="@+id/bottomButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -31,5 +31,5 @@
         android:fontFamily="@font/maruburi_bold"
         android:shadowColor="@color/white"
         android:text="@string/day_complete_string" />
-    
+
 </RelativeLayout>

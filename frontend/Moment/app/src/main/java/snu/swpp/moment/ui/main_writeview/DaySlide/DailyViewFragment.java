@@ -18,9 +18,10 @@ import snu.swpp.moment.ui.main_writeview.ListViewItem;
 public class DailyViewFragment extends Fragment {
 
     private DailyItemBinding binding;
-    private List<ListViewItem> items;
-    private ListViewAdapter mAdapter;
-    private ListView listView;
+    private List<ListViewItem> listViewItems;
+    private ListViewAdapter listViewAdapter;
+
+    private ListFooterContainer listFooterContainer;
 
 
     @Override
@@ -31,23 +32,30 @@ public class DailyViewFragment extends Fragment {
 
         // Initialize ListView and related components
         initializeListView(root);
-        System.out.println("#DEBUG: Initialized list view");
 
         return root;
     }
 
     private void initializeListView(View root) {
-        listView = root.findViewById(R.id.listview_list);
-        items = new ArrayList<>();
-        mAdapter = new ListViewAdapter(getContext(), items);
-        listView.setAdapter(mAdapter);
+        listViewItems = new ArrayList<>();
+
+        // TODO: moment GET API 호출해서 listViewItems 채우기
+
+        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        binding.dailyMomentList.setAdapter(listViewAdapter);
+        View footerView = LayoutInflater.from(getContext())
+            .inflate(R.layout.listview_footer, null, false);
+        binding.dailyMomentList.addFooterView(footerView);
+
+        // list footer 관리 객체 초기화
+        listFooterContainer = new ListFooterContainer(footerView);
     }
 
     private void addItem(String userInput) {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(new Date());
-        items.add(new ListViewItem(userInput, currentTime, ""));
-        mAdapter.notifyDataSetChanged();
-        listView.setSelection(items.size() - 1);
+        listViewItems.add(new ListViewItem(userInput, currentTime, ""));
+        listViewAdapter.notifyDataSetChanged();
+        binding.dailyMomentList.setSelection(listViewItems.size() - 1);
     }
 
     @Override
