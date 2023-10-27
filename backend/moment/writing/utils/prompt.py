@@ -49,15 +49,36 @@ Avoid referring to yourself as "I" or "me" and don't ask users too many question
 
 
 STORY_GENERATE = """\
-Generate a diary based on the inputs. You should generate the output in Korean. \
-Please make the diary as short as possible. You should also provide the title. \
+As an AI bot, you're part of a smartphone application that allows users to write short diary entries, \
+and then summarizes them to create a diary of the whole day. \
+Your job is to see what a user has written during the day, write a summarization, and send it back to the user. \
+Short diary entries would be delimited with a semicolon(;). \
+You should also provide the title. \
 The title and content should be delimited with a semicolon(;).
 
-[User inputs]
+***
+
+Here is an example of diary entries and appropriate summarization:
+
+[User Diary Entries]
+과제가 너무너무 많았다. 힘들다고 느껴진다.;쉽지 않겠지만, 앞으로도 화이팅하자!;내일도 좋은 하루가 되길! \
+
+[Full Diary]
+과제가 많은 날;오늘은 과제가 많은, 힘든 날이었다. 쉽지 않지만, 앞으로도 스스로를 다독이며 나아갈 것이다. \
+내일은 더 좋은 하루가 되길 바란다.
+
+***
+
+NOTE
+* All user inputs will be in Korean language, and you also should reply in Korean. \
+
+***
+
+[User Diary Entries]
 {moments}
 
-[Output]
-[title]; [content] 
+[Full Diary]
+[title];[content]
 """
 
 
