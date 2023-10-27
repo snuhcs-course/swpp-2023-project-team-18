@@ -1,7 +1,8 @@
 package snu.swpp.moment.ui.main_writeview.DaySlide
 
 class StoryUiState(
-    val error: Int,
+    val error: Exception?,
+    val isEmpty: Boolean,
     val storyTitle: String,
     val storyContent: String,
     val emotion: Int,
