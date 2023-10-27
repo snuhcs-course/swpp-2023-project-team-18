@@ -27,7 +27,7 @@ public class StoryGetResponse {
         @SerializedName("content")
         private String content;
 
-        @SerializedName("hastags")
+        @SerializedName("hashtags")
         private List<StoryGetResponse.Hashtag> hashtags;
 
         @SerializedName("created_at")
