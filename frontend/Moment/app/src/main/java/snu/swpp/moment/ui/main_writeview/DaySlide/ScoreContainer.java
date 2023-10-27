@@ -8,12 +8,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import snu.swpp.moment.R;
+import snu.swpp.moment.utils.AnimationProvider;
 
 public class ScoreContainer {
 
     private final ConstraintLayout scoreWrapper;
     private final SeekBar scoreSeekBar;
     private final TextView scoreText;
+    private final AnimationProvider animationProvider;
 
     private int score;
     private final int DEFAULT_SCORE = 3;
@@ -22,6 +24,7 @@ public class ScoreContainer {
         scoreWrapper = (ConstraintLayout) view;
         scoreSeekBar = view.findViewById(R.id.scoreSeekBar);
         scoreText = view.findViewById(R.id.scoreText);
+        animationProvider = new AnimationProvider(view);
 
         scoreSeekBar.setProgress(DEFAULT_SCORE);
         score = DEFAULT_SCORE;
@@ -50,7 +53,6 @@ public class ScoreContainer {
 
     public void setUiVisible() {
         scoreWrapper.setVisibility(View.VISIBLE);
-        Animation fadeIn = AnimationUtils.loadAnimation(scoreWrapper.getContext(), R.anim.fade_in);
-        scoreWrapper.startAnimation(fadeIn);
+        scoreWrapper.startAnimation(animationProvider.fadeIn);
     }
 }

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import snu.swpp.moment.R;
+import snu.swpp.moment.utils.AnimationProvider;
 
 public class StoryContainer {
 
@@ -29,7 +30,7 @@ public class StoryContainer {
     private final TextView aiButtonHelpText;
     private final Button storyAiButton;
 
-    private final Animation fadeIn;
+    private final AnimationProvider animationProvider;
 
     // 글자수 제한 초과 검사
     private boolean isTitleLimitExceeded = false;
@@ -48,7 +49,7 @@ public class StoryContainer {
         aiButtonHelpText = view.findViewById(R.id.aiButtonHelpText);
         storyAiButton = view.findViewById(R.id.storyAiButton);
 
-        fadeIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
+        animationProvider = new AnimationProvider(view);
 
         // storyTitleEditText 입력 감지
         storyTitleEditText.addTextChangedListener(new TextWatcher() {
@@ -170,7 +171,7 @@ public class StoryContainer {
     public void setUiWritingStory(String completeTime) {
         storyWrapper.setVisibility(View.VISIBLE);
         completeTimeText.setText(completeTime);
-        storyWrapper.startAnimation(fadeIn);
+        storyWrapper.startAnimation(animationProvider.fadeIn);
     }
 
     public void setUiCompleteStory() {

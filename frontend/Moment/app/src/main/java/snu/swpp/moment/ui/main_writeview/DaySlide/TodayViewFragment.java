@@ -180,7 +180,7 @@ public class TodayViewFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
             INPUT_METHOD_SERVICE);
         listFooterContainer.setSubmitButtonOnClickListener(v -> {
-            String text = listFooterContainer.getInputText();
+            String text = listFooterContainer.getMomentInputText();
 
             // 소프트 키보드 숨기기
             if (imm != null && getActivity().getCurrentFocus() != null) {
