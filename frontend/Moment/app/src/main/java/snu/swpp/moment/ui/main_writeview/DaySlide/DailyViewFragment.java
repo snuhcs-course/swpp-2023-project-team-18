@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import snu.swpp.moment.R;
@@ -47,8 +47,18 @@ public class DailyViewFragment extends Fragment {
             .inflate(R.layout.listview_footer, null, false);
         binding.dailyMomentList.addFooterView(footerView);
 
+        // TODO: story GET API 호출해서 footer 채우기
+        StoryUiState storyUiState = new StoryUiState(
+            0,
+            "스토리 제목",
+            "스토리 내용",
+            1,
+            Arrays.asList("태그1", "태그2"),
+            5
+        );
+
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView);
+        listFooterContainer = new ListFooterContainer(footerView, storyUiState);
     }
 
     private void addItem(String userInput) {

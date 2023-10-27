@@ -25,8 +25,6 @@ public class SlideViewAdapter extends FragmentStateAdapter {
         } else {
             return new DailyViewFragment();
         }
-
-
     }
 
     // 전체 페이지수

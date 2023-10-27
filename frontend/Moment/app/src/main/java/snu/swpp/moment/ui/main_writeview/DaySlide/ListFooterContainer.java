@@ -73,6 +73,25 @@ public class ListFooterContainer {
         });
     }
 
+    public ListFooterContainer(View view, StoryUiState storyUiState) {
+        this(view);
+
+        storyContainer.setStoryText(storyUiState.getStoryTitle(), storyUiState.getStoryContent());
+        storyContainer.freeze();
+        storyContainer.setUiCompleteStory();
+
+        emotionGridContainer.selectEmotion(storyUiState.getEmotion());
+        emotionGridContainer.freeze();
+        emotionWrapper.setVisibility(View.VISIBLE);
+
+        tagBoxContainer.setTags(storyUiState.getTags());
+        tagBoxContainer.freeze();
+        tagBoxContainer.setUiVisible();
+
+        scoreContainer.setScore(storyUiState.getScore());
+        scoreContainer.setUiVisible();
+    }
+
     public String getMomentInputText() {
         return momentWriterContainer.getInputText();
     }

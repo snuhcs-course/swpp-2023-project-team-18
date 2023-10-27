@@ -180,13 +180,13 @@ public class StoryContainer {
         storyAiButton.setVisibility(View.GONE);
     }
 
-    private void checkLimitExceeded() {
-        isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);
-    }
-
-    private void setStoryText(String title, String content) {
+    public void setStoryText(String title, String content) {
         storyTitleEditText.setText(title);
         storyContentEditText.setText(content);
+    }
+
+    private void checkLimitExceeded() {
+        isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);
     }
 
     private void setStoryContentLengthText(int count) {
