@@ -537,12 +537,19 @@ class GetStoryTest(TestCase):
     timestamp2 = 1698200586
     content1 = "content1"
     content2 = "content2"
+    hashtag1 = "h2"
+    hashtag2 = "h1"
+    hashtag3 = "h3"
 
     def setUp(self):
         test_user = User.objects.create(username="impri", nickname="impri")
         test_user.set_password("123456")
         other_user = User.objects.create(username="otheruser", nickname="impri")
         other_user.set_password("123456")
+        test_user_hashtag1 = Hashtag.objects.create(content=self.hashtag1)
+        test_user_hashtag2 = Hashtag.objects.create(content=self.hashtag2)
+        test_user_hashtag1.save()
+        test_user_hashtag2.save()
         story1 = Story.objects.create(
             created_at=datetime.datetime.fromtimestamp(self.timestamp1),
             user=test_user,
@@ -553,6 +560,8 @@ class GetStoryTest(TestCase):
             user=test_user,
             content=self.content2,
         )
+        story1.hashtags.add(test_user_hashtag1)
+        story1.hashtags.add(test_user_hashtag2)
         story1.save()
         story2.save()
 
@@ -580,6 +589,14 @@ class GetStoryTest(TestCase):
         self.assertEqual(response.data["stories"][0]["content"], self.content1)
         self.assertEqual(response.data["stories"][1]["content"], self.content2)
 
+        story1_hashtags = response.data["stories"][0]["hashtags"]
+        self.assertEqual(len(story1_hashtags), 2)
+        self.assertEqual(story1_hashtags[0]["content"], self.hashtag1)
+        self.assertEqual(story1_hashtags[1]["content"], self.hashtag2)
+
+        story2_hashtags = response.data["stories"][1]["hashtags"]
+        self.assertEqual(len(story2_hashtags), 0)
+
     def test_get_only_one_story(self):
         factory = APIRequestFactory()
         user = User.objects.get(username="impri")
@@ -590,7 +607,11 @@ class GetStoryTest(TestCase):
         force_authenticate(request, user=user)
         response = view(request)
         self.assertEqual(response.data["stories"][0]["created_at"], self.timestamp1)
-        self.assertEqual(len(response.data["stories"]), 1)
+
+        story1_hashtags = response.data["stories"][0]["hashtags"]
+        self.assertEqual(len(story1_hashtags), 2)
+        self.assertEqual(story1_hashtags[0]["content"], self.hashtag1)
+        self.assertEqual(story1_hashtags[1]["content"], self.hashtag2)
 
     def test_not_get_others_stories(self):
         factory = APIRequestFactory()
