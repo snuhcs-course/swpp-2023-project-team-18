@@ -19,15 +19,8 @@ services:
         python3 manage.py collectstatic --no-input &&
         python3 manage.py makemigrations &&
         python3 manage.py migrate &&
+        service cron start && python3 manage.py crontab add && tail -f /dev/null &&
         gunicorn moment.wsgi:application -b 0:3000"
     volumes:
         - ./moment:/moment
         - ./config/gunicorn:/etc/systemd/system
-  cron:
-    build: .
-    container_name: cg01
-    command: bash -c "service cron start && python3 manage.py crontab add && tail -f /dev/null"
-    volumes:
-      ./moment:/moment
-      ./config/gunicorn:/etc/systemd/system
-    depends_on: web
