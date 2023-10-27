@@ -181,7 +181,7 @@ public class StoryContainer {
     }
 
     public void setCompleteTimeText(Date completeTime) {
-        completeTimeText.setText(TimeConverter.formatTime(completeTime));
+        completeTimeText.setText(TimeConverter.formatDate(completeTime, "HH:mm"));
     }
 
     public void setStoryText(String title, String content) {

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
@@ -34,6 +34,7 @@ import snu.swpp.moment.ui.main_writeview.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
+import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewFragment extends Fragment {
 
@@ -94,36 +95,33 @@ public class TodayViewFragment extends Fragment {
     private void initializeListView(View root) {
         listViewItems = new ArrayList<>();
 
-        viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<MomentUiState>() {
-            @Override
-            public void onChanged(MomentUiState momentUiState) {
-                if (momentUiState.getError() == -1) {
-                    // 모먼트가 하나도 없으면 하단 버튼 비활성화
-                    int numMoments = momentUiState.getMomentPairsListSize();
-                    bottomButtonContainer.setActivated(numMoments != 0);
+        viewModel.getMomentState().observe(getViewLifecycleOwner(), momentUiState -> {
+            if (momentUiState.getError() == -1) {
+                // 모먼트가 하나도 없으면 하단 버튼 비활성화
+                int numMoments = momentUiState.getMomentPairsListSize();
+                bottomButtonContainer.setActivated(numMoments != 0);
 
-                    if (numMoments > 0) {
-                        listViewItems.clear();
-                        for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
-                            listViewItems.add(new ListViewItem(momentPair));
-                        }
-
-                        listViewAdapter.notifyDataSetChanged();
-                        scrollToBottom();
+                if (numMoments > 0) {
+                    listViewItems.clear();
+                    for (MomentPairModel momentPair : momentUiState.getMomentPairsList()) {
+                        listViewItems.add(new ListViewItem(momentPair));
                     }
+
+                    listViewAdapter.notifyDataSetChanged();
+                    scrollToBottom();
+                }
+            } else {
+                if (momentUiState.getError() == NO_INTERNET) {
+                    Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                        .show();
+                } else if (momentUiState.getError() == ACCESS_TOKEN_EXPIRED) {
+                    Toast.makeText(getContext(), R.string.token_expired_error,
+                        Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                    startActivity(intent);
                 } else {
-                    if (momentUiState.getError() == NO_INTERNET) {
-                        Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                            .show();
-                    } else if (momentUiState.getError() == ACCESS_TOKEN_EXPIRED) {
-                        Toast.makeText(getContext(), R.string.token_expired_error,
-                            Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                            .show();
-                    }
+                    Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                        .show();
                 }
             }
         });
@@ -200,7 +198,7 @@ public class TodayViewFragment extends Fragment {
     }
 
     private void addItem(String userInput) {
-        String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
+        String currentTime = TimeConverter.formatDate(new Date(), "yyyy.MM.dd. HH:mm");
         listViewItems.add(new ListViewItem(userInput, currentTime, ""));
         listViewAdapter.notifyDataSetChanged();
         scrollToBottom();

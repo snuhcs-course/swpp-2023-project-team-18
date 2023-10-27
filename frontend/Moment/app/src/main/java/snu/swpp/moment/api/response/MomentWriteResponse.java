@@ -1,7 +1,7 @@
 package snu.swpp.moment.api.response;
 
 import com.google.gson.annotations.SerializedName;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 
 public class MomentWriteResponse {
 
@@ -42,8 +42,8 @@ public class MomentWriteResponse {
         }
     }
 
-    public MomentPair getMomentPair() {
-        return new MomentPair(moment.getId(), moment.getMoment(), moment.getReply(),
+    public MomentPairModel getMomentPair() {
+        return new MomentPairModel(moment.getId(), moment.getMoment(), moment.getReply(),
             moment.getMoment_created_at(), moment.getReply_created_at());
     }
 }

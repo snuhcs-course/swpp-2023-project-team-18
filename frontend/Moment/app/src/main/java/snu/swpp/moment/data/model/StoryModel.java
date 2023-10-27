@@ -4,24 +4,24 @@ import java.util.Date;
 import java.util.List;
 import snu.swpp.moment.utils.TimeConverter;
 
-public class Story {
+public class StoryModel {
 
     private final int id;
     private final String emotion;
     private final int score;
     private final String title;
     private final String content;
-    private final List<Hashtag> hashtags;
+    private final List<HashtagModel> hashtags;
     private final Date createdAt;
 
-    public Story(int id, String emotion, int score, String title, String content,
-        List<Hashtag> hashtags, Long createdAt) {
+    public StoryModel(int id, String emotion, int score, String title, String content,
+        List<HashtagModel> hashtagModels, Long createdAt) {
         this.id = id;
         this.emotion = emotion;
         this.score = score;
         this.title = title;
         this.content = content;
-        this.hashtags = hashtags;
+        this.hashtags = hashtagModels;
         this.createdAt = TimeConverter.convertLongToDate(createdAt);
     }
 
@@ -41,7 +41,7 @@ public class Story {
         return content;
     }
 
-    public List<Hashtag> getHashtags() {
+    public List<HashtagModel> getHashtags() {
         return hashtags;
     }
 

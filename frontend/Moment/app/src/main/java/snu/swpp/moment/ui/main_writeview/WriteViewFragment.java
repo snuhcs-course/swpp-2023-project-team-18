@@ -75,7 +75,7 @@ public class WriteViewFragment extends Fragment {
                         mPager.setCurrentItem(0, false);
                     }
                     LocalDate pageDate = TimeConverter.getToday().minusDays(num_page - index - 1);
-                    String formattedDate = TimeConverter.formatDate(pageDate);
+                    String formattedDate = TimeConverter.formatLocalDate(pageDate, "yyyy. MM. dd.");
                     MainActivity activity = (MainActivity) getActivity();
                     activity.setToolbarTitle(formattedDate);
                 }

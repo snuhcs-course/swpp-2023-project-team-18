@@ -1,6 +1,5 @@
 package snu.swpp.moment.ui.main_writeview;
 
-import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,7 +9,7 @@ import java.util.Date;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.utils.TimeConverter;
@@ -44,7 +43,7 @@ public class TodayViewModel extends ViewModel {
                 String access_token = authenticationRepository.getToken().getAccessToken();
                 momentRepository.getMoment(access_token, start, end, new MomentGetCallBack() {
                     @Override
-                    public void onSuccess(ArrayList<MomentPair> momentPair) {
+                    public void onSuccess(ArrayList<MomentPairModel> momentPair) {
                         momentState.setValue(
                             new MomentUiState(-1, momentPair)
                         );
@@ -69,8 +68,8 @@ public class TodayViewModel extends ViewModel {
                 momentRepository.writeMoment(access_token, moment,
                     new MomentWriteCallBack() {
                         @Override
-                        public void onSuccess(MomentPair momentPair) {
-                            ArrayList<MomentPair> reply = momentState.getValue()
+                        public void onSuccess(MomentPairModel momentPair) {
+                            ArrayList<MomentPairModel> reply = momentState.getValue()
                                 .getMomentPairsList();
                             reply.add(momentPair);
                             momentState.setValue(new MomentUiState(-1, reply));
@@ -107,17 +106,20 @@ public class TodayViewModel extends ViewModel {
         }
     }
 
-    private class StartAndEndDateInLong {
-        private long start;
-        private long end;
+    private static class StartAndEndDateInLong {
+
+        private final long start;
+        private final long end;
 
         public StartAndEndDateInLong(long start, long end) {
             this.start = start;
             this.end = end;
         }
+
         public long getStart() {
             return start;
         }
+
         public long getEnd() {
             return end;
         }

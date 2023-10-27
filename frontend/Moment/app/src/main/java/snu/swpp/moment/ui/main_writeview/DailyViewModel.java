@@ -10,9 +10,9 @@ import java.util.List;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.StoryGetCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
-import snu.swpp.moment.data.model.Hashtag;
-import snu.swpp.moment.data.model.MomentPair;
-import snu.swpp.moment.data.model.Story;
+import snu.swpp.moment.data.model.HashtagModel;
+import snu.swpp.moment.data.model.MomentPairModel;
+import snu.swpp.moment.data.model.StoryModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
@@ -59,7 +59,7 @@ public class DailyViewModel extends ViewModel {
                 String access_token = authenticationRepository.getToken().getAccessToken();
                 momentRepository.getMoment(access_token, start, end, new MomentGetCallBack() {
                     @Override
-                    public void onSuccess(ArrayList<MomentPair> momentPair) {
+                    public void onSuccess(ArrayList<MomentPairModel> momentPair) {
                         momentState.setValue(
                             new MomentUiState(-1, momentPair)
                         );
@@ -87,18 +87,18 @@ public class DailyViewModel extends ViewModel {
                 String access_token = authenticationRepository.getToken().getAccessToken();
                 storyRepository.getStory(access_token, start, end, new StoryGetCallBack() {
                     @Override
-                    public void onSuccess(ArrayList<Story> story) {
+                    public void onSuccess(ArrayList<StoryModel> story) {
                         if (story.isEmpty()) {
                             storyState.setValue(StoryUiState.empty());
                         } else {
-                            Story storyInstance = story.get(0);
+                            StoryModel storyInstance = story.get(0);
                             String title = storyInstance.getTitle();
                             String content = storyInstance.getContent();
                             int emotion = EmotionMap.getEmotionInt(storyInstance.getEmotion());
-                            List<Hashtag> tags = storyInstance.getHashtags();
+                            List<HashtagModel> tags = storyInstance.getHashtags();
                             List<String> parsedTags = new ArrayList<>();
-                            for (Hashtag hashtag : tags) {
-                                parsedTags.add(hashtag.getContent());
+                            for (HashtagModel hashtagModel : tags) {
+                                parsedTags.add(hashtagModel.getContent());
                             }
                             int score = storyInstance.getScore();
                             Date createdAt = storyInstance.getCreatedAt();

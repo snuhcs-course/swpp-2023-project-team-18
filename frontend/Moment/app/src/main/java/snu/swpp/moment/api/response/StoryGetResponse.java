@@ -3,14 +3,15 @@ package snu.swpp.moment.api.response;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
-import snu.swpp.moment.data.model.Story;
+import snu.swpp.moment.data.model.HashtagModel;
+import snu.swpp.moment.data.model.StoryModel;
 
 public class StoryGetResponse {
 
     @SerializedName("stories")
     private List<StoryResponse> storyList;
 
-    private class StoryResponse {
+    private static class StoryResponse {
 
         @SerializedName("id")
         private int id;
@@ -34,7 +35,7 @@ public class StoryGetResponse {
         private long createdAt;
     }
 
-    private class Hashtag {
+    private static class Hashtag {
 
         @SerializedName("id")
         private int id;
@@ -44,10 +45,10 @@ public class StoryGetResponse {
 
     }
 
-    public ArrayList<Story> getStoryList() {
-        ArrayList<Story> result = new ArrayList<>();
+    public ArrayList<StoryModel> getStoryList() {
+        ArrayList<StoryModel> result = new ArrayList<>();
         for (StoryResponse storyResponse : storyList) {
-            result.add(new Story(
+            result.add(new StoryModel(
                 storyResponse.id,
                 storyResponse.emotion,
                 storyResponse.score,
@@ -60,10 +61,11 @@ public class StoryGetResponse {
         return result;
     }
 
-    private List<snu.swpp.moment.data.model.Hashtag> convertHashtags(List<Hashtag> hashtags) {
-        List<snu.swpp.moment.data.model.Hashtag> result = new ArrayList<>();
+    private List<HashtagModel> convertHashtags(List<Hashtag> hashtags) {
+        assert hashtags != null;
+        List<snu.swpp.moment.data.model.HashtagModel> result = new ArrayList<>();
         for (Hashtag hashtag : hashtags) {
-            result.add(new snu.swpp.moment.data.model.Hashtag(hashtag.id, hashtag.content));
+            result.add(new HashtagModel(hashtag.id, hashtag.content));
         }
         return result;
     }

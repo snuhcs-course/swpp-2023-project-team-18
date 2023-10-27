@@ -10,19 +10,19 @@ import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 
 public class MomentRemoteDataSource {
 
     private ServiceApi service;
-    private MomentPair momentPair;
+    private MomentPairModel momentPair;
     private Integer error;
     private final int NO_INTERNET = 0;
 
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        service.getMoments(bearer, start, end).enqueue(new Callback<MomentGetResponse>() {
+        service.getMoments(bearer, start, end).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<MomentGetResponse> call,
                 Response<MomentGetResponse> response) {
@@ -45,7 +45,7 @@ public class MomentRemoteDataSource {
         String bearer = "Bearer " + access_token;
         MomentWriteRequest request = new MomentWriteRequest(moment);
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        service.writeMoment(bearer, request).enqueue(new Callback<MomentWriteResponse>() {
+        service.writeMoment(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<MomentWriteResponse> call,
                 Response<MomentWriteResponse> response) {

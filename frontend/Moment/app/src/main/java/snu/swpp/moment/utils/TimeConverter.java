@@ -28,13 +28,13 @@ public class TimeConverter {
         return updateDateFromThree(today, hour);
     }
 
-    public static String formatDate(LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd.");
+    public static String formatLocalDate(LocalDate date, String formatString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatString);
         return date.format(formatter);
     }
 
-    public static String formatTime(Date date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    public static String formatDate(Date date, String formatString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatString);
         return date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalTime()
             .format(formatter);
     }

@@ -4,7 +4,7 @@ import java.util.Date;
 import snu.swpp.moment.utils.TimeConverter;
 
 
-public class MomentPair {
+public class MomentPairModel {
 
     private final long id;
     private final String moment;
@@ -12,7 +12,7 @@ public class MomentPair {
     private final Date moment_created_at;
     private final Date reply_created_at;
 
-    public MomentPair(long id, String moment, String reply, long moment_created_at,
+    public MomentPairModel(long id, String moment, String reply, long moment_created_at,
         long reply_created_at) {
         this.id = id;
         this.moment = moment;

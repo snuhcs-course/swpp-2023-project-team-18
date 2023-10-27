@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
@@ -93,7 +93,7 @@ public class DailyViewFragment extends Fragment {
                     int numMoments = momentUiState.getMomentPairsListSize();
                     if (numMoments > 0) {
                         listViewItems.clear();
-                        for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
+                        for (MomentPairModel momentPair : momentUiState.getMomentPairsList()) {
                             listViewItems.add(new ListViewItem(momentPair));
                         }
 

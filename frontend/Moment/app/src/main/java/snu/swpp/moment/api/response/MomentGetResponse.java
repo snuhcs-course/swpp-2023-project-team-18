@@ -3,7 +3,7 @@ package snu.swpp.moment.api.response;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 
 public class MomentGetResponse {
 
@@ -44,10 +44,10 @@ public class MomentGetResponse {
         }
     }
 
-    public ArrayList<MomentPair> getMomentList() {
-        ArrayList<MomentPair> result = new ArrayList<>();
+    public ArrayList<MomentPairModel> getMomentList() {
+        ArrayList<MomentPairModel> result = new ArrayList<>();
         for (Moment moment : momentList) {
-            result.add(new MomentPair(
+            result.add(new MomentPairModel(
                 moment.getId(),
                 moment.getMoment(),
                 moment.getReply(),
