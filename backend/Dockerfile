@@ -15,6 +15,9 @@ RUN apt-get install -y libssl-dev
 # RUN apt-get install -y mysql-client
 # RUN apt-get install -y libmysqlclient-dev
 
+# add cron for auto day completion
+RUN apt-get install -y cron && touch ./cron.log
+
 RUN pip3 install --upgrade pip
 RUN pip3 install --upgrade setuptools
 
