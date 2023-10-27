@@ -3,6 +3,7 @@ package snu.swpp.moment.utils;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TimeConverter {
@@ -37,5 +38,18 @@ public class TimeConverter {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatString);
         return date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalTime()
             .format(formatter);
+    }
+
+    public static long[] getOneDayIntervalTimestamps(int year, int month, int date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
+        Date startDate = calendar.getTime();
+
+        final int MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
+        calendar.add(Calendar.MILLISECOND, MILLIS_IN_A_DAY - 1);
+        Date endDate = calendar.getTime();
+        long start = TimeConverter.convertDateToLong(startDate);
+        long end = TimeConverter.convertDateToLong(endDate);
+        return new long[]{start, end};
     }
 }

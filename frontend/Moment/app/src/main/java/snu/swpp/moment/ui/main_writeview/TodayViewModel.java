@@ -16,7 +16,6 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewModel extends ViewModel {
 
-    private final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
     private final int REFRESH_TOKEN_EXPIRED = 1;
     private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
     private final AuthenticationRepository authenticationRepository;
@@ -33,29 +32,28 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void getMoment(int year, int month, int date) {
-        StartAndEndDateInLong startEnd = getStartAndEndInLong(year, month, date);
-        long start = startEnd.getStart();
-        long end = startEnd.getEnd();
+        long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(year, month, date);
 
         authenticationRepository.isTokenValid(new TodayViewModel.WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                momentRepository.getMoment(access_token, start, end, new MomentGetCallBack() {
-                    @Override
-                    public void onSuccess(ArrayList<MomentPairModel> momentPair) {
-                        momentState.setValue(
-                            new MomentUiState(-1, momentPair)
-                        );
-                    }
+                momentRepository.getMoment(access_token, dayInterval[0], dayInterval[1],
+                    new MomentGetCallBack() {
+                        @Override
+                        public void onSuccess(ArrayList<MomentPairModel> momentPair) {
+                            momentState.setValue(
+                                new MomentUiState(-1, momentPair)
+                            );
+                        }
 
-                    @Override
-                    public void onFailure(int error) {
-                        momentState.setValue(
-                            new MomentUiState(error, new ArrayList<>())
-                        );
-                    }
-                });
+                        @Override
+                        public void onFailure(int error) {
+                            momentState.setValue(
+                                new MomentUiState(error, new ArrayList<>())
+                            );
+                        }
+                    });
             }
         });
     }
@@ -86,42 +84,11 @@ public class TodayViewModel extends ViewModel {
         });
     }
 
-    private StartAndEndDateInLong getStartAndEndInLong(int year, int month, int date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
-        Date startDate = calendar.getTime();
-
-        calendar.add(Calendar.MILLISECOND, (int) (MILLIS_IN_A_DAY - 1));
-        Date endDate = calendar.getTime();
-        long start = TimeConverter.convertDateToLong(startDate);
-        long end = TimeConverter.convertDateToLong(endDate);
-        return new StartAndEndDateInLong(start, end);
-    }
-
     abstract class WriteViewTokenCallback implements TokenCallBack {
 
         @Override
         public void onFailure() {
             momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
-        }
-    }
-
-    private static class StartAndEndDateInLong {
-
-        private final long start;
-        private final long end;
-
-        public StartAndEndDateInLong(long start, long end) {
-            this.start = start;
-            this.end = end;
-        }
-
-        public long getStart() {
-            return start;
-        }
-
-        public long getEnd() {
-            return end;
         }
     }
 }
