@@ -31,8 +31,8 @@ import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
 import snu.swpp.moment.ui.main_writeview.MomentUiState;
-import snu.swpp.moment.ui.main_writeview.WriteViewModel;
-import snu.swpp.moment.ui.main_writeview.WriteViewModelFactory;
+import snu.swpp.moment.ui.main_writeview.TodayViewModel;
+import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
 
 public class TodayViewFragment extends Fragment {
@@ -44,7 +44,7 @@ public class TodayViewFragment extends Fragment {
     private BottomButtonContainer bottomButtonContainer;
     private ListFooterContainer listFooterContainer;
 
-    private WriteViewModel viewModel;
+    private TodayViewModel viewModel;
     private MomentRemoteDataSource remoteDataSource;
     private MomentRepository momentRepository;
     private AuthenticationRepository authenticationRepository;
@@ -71,8 +71,8 @@ public class TodayViewFragment extends Fragment {
         }
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
-                new WriteViewModelFactory(authenticationRepository, momentRepository))
-                .get(WriteViewModel.class);
+                new TodayViewModelFactory(authenticationRepository, momentRepository))
+                .get(TodayViewModel.class);
         }
 
         binding = TodayItemBinding.inflate(inflater, container, false);
