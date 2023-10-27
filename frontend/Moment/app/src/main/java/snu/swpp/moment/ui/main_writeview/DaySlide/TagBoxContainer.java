@@ -68,6 +68,14 @@ public class TagBoxContainer {
         return parseTags(tagEditText.getText().toString());
     }
 
+    public void setTags(@NonNull List<String> tags) {
+        StringBuilder sb = new StringBuilder();
+        for (String tag : tags) {
+            sb.append("#").append(tag).append(" ");
+        }
+        tagEditText.setText(sb.toString());
+    }
+
     public void setUiVisible() {
         tagWrapper.setVisibility(View.VISIBLE);
         tagWrapper.startAnimation(animationProvider.fadeIn);

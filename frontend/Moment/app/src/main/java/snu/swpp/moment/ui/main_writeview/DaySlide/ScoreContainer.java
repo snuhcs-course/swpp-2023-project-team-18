@@ -26,9 +26,8 @@ public class ScoreContainer {
         scoreText = view.findViewById(R.id.scoreText);
         animationProvider = new AnimationProvider(view);
 
-        scoreSeekBar.setProgress(DEFAULT_SCORE);
-        score = DEFAULT_SCORE;
-        scoreText.setText(String.valueOf(DEFAULT_SCORE));
+        setScore(DEFAULT_SCORE);
+
         scoreSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int scoreValue, boolean fromUser) {
@@ -49,6 +48,12 @@ public class ScoreContainer {
 
     public int getScore() {
         return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+        scoreSeekBar.setProgress(score);
+        scoreText.setText(String.valueOf(score));
     }
 
     public void setUiVisible() {
