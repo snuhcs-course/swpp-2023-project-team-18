@@ -26,11 +26,37 @@ class MomentPairCreateSerializer(serializers.Serializer):
     moment = serializers.CharField(max_length=MOMENT_MAX_LENGTH)
 
 
+# serializer for hashtag
+class HashtagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hashtag
+        fields = ["id", "content"]
+
+
+class HashtagQuerySerializer(serializers.Serializer):
+    story_id = serializers.IntegerField()
+
+
+class HashtagCreateSerializer(serializers.Serializer):
+    story_id = serializers.IntegerField()
+    content = serializers.CharField()
+
+
 # Serializer for stories
 class StorySerializer(serializers.ModelSerializer):
+    hashtags = HashtagSerializer(many=True, read_only=True)
+
     class Meta:
         model = Story
-        fields = ["id", "emotion", "score", "title", "content", "created_at"]
+        fields = [
+            "id",
+            "emotion",
+            "score",
+            "title",
+            "content",
+            "created_at",
+            "hashtags",
+        ]
 
     def to_representation(self, instance: Story):
         res = super().to_representation(instance)
@@ -65,19 +91,3 @@ class EmotionCreateSerializer(serializers.Serializer):
 class ScoreCreateSerializer(serializers.Serializer):
     story_id = serializers.IntegerField()
     score = serializers.IntegerField()
-
-
-# serializer for hashtag
-class HashtagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hashtag
-        fields = ["id", "content"]
-
-
-class HashtagQuerySerializer(serializers.Serializer):
-    story_id = serializers.IntegerField()
-
-
-class HashtagCreateSerializer(serializers.Serializer):
-    story_id = serializers.IntegerField()
-    content = serializers.CharField()
