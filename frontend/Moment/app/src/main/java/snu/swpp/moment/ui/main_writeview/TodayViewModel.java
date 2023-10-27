@@ -34,18 +34,11 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void getMoment(int year, int month, int date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
-        Date startDate = calendar.getTime();
+        StartAndEndDateInLong startEnd = getStartAndEndInLong(year, month, date);
+        long start = startEnd.getStart();
+        long end = startEnd.getEnd();
 
-        calendar.add(Calendar.MILLISECOND, (int) (MILLIS_IN_A_DAY - 1));
-        Date endDate = calendar.getTime();
-        long start = TimeConverter.convertDateToLong(startDate);
-        long end = TimeConverter.convertDateToLong(endDate);
-
-        Log.d("WriteViewModel", String.format("start : %d, end : %d", start, end));
-
-        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+        authenticationRepository.isTokenValid(new TodayViewModel.WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
@@ -94,11 +87,39 @@ public class TodayViewModel extends ViewModel {
         });
     }
 
+    private StartAndEndDateInLong getStartAndEndInLong(int year, int month, int date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
+        Date startDate = calendar.getTime();
+
+        calendar.add(Calendar.MILLISECOND, (int) (MILLIS_IN_A_DAY - 1));
+        Date endDate = calendar.getTime();
+        long start = TimeConverter.convertDateToLong(startDate);
+        long end = TimeConverter.convertDateToLong(endDate);
+        return new StartAndEndDateInLong(start, end);
+    }
+
     abstract class WriteViewTokenCallback implements TokenCallBack {
 
         @Override
         public void onFailure() {
             momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
+        }
+    }
+
+    private class StartAndEndDateInLong {
+        private long start;
+        private long end;
+
+        public StartAndEndDateInLong(long start, long end) {
+            this.start = start;
+            this.end = end;
+        }
+        public long getStart() {
+            return start;
+        }
+        public long getEnd() {
+            return end;
         }
     }
 }
