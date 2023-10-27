@@ -1,6 +1,7 @@
 package snu.swpp.moment.data.model;
 
 import java.util.Date;
+import java.util.List;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class Story {
@@ -10,14 +11,17 @@ public class Story {
     private final int score;
     private final String title;
     private final String content;
+    private final List<Hashtag> hashtags;
     private final Date createdAt;
 
-    public Story(int id, String emotion, int score, String title, String content, Long createdAt) {
+    public Story(int id, String emotion, int score, String title, String content,
+        List<Hashtag> hashtags, Long createdAt) {
         this.id = id;
         this.emotion = emotion;
         this.score = score;
         this.title = title;
         this.content = content;
+        this.hashtags = hashtags;
         this.createdAt = TimeConverter.convertLongToDate(createdAt);
     }
 
@@ -35,6 +39,10 @@ public class Story {
 
     public String getContent() {
         return content;
+    }
+
+    public List<Hashtag> getHashtags() {
+        return hashtags;
     }
 
     public Date getCreatedAt() {

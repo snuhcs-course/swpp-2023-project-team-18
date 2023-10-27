@@ -10,6 +10,7 @@ import java.util.List;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.StoryGetCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
+import snu.swpp.moment.data.model.Hashtag;
 import snu.swpp.moment.data.model.MomentPair;
 import snu.swpp.moment.data.model.Story;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
@@ -94,12 +95,17 @@ public class DailyViewModel extends ViewModel {
                             String title = storyInstance.getTitle();
                             String content = storyInstance.getContent();
                             int emotion = EmotionMap.getEmotionInt(storyInstance.getEmotion());
-                            List<String> tags = new ArrayList<>();  // TODO: API로 tags 받아오기
+                            List<Hashtag> tags = storyInstance.getHashtags();
+                            List<String> parsedTags = new ArrayList<>();
+                            for (Hashtag hashtag : tags) {
+                                parsedTags.add(hashtag.getContent());
+                            }
                             int score = storyInstance.getScore();
                             Date createdAt = storyInstance.getCreatedAt();
 
                             storyState.setValue(
-                                new StoryUiState(null, false, title, content, emotion, tags, score,
+                                new StoryUiState(null, false, title, content, emotion, parsedTags,
+                                    score,
                                     createdAt));
                         }
                     }

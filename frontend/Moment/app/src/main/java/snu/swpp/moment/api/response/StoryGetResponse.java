@@ -27,32 +27,21 @@ public class StoryGetResponse {
         @SerializedName("content")
         private String content;
 
+        @SerializedName("hastags")
+        private List<StoryGetResponse.Hashtag> hashtags;
+
         @SerializedName("created_at")
         private long createdAt;
+    }
 
-        public int getId() {
-            return id;
-        }
+    private class Hashtag {
 
-        public String getEmotion() {
-            return emotion;
-        }
+        @SerializedName("id")
+        private int id;
 
-        public int getScore() {
-            return score;
-        }
+        @SerializedName("content")
+        private String content;
 
-        public String getTitle() {
-            return title;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public long getCreatedAt() {
-            return createdAt;
-        }
     }
 
     public ArrayList<Story> getStoryList() {
@@ -64,8 +53,17 @@ public class StoryGetResponse {
                 storyResponse.score,
                 storyResponse.title,
                 storyResponse.content,
+                convertHashtags(storyResponse.hashtags),
                 storyResponse.createdAt)
             );
+        }
+        return result;
+    }
+
+    private List<snu.swpp.moment.data.model.Hashtag> convertHashtags(List<Hashtag> hashtags) {
+        List<snu.swpp.moment.data.model.Hashtag> result = new ArrayList<>();
+        for (Hashtag hashtag : hashtags) {
+            result.add(new snu.swpp.moment.data.model.Hashtag(hashtag.id, hashtag.content));
         }
         return result;
     }
