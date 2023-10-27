@@ -17,7 +17,8 @@ from writing.views import (
     EmotionView,
     HashtagView,
 )
-
+from writing.cron import auto_completion_job
+from writing.constants import Emotions
 
 # Create your tests here.
 intended_day = datetime.datetime(
@@ -25,6 +26,94 @@ intended_day = datetime.datetime(
 )  # class field not usable in decorators
 ai_sample_title = "ai_sample_title"
 ai_sample_story = "ai_sample_story"
+
+
+class AutoCompletionTest(TestCase):
+    def setUp(self):
+        self.test_user = User.objects.create(username="user1", nickname="user1")
+        self.other_user = User.objects.create(username="other", nickname="other")
+
+    @freeze_time(lambda: intended_day + datetime.timedelta(days=1, seconds=1))
+    def test_already_completed_user(self):
+        story = Story.objects.create(
+            user=self.test_user, created_at=intended_day, emotion=Emotions.HAPPY1
+        )
+        story.save()
+        auto_completion_job()
+        self.assertEqual(
+            Story.objects.get(user=self.test_user).emotion, Emotions.HAPPY1
+        )
+        self.assertEqual(
+            intended_day.timestamp(),
+            Story.objects.get(user=self.test_user).created_at.timestamp(),
+        )
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value="")
+    @freeze_time(lambda: intended_day + datetime.timedelta(days=1, seconds=1))
+    def test_completion_without_moments(self, mock_get):
+        previous_moment = MomentPair.objects.create(
+            user=self.test_user,
+            moment_created_at=intended_day - datetime.timedelta(seconds=1),
+            reply_created_at=intended_day - datetime.timedelta(seconds=1),
+            moment="moment",
+        )
+        other_moment = MomentPair.objects.create(
+            user=self.other_user,
+            moment_created_at=intended_day,
+            reply_created_at=intended_day,
+            moment="moment",
+        )
+        previous_moment.save()
+        other_moment.save()
+        auto_completion_job()
+        created_story = Story.objects.get(user=self.test_user)
+        self.assertEqual(created_story.emotion, Emotions.INVALID)
+        self.assertEqual(
+            created_story.created_at.timestamp(),
+            (datetime.datetime.now() - datetime.timedelta(seconds=2)).timestamp(),
+        )
+
+    @freeze_time(lambda: intended_day + datetime.timedelta(days=1, seconds=1))
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value=f"{ai_sample_title};{ai_sample_story}",
+    )
+    @patch(
+        "writing.utils.gpt.GPTAgent.add_message",
+    )
+    def test_completion_with_moments_without_story(self, mock_add, mock_get):
+        content1 = "moment1"
+        content2 = "moment2"
+        moment1 = MomentPair.objects.create(
+            user=self.test_user,
+            moment_created_at=intended_day,
+            reply_created_at=intended_day,
+            moment=content1,
+        )
+        moment2 = MomentPair.objects.create(
+            user=self.test_user,
+            moment_created_at=intended_day + datetime.timedelta(hours=21),
+            reply_created_at=intended_day + datetime.timedelta(hours=21),
+            moment=content2,
+        )
+        other_moment = MomentPair.objects.create(
+            user=self.other_user,
+            moment_created_at=intended_day,
+            reply_created_at=intended_day,
+            moment=content1,
+        )
+        moment1.save()
+        moment2.save()
+        other_moment.save()
+
+        auto_completion_job()
+        created_story = Story.objects.get(user=self.test_user)
+        self.assertEqual(created_story.emotion, Emotions.NORMAL1)
+        self.assertEqual(created_story.title, ai_sample_title)
+        self.assertEqual(created_story.content, ai_sample_story)
+        mock_add.assert_any_call(
+            StoryGenerateTemplate.get_prompt(moments=f"{content1};{content2}")
+        )
 
 
 class GetHashtagTest(TestCase):

@@ -2,6 +2,7 @@ version: "3"
 services:
   nginx:
     image: nginx:latest
+    restart: always
     container_name: ng01
     ports:
         - "3000:3000"
@@ -14,6 +15,7 @@ services:
 
   web:
     build: .
+    restart: always
     container_name: dg01
     command: bash -c "
         python3 manage.py collectstatic --no-input &&
@@ -23,3 +25,13 @@ services:
     volumes:
         - ./moment:/moment
         - ./config/gunicorn:/etc/systemd/system
+  cron:
+    build: .
+    restart: always
+    container_name: cg01
+    command: bash -c "service cron start && python3 manage.py crontab add && tail -f /dev/null"
+    volumes:
+        - ./moment:/moment
+        - ./config/gunicorn:/etc/systemd/system
+    depends_on:
+        - web
