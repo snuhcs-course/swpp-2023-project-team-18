@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class DailyViewFragment extends Fragment {
 
     public DailyViewFragment(int minusDays) {
         this.minusDays = minusDays;
+        Log.d("DailyViewFragment", "Initializing DailyViewFragment with minusDays: " + minusDays);
     }
 
 
@@ -146,13 +148,14 @@ public class DailyViewFragment extends Fragment {
             }
         });
 
-        // TODO: API call interface 맞추기
         LocalDate date = TimeConverter.getToday().minusDays(minusDays);
         int year = date.getYear();
         int month = date.getMonthValue();
         int day = date.getDayOfMonth();
         viewModel.getMoment(year, month, day);
         viewModel.getStory(year, month, day);
+
+        Log.d("DailyViewFragment", "onCreateView() ended");
 
         return root;
     }

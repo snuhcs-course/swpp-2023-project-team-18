@@ -22,6 +22,7 @@ import snu.swpp.moment.utils.EmotionMap;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class DailyViewModel extends ViewModel {
+
     private final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
     private final int REFRESH_TOKEN_EXPIRED = 1;
     private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
@@ -40,8 +41,13 @@ public class DailyViewModel extends ViewModel {
         this.storyRepository = storyRepository;
     }
 
-    public LiveData<MomentUiState> getMomentState() { return momentState; }
-    public LiveData<StoryUiState> getStoryState() { return storyState; }
+    public LiveData<MomentUiState> getMomentState() {
+        return momentState;
+    }
+
+    public LiveData<StoryUiState> getStoryState() {
+        return storyState;
+    }
 
     public void getMoment(int year, int month, int date) {
         StartAndEndDateInLong startEnd = getStartAndEndInLong(year, month, date);
@@ -85,9 +91,9 @@ public class DailyViewModel extends ViewModel {
                     public void onSuccess(ArrayList<Story> story) {
                         int emotion = 0, score = 0;
                         Boolean isEmpty = true;
-                        String title = null;
-                        String content = null;
-                        List<String> tags = null;
+                        String title = "";
+                        String content = "";
+                        List<String> tags = new ArrayList<>();
 
                         if (!story.isEmpty()) {
                             Story storyInstance = story.get(0);
@@ -134,6 +140,7 @@ public class DailyViewModel extends ViewModel {
     }
 
     private class StartAndEndDateInLong {
+
         private long start;
         private long end;
 
@@ -141,9 +148,11 @@ public class DailyViewModel extends ViewModel {
             this.start = start;
             this.end = end;
         }
+
         public long getStart() {
             return start;
         }
+
         public long getEnd() {
             return end;
         }
