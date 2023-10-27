@@ -91,9 +91,9 @@ public class DailyViewFragment extends Fragment {
                 if (error == -1) {
                     // SUCCESS
                     int numMoments = momentUiState.getMomentPairsListSize();
-                    if (numMoments > 0 {
+                    if (numMoments > 0) {
                         listViewItems.clear();
-                        for (MomentPair momentPair: momentUiState.getMomentPairsList()) {
+                        for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
                             listViewItems.add(new ListViewItem(momentPair));
                         }
 

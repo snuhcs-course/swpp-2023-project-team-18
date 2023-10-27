@@ -3,10 +3,11 @@ package snu.swpp.moment.utils;
 import java.util.HashMap;
 
 public class EmotionMap {
+
     private static HashMap<String, Integer> emotionEnumMap = new HashMap<String, Integer>();
 
 
-    public static int getEmotionInt(String emotion){
+    public static int getEmotionInt(String emotion) {
         initialize();
         return emotionEnumMap.getOrDefault(emotion, 10);
     }
@@ -22,6 +23,6 @@ public class EmotionMap {
         emotionEnumMap.put("sad2", 7);
         emotionEnumMap.put("angry1", 8);
         emotionEnumMap.put("angry2", 9);
-        emotionEnumMap.put("null", 10);
+        emotionEnumMap.put("invalid", 10);
     }
 }
