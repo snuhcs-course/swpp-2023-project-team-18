@@ -103,12 +103,7 @@ public class TodayViewFragment extends Fragment {
                     if (numMoments > 0) {
                         listViewItems.clear();
                         for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
-                            String userInput = momentPair.getMoment();
-                            String serverResponse = momentPair.getReply();
-                            String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(
-                                momentPair.getMomentCreatedTime());
-                            listViewItems.add(
-                                new ListViewItem(userInput, createdTime, serverResponse));
+                            listViewItems.add(new ListViewItem(momentPair));
                         }
 
                         listViewAdapter.notifyDataSetChanged();

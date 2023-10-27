@@ -1,5 +1,9 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import snu.swpp.moment.data.model.MomentPair;
+
 public class ListViewItem {
 
     private String userInput;
@@ -10,6 +14,13 @@ public class ListViewItem {
         this.userInput = userInput;
         this.inputTime = inputTime;
         this.serverResponse = serverResponse; // 초기에는 서버 응답이 없기 때문에 빈 문자열로 설정
+    }
+
+    public ListViewItem(MomentPair momentPair) {
+        userInput = momentPair.getMoment();
+        inputTime = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault()).format(
+            momentPair.getMomentCreatedTime());
+        serverResponse = momentPair.getReply();
     }
 
     // 사용자 입력 getter 및 setter
