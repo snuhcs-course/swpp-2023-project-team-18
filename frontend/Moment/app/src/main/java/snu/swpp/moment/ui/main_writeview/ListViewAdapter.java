@@ -5,18 +5,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import java.util.List;
 import snu.swpp.moment.R;
+import snu.swpp.moment.utils.AnimationProvider;
 
 public class ListViewAdapter extends BaseAdapter {
 
     private List<ListViewItem> items = null;
     private final Context context;
+
     private int size;
+    private AnimationProvider animationProvider;
 
     public ListViewAdapter(Context context, List<ListViewItem> items) {
         this.items = items;
@@ -76,8 +77,7 @@ public class ListViewAdapter extends BaseAdapter {
         textView.setGravity(Gravity.START);
         textView.setAlpha(1);
         textView.clearAnimation();
-        Animation fadeIn = AnimationUtils.loadAnimation(textView.getContext(), R.anim.fade_in);
-        textView.startAnimation(fadeIn);
+        textView.startAnimation(animationProvider.fadeIn);
     }
 
 
@@ -93,9 +93,7 @@ public class ListViewAdapter extends BaseAdapter {
         textView.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
         textView.setAlpha(0.5f);
         textView.clearAnimation();
-        Animation fadeInOut = AnimationUtils.loadAnimation(textView.getContext(),
-            R.anim.fade_in_out);
-        textView.startAnimation(fadeInOut);
+        textView.startAnimation(animationProvider.fadeInOut);
     }
 }
 

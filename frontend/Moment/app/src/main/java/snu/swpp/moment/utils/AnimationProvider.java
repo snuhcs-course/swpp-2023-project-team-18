@@ -9,6 +9,7 @@ public class AnimationProvider {
     public final Animation fadeIn;
     public final Animation delayedFadeIn;
     public final Animation fadeOut;
+    public final Animation fadeInOut;
 
     public AnimationProvider(View view) {
         fadeIn = android.view.animation.AnimationUtils.loadAnimation(view.getContext(),
@@ -18,5 +19,7 @@ public class AnimationProvider {
         delayedFadeIn.setStartOffset(500);
         fadeOut = android.view.animation.AnimationUtils.loadAnimation(view.getContext(),
             R.anim.fade_out);
+        fadeInOut = android.view.animation.AnimationUtils.loadAnimation(view.getContext(),
+            R.anim.fade_in_out);
     }
 }
