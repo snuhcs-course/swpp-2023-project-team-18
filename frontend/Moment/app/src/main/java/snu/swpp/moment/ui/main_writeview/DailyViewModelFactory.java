@@ -8,6 +8,7 @@ import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 
 public class DailyViewModelFactory implements ViewModelProvider.Factory {
+
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
     private final StoryRepository storyRepository;

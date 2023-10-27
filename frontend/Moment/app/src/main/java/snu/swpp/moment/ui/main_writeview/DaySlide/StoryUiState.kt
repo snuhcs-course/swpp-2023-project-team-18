@@ -1,6 +1,5 @@
 package snu.swpp.moment.ui.main_writeview.DaySlide
 
-import java.lang.Exception
 import java.util.Date
 
 class StoryUiState(

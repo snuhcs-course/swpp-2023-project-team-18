@@ -6,9 +6,9 @@ import snu.swpp.moment.data.model.MomentPairModel;
 
 public class ListViewItem {
 
-    private String userInput;
-    private String serverResponse;
-    private String inputTime;
+    private final String userInput;
+    private final String serverResponse;
+    private final String inputTime;
 
     public ListViewItem(String userInput, String inputTime, String serverResponse) {
         this.userInput = userInput;

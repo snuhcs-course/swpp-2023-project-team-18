@@ -1,8 +1,6 @@
 package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
