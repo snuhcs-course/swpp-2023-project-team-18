@@ -17,12 +17,13 @@ public class ListViewAdapter extends BaseAdapter {
     private final Context context;
 
     private int size;
-    private AnimationProvider animationProvider;
+    private final AnimationProvider animationProvider;
 
     public ListViewAdapter(Context context, List<ListViewItem> items) {
         this.items = items;
         this.context = context;
         this.size = items.size();
+        this.animationProvider = new AnimationProvider(context);
     }
 
     public void notifyChange() {
