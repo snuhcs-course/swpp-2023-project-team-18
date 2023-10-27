@@ -69,8 +69,8 @@ class AutoCompletionTest(TestCase):
         created_story = Story.objects.get(user=self.test_user)
         self.assertEqual(created_story.emotion, Emotions.INVALID)
         self.assertEqual(
-            created_story.created_at,
-            datetime.datetime.now() - datetime.timedelta(seconds=2),
+            created_story.created_at.timestamp(),
+            (datetime.datetime.now() - datetime.timedelta(seconds=2)).timestamp(),
         )
 
     @freeze_time(lambda: intended_day + datetime.timedelta(days=1, seconds=1))
