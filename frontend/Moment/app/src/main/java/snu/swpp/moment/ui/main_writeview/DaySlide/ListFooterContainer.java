@@ -73,8 +73,10 @@ public class ListFooterContainer {
         });
     }
 
-    public ListFooterContainer(View view, StoryUiState storyUiState) {
-        this(view);
+    public void updateUi(@NonNull StoryUiState storyUiState) {
+        if (storyUiState.isEmpty()) {
+            return;
+        }
 
         storyContainer.setStoryText(storyUiState.getStoryTitle(), storyUiState.getStoryContent());
         storyContainer.freeze();

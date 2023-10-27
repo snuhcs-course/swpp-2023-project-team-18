@@ -62,6 +62,7 @@ public class TodayViewFragment extends Fragment {
         if (momentRepository == null) {
             momentRepository = new MomentRepository(remoteDataSource);
         }
+
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
         } catch (Exception e) {
@@ -69,6 +70,7 @@ public class TodayViewFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
+
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
                 new TodayViewModelFactory(authenticationRepository, momentRepository))
