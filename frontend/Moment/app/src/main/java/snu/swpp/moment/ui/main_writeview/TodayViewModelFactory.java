@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 
-public class WriteViewModelFactory implements ViewModelProvider.Factory {
+public class TodayViewModelFactory implements ViewModelProvider.Factory {
 
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
 
-    public WriteViewModelFactory(
+    public TodayViewModelFactory(
         AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository
     ) {
@@ -22,11 +22,11 @@ public class WriteViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(WriteViewModel.class)) {
-            return (T) new WriteViewModel(authenticationRepository, momentRepository);
+        if (modelClass.isAssignableFrom(TodayViewModel.class)) {
+            return (T) new TodayViewModel(authenticationRepository, momentRepository);
         } else {
             System.out.println("#DEBUG: WriteViewModelFactory not working");
-            throw new IllegalArgumentException("Unkown ViewModel class");
+            throw new IllegalArgumentException("Unknown ViewModel class");
         }
     }
 }

@@ -14,7 +14,7 @@ import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.utils.TimeConverter;
 
-public class WriteViewModel extends ViewModel {
+public class TodayViewModel extends ViewModel {
 
     private final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
     private final int REFRESH_TOKEN_EXPIRED = 1;
@@ -22,7 +22,7 @@ public class WriteViewModel extends ViewModel {
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
 
-    public WriteViewModel(AuthenticationRepository authenticationRepository,
+    public TodayViewModel(AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;

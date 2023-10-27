@@ -15,6 +15,7 @@ import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
+import snu.swpp.moment.api.response.StoryGetResponse;
 import snu.swpp.moment.api.response.TokenRefreshResponse;
 import snu.swpp.moment.api.response.TokenVerifyResponse;
 
@@ -39,5 +40,9 @@ public interface ServiceApi {
     @POST("api/writing/moments/")
     Call<MomentWriteResponse> writeMoment(@Header("Authorization") String bearerToken,
         @Body MomentWriteRequest data);
+
+    @GET("api/writing/stories/")
+    Call<StoryGetResponse> getStories(@Header("Authorization") String bearerToken,
+        @Query("start") long start, @Query("end") long end);
 
 }
