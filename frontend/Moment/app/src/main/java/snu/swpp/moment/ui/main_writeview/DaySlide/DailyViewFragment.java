@@ -9,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
@@ -131,7 +129,7 @@ public class DailyViewFragment extends Fragment {
             Exception error = storyUiState.getError();
             if (error == null) {
                 // SUCCESS
-                listFooterContainer.updateUi(storyUiState);
+                listFooterContainer.updateUiWithRemoteData(storyUiState);
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
                 Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
@@ -158,13 +156,6 @@ public class DailyViewFragment extends Fragment {
         Log.d("DailyViewFragment", "onCreateView() ended");
 
         return root;
-    }
-
-    private void addItem(String userInput) {
-        String currentTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(new Date());
-        listViewItems.add(new ListViewItem(userInput, currentTime, ""));
-        listViewAdapter.notifyDataSetChanged();
-        binding.dailyMomentList.setSelection(listViewItems.size() - 1);
     }
 
     @Override

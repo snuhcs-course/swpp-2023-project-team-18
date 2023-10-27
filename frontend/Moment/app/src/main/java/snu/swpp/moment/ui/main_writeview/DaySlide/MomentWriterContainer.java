@@ -130,7 +130,7 @@ public class MomentWriterContainer {
     }
 
     public void setInvisible() {
-        // 하루 마무리 시작되었을 때 모먼트 작성 칸 숨기기
+        // 하루 마무리 시작되었을 때, 또는 과거 데이터 볼 때 모먼트 작성 칸 숨기기
         addButton.setVisibility(View.GONE);
         addButtonText.setVisibility(View.GONE);
         addLimitWarnText.setVisibility(View.GONE);

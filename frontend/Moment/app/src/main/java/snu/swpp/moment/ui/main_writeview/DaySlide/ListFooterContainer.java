@@ -73,7 +73,9 @@ public class ListFooterContainer {
         });
     }
 
-    public void updateUi(@NonNull StoryUiState storyUiState) {
+    public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState) {
+        momentWriterContainer.setInvisible();
+
         if (storyUiState.isEmpty()) {
             return;
         }
