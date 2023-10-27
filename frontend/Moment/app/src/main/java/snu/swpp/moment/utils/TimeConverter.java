@@ -32,4 +32,10 @@ public class TimeConverter {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd.");
         return date.format(formatter);
     }
+
+    public static String formatTime(Date date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalTime()
+            .format(formatter);
+    }
 }

@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import java.util.Date;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.EmotionGridContainer;
 import snu.swpp.moment.utils.AnimationProvider;
@@ -80,6 +81,7 @@ public class ListFooterContainer {
             return;
         }
 
+        storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
         storyContainer.setStoryText(storyUiState.getStoryTitle(), storyUiState.getStoryContent());
         storyContainer.freeze();
         storyContainer.setUiCompleteStory();
@@ -152,7 +154,7 @@ public class ListFooterContainer {
         setScrollToBottomSwitch();
     }
 
-    public void setUiWritingStory(String completeTime) {
+    public void setUiWritingStory(Date completeTime) {
         // 스토리 작성 칸 나올 때
         momentWriterContainer.setInvisible();
 

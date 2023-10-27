@@ -4,20 +4,21 @@ import java.util.Date;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class Story {
+
     private final int id;
     private final String emotion;
     private final int score;
     private final String title;
     private final String content;
-    private final Date created_at;
+    private final Date createdAt;
 
-    public Story(int id, String emotion, int score, String title, String content, Long created_at) {
+    public Story(int id, String emotion, int score, String title, String content, Long createdAt) {
         this.id = id;
         this.emotion = emotion;
         this.score = score;
         this.title = title;
         this.content = content;
-        this.created_at = TimeConverter.convertLongToDate(created_at);
+        this.createdAt = TimeConverter.convertLongToDate(createdAt);
     }
 
     public String getEmotion() {
@@ -36,7 +37,7 @@ public class Story {
         return content;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 }

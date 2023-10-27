@@ -3,8 +3,6 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,11 +12,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
+import snu.swpp.moment.utils.TimeConverter;
 
 public class StoryContainer {
 
@@ -168,9 +168,9 @@ public class StoryContainer {
         isLimitExceeded.observeForever(observer);
     }
 
-    public void setUiWritingStory(String completeTime) {
+    public void setUiWritingStory(Date completeTime) {
         storyWrapper.setVisibility(View.VISIBLE);
-        completeTimeText.setText(completeTime);
+        setCompleteTimeText(completeTime);
         storyWrapper.startAnimation(animationProvider.fadeIn);
     }
 
@@ -178,6 +178,10 @@ public class StoryContainer {
         storyContentLengthText.setVisibility(View.GONE);
         aiButtonHelpText.setVisibility(View.GONE);
         storyAiButton.setVisibility(View.GONE);
+    }
+
+    public void setCompleteTimeText(Date completeTime) {
+        completeTimeText.setText(TimeConverter.formatTime(completeTime));
     }
 
     public void setStoryText(String title, String content) {

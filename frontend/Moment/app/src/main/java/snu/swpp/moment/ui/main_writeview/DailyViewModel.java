@@ -1,6 +1,5 @@
 package snu.swpp.moment.ui.main_writeview;
 
-import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,7 +16,6 @@ import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.ui.main_writeview.DaySlide.StoryUiState;
-import snu.swpp.moment.ui.main_writeview.TodayViewModel.WriteViewTokenCallback;
 import snu.swpp.moment.utils.EmotionMap;
 import snu.swpp.moment.utils.TimeConverter;
 
@@ -89,30 +87,26 @@ public class DailyViewModel extends ViewModel {
                 storyRepository.getStory(access_token, start, end, new StoryGetCallBack() {
                     @Override
                     public void onSuccess(ArrayList<Story> story) {
-                        int emotion = 0, score = 0;
-                        Boolean isEmpty = true;
-                        String title = "";
-                        String content = "";
-                        List<String> tags = new ArrayList<>();
-
-                        if (!story.isEmpty()) {
+                        if (story.isEmpty()) {
+                            storyState.setValue(StoryUiState.empty());
+                        } else {
                             Story storyInstance = story.get(0);
-                            isEmpty = false;
-                            title = storyInstance.getTitle();
-                            content = storyInstance.getContent();
-                            score = storyInstance.getScore();
-                            emotion = EmotionMap.getEmotionInt(storyInstance.getEmotion());
-                        }
+                            String title = storyInstance.getTitle();
+                            String content = storyInstance.getContent();
+                            int emotion = EmotionMap.getEmotionInt(storyInstance.getEmotion());
+                            List<String> tags = new ArrayList<>();  // TODO: API로 tags 받아오기
+                            int score = storyInstance.getScore();
+                            Date createdAt = storyInstance.getCreatedAt();
 
-                        storyState.setValue(new StoryUiState(
-                            null, isEmpty, title, content, emotion, tags, score));
+                            storyState.setValue(
+                                new StoryUiState(null, false, title, content, emotion, tags, score,
+                                    createdAt));
+                        }
                     }
 
                     @Override
                     public void onFailure(Exception error) {
-                        storyState.setValue(new StoryUiState(
-                            error, true, null, null, 0, null, 0)
-                        );
+                        storyState.setValue(StoryUiState.empty());
                     }
                 });
             }

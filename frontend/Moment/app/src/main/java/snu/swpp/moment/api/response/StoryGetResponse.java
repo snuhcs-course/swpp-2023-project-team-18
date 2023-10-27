@@ -6,10 +6,12 @@ import java.util.List;
 import snu.swpp.moment.data.model.Story;
 
 public class StoryGetResponse {
+
     @SerializedName("stories")
     private List<StoryResponse> storyList;
 
     private class StoryResponse {
+
         @SerializedName("id")
         private int id;
 
@@ -26,7 +28,7 @@ public class StoryGetResponse {
         private String content;
 
         @SerializedName("created_at")
-        private long created_at;
+        private long createdAt;
 
         public int getId() {
             return id;
@@ -48,21 +50,21 @@ public class StoryGetResponse {
             return content;
         }
 
-        public long getCreated_at() {
-            return created_at;
+        public long getCreatedAt() {
+            return createdAt;
         }
     }
 
     public ArrayList<Story> getStoryList() {
         ArrayList<Story> result = new ArrayList<>();
-        for (StoryResponse storyResponse: storyList) {
+        for (StoryResponse storyResponse : storyList) {
             result.add(new Story(
                 storyResponse.id,
                 storyResponse.emotion,
                 storyResponse.score,
                 storyResponse.title,
                 storyResponse.content,
-                storyResponse.created_at)
+                storyResponse.createdAt)
             );
         }
         return result;
