@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,7 +15,7 @@ import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.utils.TimeConverter;
 
-public class WriteViewModel extends ViewModel {
+public class TodayViewModel extends ViewModel {
 
     private final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
     private final int REFRESH_TOKEN_EXPIRED = 1;
@@ -22,7 +23,7 @@ public class WriteViewModel extends ViewModel {
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
 
-    public WriteViewModel(AuthenticationRepository authenticationRepository,
+    public TodayViewModel(AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
@@ -32,30 +33,18 @@ public class WriteViewModel extends ViewModel {
         return momentState;
     }
 
-    public void setMomentState(MomentUiState momentState) {
-        this.momentState.setValue(momentState);
-    }
-
     public void getMoment(int year, int month, int date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
-        Date startDate = calendar.getTime();
+        StartAndEndDateInLong startEnd = getStartAndEndInLong(year, month, date);
+        long start = startEnd.getStart();
+        long end = startEnd.getEnd();
 
-        calendar.add(Calendar.MILLISECOND, (int) (MILLIS_IN_A_DAY - 1));
-        Date endDate = calendar.getTime();
-        long start = TimeConverter.convertDateToLong(startDate);
-        long end = TimeConverter.convertDateToLong(endDate);
-
-        System.out.println("#Debug  start : " + start + " end : " + end);
-
-        authenticationRepository.isTokenValid(new TokenCallBack() {
+        authenticationRepository.isTokenValid(new TodayViewModel.WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
                 momentRepository.getMoment(access_token, start, end, new MomentGetCallBack() {
                     @Override
                     public void onSuccess(ArrayList<MomentPair> momentPair) {
-                        //System.out.println("#DEBUG: VIEWMODEL " + momentPair.size());
                         momentState.setValue(
                             new MomentUiState(-1, momentPair)
                         );
@@ -63,28 +52,21 @@ public class WriteViewModel extends ViewModel {
 
                     @Override
                     public void onFailure(int error) {
-
                         momentState.setValue(
                             new MomentUiState(error, new ArrayList<>())
                         );
                     }
                 });
             }
-
-            @Override
-            public void onFailure() {
-                momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
-            }
         });
     }
 
     public void writeMoment(String moment) {
-        String writtenMoment = moment;
-        authenticationRepository.isTokenValid(new TokenCallBack() {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                momentRepository.writeMoment(access_token, writtenMoment,
+                momentRepository.writeMoment(access_token, moment,
                     new MomentWriteCallBack() {
                         @Override
                         public void onSuccess(MomentPair momentPair) {
@@ -97,18 +79,47 @@ public class WriteViewModel extends ViewModel {
                         @Override
                         public void onFailure(int error) {
                             momentState.setValue(
-                                //new MomentUiState(error, new ArrayList<>())
                                 new MomentUiState(error, null)
                             );
                         }
                     });
             }
-
-            @Override
-            public void onFailure() {
-                momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
-            }
         });
+    }
 
+    private StartAndEndDateInLong getStartAndEndInLong(int year, int month, int date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
+        Date startDate = calendar.getTime();
+
+        calendar.add(Calendar.MILLISECOND, (int) (MILLIS_IN_A_DAY - 1));
+        Date endDate = calendar.getTime();
+        long start = TimeConverter.convertDateToLong(startDate);
+        long end = TimeConverter.convertDateToLong(endDate);
+        return new StartAndEndDateInLong(start, end);
+    }
+
+    abstract class WriteViewTokenCallback implements TokenCallBack {
+
+        @Override
+        public void onFailure() {
+            momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
+        }
+    }
+
+    private class StartAndEndDateInLong {
+        private long start;
+        private long end;
+
+        public StartAndEndDateInLong(long start, long end) {
+            this.start = start;
+            this.end = end;
+        }
+        public long getStart() {
+            return start;
+        }
+        public long getEnd() {
+            return end;
+        }
     }
 }

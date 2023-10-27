@@ -31,20 +31,20 @@ import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
 import snu.swpp.moment.ui.main_writeview.MomentUiState;
-import snu.swpp.moment.ui.main_writeview.WriteViewModel;
-import snu.swpp.moment.ui.main_writeview.WriteViewModelFactory;
+import snu.swpp.moment.ui.main_writeview.TodayViewModel;
+import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
 
 public class TodayViewFragment extends Fragment {
 
     private TodayItemBinding binding;
-    private List<ListViewItem> items;
-    private ListViewAdapter mAdapter;
+    private List<ListViewItem> listViewItems;
+    private ListViewAdapter listViewAdapter;
 
     private BottomButtonContainer bottomButtonContainer;
     private ListFooterContainer listFooterContainer;
 
-    private WriteViewModel viewModel;
+    private TodayViewModel viewModel;
     private MomentRemoteDataSource remoteDataSource;
     private MomentRepository momentRepository;
     private AuthenticationRepository authenticationRepository;
@@ -62,6 +62,7 @@ public class TodayViewFragment extends Fragment {
         if (momentRepository == null) {
             momentRepository = new MomentRepository(remoteDataSource);
         }
+
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
         } catch (Exception e) {
@@ -69,10 +70,11 @@ public class TodayViewFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
+
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
-                new WriteViewModelFactory(authenticationRepository, momentRepository))
-                .get(WriteViewModel.class);
+                new TodayViewModelFactory(authenticationRepository, momentRepository))
+                .get(TodayViewModel.class);
         }
 
         binding = TodayItemBinding.inflate(inflater, container, false);
@@ -90,7 +92,7 @@ public class TodayViewFragment extends Fragment {
     }
 
     private void initializeListView(View root) {
-        items = new ArrayList<>();
+        listViewItems = new ArrayList<>();
 
         viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<MomentUiState>() {
             @Override
@@ -101,16 +103,12 @@ public class TodayViewFragment extends Fragment {
                     bottomButtonContainer.setActivated(numMoments != 0);
 
                     if (numMoments > 0) {
-                        items.clear();
+                        listViewItems.clear();
                         for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
-                            String userInput = momentPair.getMoment();
-                            String serverResponse = momentPair.getReply();
-                            String createdTime = new SimpleDateFormat("yyyy.MM.dd HH:mm").format(
-                                momentPair.getMomentCreatedTime());
-                            items.add(new ListViewItem(userInput, createdTime, serverResponse));
+                            listViewItems.add(new ListViewItem(momentPair));
                         }
 
-                        mAdapter.notifyDataSetChanged();
+                        listViewAdapter.notifyDataSetChanged();
                         scrollToBottom();
                     }
                 } else {
@@ -136,11 +134,11 @@ public class TodayViewFragment extends Fragment {
         int date = today.getDayOfMonth();
         viewModel.getMoment(year, month, date);
 
-        mAdapter = new ListViewAdapter(getContext(), items);
-        binding.listviewList.setAdapter(mAdapter);
+        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        binding.todayMomentList.setAdapter(listViewAdapter);
         View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, binding.listviewList, false);
-        binding.listviewList.addFooterView(footerView);
+            .inflate(R.layout.listview_footer, binding.todayMomentList, false);
+        binding.todayMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
         listFooterContainer = new ListFooterContainer(footerView);
@@ -151,7 +149,7 @@ public class TodayViewFragment extends Fragment {
 
             int numMoments = viewModel.getMomentState().getValue().getMomentPairsListSize();
             if (numMoments >= 2) {
-                String createdSecond = items.get(numMoments - 2).getInputTime();
+                String createdSecond = listViewItems.get(numMoments - 2).getInputTime();
 
                 try {
                     Date createdDate = inputFormat.parse(createdSecond);
@@ -180,7 +178,7 @@ public class TodayViewFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
             INPUT_METHOD_SERVICE);
         listFooterContainer.setSubmitButtonOnClickListener(v -> {
-            String text = listFooterContainer.getInputText();
+            String text = listFooterContainer.getMomentInputText();
 
             // 소프트 키보드 숨기기
             if (imm != null && getActivity().getCurrentFocus() != null) {
@@ -203,14 +201,14 @@ public class TodayViewFragment extends Fragment {
 
     private void addItem(String userInput) {
         String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
-        items.add(new ListViewItem(userInput, currentTime, ""));
-        mAdapter.notifyDataSetChanged();
+        listViewItems.add(new ListViewItem(userInput, currentTime, ""));
+        listViewAdapter.notifyDataSetChanged();
         scrollToBottom();
     }
 
     private void scrollToBottom() {
-        binding.listviewList.post(() -> binding.listviewList.smoothScrollToPosition(
-            binding.listviewList.getCount() - 1));
+        binding.todayMomentList.post(() -> binding.todayMomentList.smoothScrollToPosition(
+            binding.todayMomentList.getCount() - 1));
     }
 
     @Override

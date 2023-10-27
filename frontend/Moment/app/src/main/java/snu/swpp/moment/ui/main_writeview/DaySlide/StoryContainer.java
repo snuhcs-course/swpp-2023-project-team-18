@@ -3,8 +3,6 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,10 +12,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import snu.swpp.moment.R;
+import snu.swpp.moment.utils.AnimationProvider;
+import snu.swpp.moment.utils.TimeConverter;
 
 public class StoryContainer {
 
@@ -29,7 +30,7 @@ public class StoryContainer {
     private final TextView aiButtonHelpText;
     private final Button storyAiButton;
 
-    private final Animation fadeIn;
+    private final AnimationProvider animationProvider;
 
     // 글자수 제한 초과 검사
     private boolean isTitleLimitExceeded = false;
@@ -48,7 +49,7 @@ public class StoryContainer {
         aiButtonHelpText = view.findViewById(R.id.aiButtonHelpText);
         storyAiButton = view.findViewById(R.id.storyAiButton);
 
-        fadeIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
+        animationProvider = new AnimationProvider(view);
 
         // storyTitleEditText 입력 감지
         storyTitleEditText.addTextChangedListener(new TextWatcher() {
@@ -167,10 +168,10 @@ public class StoryContainer {
         isLimitExceeded.observeForever(observer);
     }
 
-    public void setUiWritingStory(String completeTime) {
+    public void setUiWritingStory(Date completeTime) {
         storyWrapper.setVisibility(View.VISIBLE);
-        completeTimeText.setText(completeTime);
-        storyWrapper.startAnimation(fadeIn);
+        setCompleteTimeText(completeTime);
+        storyWrapper.startAnimation(animationProvider.fadeIn);
     }
 
     public void setUiCompleteStory() {
@@ -179,13 +180,17 @@ public class StoryContainer {
         storyAiButton.setVisibility(View.GONE);
     }
 
-    private void checkLimitExceeded() {
-        isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);
+    public void setCompleteTimeText(Date completeTime) {
+        completeTimeText.setText(TimeConverter.formatTime(completeTime));
     }
 
-    private void setStoryText(String title, String content) {
+    public void setStoryText(String title, String content) {
         storyTitleEditText.setText(title);
         storyContentEditText.setText(content);
+    }
+
+    private void checkLimitExceeded() {
+        isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);
     }
 
     private void setStoryContentLengthText(int count) {

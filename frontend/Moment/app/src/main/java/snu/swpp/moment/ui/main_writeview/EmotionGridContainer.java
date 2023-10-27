@@ -71,6 +71,11 @@ public class EmotionGridContainer {
         }
     }
 
+    public void selectEmotion(int emotion) {
+        TextView textButton = textButtonList.get(emotion);
+        textButton.performClick();
+    }
+
     public void setSelectedEmotionObserver(Observer<Integer> observer) {
         selectedEmotion.observeForever(observer);
     }

@@ -8,15 +8,14 @@
     android:paddingHorizontal="16dp">
 
     <ListView
-        android:id="@+id/listview_list"
+        android:id="@+id/dailyMomentList"
         android:layout_width="match_parent"
-        android:layout_height="665dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:divider="#FFFFFF"
         android:dividerHeight="15dp" />
 
     <!-- 스크롤 시 맨 밑이 보이게 하기 위한 padding -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="50dp" />
 </LinearLayout>

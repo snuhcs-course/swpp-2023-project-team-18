@@ -23,10 +23,8 @@ public class SlideViewAdapter extends FragmentStateAdapter {
         if (index == count - 1) {
             return new TodayViewFragment();
         } else {
-            return new DailyViewFragment();
+            return new DailyViewFragment(count - index - 1);
         }
-
-
     }
 
     // 전체 페이지수

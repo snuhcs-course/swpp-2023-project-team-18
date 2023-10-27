@@ -18,12 +18,14 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import snu.swpp.moment.R;
+import snu.swpp.moment.utils.AnimationProvider;
 
 public class TagBoxContainer {
 
     private final ConstraintLayout tagWrapper;
     private final EditText tagEditText;
     private final TextView limitHelpText;
+    private final AnimationProvider animationProvider;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
 
     private final int MAX_TAGS = 10;
@@ -32,6 +34,7 @@ public class TagBoxContainer {
         tagWrapper = (ConstraintLayout) view;
         tagEditText = view.findViewById(R.id.tagsEditText);
         limitHelpText = view.findViewById(R.id.tagLimitHelpText);
+        animationProvider = new AnimationProvider(view);
 
         tagEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,10 +68,17 @@ public class TagBoxContainer {
         return parseTags(tagEditText.getText().toString());
     }
 
+    public void setTags(@NonNull List<String> tags) {
+        StringBuilder sb = new StringBuilder();
+        for (String tag : tags) {
+            sb.append("#").append(tag).append(" ");
+        }
+        tagEditText.setText(sb.toString());
+    }
+
     public void setUiVisible() {
         tagWrapper.setVisibility(View.VISIBLE);
-        Animation fadeIn = AnimationUtils.loadAnimation(tagWrapper.getContext(), R.anim.fade_in);
-        tagWrapper.startAnimation(fadeIn);
+        tagWrapper.startAnimation(animationProvider.fadeIn);
     }
 
     public void freeze() {
