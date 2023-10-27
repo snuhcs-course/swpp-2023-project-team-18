@@ -24,3 +24,6 @@ RUN pip3 install -r /config/requirements.txt
 
 RUN mkdir /moment
 WORKDIR /moment
+
+RUN apt-get update
+RUN apt-get install -y cron && touch ./cron.log

@@ -23,3 +23,11 @@ services:
     volumes:
         - ./moment:/moment
         - ./config/gunicorn:/etc/systemd/system
+  cron:
+    build: .
+    container_name: cg01
+    command: bash -c "service cron start && python manage.py crontab add && tail -f /dev/null"
+    volumes:
+      ./moment:/moment
+      ./config/gunicorn:/etc/systemd/system
+    depends_on: web
