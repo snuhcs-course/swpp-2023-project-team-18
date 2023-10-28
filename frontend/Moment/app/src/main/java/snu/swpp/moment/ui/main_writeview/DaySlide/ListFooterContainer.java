@@ -69,6 +69,15 @@ public class ListFooterContainer {
             setBottomButtonState(!isLimitExceeded);
         });
 
+        // AI에게 부탁하기 버튼 감지
+        storyContainer.observeAiButtonSwitch(isSet -> {
+            if (isSet) {
+                showLoadingText(true, R.string.ai_story_loading);
+                setAiStoryCallSwitch();
+                setBottomButtonState(false);
+            }
+        });
+
         // 감정 선택 감지
         emotionGridContainer.setSelectedEmotionObserver((Integer emotion) -> {
             setBottomButtonState(emotion > -1);
@@ -91,12 +100,6 @@ public class ListFooterContainer {
         storyContainer.setStoryText(storyUiState.getStoryTitle(), storyUiState.getStoryContent());
         storyContainer.freeze();
         storyContainer.setUiCompleteStory();
-        storyContainer.observeAiButtonSwitch(isSet -> {
-            if (isSet) {
-                showLoadingText(true, R.string.ai_story_loading);
-                setAiStoryCallSwitch();
-            }
-        });
 
         emotionGridContainer.selectEmotion(storyUiState.getEmotion());
         emotionGridContainer.freeze();
@@ -203,6 +206,8 @@ public class ListFooterContainer {
     public Observer<AiStoryState> aiStoryObserver() {
         return (AiStoryState aiStoryState) -> {
             showLoadingText(false);
+            setBottomButtonState(true);
+            
             if (aiStoryState.getError() != null) {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
@@ -219,9 +224,11 @@ public class ListFooterContainer {
             loadingText.clearAnimation();
             loadingText.startAnimation(animationProvider.fadeInOut);
             loadingText.setVisibility(View.VISIBLE);
+            setBottomButtonState(false);
         } else {
             loadingText.setVisibility(View.GONE);
             loadingText.clearAnimation();
+            setBottomButtonState(true);
         }
     }
 
