@@ -222,24 +222,8 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void saveScore(int score) {
-        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
-            @Override
-            public void onSuccess() {
-                String access_token = authenticationRepository.getToken().getAccessToken();
-                int story_id = getStoryUseCase.getStoryId();
-                storyRepository.saveScore(access_token, story_id, score, new ScoreSaveCallback() {
-                    @Override
-                    public void onSuccess() {
-                        scoreResultState.setValue(new CompletionStoreResultState(null));
-                    }
-
-                    @Override
-                    public void onFailure(Exception error) {
-                        scoreResultState.setValue(new CompletionStoreResultState(error));
-                    }
-                });
-            }
-        });
+        int story_id = getStoryUseCase.getStoryId();
+        saveScoreUseCase.saveScore(story_id, score);
     }
 
     public void saveHashtags(String content) {
