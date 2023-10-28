@@ -1,5 +1,6 @@
 package snu.swpp.moment.data.source;
 
+import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,6 +52,8 @@ public class MomentRemoteDataSource {
                 Response<MomentWriteResponse> response) {
                 if (response.isSuccessful()) {
                     MomentWriteResponse result = response.body();
+                    Log.d("MomentRemoteDataSource",
+                        "Got AI reply: " + result.getMomentPair().getReply());
                     callback.onSuccess(result.getMomentPair());
                 } else {
                     callback.onFailure(response.code());
