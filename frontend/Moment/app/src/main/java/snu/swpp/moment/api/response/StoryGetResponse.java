@@ -33,6 +33,9 @@ public class StoryGetResponse {
 
         @SerializedName("created_at")
         private long createdAt;
+
+        @SerializedName("is_point_completed")
+        private boolean is_point_completed;
     }
 
     private static class Hashtag {
@@ -55,7 +58,8 @@ public class StoryGetResponse {
                 storyResponse.title,
                 storyResponse.content,
                 convertHashtags(storyResponse.hashtags),
-                storyResponse.createdAt)
+                storyResponse.createdAt,
+                storyResponse.is_point_completed)
             );
         }
         return result;

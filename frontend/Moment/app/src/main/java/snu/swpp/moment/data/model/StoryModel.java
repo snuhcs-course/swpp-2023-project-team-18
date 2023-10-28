@@ -13,9 +13,10 @@ public class StoryModel {
     private final String content;
     private final List<HashtagModel> hashtags;
     private final Date createdAt;
+    private boolean isPointCompleted;
 
     public StoryModel(int id, String emotion, int score, String title, String content,
-        List<HashtagModel> hashtagModels, Long createdAt) {
+        List<HashtagModel> hashtagModels, Long createdAt, boolean isPointCompleted) {
         this.id = id;
         this.emotion = emotion;
         this.score = score;
@@ -23,6 +24,7 @@ public class StoryModel {
         this.content = content;
         this.hashtags = hashtagModels;
         this.createdAt = TimeConverter.convertTimestampToDate(createdAt);
+        this.isPointCompleted = isPointCompleted;
     }
 
     public int getId() {
@@ -52,4 +54,6 @@ public class StoryModel {
     public Date getCreatedAt() {
         return createdAt;
     }
+
+    public boolean getIsPointCompleted() { return isPointCompleted; }
 }
