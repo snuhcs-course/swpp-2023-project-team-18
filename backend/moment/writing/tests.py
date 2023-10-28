@@ -380,6 +380,7 @@ class SaveScoreTest(TestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Story.objects.get(pk=self.story1_pk).score, self.new_score)
+        self.assertEqual(Story.objects.get(pk=self.story1_pk).is_point_completed, True)
         self.assertEqual(Story.objects.get(pk=self.story2_pk).score, self.default_score)
 
     def test_save_others_score_fail(self):
@@ -559,7 +560,7 @@ class GetStoryTest(TestCase):
             created_at=datetime.datetime.fromtimestamp(self.timestamp2),
             user=test_user,
             content=self.content2,
-            is_point_completed=True
+            is_point_completed=True,
         )
         story1.hashtags.add(test_user_hashtag1)
         story1.hashtags.add(test_user_hashtag2)
@@ -589,13 +590,12 @@ class GetStoryTest(TestCase):
         self.assertEqual(response.data["stories"][1]["created_at"], self.timestamp2)
         self.assertEqual(response.data["stories"][0]["content"], self.content1)
         self.assertEqual(response.data["stories"][1]["content"], self.content2)
-        self.assertEqual(response.data['stories'][0]['is_point_completed'],False)
+        self.assertEqual(response.data["stories"][0]["is_point_completed"], False)
         story1_hashtags = response.data["stories"][0]["hashtags"]
         self.assertEqual(len(story1_hashtags), 2)
         self.assertEqual(story1_hashtags[0]["content"], self.hashtag1)
         self.assertEqual(story1_hashtags[1]["content"], self.hashtag2)
-        self.assertEqual(response.data['stories'][1]['is_point_completed'],True)
-
+        self.assertEqual(response.data["stories"][1]["is_point_completed"], True)
 
         story2_hashtags = response.data["stories"][1]["hashtags"]
         self.assertEqual(len(story2_hashtags), 0)

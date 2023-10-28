@@ -56,7 +56,7 @@ class StorySerializer(serializers.ModelSerializer):
             "content",
             "created_at",
             "hashtags",
-            "is_point_completed"
+            "is_point_completed",
         ]
 
     def to_representation(self, instance: Story):
