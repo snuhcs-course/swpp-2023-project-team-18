@@ -21,6 +21,7 @@ public class GetStoryUseCase {
     private final MutableLiveData<StoryUiState> storyState = new MutableLiveData<>();
     private final AuthenticationRepository authenticationRepository;
     private final StoryRepository storyRepository;
+    private int storyId = -1;
 
     public GetStoryUseCase(
         AuthenticationRepository authenticationRepository,
@@ -56,6 +57,8 @@ public class GetStoryUseCase {
                                 int score = storyInstance.getScore();
                                 Date createdAt = storyInstance.getCreatedAt();
 
+                                storyId = storyInstance.getId();
+
                                 storyState.setValue(
                                     new StoryUiState(null, false, title, content, emotion,
                                         parsedTags,
@@ -76,6 +79,11 @@ public class GetStoryUseCase {
                 storyState.setValue(StoryUiState.withError(new UnauthorizedAccessException()));
             }
         });
+    }
+
+    public int getStoryId() {
+        // TODO: id가 -1인 경우 처리해야 함
+        return storyId;
     }
 
     public void observeStoryState(Observer<StoryUiState> observer) {

@@ -25,6 +25,10 @@ public class StoryModel {
         this.createdAt = TimeConverter.convertTimestampToDate(createdAt);
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getEmotion() {
         return emotion;
     }
