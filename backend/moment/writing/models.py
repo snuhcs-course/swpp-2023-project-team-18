@@ -2,6 +2,7 @@ from django.db import models
 from user.models import User
 from .constants import (
     MOMENT_MAX_LENGTH,
+    REPLY_MAX_LENGTH,
     STORY_MAX_LENGTH,
     STORY_TITLE_MAX_LENGTH,
     Emotions,
@@ -36,7 +37,7 @@ class Story(models.Model):
 class MomentPair(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     moment = models.CharField(max_length=MOMENT_MAX_LENGTH)
-    reply = models.CharField(max_length=MOMENT_MAX_LENGTH, blank=True)
+    reply = models.CharField(max_length=REPLY_MAX_LENGTH, blank=True)
     story = models.ForeignKey(Story, null=True, blank=True, on_delete=models.CASCADE)
 
     moment_created_at = models.DateTimeField()
