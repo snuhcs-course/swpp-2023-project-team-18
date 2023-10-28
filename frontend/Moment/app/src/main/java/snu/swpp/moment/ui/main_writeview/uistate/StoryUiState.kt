@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide
+package snu.swpp.moment.ui.main_writeview.uistate
 
 import java.util.Date
 
