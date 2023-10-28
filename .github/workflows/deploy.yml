@@ -27,3 +27,4 @@ jobs:
             docker stop cg01
             docker rm cg01
             docker-compose up -d --build
+
