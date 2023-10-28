@@ -42,6 +42,7 @@ public class TodayViewModel extends ViewModel {
     private final MutableLiveData<CompletionStoreResultState> emotionResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> tagsResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> scoreResultState = new MutableLiveData<>();
+    private final SaveScoreUseCase saveScoreUseCase;
 
     private final GetStoryUseCase getStoryUseCase;
     private final AuthenticationRepository authenticationRepository;
@@ -51,12 +52,15 @@ public class TodayViewModel extends ViewModel {
     public TodayViewModel(
         AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository,
-        StoryRepository storyRepository
+        StoryRepository storyRepository,
+        GetStoryUseCase getStoryUseCase,
+        SaveScoreUseCase saveScoreUseCase
     ) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
         this.storyRepository = storyRepository;
-        this.getStoryUseCase = new GetStoryUseCase(authenticationRepository, storyRepository);
+        this.getStoryUseCase = getStoryUseCase;
+        this.saveScoreUseCase = saveScoreUseCase;
     }
 
     public MomentUiState getMomentState() {
@@ -259,6 +263,7 @@ public class TodayViewModel extends ViewModel {
             }
         });
     }
+
     public void observeMomentState(Observer<MomentUiState> observer) {
         momentState.observeForever(observer);
     }

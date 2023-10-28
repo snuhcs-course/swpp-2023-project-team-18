@@ -70,6 +70,10 @@ public class DailyViewModel extends ViewModel {
         getStoryUseCase.getStory(year, month, date);
     }
 
+    public void setScore(int score) {
+        // TODO
+    }
+
     public void observeMomentState(Observer<MomentUiState> observer) {
         momentState.observeForever(observer);
     }

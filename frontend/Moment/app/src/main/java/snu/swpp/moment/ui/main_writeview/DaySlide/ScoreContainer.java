@@ -5,6 +5,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
 
@@ -15,7 +17,7 @@ public class ScoreContainer {
     private final TextView scoreText;
     private final AnimationProvider animationProvider;
 
-    private int score;
+    private final MutableLiveData<Integer> score = new MutableLiveData<>();
     private final int DEFAULT_SCORE = 3;
 
     public ScoreContainer(@NonNull View view) {
@@ -37,19 +39,22 @@ public class ScoreContainer {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                score = seekBar.getProgress();
+                score.setValue(seekBar.getProgress());
                 scoreText.setText(String.valueOf(score));
-                // TODO: 점수 저장 API 호출
             }
         });
     }
 
     public int getScore() {
-        return score;
+        Integer value = score.getValue();
+        if (value == null) {
+            return DEFAULT_SCORE;
+        }
+        return value;
     }
 
     public void setScore(int score) {
-        this.score = score;
+        this.score.setValue(score);
         scoreSeekBar.setProgress(score);
         scoreText.setText(String.valueOf(score));
     }
@@ -57,5 +62,9 @@ public class ScoreContainer {
     public void setUiVisible() {
         scoreWrapper.setVisibility(View.VISIBLE);
         scoreWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void observeScore(Observer<Integer> observer) {
+        score.observeForever(observer);
     }
 }

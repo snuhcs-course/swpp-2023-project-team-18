@@ -117,6 +117,22 @@ public class ListFooterContainer {
         return momentWriterContainer.getInputText();
     }
 
+    public String getStoryTitle() {
+        return storyContainer.getStoryTitle();
+    }
+
+    public String getStoryContent() {
+        return storyContainer.getStoryContent();
+    }
+
+    public int getSelectedEmotion() {
+        return emotionGridContainer.getSelectedEmotion();
+    }
+
+    public String getTags() {
+        return tagBoxContainer.getTags();
+    }
+
     public void setAddButtonOnClickListener(View.OnClickListener listener) {
         momentWriterContainer.setAddButtonOnClickListener(listener);
     }
@@ -135,6 +151,10 @@ public class ListFooterContainer {
 
     public void observeAiStoryCallSwitch(Observer<Boolean> observer) {
         aiStoryCallSwitch.observeForever(observer);
+    }
+
+    public void observeScore(Observer<Integer> observer) {
+        scoreContainer.observeScore(observer);
     }
 
     public void freezeStoryEditText() {
@@ -207,7 +227,7 @@ public class ListFooterContainer {
         return (AiStoryState aiStoryState) -> {
             showLoadingText(false);
             setBottomButtonState(true);
-            
+
             if (aiStoryState.getError() != null) {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();

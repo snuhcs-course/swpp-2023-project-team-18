@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
+import snu.swpp.moment.ui.main_writeview.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 
@@ -15,12 +16,15 @@ public class BottomButtonContainer {
 
     private final Button button;
     private final View view;
+    private final TodayViewModel viewModel;
     private final ListFooterContainer listFooterContainer;
 
-    public BottomButtonContainer(@NonNull View view, ListFooterContainer listFooterContainer) {
+    public BottomButtonContainer(@NonNull View view, TodayViewModel viewModel,
+        ListFooterContainer listFooterContainer) {
         button = view.findViewById(R.id.bottomButton);
 
         this.view = view;
+        this.viewModel = viewModel;
         this.listFooterContainer = listFooterContainer;
 
         this.listFooterContainer.observeBottomButtonState((Boolean state) -> {
@@ -48,7 +52,8 @@ public class BottomButtonContainer {
             builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
                 // 네 -> 하루 마무리 시작
                 listFooterContainer.showLoadingText(true);
-                // TODO: 마무리 상태 기록 API 호출
+                // 마무리 상태 기록 API 호출
+                viewModel.notifyCompletion();
             });
             builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
             });
@@ -63,7 +68,9 @@ public class BottomButtonContainer {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
             listFooterContainer.showLoadingText(true);
-            // TODO: 스토리 저장 API 호출
+            // 스토리 저장 API 호출
+            viewModel.saveStory(listFooterContainer.getStoryTitle(),
+                listFooterContainer.getStoryContent());
         });
     }
 
@@ -75,7 +82,8 @@ public class BottomButtonContainer {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
             listFooterContainer.showLoadingText(true);
-            // TODO: 감정 저장 API 호출
+            // 감정 저장 API 호출
+            viewModel.saveEmotion(listFooterContainer.getSelectedEmotion());
         });
     }
 
@@ -86,7 +94,8 @@ public class BottomButtonContainer {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
             listFooterContainer.showLoadingText(true);
-            // TODO: 태그 저장 API 호출
+            // 태그 저장 API 호출
+            viewModel.saveHashtags(listFooterContainer.getStoryContent());
         });
     }
 

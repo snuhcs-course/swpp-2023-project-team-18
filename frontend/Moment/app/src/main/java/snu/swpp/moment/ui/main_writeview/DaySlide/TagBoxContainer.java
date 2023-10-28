@@ -61,8 +61,8 @@ public class TagBoxContainer {
         });
     }
 
-    public List<String> getTags() {
-        return parseTags(tagEditText.getText().toString());
+    public String getTags() {
+        return tagEditText.getText().toString();
     }
 
     public void setTags(@NonNull List<String> tags) {

@@ -32,8 +32,10 @@ import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.ui.main_writeview.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
+import snu.swpp.moment.ui.main_writeview.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
@@ -56,6 +58,8 @@ public class TodayViewFragment extends Fragment {
     private MomentRemoteDataSource momentRemoteDataSource;
     private StoryRepository storyRepository;
     private StoryRemoteDataSource storyRemoteDataSource;
+    private GetStoryUseCase getStoryUseCase;
+    private SaveScoreUseCase saveScoreUseCase;
 
     private final int MOMENT_HOUR_LIMIT = 2;
 
@@ -80,10 +84,15 @@ public class TodayViewFragment extends Fragment {
             startActivity(intent);
         }
 
+        getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
+            new GetStoryUseCase(authenticationRepository, storyRepository));
+        saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
+            new SaveScoreUseCase());    // FIXME: temp
+
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
                 new TodayViewModelFactory(authenticationRepository, momentRepository,
-                    storyRepository))
+                    storyRepository, getStoryUseCase, saveScoreUseCase))
                 .get(TodayViewModel.class);
         }
 
@@ -224,8 +233,14 @@ public class TodayViewFragment extends Fragment {
             }
         });
 
+        listFooterContainer.observeScore(score -> {
+            if (score != null) {
+                viewModel.saveScore(score);
+            }
+        });
+
         // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
+        bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
         bottomButtonContainer.viewingMoment();
 
         // 하루 마무리 API 호출 시 동작 설정

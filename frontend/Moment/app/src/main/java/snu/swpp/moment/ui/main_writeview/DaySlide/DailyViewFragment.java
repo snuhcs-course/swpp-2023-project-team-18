@@ -87,23 +87,23 @@ public class DailyViewFragment extends Fragment {
         listViewItems = new ArrayList<>();
 
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
-            int error = momentUiState.getError();
-            if (error == -1) {
+            Exception error = momentUiState.getError();
+            if (error != null) {
                 // SUCCESS
-                int numMoments = momentUiState.getMomentPairsListSize();
+                int numMoments = momentUiState.getNumMoments();
                 if (numMoments > 0) {
                     listViewItems.clear();
-                    for (MomentPairModel momentPair : momentUiState.getMomentPairsList()) {
+                    for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
 
                     listViewAdapter.notifyDataSetChanged();
                 }
-            } else if (error == 0) {
+            } else if (error instanceof NoInternetException) {
                 // NO INTERNET
                 Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
-            } else if (error == 1) {
+            } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
                 Toast.makeText(getContext(), R.string.token_expired_error,
                     Toast.LENGTH_SHORT).show();
@@ -123,6 +123,10 @@ public class DailyViewFragment extends Fragment {
 
         // list footer 관리 객체 초기화
         listFooterContainer = new ListFooterContainer(footerView);
+
+        listFooterContainer.observeScore(score -> {
+            viewModel.setScore(score);
+        });
 
         viewModel.observeStoryState((StoryUiState storyUiState) -> {
             Exception error = storyUiState.getError();

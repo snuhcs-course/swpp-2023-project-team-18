@@ -12,15 +12,21 @@ public class TodayViewModelFactory implements ViewModelProvider.Factory {
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
     private final StoryRepository storyRepository;
+    private final GetStoryUseCase getStoryUseCase;
+    private final SaveScoreUseCase saveScoreUseCase;
 
     public TodayViewModelFactory(
         AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository,
-        StoryRepository storyRepository
+        StoryRepository storyRepository,
+        GetStoryUseCase getStoryUseCase,
+        SaveScoreUseCase saveScoreUseCase
     ) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
         this.storyRepository = storyRepository;
+        this.getStoryUseCase = getStoryUseCase;
+        this.saveScoreUseCase = saveScoreUseCase;
     }
 
     @NonNull
@@ -28,7 +34,7 @@ public class TodayViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(TodayViewModel.class)) {
             return (T) new TodayViewModel(authenticationRepository, momentRepository,
-                storyRepository);
+                storyRepository, getStoryUseCase, saveScoreUseCase);
         } else {
             System.out.println("#DEBUG: WriteViewModelFactory not working");
             throw new IllegalArgumentException("Unknown ViewModel class");
