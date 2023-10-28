@@ -40,7 +40,7 @@ public class ScoreContainer {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 score.setValue(seekBar.getProgress());
-                scoreText.setText(String.valueOf(score));
+                scoreText.setText(String.valueOf(getScore()));
             }
         });
     }
