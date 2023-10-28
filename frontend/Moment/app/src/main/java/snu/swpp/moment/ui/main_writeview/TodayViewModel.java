@@ -158,7 +158,7 @@ public class TodayViewModel extends ViewModel {
                 long[] todayTomorrowTimestamp = TimeConverter.getOneDayIntervalTimestamps(
                     today.getYear(), today.getMonthValue(), today.getDayOfMonth());
                 long start = todayTomorrowTimestamp[0];
-                long end = todayTomorrowTimestamp[1];
+                long end = todayTomorrowTimestamp[1] + 1;
 
                 storyRepository.notifyCompletion(access_token, start, end,
                     new StoryCompletionNotifyCallBack() {
