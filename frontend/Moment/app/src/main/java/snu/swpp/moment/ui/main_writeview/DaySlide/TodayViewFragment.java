@@ -50,6 +50,7 @@ public class TodayViewFragment extends Fragment {
 
     private final int NO_INTERNET = 0;
     private final int ACCESS_TOKEN_EXPIRED = 1;
+    private final int MOMENT_HOUR_LIMIT = 2;
 
 
     @Override
@@ -144,8 +145,9 @@ public class TodayViewFragment extends Fragment {
                 Locale.getDefault());
 
             int numMoments = viewModel.getMomentState().getValue().getMomentPairsListSize();
-            if (numMoments >= 2) {
-                String createdSecond = listViewItems.get(numMoments - 2).getInputTime();
+            if (numMoments >= MOMENT_HOUR_LIMIT) {
+                String createdSecond = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
+                    .getInputTime();
 
                 try {
                     Date createdDate = inputFormat.parse(createdSecond);
