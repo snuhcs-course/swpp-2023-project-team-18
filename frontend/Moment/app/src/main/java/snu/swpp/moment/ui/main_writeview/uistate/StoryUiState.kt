@@ -24,5 +24,17 @@ class StoryUiState(
             score = 0,
             createdAt = Date(),
         )
+
+        @JvmStatic
+        fun withError(error: Exception) = StoryUiState(
+            error = error,
+            isEmpty = true,
+            storyTitle = "",
+            storyContent = "",
+            emotion = 0,
+            tags = listOf(),
+            score = 0,
+            createdAt = Date(),
+        )
     }
 }
