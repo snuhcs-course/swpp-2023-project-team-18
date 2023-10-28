@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +32,8 @@ public class GetStoryUseCase {
         this.storyRepository = storyRepository;
     }
 
-    public void getStory(int year, int month, int date) {
-        long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(year, month, date);
+    public void getStory(LocalDateTime now) {
+        long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(now);
 
         authenticationRepository.isTokenValid(new TokenCallBack() {
             @Override

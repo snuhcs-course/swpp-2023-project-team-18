@@ -1,7 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import snu.swpp.moment.data.callback.ScoreSaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
@@ -10,13 +9,13 @@ import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 
 public class SaveScoreUseCase {
-    // TODO: 점수 저장 API 구현
-    //      DailyViewModel에서도 써야 함
-    private final MutableLiveData<CompletionStoreResultState> scoreResultState = new MutableLiveData<>();
-    private AuthenticationRepository authenticationRepository;
-    private StoryRepository storyRepository;
 
-    public SaveScoreUseCase(AuthenticationRepository authenticationRepository, StoryRepository storyRepository) {
+    private final MutableLiveData<CompletionStoreResultState> scoreResultState = new MutableLiveData<>();
+    private final AuthenticationRepository authenticationRepository;
+    private final StoryRepository storyRepository;
+
+    public SaveScoreUseCase(AuthenticationRepository authenticationRepository,
+        StoryRepository storyRepository) {
         this.authenticationRepository = authenticationRepository;
         this.storyRepository = storyRepository;
     }
@@ -41,7 +40,8 @@ public class SaveScoreUseCase {
 
             @Override
             public void onFailure() {
-                scoreResultState.setValue(new CompletionStoreResultState(new UnauthorizedAccessException()));
+                scoreResultState.setValue(
+                    new CompletionStoreResultState(new UnauthorizedAccessException()));
             }
         });
     }

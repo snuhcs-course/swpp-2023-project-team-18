@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
-import snu.swpp.moment.data.repository.StoryRepository;
 
 public class DailyViewModelFactory implements ViewModelProvider.Factory {
 

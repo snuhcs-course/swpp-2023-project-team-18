@@ -55,5 +55,7 @@ public class StoryModel {
         return createdAt;
     }
 
-    public boolean getIsPointCompleted() { return isPointCompleted; }
+    public boolean getIsPointCompleted() {
+        return isPointCompleted;
+    }
 }

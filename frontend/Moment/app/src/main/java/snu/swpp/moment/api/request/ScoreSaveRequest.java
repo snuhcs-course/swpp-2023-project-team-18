@@ -3,6 +3,7 @@ package snu.swpp.moment.api.request;
 import com.google.gson.annotations.SerializedName;
 
 public class ScoreSaveRequest {
+
     @SerializedName("story_id")
     private int story_id;
     @SerializedName("score")

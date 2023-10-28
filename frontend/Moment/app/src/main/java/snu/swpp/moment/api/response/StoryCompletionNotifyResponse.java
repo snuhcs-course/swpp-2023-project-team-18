@@ -3,6 +3,7 @@ package snu.swpp.moment.api.response;
 import com.google.gson.annotations.SerializedName;
 
 public class StoryCompletionNotifyResponse {
+
     @SerializedName("id")
     private int id;
     @SerializedName("message")

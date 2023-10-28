@@ -25,7 +25,6 @@ import snu.swpp.moment.data.callback.ScoreSaveCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StoryGetCallBack;
 import snu.swpp.moment.data.callback.StorySaveCallback;
-import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.exception.AIStoryRetrievalFailureException;
 import snu.swpp.moment.exception.InvalidEmotionException;
 import snu.swpp.moment.exception.InvalidHashtagSaveRequestException;

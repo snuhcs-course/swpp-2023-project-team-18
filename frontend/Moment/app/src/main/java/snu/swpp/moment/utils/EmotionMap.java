@@ -19,19 +19,21 @@ public class EmotionMap {
         put("invalid", 10);
     }};
 
-    private static final HashMap<Integer, String> reverseMap = new HashMap<>() { {
-        put(0, "excited1");
-        put(1, "excited2");
-        put(2, "happy1");
-        put(3, "happy2");
-        put(4, "normal1");
-        put(5, "normal2");
-        put(6, "sad1");
-        put(7, "sad2");
-        put(8, "angry1");
-        put(9, "angry2");
-        put(10, "invalid");
-    }};
+    private static final HashMap<Integer, String> reverseMap = new HashMap<>() {
+        {
+            put(0, "excited1");
+            put(1, "excited2");
+            put(2, "happy1");
+            put(3, "happy2");
+            put(4, "normal1");
+            put(5, "normal2");
+            put(6, "sad1");
+            put(7, "sad2");
+            put(8, "angry1");
+            put(9, "angry2");
+            put(10, "invalid");
+        }
+    };
 
     public static int getEmotionInt(String emotion) {
         Integer emotionInt = emotionEnumMap.getOrDefault(emotion, 10);

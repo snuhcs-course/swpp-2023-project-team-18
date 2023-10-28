@@ -3,6 +3,7 @@ package snu.swpp.moment.api.request;
 import com.google.gson.annotations.SerializedName;
 
 public class HashtagSaveRequest {
+
     @SerializedName("story_id")
     private int story_id;
     @SerializedName("content")
