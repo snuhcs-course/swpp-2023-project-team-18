@@ -74,9 +74,9 @@ public interface ServiceApi {
 
     @POST("api/writing/score/")
     Call<ScoreSaveResponse> saveScore(@Header("Authorization") String bearerToken,
-        ScoreSaveRequest data);
+        @Body ScoreSaveRequest data);
 
     @POST("api/writing/hashtags/")
     Call<HashtagSaveResponse> saveHashtags(@Header("Authorization") String bearerToken,
-        HashtagSaveRequest data);
+        @Body HashtagSaveRequest data);
 }

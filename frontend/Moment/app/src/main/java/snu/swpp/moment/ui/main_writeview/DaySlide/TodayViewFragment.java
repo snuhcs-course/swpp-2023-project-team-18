@@ -87,7 +87,7 @@ public class TodayViewFragment extends Fragment {
         getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
             new GetStoryUseCase(authenticationRepository, storyRepository));
         saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
-            new SaveScoreUseCase());    // FIXME: temp
+            new SaveScoreUseCase(authenticationRepository, storyRepository));    // FIXME: temp
 
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
