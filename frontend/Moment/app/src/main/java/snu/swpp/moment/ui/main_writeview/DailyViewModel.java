@@ -1,7 +1,7 @@
 package snu.swpp.moment.ui.main_writeview;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,14 +37,6 @@ public class DailyViewModel extends ViewModel {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
         this.storyRepository = storyRepository;
-    }
-
-    public LiveData<MomentUiState> getMomentState() {
-        return momentState;
-    }
-
-    public LiveData<StoryUiState> getStoryState() {
-        return storyState;
     }
 
     public void getMoment(int year, int month, int date) {
@@ -115,6 +107,14 @@ public class DailyViewModel extends ViewModel {
                     });
             }
         });
+    }
+
+    public void observeMomentState(Observer<MomentUiState> observer) {
+        momentState.observeForever(observer);
+    }
+
+    public void observeStoryState(Observer<StoryUiState> observer) {
+        storyState.observeForever(observer);
     }
 
     abstract class WriteViewTokenCallback implements TokenCallBack {

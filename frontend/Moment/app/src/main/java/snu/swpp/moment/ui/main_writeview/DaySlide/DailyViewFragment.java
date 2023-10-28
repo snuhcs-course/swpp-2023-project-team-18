@@ -85,36 +85,34 @@ public class DailyViewFragment extends Fragment {
 
         listViewItems = new ArrayList<>();
 
-        viewModel.getMomentState()
-            .observe(getViewLifecycleOwner(), (MomentUiState momentUiState) -> {
-                int error = momentUiState.getError();
-                if (error == -1) {
-                    // SUCCESS
-                    int numMoments = momentUiState.getMomentPairsListSize();
-                    if (numMoments > 0) {
-                        listViewItems.clear();
-                        for (MomentPairModel momentPair : momentUiState.getMomentPairsList()) {
-                            listViewItems.add(new ListViewItem(momentPair));
-                        }
-
-                        listViewAdapter.notifyDataSetChanged();
-                        // TODO: 맨 위로 스크롤 focus 유지되는지 확인
+        viewModel.observeMomentState((MomentUiState momentUiState) -> {
+            int error = momentUiState.getError();
+            if (error == -1) {
+                // SUCCESS
+                int numMoments = momentUiState.getMomentPairsListSize();
+                if (numMoments > 0) {
+                    listViewItems.clear();
+                    for (MomentPairModel momentPair : momentUiState.getMomentPairsList()) {
+                        listViewItems.add(new ListViewItem(momentPair));
                     }
-                } else if (error == 0) {
-                    // NO INTERNET
-                    Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                        .show();
-                } else if (error == 1) {
-                    // ACCESS TOKEN EXPIRED
-                    Toast.makeText(getContext(), R.string.token_expired_error,
-                        Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                        .show();
+
+                    listViewAdapter.notifyDataSetChanged();
                 }
-            });
+            } else if (error == 0) {
+                // NO INTERNET
+                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                    .show();
+            } else if (error == 1) {
+                // ACCESS TOKEN EXPIRED
+                Toast.makeText(getContext(), R.string.token_expired_error,
+                    Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                    .show();
+            }
+        });
 
         listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
         binding.dailyMomentList.setAdapter(listViewAdapter);
@@ -125,7 +123,7 @@ public class DailyViewFragment extends Fragment {
         // list footer 관리 객체 초기화
         listFooterContainer = new ListFooterContainer(footerView);
 
-        viewModel.getStoryState().observe(getViewLifecycleOwner(), (StoryUiState storyUiState) -> {
+        viewModel.observeStoryState((StoryUiState storyUiState) -> {
             Exception error = storyUiState.getError();
             if (error == null) {
                 // SUCCESS
