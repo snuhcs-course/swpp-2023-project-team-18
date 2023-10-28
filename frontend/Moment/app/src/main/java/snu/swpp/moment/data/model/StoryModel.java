@@ -22,7 +22,7 @@ public class StoryModel {
         this.title = title;
         this.content = content;
         this.hashtags = hashtagModels;
-        this.createdAt = TimeConverter.convertLongToDate(createdAt);
+        this.createdAt = TimeConverter.convertTimestampToDate(createdAt);
     }
 
     public String getEmotion() {

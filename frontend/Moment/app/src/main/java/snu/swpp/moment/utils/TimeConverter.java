@@ -10,11 +10,11 @@ import java.util.Locale;
 
 public class TimeConverter {
 
-    public static long convertDateToLong(Date date) {
+    public static long convertDateToTimestamp(Date date) {
         return date.getTime() / 1000;
     }
 
-    public static Date convertLongToDate(Long timestamp) {
+    public static Date convertTimestampToDate(Long timestamp) {
         return new Date(timestamp * 1000);
     }
 
@@ -49,8 +49,8 @@ public class TimeConverter {
         final int MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
         calendar.add(Calendar.MILLISECOND, MILLIS_IN_A_DAY - 1);
         Date endDate = calendar.getTime();
-        long start = TimeConverter.convertDateToLong(startDate);
-        long end = TimeConverter.convertDateToLong(endDate);
+        long start = TimeConverter.convertDateToTimestamp(startDate);
+        long end = TimeConverter.convertDateToTimestamp(endDate);
         return new long[]{start, end};
     }
 }
