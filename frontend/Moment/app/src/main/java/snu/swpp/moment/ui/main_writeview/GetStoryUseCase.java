@@ -82,7 +82,9 @@ public class GetStoryUseCase {
     }
 
     public int getStoryId() {
-        // TODO: id가 -1인 경우 처리해야 함
+        if (storyId == -1) {
+            System.out.printf("#DEBUG: story id is -1");
+        }
         return storyId;
     }
 
