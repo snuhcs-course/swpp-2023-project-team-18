@@ -33,10 +33,17 @@ public class BottomButtonContainer {
         });
     }
 
-    public void setActivated(boolean activated) {
+    public void setActivated(boolean activated, boolean completed) {
         button.setActivated(activated);
         button.setEnabled(activated);
+        if (completed) {
+            button.setText(R.string.completed_day);
+        }
         Log.d("BottomButtonContainer", "setActivated: " + activated);
+    }
+
+    public void setActivated(boolean activated) {
+        setActivated(activated, false);
     }
 
     /* 모먼트 작성 중: 하루 마무리하기 버튼 */
