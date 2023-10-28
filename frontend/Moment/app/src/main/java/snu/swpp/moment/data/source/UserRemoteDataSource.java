@@ -1,5 +1,6 @@
 package snu.swpp.moment.data.source;
 
+import android.util.Log;
 import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,8 +26,6 @@ import snu.swpp.moment.data.model.LoggedInUserModel;
 public class UserRemoteDataSource {
 
     private ServiceApi service;
-    LoggedInUserModel loggedInUser = null;
-    Integer error;
 
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
         service = RetrofitClient.getClient().create(ServiceApi.class);
@@ -34,6 +33,7 @@ public class UserRemoteDataSource {
         service.userLogin(loginRequest).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                Log.d("APICall", "login: " + response.code());
                 if (response.isSuccessful()) {
                     LoginResponse result = response.body();
                     loginCallBack.onSuccess(
@@ -47,7 +47,6 @@ public class UserRemoteDataSource {
                     } finally {
                         loginCallBack.onFailure(message);
                     }
-
                 }
             }
 
@@ -60,17 +59,14 @@ public class UserRemoteDataSource {
 
     public void register(String username, String password, String nickname,
         AuthenticationCallBack registerCallBack) {
-        //System.out.println("#Debug from datasource || username : " + username + " password : " + password);
-        //System.out.println("#Debug service create");
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        //System.out.println("#Debug LoginRequest");
         RegisterRequest request = new RegisterRequest(username, password, nickname);
         service.userRegister(request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<RegisterResponse> call,
                 Response<RegisterResponse> response) {
+                Log.d("APICall", "register: " + response.code());
                 if (response.isSuccessful()) {
-                    //System.out.println("#Debug Login OnResponse ");
                     RegisterResponse result = response.body();
                     registerCallBack.onSuccess(
                         new LoggedInUserModel(result.getUser(), result.getToken()));
@@ -98,12 +94,12 @@ public class UserRemoteDataSource {
 
     public void isTokenValid(String token, TokenCallBack callBack) {
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        //System.out.println("#Debug LoginRequest");
         TokenVerifyRequest request = new TokenVerifyRequest(token);
         service.tokenVerify(request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<TokenVerifyResponse> call,
                 Response<TokenVerifyResponse> response) {
+                Log.d("APICall", "isTokenValid: " + response.code());
                 if (response.code() == 401) {
                     callBack.onFailure();
                 } else {
@@ -128,6 +124,7 @@ public class UserRemoteDataSource {
             @Override
             public void onResponse(Call<TokenRefreshResponse> call,
                 Response<TokenRefreshResponse> response) {
+                Log.d("APICall", "refresh: " + response.code());
                 if (response.code() == 401) {
                     callBack.onFailure();
                 } else {

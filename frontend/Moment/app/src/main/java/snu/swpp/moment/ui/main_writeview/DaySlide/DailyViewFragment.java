@@ -122,6 +122,7 @@ public class DailyViewFragment extends Fragment {
                 Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
+                Log.d("DailyViewFragment", "Unknown error: " + error.getMessage());
                 Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
                     .show();
             }

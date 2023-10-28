@@ -11,7 +11,6 @@ import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
-import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
@@ -40,6 +39,7 @@ public class MomentRemoteDataSource {
 
             @Override
             public void onFailure(Call<MomentGetResponse> call, Throwable t) {
+                Log.d("APICall", "getMoment: onFailure");
                 callback.onFailure(new NoInternetException());
             }
         });
@@ -68,6 +68,7 @@ public class MomentRemoteDataSource {
 
             @Override
             public void onFailure(Call<MomentWriteResponse> call, Throwable t) {
+                Log.d("APICall", "writeMoment: onFailure");
                 callback.onFailure(new NoInternetException());
             }
         });

@@ -87,7 +87,7 @@ public class TodayViewFragment extends Fragment {
         getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
             new GetStoryUseCase(authenticationRepository, storyRepository));
         saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
-            new SaveScoreUseCase(authenticationRepository, storyRepository));    // FIXME: temp
+            new SaveScoreUseCase(authenticationRepository, storyRepository));
 
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
@@ -103,7 +103,8 @@ public class TodayViewFragment extends Fragment {
 
         // moment GET API 호출
         viewModel.observeMomentState(momentUiState -> {
-            if (momentUiState.getError() == null) {
+            Exception error = momentUiState.getError();
+            if (error == null) {
                 // 모먼트가 하나도 없으면 하단 버튼 비활성화
                 int numMoments = momentUiState.getNumMoments();
                 bottomButtonContainer.setActivated(numMoments != 0);
@@ -117,20 +118,19 @@ public class TodayViewFragment extends Fragment {
                     listViewAdapter.notifyDataSetChanged();
                     scrollToBottom();
                 }
+            } else if (error instanceof NoInternetException) {
+                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                    .show();
+            } else if (error instanceof UnauthorizedAccessException) {
+                Toast.makeText(getContext(), R.string.token_expired_error,
+                    Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                startActivity(intent);
             } else {
-                if (momentUiState.getError() instanceof NoInternetException) {
-                    Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                        .show();
-                } else if (momentUiState.getError() instanceof UnauthorizedAccessException) {
-                    Toast.makeText(getContext(), R.string.token_expired_error,
-                        Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                        .show();
-                }
+                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                    .show();
             }
+
         });
         viewModel.getMoment(LocalDate.now());
 
