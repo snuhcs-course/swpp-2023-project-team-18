@@ -2,7 +2,7 @@ package snu.swpp.moment.exception;
 
 import androidx.annotation.Nullable;
 
-public class AIStoryRetrievalFailureException extends RuntimeException {
+public class AIStoryRetrievalFailureException extends Exception {
 
     @Nullable
     @Override

@@ -2,7 +2,7 @@ package snu.swpp.moment.exception;
 
 import androidx.annotation.Nullable;
 
-public class InvalidEmotionException extends RuntimeException{
+public class InvalidEmotionException extends Exception {
 
     @Nullable
     @Override

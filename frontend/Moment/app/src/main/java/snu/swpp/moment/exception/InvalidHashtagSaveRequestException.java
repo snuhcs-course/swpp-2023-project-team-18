@@ -2,7 +2,7 @@ package snu.swpp.moment.exception;
 
 import androidx.annotation.Nullable;
 
-public class InvalidHashtagSaveRequestException extends RuntimeException{
+public class InvalidHashtagSaveRequestException extends Exception {
 
     @Nullable
     @Override

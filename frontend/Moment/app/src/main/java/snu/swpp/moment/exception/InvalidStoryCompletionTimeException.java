@@ -2,7 +2,7 @@ package snu.swpp.moment.exception;
 
 import androidx.annotation.Nullable;
 
-public class InvalidStoryCompletionTimeException extends RuntimeException{
+public class InvalidStoryCompletionTimeException extends Exception {
 
     @Nullable
     @Override

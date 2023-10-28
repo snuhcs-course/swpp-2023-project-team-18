@@ -2,7 +2,7 @@ package snu.swpp.moment.exception;
 
 import androidx.annotation.Nullable;
 
-public class InvalidScoreSaveRequestException extends RuntimeException{
+public class InvalidScoreSaveRequestException extends Exception {
 
     @Nullable
     @Override
