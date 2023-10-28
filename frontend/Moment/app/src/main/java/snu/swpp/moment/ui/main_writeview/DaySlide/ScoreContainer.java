@@ -15,6 +15,8 @@ public class ScoreContainer {
     private final ConstraintLayout scoreWrapper;
     private final SeekBar scoreSeekBar;
     private final TextView scoreText;
+    private final TextView autoCompleteWarnText;
+
     private final AnimationProvider animationProvider;
 
     private final MutableLiveData<Integer> score = new MutableLiveData<>();
@@ -24,6 +26,7 @@ public class ScoreContainer {
         scoreWrapper = (ConstraintLayout) view;
         scoreSeekBar = view.findViewById(R.id.scoreSeekBar);
         scoreText = view.findViewById(R.id.scoreText);
+        autoCompleteWarnText = view.findViewById(R.id.autoCompleteWarnText);
         animationProvider = new AnimationProvider(view);
 
         setScore(DEFAULT_SCORE);
@@ -41,6 +44,7 @@ public class ScoreContainer {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 score.setValue(seekBar.getProgress());
                 scoreText.setText(String.valueOf(getScore()));
+                showAutoCompleteWarnText(false);
             }
         });
     }
@@ -62,6 +66,14 @@ public class ScoreContainer {
     public void setUiVisible() {
         scoreWrapper.setVisibility(View.VISIBLE);
         scoreWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void showAutoCompleteWarnText(boolean visible) {
+        if (visible) {
+            autoCompleteWarnText.setVisibility(View.VISIBLE);
+        } else {
+            autoCompleteWarnText.setVisibility(View.GONE);
+        }
     }
 
     public void observeScore(Observer<Integer> observer) {

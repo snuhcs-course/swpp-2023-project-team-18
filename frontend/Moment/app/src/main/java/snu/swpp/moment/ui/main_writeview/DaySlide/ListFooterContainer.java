@@ -111,6 +111,7 @@ public class ListFooterContainer {
 
         scoreContainer.setScore(storyUiState.getScore());
         scoreContainer.setUiVisible();
+        scoreContainer.showAutoCompleteWarnText(!storyUiState.isPointCompleted());
     }
 
     public String getMomentInputText() {

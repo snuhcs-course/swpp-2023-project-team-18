@@ -62,6 +62,7 @@
     <string name="completed_day">마무리된 하루</string>
     <string name="completion_loading">· · · \n잠시만 기다려주세요</string>
     <string name="please_retry">다시 시도해주세요.</string>
+    <string name="auto_complete_warning">직접 점수를 매기지 않아 자동으로 입력되었으니 수정해주세요</string>
 
     <string name="popup_yes">네</string>
     <string name="popup_no">아니요</string>
