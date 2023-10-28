@@ -37,7 +37,7 @@ def auto_completion_job():
                     year=now.year,
                     month=now.month,
                     day=now.day,
-                    hour=2,
+                    hour=17,
                     minute=59,
                     second=59,
                 ),
@@ -59,7 +59,7 @@ def auto_completion_job():
                     year=now.year,
                     month=now.month,
                     day=now.day,
-                    hour=2,
+                    hour=17,
                     minute=59,
                     second=59,
                 ),
@@ -69,7 +69,7 @@ def auto_completion_job():
 
 def get_last_days_moment_contents(user: User, now: datetime.datetime) -> List[str]:
     last_day_end = datetime.datetime(
-        year=now.year, month=now.month, day=now.day, hour=2, minute=59, second=59
+        year=now.year, month=now.month, day=now.day, hour=17, minute=59, second=59
     )
     last_day_start = (
         last_day_end - datetime.timedelta(days=1) + datetime.timedelta(seconds=1)
@@ -83,7 +83,7 @@ def get_last_days_moment_contents(user: User, now: datetime.datetime) -> List[st
 
 def get_last_days_story(user: User, now: datetime.datetime) -> Story:
     last_day_end = datetime.datetime(
-        year=now.year, month=now.month, day=now.day, hour=2, minute=59, second=59
+        year=now.year, month=now.month, day=now.day, hour=17, minute=59, second=59
     )
     last_day_start = (
         last_day_end - datetime.timedelta(days=1) + datetime.timedelta(seconds=1)
