@@ -94,7 +94,7 @@ public class TodayViewFragment extends Fragment {
     private void initializeListView(View root) {
         listViewItems = new ArrayList<>();
 
-        viewModel.getMomentState().observe(getViewLifecycleOwner(), momentUiState -> {
+        viewModel.observeMomentState(momentUiState -> {
             if (momentUiState.getError() == -1) {
                 // 모먼트가 하나도 없으면 하단 버튼 비활성화
                 int numMoments = momentUiState.getMomentPairsListSize();
@@ -144,7 +144,7 @@ public class TodayViewFragment extends Fragment {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
                 Locale.getDefault());
 
-            int numMoments = viewModel.getMomentState().getValue().getMomentPairsListSize();
+            int numMoments = viewModel.getMomentState().getMomentPairsListSize();
             if (numMoments >= MOMENT_HOUR_LIMIT) {
                 String createdSecond = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
                     .getInputTime();

@@ -1,7 +1,7 @@
 package snu.swpp.moment.ui.main_writeview;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
@@ -10,15 +10,26 @@ import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewModel extends ViewModel {
 
-    private final int REFRESH_TOKEN_EXPIRED = 1;
+    // 모먼트 작성
     private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
+
+    // 하루 마무리
+    private final MutableLiveData<CompletionState> completionState = new MutableLiveData<>();
+    private final MutableLiveData<CompletionStoreResultState> storyResultState = new MutableLiveData<>();
+    private final MutableLiveData<CompletionStoreResultState> emotionResultState = new MutableLiveData<>();
+    private final MutableLiveData<CompletionStoreResultState> tagsResultState = new MutableLiveData<>();
+    private final MutableLiveData<CompletionStoreResultState> scoreResultState = new MutableLiveData<>();
+
+    private final int REFRESH_TOKEN_EXPIRED = 1;
 
     public TodayViewModel(AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository) {
@@ -26,8 +37,8 @@ public class TodayViewModel extends ViewModel {
         this.momentRepository = momentRepository;
     }
 
-    public LiveData<MomentUiState> getMomentState() {
-        return momentState;
+    public MomentUiState getMomentState() {
+        return momentState.getValue();
     }
 
     public void getMoment(int year, int month, int date) {
@@ -82,6 +93,31 @@ public class TodayViewModel extends ViewModel {
             }
         });
     }
+
+    public void observeMomentState(Observer<MomentUiState> observer) {
+        momentState.observeForever(observer);
+    }
+
+    public void observerCompletionState(Observer<CompletionState> observer) {
+        completionState.observeForever(observer);
+    }
+
+    public void observerStoryResultState(Observer<CompletionStoreResultState> observer) {
+        storyResultState.observeForever(observer);
+    }
+
+    public void observerEmotionResultState(Observer<CompletionStoreResultState> observer) {
+        emotionResultState.observeForever(observer);
+    }
+
+    public void observerTagsResultState(Observer<CompletionStoreResultState> observer) {
+        tagsResultState.observeForever(observer);
+    }
+
+    public void observerScoreResultState(Observer<CompletionStoreResultState> observer) {
+        scoreResultState.observeForever(observer);
+    }
+
 
     abstract class WriteViewTokenCallback implements TokenCallBack {
 
