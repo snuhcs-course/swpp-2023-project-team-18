@@ -16,6 +16,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/swpp-2023-project-team-18/backend/
+            git clean -f
             git pull origin backend/release
             pip install -r config/requirements.txt
             cd moment
@@ -23,4 +24,7 @@ jobs:
             docker rm dg01
             docker stop ng01
             docker rm ng01
+            docker stop cg01
+            docker rm cg01
             docker-compose up -d --build
+
