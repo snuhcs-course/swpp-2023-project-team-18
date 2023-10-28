@@ -115,7 +115,7 @@ public class TodayViewModel extends ViewModel {
                         @Override
                         public void onFailure(Exception error) {
                             momentState.setValue(
-                                new MomentUiState(error, null)
+                                new MomentUiState(error, new ArrayList<>())
                             );
                         }
                     });
