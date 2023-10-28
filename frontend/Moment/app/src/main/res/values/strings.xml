@@ -61,6 +61,7 @@
     <string name="score_help_text">마지막으로 오늘 하루에 점수를 매겨주세요</string>
     <string name="completed_day">마무리된 하루</string>
     <string name="completion_loading">· · · \n잠시만 기다려주세요</string>
+    <string name="please_retry">다시 시도해주세요.</string>
 
     <string name="popup_yes">네</string>
     <string name="popup_no">아니요</string>

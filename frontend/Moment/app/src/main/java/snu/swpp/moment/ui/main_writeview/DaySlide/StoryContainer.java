@@ -127,7 +127,8 @@ public class StoryContainer {
 
                 builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
                     // AI 버튼 숨기고 API 호출
-                    aiButtonClicked();
+                    setAiButtonVisibility(View.GONE);
+                    setAiButtonSwitch();
                 });
                 builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
                 });
@@ -195,6 +196,11 @@ public class StoryContainer {
         storyContentEditText.setText(content);
     }
 
+    public void setAiButtonVisibility(int visibility) {
+        storyAiButton.setVisibility(visibility);
+        aiButtonHelpText.setVisibility(visibility);
+    }
+
     private void checkLimitExceeded() {
         isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);
     }
@@ -204,11 +210,7 @@ public class StoryContainer {
             String.format(Locale.getDefault(), "%d / %d", count, STORY_CONTENT_MAX_LENGTH));
     }
 
-    private void aiButtonClicked() {
-        // AI 버튼 숨기기
-        storyAiButton.setVisibility(View.INVISIBLE);
-        aiButtonHelpText.setVisibility(View.INVISIBLE);
-        // API call을 위해 switch 켜기
+    private void setAiButtonSwitch() {
         aiButtonSwitch.setValue(true);
         aiButtonSwitch.setValue(false);
     }

@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -14,6 +15,8 @@ import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.AnimationProvider;
 
 public class ListFooterContainer {
+
+    private final View view;
 
     // 모먼트 작성
     private final MomentWriterContainer momentWriterContainer;
@@ -42,6 +45,8 @@ public class ListFooterContainer {
 
 
     public ListFooterContainer(@NonNull View view) {
+        this.view = view;
+
         // 모먼트 작성
         momentWriterContainer = new MomentWriterContainer(view.findViewById(R.id.moment_writer));
         // 스토리 작성
@@ -198,6 +203,12 @@ public class ListFooterContainer {
     public Observer<AiStoryState> aiStoryObserver() {
         return (AiStoryState aiStoryState) -> {
             showLoadingText(false);
+            if (aiStoryState.getError() != null) {
+                Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
+                    .show();
+                storyContainer.setAiButtonVisibility(View.VISIBLE);
+                return;
+            }
             storyContainer.setStoryText(aiStoryState.getTitle(), aiStoryState.getContent());
         };
     }

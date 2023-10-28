@@ -3,6 +3,7 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
@@ -99,6 +100,11 @@ public class BottomButtonContainer {
 
     public Observer<CompletionState> completionStateObserver() {
         return (CompletionState completionState) -> {
+            if (completionState.getError() != null) {
+                Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
+                    .show();
+                return;
+            }
             listFooterContainer.showLoadingText(false);
             writingStory();
         };
@@ -106,6 +112,11 @@ public class BottomButtonContainer {
 
     public Observer<CompletionStoreResultState> storyResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
+            if (completionStoreResultState.getError() != null) {
+                Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
+                    .show();
+                return;
+            }
             listFooterContainer.showLoadingText(false);
             selectingEmotion();
         };
@@ -113,6 +124,11 @@ public class BottomButtonContainer {
 
     public Observer<CompletionStoreResultState> emotionResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
+            if (completionStoreResultState.getError() != null) {
+                Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
+                    .show();
+                return;
+            }
             listFooterContainer.showLoadingText(false);
             writingTags();
         };
@@ -120,6 +136,11 @@ public class BottomButtonContainer {
 
     public Observer<CompletionStoreResultState> tagsResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
+            if (completionStoreResultState.getError() != null) {
+                Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
+                    .show();
+                return;
+            }
             listFooterContainer.showLoadingText(false);
             completionDone();
         };
