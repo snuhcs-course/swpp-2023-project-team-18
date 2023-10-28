@@ -30,6 +30,8 @@ import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
+import snu.swpp.moment.exception.NoInternetException;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
 import snu.swpp.moment.ui.main_writeview.TodayViewModel;
@@ -127,7 +129,29 @@ public class TodayViewFragment extends Fragment {
 
         // story GET API 호출
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
-            // TODO: story 없으면 moment add 버튼 보여주고, 있으면 그 내용 보여주기
+            if (savedStoryState.isEmpty()) {
+                return;
+            }
+
+            // story가 이미 있으면 마무리된 하루로 판정해 받아온 데이터 보여줌
+            Exception error = savedStoryState.getError();
+            if (error == null) {
+                // SUCCESS
+                listFooterContainer.updateUiWithRemoteData(savedStoryState);
+            } else if (error instanceof NoInternetException) {
+                // NO INTERNET
+                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                    .show();
+            } else if (error instanceof UnauthorizedAccessException) {
+                // ACCESS TOKEN EXPIRED
+                Toast.makeText(getContext(), R.string.token_expired_error,
+                    Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                    .show();
+            }
         });
         viewModel.getStory(LocalDate.now());
 

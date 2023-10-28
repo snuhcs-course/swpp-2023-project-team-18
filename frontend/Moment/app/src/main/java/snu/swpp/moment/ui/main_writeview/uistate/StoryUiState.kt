@@ -3,8 +3,8 @@ package snu.swpp.moment.ui.main_writeview.uistate
 import java.util.Date
 
 class StoryUiState(
-    val error: Exception?,
-    val isEmpty: Boolean,
+    val error: Exception?,  // 성공 시 null
+    val isEmpty: Boolean,   // 저장된 story가 없으면 true
     val storyTitle: String,
     val storyContent: String,
     val emotion: Int,
