@@ -37,7 +37,7 @@ def auto_completion_job():
                     year=now.year,
                     month=now.month,
                     day=now.day,
-                    hour=2,
+                    hour=17,
                     minute=59,
                     second=59,
                 ),
