@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -12,6 +13,7 @@ import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
@@ -36,8 +38,6 @@ public class TodayViewModel extends ViewModel {
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
     private final StoryRepository storyRepository;
-
-    private final int REFRESH_TOKEN_EXPIRED = 1;
 
     public TodayViewModel(
         AuthenticationRepository authenticationRepository,
@@ -67,14 +67,14 @@ public class TodayViewModel extends ViewModel {
                 momentRepository.getMoment(access_token, dayInterval[0], dayInterval[1],
                     new MomentGetCallBack() {
                         @Override
-                        public void onSuccess(ArrayList<MomentPairModel> momentPair) {
+                        public void onSuccess(List<MomentPairModel> momentPairList) {
                             momentState.setValue(
-                                new MomentUiState(-1, momentPair)
+                                new MomentUiState(null, momentPairList)
                             );
                         }
 
                         @Override
-                        public void onFailure(int error) {
+                        public void onFailure(Exception error) {
                             momentState.setValue(
                                 new MomentUiState(error, new ArrayList<>())
                             );
@@ -93,14 +93,14 @@ public class TodayViewModel extends ViewModel {
                     new MomentWriteCallBack() {
                         @Override
                         public void onSuccess(MomentPairModel momentPair) {
-                            ArrayList<MomentPairModel> reply = momentState.getValue()
-                                .getMomentPairsList();
-                            reply.add(momentPair);
-                            momentState.setValue(new MomentUiState(-1, reply));
+                            List<MomentPairModel> momentPairList = momentState.getValue()
+                                .getMomentPairList();
+                            momentPairList.add(momentPair);
+                            momentState.setValue(new MomentUiState(null, momentPairList));
                         }
 
                         @Override
-                        public void onFailure(int error) {
+                        public void onFailure(Exception error) {
                             momentState.setValue(
                                 new MomentUiState(error, null)
                             );
@@ -159,7 +159,7 @@ public class TodayViewModel extends ViewModel {
 
         @Override
         public void onFailure() {
-            momentState.setValue(new MomentUiState(REFRESH_TOKEN_EXPIRED, null));
+            momentState.setValue(new MomentUiState(new UnauthorizedAccessException(), null));
         }
     }
 }

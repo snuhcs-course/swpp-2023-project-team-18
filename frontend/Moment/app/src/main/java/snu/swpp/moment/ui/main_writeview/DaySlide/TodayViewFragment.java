@@ -57,8 +57,6 @@ public class TodayViewFragment extends Fragment {
     private StoryRepository storyRepository;
     private StoryRemoteDataSource storyRemoteDataSource;
 
-    private final int NO_INTERNET = 0;
-    private final int ACCESS_TOKEN_EXPIRED = 1;
     private final int MOMENT_HOUR_LIMIT = 2;
 
 
@@ -96,14 +94,14 @@ public class TodayViewFragment extends Fragment {
 
         // moment GET API 호출
         viewModel.observeMomentState(momentUiState -> {
-            if (momentUiState.getError() == -1) {
+            if (momentUiState.getError() == null) {
                 // 모먼트가 하나도 없으면 하단 버튼 비활성화
-                int numMoments = momentUiState.getMomentPairsListSize();
+                int numMoments = momentUiState.getNumMoments();
                 bottomButtonContainer.setActivated(numMoments != 0);
 
                 if (numMoments > 0) {
                     listViewItems.clear();
-                    for (MomentPairModel momentPair : momentUiState.getMomentPairsList()) {
+                    for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
 
@@ -111,10 +109,10 @@ public class TodayViewFragment extends Fragment {
                     scrollToBottom();
                 }
             } else {
-                if (momentUiState.getError() == NO_INTERNET) {
+                if (momentUiState.getError() instanceof NoInternetException) {
                     Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                         .show();
-                } else if (momentUiState.getError() == ACCESS_TOKEN_EXPIRED) {
+                } else if (momentUiState.getError() instanceof UnauthorizedAccessException) {
                     Toast.makeText(getContext(), R.string.token_expired_error,
                         Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
@@ -168,7 +166,7 @@ public class TodayViewFragment extends Fragment {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
                 Locale.getDefault());
 
-            int numMoments = viewModel.getMomentState().getMomentPairsListSize();
+            int numMoments = viewModel.getMomentState().getNumMoments();
             if (numMoments >= MOMENT_HOUR_LIMIT) {
                 String createdSecond = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
                     .getInputTime();

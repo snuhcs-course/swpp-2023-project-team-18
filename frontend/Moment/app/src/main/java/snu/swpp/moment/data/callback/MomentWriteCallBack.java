@@ -6,5 +6,5 @@ public interface MomentWriteCallBack {
 
     void onSuccess(MomentPairModel momentPair);
 
-    void onFailure(int error);
+    void onFailure(Exception error);
 }

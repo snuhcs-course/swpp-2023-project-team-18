@@ -1,6 +1,6 @@
 package snu.swpp.moment.data.repository;
 
-import java.util.ArrayList;
+import java.util.List;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
@@ -17,13 +17,12 @@ public class MomentRepository {
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
         remoteDataSource.getMoment(access_token, start, end, new MomentGetCallBack() {
             @Override
-            public void onSuccess(ArrayList<MomentPairModel> momentPair) {
-                //System.out.println("#DEBUG: REPO " + momentPair.get(0).getMoment());
+            public void onSuccess(List<MomentPairModel> momentPair) {
                 callback.onSuccess(momentPair);
             }
 
             @Override
-            public void onFailure(int error) {
+            public void onFailure(Exception error) {
                 callback.onFailure(error);
             }
         });
@@ -37,7 +36,7 @@ public class MomentRepository {
             }
 
             @Override
-            public void onFailure(int error) {
+            public void onFailure(Exception error) {
                 callback.onFailure(error);
             }
         });

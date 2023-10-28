@@ -12,13 +12,13 @@ import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
+import snu.swpp.moment.exception.NoInternetException;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.exception.UnknownErrorException;
 
 public class MomentRemoteDataSource {
 
     private ServiceApi service;
-    private MomentPairModel momentPair;
-    private Integer error;
-    private final int NO_INTERNET = 0;
 
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
         String bearer = "Bearer " + access_token;
@@ -30,14 +30,16 @@ public class MomentRemoteDataSource {
                 if (response.isSuccessful()) {
                     MomentGetResponse result = response.body();
                     callback.onSuccess(result.getMomentList());
+                } else if (response.code() == 401) {
+                    callback.onFailure(new UnauthorizedAccessException());
                 } else {
-                    callback.onFailure(response.code());
+                    callback.onFailure(new UnknownErrorException());
                 }
             }
 
             @Override
             public void onFailure(Call<MomentGetResponse> call, Throwable t) {
-                callback.onFailure(NO_INTERNET);
+                callback.onFailure(new NoInternetException());
             }
         });
     }
@@ -55,14 +57,16 @@ public class MomentRemoteDataSource {
                     Log.d("MomentRemoteDataSource",
                         "Got AI reply: " + result.getMomentPair().getReply());
                     callback.onSuccess(result.getMomentPair());
+                } else if (response.code() == 401) {
+                    callback.onFailure(new UnauthorizedAccessException());
                 } else {
-                    callback.onFailure(response.code());
+                    callback.onFailure(new UnknownErrorException());
                 }
             }
 
             @Override
             public void onFailure(Call<MomentWriteResponse> call, Throwable t) {
-                callback.onFailure(NO_INTERNET);
+                callback.onFailure(new NoInternetException());
             }
         });
 
