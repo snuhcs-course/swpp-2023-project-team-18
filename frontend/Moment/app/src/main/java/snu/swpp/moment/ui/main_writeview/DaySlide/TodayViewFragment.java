@@ -20,17 +20,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
+import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
 import snu.swpp.moment.ui.main_writeview.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.KeyboardUtils;
 import snu.swpp.moment.utils.TimeConverter;
 
@@ -44,9 +48,12 @@ public class TodayViewFragment extends Fragment {
     private ListFooterContainer listFooterContainer;
 
     private TodayViewModel viewModel;
-    private MomentRemoteDataSource remoteDataSource;
-    private MomentRepository momentRepository;
+
     private AuthenticationRepository authenticationRepository;
+    private MomentRepository momentRepository;
+    private MomentRemoteDataSource momentRemoteDataSource;
+    private StoryRepository storyRepository;
+    private StoryRemoteDataSource storyRemoteDataSource;
 
     private final int NO_INTERNET = 0;
     private final int ACCESS_TOKEN_EXPIRED = 1;
@@ -56,12 +63,14 @@ public class TodayViewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        if (remoteDataSource == null) {
-            remoteDataSource = new MomentRemoteDataSource();
-        }
-        if (momentRepository == null) {
-            momentRepository = new MomentRepository(remoteDataSource);
-        }
+        momentRemoteDataSource = Objects.requireNonNullElse(momentRemoteDataSource,
+            new MomentRemoteDataSource());
+        momentRepository = Objects.requireNonNullElse(momentRepository,
+            new MomentRepository(momentRemoteDataSource));
+        storyRemoteDataSource = Objects.requireNonNullElse(storyRemoteDataSource,
+            new StoryRemoteDataSource());
+        storyRepository = Objects.requireNonNullElse(storyRepository,
+            new StoryRepository(storyRemoteDataSource));
 
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
@@ -73,7 +82,8 @@ public class TodayViewFragment extends Fragment {
 
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
-                new TodayViewModelFactory(authenticationRepository, momentRepository))
+                new TodayViewModelFactory(authenticationRepository, momentRepository,
+                    storyRepository))
                 .get(TodayViewModel.class);
         }
 
@@ -82,6 +92,7 @@ public class TodayViewFragment extends Fragment {
 
         listViewItems = new ArrayList<>();
 
+        // moment GET API 호출
         viewModel.observeMomentState(momentUiState -> {
             if (momentUiState.getError() == -1) {
                 // 모먼트가 하나도 없으면 하단 버튼 비활성화
@@ -112,12 +123,13 @@ public class TodayViewFragment extends Fragment {
                 }
             }
         });
+        viewModel.getMoment(LocalDate.now());
 
-        LocalDate today = LocalDate.now();
-        int year = today.getYear();
-        int month = today.getMonthValue();
-        int date = today.getDayOfMonth();
-        viewModel.getMoment(year, month, date);
+        // story GET API 호출
+        viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
+            // TODO: story 없으면 moment add 버튼 보여주고, 있으면 그 내용 보여주기
+        });
+        viewModel.getStory(LocalDate.now());
 
         listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);

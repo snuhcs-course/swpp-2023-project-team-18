@@ -3,6 +3,7 @@ package snu.swpp.moment.ui.main_writeview;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
@@ -10,17 +11,17 @@ import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewModel extends ViewModel {
 
     // 모먼트 작성
     private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
-    private final AuthenticationRepository authenticationRepository;
-    private final MomentRepository momentRepository;
 
     // 하루 마무리
     private final MutableLiveData<CompletionState> completionState = new MutableLiveData<>();
@@ -29,19 +30,32 @@ public class TodayViewModel extends ViewModel {
     private final MutableLiveData<CompletionStoreResultState> tagsResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> scoreResultState = new MutableLiveData<>();
 
+    private final GetStoryUseCase getStoryUseCase;
+    private final AuthenticationRepository authenticationRepository;
+    private final MomentRepository momentRepository;
+    private final StoryRepository storyRepository;
+
     private final int REFRESH_TOKEN_EXPIRED = 1;
 
-    public TodayViewModel(AuthenticationRepository authenticationRepository,
-        MomentRepository momentRepository) {
+    public TodayViewModel(
+        AuthenticationRepository authenticationRepository,
+        MomentRepository momentRepository,
+        StoryRepository storyRepository
+    ) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
+        this.storyRepository = storyRepository;
+        this.getStoryUseCase = new GetStoryUseCase(authenticationRepository, storyRepository);
     }
 
     public MomentUiState getMomentState() {
         return momentState.getValue();
     }
 
-    public void getMoment(int year, int month, int date) {
+    public void getMoment(LocalDate localDate) {
+        int year = localDate.getYear();
+        int month = localDate.getMonthValue();
+        int date = localDate.getDayOfMonth();
         long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(year, month, date);
 
         authenticationRepository.isTokenValid(new TodayViewModel.WriteViewTokenCallback() {
@@ -94,8 +108,19 @@ public class TodayViewModel extends ViewModel {
         });
     }
 
+    public void getStory(LocalDate localDate) {
+        int year = localDate.getYear();
+        int month = localDate.getMonthValue();
+        int date = localDate.getDayOfMonth();
+        getStoryUseCase.getStory(year, month, date);
+    }
+
     public void observeMomentState(Observer<MomentUiState> observer) {
         momentState.observeForever(observer);
+    }
+
+    public void observeSavedStoryState(Observer<StoryUiState> observer) {
+        getStoryUseCase.observeStoryState(observer);
     }
 
     public void observeCompletionState(Observer<CompletionState> observer) {
