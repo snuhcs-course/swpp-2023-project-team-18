@@ -169,9 +169,16 @@ public class StoryContainer {
     }
 
     public void setUiWritingStory(Date completeTime) {
+        // 과거 스토리: 서버에서 받아온 createdAt 표시
         storyWrapper.setVisibility(View.VISIBLE);
         setCompleteTimeText(completeTime);
         storyWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void setUiWritingStory() {
+        // 오늘 스토리: 현재 시간 표시
+        Date completeTime = new Date();
+        setUiWritingStory(completeTime);
     }
 
     public void setUiCompleteStory() {

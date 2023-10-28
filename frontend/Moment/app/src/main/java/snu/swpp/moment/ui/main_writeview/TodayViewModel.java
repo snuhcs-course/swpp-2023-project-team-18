@@ -98,23 +98,24 @@ public class TodayViewModel extends ViewModel {
         momentState.observeForever(observer);
     }
 
-    public void observerCompletionState(Observer<CompletionState> observer) {
+    public void observeCompletionState(Observer<CompletionState> observer) {
         completionState.observeForever(observer);
     }
 
-    public void observerStoryResultState(Observer<CompletionStoreResultState> observer) {
+    public void observeStoryResultState(Observer<CompletionStoreResultState> observer) {
         storyResultState.observeForever(observer);
     }
 
-    public void observerEmotionResultState(Observer<CompletionStoreResultState> observer) {
+    public void observeEmotionResultState(Observer<CompletionStoreResultState> observer) {
         emotionResultState.observeForever(observer);
     }
 
-    public void observerTagsResultState(Observer<CompletionStoreResultState> observer) {
+    public void observeTagsResultState(Observer<CompletionStoreResultState> observer) {
         tagsResultState.observeForever(observer);
     }
 
-    public void observerScoreResultState(Observer<CompletionStoreResultState> observer) {
+    public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
+        // TODO: 점수 저장 후에 뭘 해야 하지?
         scoreResultState.observeForever(observer);
     }
 

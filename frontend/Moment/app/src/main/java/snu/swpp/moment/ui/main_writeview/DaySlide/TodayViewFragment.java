@@ -80,18 +80,6 @@ public class TodayViewFragment extends Fragment {
         binding = TodayItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Initialize ListView and related components
-        initializeListView(root);
-        KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
-
-        // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
-        bottomButtonContainer.viewingMoment();
-
-        return root;
-    }
-
-    private void initializeListView(View root) {
         listViewItems = new ArrayList<>();
 
         viewModel.observeMomentState(momentUiState -> {
@@ -195,6 +183,20 @@ public class TodayViewFragment extends Fragment {
                 scrollToBottom();
             }
         });
+
+        // 하단 버튼 관리 객체 초기화
+        bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
+        bottomButtonContainer.viewingMoment();
+
+        // 하루 마무리 API 호출 시 동작 설정
+        viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
+        viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
+        viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
+        viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
+
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
+
+        return root;
     }
 
     private void addItem(String userInput) {

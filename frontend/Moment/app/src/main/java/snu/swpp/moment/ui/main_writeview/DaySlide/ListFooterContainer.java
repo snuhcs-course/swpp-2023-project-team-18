@@ -151,11 +151,11 @@ public class ListFooterContainer {
         setScrollToBottomSwitch();
     }
 
-    public void setUiWritingStory(Date completeTime) {
+    public void setUiWritingStory() {
         // 스토리 작성 칸 나올 때
         momentWriterContainer.setInvisible();
 
-        storyContainer.setUiWritingStory(completeTime);
+        storyContainer.setUiWritingStory();
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
