@@ -29,7 +29,7 @@ public class BottomButtonContainer {
 
         this.listFooterContainer.observeBottomButtonState((Boolean state) -> {
             setActivated(state);
-            Log.d("BottomButtonContainer", "setBottomButtonStateObserver: " + state);
+            Log.d("BottomButtonContainer", "observeBottomButtonState: " + state);
         });
     }
 
@@ -110,55 +110,58 @@ public class BottomButtonContainer {
         listFooterContainer.setUiSelectingScore();
         listFooterContainer.freezeTagEditText();
 
-        button.setText(R.string.completed_day);
-        setActivated(false);
+        setActivated(false, true);
     }
 
     public Observer<CompletionState> completionStateObserver() {
         return (CompletionState completionState) -> {
-            if (completionState.getError() != null) {
+            listFooterContainer.showLoadingText(false);
+            if (completionState.getError() == null) {
+                writingStory();
+            } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
-                return;
+                setActivated(true);
             }
-            listFooterContainer.showLoadingText(false);
-            writingStory();
         };
     }
 
     public Observer<CompletionStoreResultState> storyResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
-            if (completionStoreResultState.getError() != null) {
+            listFooterContainer.showLoadingText(false);
+            if (completionStoreResultState.getError() == null) {
+                selectingEmotion();
+            } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
-                return;
+                setActivated(true);
             }
-            listFooterContainer.showLoadingText(false);
-            selectingEmotion();
         };
     }
 
     public Observer<CompletionStoreResultState> emotionResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
-            if (completionStoreResultState.getError() != null) {
+            listFooterContainer.showLoadingText(false);
+            if (completionStoreResultState.getError() == null) {
+                writingTags();
+            } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
-                return;
+                setActivated(true);
             }
-            listFooterContainer.showLoadingText(false);
-            writingTags();
         };
     }
 
     public Observer<CompletionStoreResultState> tagsResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
-            if (completionStoreResultState.getError() != null) {
+            listFooterContainer.showLoadingText(false);
+            if (completionStoreResultState.getError() == null) {
+                completionDone();
+            } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
-                return;
+                setActivated(true);
             }
-            listFooterContainer.showLoadingText(false);
-            completionDone();
         };
     }
 }

@@ -74,7 +74,7 @@ public class StoryContainer {
 
                     isTitleLimitExceeded = true;
                     checkLimitExceeded();
-                } else {
+                } else if (isTitleLimitExceeded) {
                     storyTitleEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
 
@@ -108,7 +108,7 @@ public class StoryContainer {
 
                     isContentLimitExceeded = true;
                     checkLimitExceeded();
-                } else {
+                } else if (isContentLimitExceeded) {
                     storyContentEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
 
