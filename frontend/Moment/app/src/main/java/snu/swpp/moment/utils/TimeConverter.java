@@ -1,10 +1,12 @@
 package snu.swpp.moment.utils;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class TimeConverter {
 
@@ -35,9 +37,8 @@ public class TimeConverter {
     }
 
     public static String formatDate(Date date, String formatString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatString);
-        return date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalTime()
-            .format(formatter);
+        SimpleDateFormat formatter = new SimpleDateFormat(formatString, Locale.getDefault());
+        return formatter.format(date);
     }
 
     public static long[] getOneDayIntervalTimestamps(int year, int month, int date) {
