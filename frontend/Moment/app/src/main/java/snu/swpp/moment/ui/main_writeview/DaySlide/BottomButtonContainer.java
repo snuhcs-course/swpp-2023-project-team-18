@@ -95,7 +95,7 @@ public class BottomButtonContainer {
         button.setOnClickListener(v -> {
             listFooterContainer.showLoadingText(true);
             // 태그 저장 API 호출
-            viewModel.saveHashtags(listFooterContainer.getStoryContent());
+            viewModel.saveHashtags(listFooterContainer.getTags());
         });
     }
 
