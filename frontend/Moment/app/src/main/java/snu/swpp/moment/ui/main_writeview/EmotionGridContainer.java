@@ -72,6 +72,9 @@ public class EmotionGridContainer {
     }
 
     public void selectEmotion(int emotion) {
+        if (emotion == 10) {
+            return;
+        }
         TextView textButton = textButtonList.get(emotion);
         textButton.performClick();
     }
