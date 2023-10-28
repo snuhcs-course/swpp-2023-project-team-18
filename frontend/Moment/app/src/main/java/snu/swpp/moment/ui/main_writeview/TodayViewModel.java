@@ -5,8 +5,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import snu.swpp.moment.api.response.AIStoryGetResponse;
+import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
+import snu.swpp.moment.data.callback.AIStoryCallback;
+import snu.swpp.moment.data.callback.EmotionSaveCallback;
+import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
+import snu.swpp.moment.data.callback.ScoreSaveCallback;
+import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
+import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
@@ -17,6 +25,7 @@ import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
+import snu.swpp.moment.utils.EmotionMap;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewModel extends ViewModel {
@@ -111,7 +120,25 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void getAiStory() {
-        // TODO: AI 요약 받아오는 API 구현
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                storyRepository.getAIGeneratedStory(access_token, new AIStoryCallback() {
+                    @Override
+                    public void onSuccess(AIStoryGetResponse response) {
+                        String title = response.getTitle();
+                        String content = response.getStory();
+                        aiStoryState.setValue(new AiStoryState(null, title, content));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        aiStoryState.setValue(new AiStoryState(error, "", ""));
+                    }
+                });
+            }
+        });
     }
 
     public void getStory(LocalDate localDate) {
@@ -121,6 +148,117 @@ public class TodayViewModel extends ViewModel {
         getStoryUseCase.getStory(year, month, date);
     }
 
+    public void notifyCompletion() {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+
+                LocalDate today = TimeConverter.getToday();
+                long[] todayTomorrowTimestamp = TimeConverter.getOneDayIntervalTimestamps(
+                    today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+                long start = todayTomorrowTimestamp[0];
+                long end = todayTomorrowTimestamp[1];
+
+                storyRepository.notifyCompletion(access_token, start, end,
+                    new StoryCompletionNotifyCallBack() {
+                        @Override
+                        public void onSuccess(StoryCompletionNotifyResponse response) {
+                            completionState.setValue(new CompletionState(null, response.getId()));
+                        }
+
+                        @Override
+                        public void onFailure(Exception error) {
+                            completionState.setValue(new CompletionState(error, -1));
+                        }
+                    });
+            }
+        });
+    }
+
+    public void saveStory(String title, String content) {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                storyRepository.saveStory(access_token, title, content, new StorySaveCallback() {
+                    @Override
+                    public void onSuccess() {
+                        storyResultState.setValue(new CompletionStoreResultState(null));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        storyResultState.setValue(new CompletionStoreResultState(error));
+                    }
+                });
+            }
+        });
+    }
+
+    public void saveEmotion(int emotionInt) {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                String emotion = EmotionMap.getEmotion(emotionInt);
+                storyRepository.saveEmotion(access_token, emotion, new EmotionSaveCallback() {
+                    @Override
+                    public void onSuccess() {
+                        emotionResultState.setValue(new CompletionStoreResultState(null));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        emotionResultState.setValue(new CompletionStoreResultState(error));
+                    }
+                });
+            }
+        });
+    }
+
+    public void saveScore(int score) {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                int story_id = getStoryUseCase.getStoryId();
+                storyRepository.saveScore(access_token, story_id, score, new ScoreSaveCallback() {
+                    @Override
+                    public void onSuccess() {
+                        scoreResultState.setValue(new CompletionStoreResultState(null));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        scoreResultState.setValue(new CompletionStoreResultState(error));
+                    }
+                });
+            }
+        });
+    }
+
+    public void saveHashtags(String content) {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                int story_id = getStoryUseCase.getStoryId();
+                storyRepository.saveHashtags(access_token, story_id, content,
+                    new HashtagSaveCallback() {
+                        @Override
+                        public void onSuccess() {
+                            tagsResultState.setValue(new CompletionStoreResultState(null));
+                        }
+
+                        @Override
+                        public void onFailure(Exception error) {
+                            tagsResultState.setValue(new CompletionStoreResultState(error));
+                        }
+                    });
+            }
+        });
+    }
     public void observeMomentState(Observer<MomentUiState> observer) {
         momentState.observeForever(observer);
     }
@@ -147,11 +285,6 @@ public class TodayViewModel extends ViewModel {
 
     public void observeTagsResultState(Observer<CompletionStoreResultState> observer) {
         tagsResultState.observeForever(observer);
-    }
-
-    public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
-        // TODO: 점수 저장 후에 뭘 해야 하지?
-        scoreResultState.observeForever(observer);
     }
 
 
