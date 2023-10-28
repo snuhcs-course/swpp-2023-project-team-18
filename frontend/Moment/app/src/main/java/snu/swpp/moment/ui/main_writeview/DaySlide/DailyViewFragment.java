@@ -28,7 +28,7 @@ import snu.swpp.moment.ui.main_writeview.DailyViewModel;
 import snu.swpp.moment.ui.main_writeview.DailyViewModelFactory;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
-import snu.swpp.moment.ui.main_writeview.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class DailyViewFragment extends Fragment {

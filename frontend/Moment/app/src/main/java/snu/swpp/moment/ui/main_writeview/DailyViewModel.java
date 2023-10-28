@@ -16,6 +16,7 @@ import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.ui.main_writeview.DaySlide.StoryUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.utils.EmotionMap;
 import snu.swpp.moment.utils.TimeConverter;
 

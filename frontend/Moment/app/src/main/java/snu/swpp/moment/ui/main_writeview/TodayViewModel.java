@@ -10,6 +10,7 @@ import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewModel extends ViewModel {
