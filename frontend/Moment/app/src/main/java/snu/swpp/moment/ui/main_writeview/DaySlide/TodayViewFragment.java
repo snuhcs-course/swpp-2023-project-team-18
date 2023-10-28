@@ -190,9 +190,15 @@ public class TodayViewFragment extends Fragment {
             }
         });
 
-        listFooterContainer.setScrollToBottomSwitchObserver(isSet -> {
+        listFooterContainer.observeScrollToBottomSwitch(isSet -> {
             if (isSet) {
                 scrollToBottom();
+            }
+        });
+
+        listFooterContainer.observeAiStoryCallSwitch(isSet -> {
+            if (isSet) {
+                viewModel.getAiStory();
             }
         });
 
@@ -205,6 +211,7 @@ public class TodayViewFragment extends Fragment {
         viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
         viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
         viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
+        viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
 
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 

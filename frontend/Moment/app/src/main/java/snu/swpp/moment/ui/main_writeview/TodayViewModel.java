@@ -12,6 +12,7 @@ import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
+import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
@@ -25,6 +26,7 @@ public class TodayViewModel extends ViewModel {
 
     // 하루 마무리
     private final MutableLiveData<CompletionState> completionState = new MutableLiveData<>();
+    private final MutableLiveData<AiStoryState> aiStoryState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> storyResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> emotionResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> tagsResultState = new MutableLiveData<>();
@@ -108,6 +110,10 @@ public class TodayViewModel extends ViewModel {
         });
     }
 
+    public void getAiStory() {
+        // TODO: AI 요약 받아오는 API 구현
+    }
+
     public void getStory(LocalDate localDate) {
         int year = localDate.getYear();
         int month = localDate.getMonthValue();
@@ -125,6 +131,10 @@ public class TodayViewModel extends ViewModel {
 
     public void observeCompletionState(Observer<CompletionState> observer) {
         completionState.observeForever(observer);
+    }
+
+    public void observeAiStoryState(Observer<AiStoryState> observer) {
+        aiStoryState.observeForever(observer);
     }
 
     public void observeStoryResultState(Observer<CompletionStoreResultState> observer) {

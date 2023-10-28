@@ -22,7 +22,7 @@ public class BottomButtonContainer {
         this.view = view;
         this.listFooterContainer = listFooterContainer;
 
-        this.listFooterContainer.setBottomButtonStateObserver((Boolean state) -> {
+        this.listFooterContainer.observeBottomButtonState((Boolean state) -> {
             setActivated(state);
             Log.d("BottomButtonContainer", "setBottomButtonStateObserver: " + state);
         });

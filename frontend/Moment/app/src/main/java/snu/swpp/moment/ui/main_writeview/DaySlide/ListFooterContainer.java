@@ -3,11 +3,13 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.EmotionGridContainer;
+import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.AnimationProvider;
 
@@ -35,6 +37,8 @@ public class ListFooterContainer {
 
     // 새 요소 추가 시 하단으로 스크롤 하기 위한 스위치
     private final MutableLiveData<Boolean> scrollToBottomSwitch = new MutableLiveData<>(false);
+    // AI 요약 API call을 위한 스위치
+    private final MutableLiveData<Boolean> aiStoryCallSwitch = new MutableLiveData<>(false);
 
 
     public ListFooterContainer(@NonNull View view) {
@@ -82,6 +86,12 @@ public class ListFooterContainer {
         storyContainer.setStoryText(storyUiState.getStoryTitle(), storyUiState.getStoryContent());
         storyContainer.freeze();
         storyContainer.setUiCompleteStory();
+        storyContainer.observeAiButtonSwitch(isSet -> {
+            if (isSet) {
+                showLoadingText(true, R.string.ai_story_loading);
+                setAiStoryCallSwitch();
+            }
+        });
 
         emotionGridContainer.selectEmotion(storyUiState.getEmotion());
         emotionGridContainer.freeze();
@@ -107,12 +117,16 @@ public class ListFooterContainer {
         momentWriterContainer.setSubmitButtonOnClickListener(listener);
     }
 
-    public void setBottomButtonStateObserver(Observer<Boolean> observer) {
+    public void observeBottomButtonState(Observer<Boolean> observer) {
         bottomButtonState.observeForever(observer);
     }
 
-    public void setScrollToBottomSwitchObserver(Observer<Boolean> observer) {
+    public void observeScrollToBottomSwitch(Observer<Boolean> observer) {
         scrollToBottomSwitch.observeForever(observer);
+    }
+
+    public void observeAiStoryCallSwitch(Observer<Boolean> observer) {
+        aiStoryCallSwitch.observeForever(observer);
     }
 
     public void freezeStoryEditText() {
@@ -181,8 +195,16 @@ public class ListFooterContainer {
         setScrollToBottomSwitch();
     }
 
-    public void showLoadingText(boolean on) {
+    public Observer<AiStoryState> aiStoryObserver() {
+        return (AiStoryState aiStoryState) -> {
+            showLoadingText(false);
+            storyContainer.setStoryText(aiStoryState.getTitle(), aiStoryState.getContent());
+        };
+    }
+
+    public void showLoadingText(boolean on, @StringRes int textResId) {
         if (on) {
+            loadingText.setText(textResId);
             loadingText.clearAnimation();
             loadingText.startAnimation(animationProvider.fadeInOut);
             loadingText.setVisibility(View.VISIBLE);
@@ -190,6 +212,10 @@ public class ListFooterContainer {
             loadingText.setVisibility(View.GONE);
             loadingText.clearAnimation();
         }
+    }
+
+    public void showLoadingText(boolean on) {
+        showLoadingText(on, R.string.completion_loading);
     }
 
 
@@ -200,5 +226,10 @@ public class ListFooterContainer {
     private void setScrollToBottomSwitch() {
         scrollToBottomSwitch.setValue(true);
         scrollToBottomSwitch.setValue(false);
+    }
+
+    private void setAiStoryCallSwitch() {
+        aiStoryCallSwitch.setValue(true);
+        aiStoryCallSwitch.setValue(false);
     }
 }

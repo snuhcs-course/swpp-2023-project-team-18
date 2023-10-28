@@ -13,9 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
 import snu.swpp.moment.utils.TimeConverter;
@@ -36,6 +34,9 @@ public class StoryContainer {
     private boolean isTitleLimitExceeded = false;
     private boolean isContentLimitExceeded = false;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
+
+    // AI에게 부탁하기 버튼
+    private final MutableLiveData<Boolean> aiButtonSwitch = new MutableLiveData<>(false);
 
     private final int STORY_TITLE_MAX_LENGTH = 20;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
@@ -125,14 +126,8 @@ public class StoryContainer {
                 builder.setMessage(R.string.ai_story_popup);
 
                 builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
-                    hideAiButton();
-
-                    // TODO: API 호출해서 AI 요약 받아오기
-                    Map<String, String> result = new HashMap<>() {{
-                        put("title", "AI 요약 제목");
-                        put("content", "AI 요약 내용");
-                    }};
-                    setStoryText(result.get("title"), result.get("content"));
+                    // AI 버튼 숨기고 API 호출
+                    aiButtonClicked();
                 });
                 builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
                 });
@@ -166,6 +161,10 @@ public class StoryContainer {
 
     public void setLimitObserver(Observer<Boolean> observer) {
         isLimitExceeded.observeForever(observer);
+    }
+
+    public void observeAiButtonSwitch(Observer<Boolean> observer) {
+        aiButtonSwitch.observeForever(observer);
     }
 
     public void setUiWritingStory(Date completeTime) {
@@ -205,8 +204,12 @@ public class StoryContainer {
             String.format(Locale.getDefault(), "%d / %d", count, STORY_CONTENT_MAX_LENGTH));
     }
 
-    private void hideAiButton() {
+    private void aiButtonClicked() {
+        // AI 버튼 숨기기
         storyAiButton.setVisibility(View.INVISIBLE);
         aiButtonHelpText.setVisibility(View.INVISIBLE);
+        // API call을 위해 switch 켜기
+        aiButtonSwitch.setValue(true);
+        aiButtonSwitch.setValue(false);
     }
 }
