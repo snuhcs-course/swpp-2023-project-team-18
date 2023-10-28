@@ -24,4 +24,6 @@ jobs:
             docker rm dg01
             docker stop ng01
             docker rm ng01
+            docker stop cg01
+            docker rm cg01
             docker-compose up -d --build
