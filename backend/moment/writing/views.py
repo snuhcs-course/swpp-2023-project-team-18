@@ -366,6 +366,7 @@ class ScoreView(GenericAPIView):
             )
 
         story.score = score
+        story.is_point_completed = True
         story.save()
 
         return Response(
