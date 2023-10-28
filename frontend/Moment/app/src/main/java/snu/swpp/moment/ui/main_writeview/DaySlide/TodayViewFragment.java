@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -132,7 +132,7 @@ public class TodayViewFragment extends Fragment {
             }
 
         });
-        viewModel.getMoment(LocalDate.now());
+        viewModel.getMoment(LocalDateTime.now());
 
         // story GET API 호출
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
@@ -161,7 +161,7 @@ public class TodayViewFragment extends Fragment {
                     .show();
             }
         });
-        viewModel.getStory(LocalDate.now());
+        viewModel.getStory(LocalDateTime.now());
 
         listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);

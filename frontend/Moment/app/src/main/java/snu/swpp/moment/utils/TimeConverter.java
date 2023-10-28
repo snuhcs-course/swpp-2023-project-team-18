@@ -2,9 +2,9 @@ package snu.swpp.moment.utils;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -16,6 +16,10 @@ public class TimeConverter {
 
     public static Date convertTimestampToDate(Long timestamp) {
         return new Date(timestamp * 1000);
+    }
+
+    public static long convertLocalDateTimeToTimestamp(LocalDateTime localDateTime) {
+        return localDateTime.toEpochSecond(java.time.ZoneOffset.UTC);
     }
 
     public static LocalDate updateDateFromThree(LocalDate date, int hour) {
@@ -41,16 +45,14 @@ public class TimeConverter {
         return formatter.format(date);
     }
 
-    public static long[] getOneDayIntervalTimestamps(int year, int month, int date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, date, 3, 0, 0);  // month is 0-based
-        Date startDate = calendar.getTime();
-
-        final int MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
-        calendar.add(Calendar.MILLISECOND, MILLIS_IN_A_DAY - 1);
-        Date endDate = calendar.getTime();
-        long start = TimeConverter.convertDateToTimestamp(startDate);
-        long end = TimeConverter.convertDateToTimestamp(endDate);
-        return new long[]{start, end};
+    public static long[] getOneDayIntervalTimestamps(LocalDateTime now) {
+        LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(),
+            3, 0, 0);
+        if (now.getHour() < 3) {
+            start = start.minusDays(1);
+        }
+        LocalDateTime end = start.plusDays(1).minusSeconds(1);
+        return new long[]{convertLocalDateTimeToTimestamp(start),
+            convertLocalDateTimeToTimestamp(end)};
     }
 }

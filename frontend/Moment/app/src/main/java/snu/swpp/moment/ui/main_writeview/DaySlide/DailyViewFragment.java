@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -163,11 +164,8 @@ public class DailyViewFragment extends Fragment {
         });
 
         LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        int year = date.getYear();
-        int month = date.getMonthValue();
-        int day = date.getDayOfMonth();
-        viewModel.getMoment(year, month, day);
-        viewModel.getStory(year, month, day);
+        viewModel.getMoment(LocalDateTime.now());
+        viewModel.getStory(LocalDateTime.now());
 
         Log.d("DailyViewFragment", "onCreateView() ended");
 

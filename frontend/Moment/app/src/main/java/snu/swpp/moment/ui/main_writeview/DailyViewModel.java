@@ -3,6 +3,7 @@ package snu.swpp.moment.ui.main_writeview;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
@@ -10,7 +11,6 @@ import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
-import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
@@ -36,8 +36,8 @@ public class DailyViewModel extends ViewModel {
         this.saveScoreUseCase = saveScoreUseCase;
     }
 
-    public void getMoment(int year, int month, int date) {
-        long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(year, month, date);
+    public void getMoment(LocalDateTime now) {
+        long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(now);
 
         authenticationRepository.isTokenValid(new TokenCallBack() {
             @Override
@@ -69,8 +69,8 @@ public class DailyViewModel extends ViewModel {
         });
     }
 
-    public void getStory(int year, int month, int date) {
-        getStoryUseCase.getStory(year, month, date);
+    public void getStory(LocalDateTime now) {
+        getStoryUseCase.getStory(now);
     }
 
     public void setScore(int score) {

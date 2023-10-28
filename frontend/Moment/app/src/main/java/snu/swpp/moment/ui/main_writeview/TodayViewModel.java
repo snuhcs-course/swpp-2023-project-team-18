@@ -3,17 +3,16 @@ package snu.swpp.moment.ui.main_writeview;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import snu.swpp.moment.api.response.AIStoryGetResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.data.callback.AIStoryCallback;
 import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
-import java.util.List;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
-import snu.swpp.moment.data.callback.ScoreSaveCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -67,11 +66,8 @@ public class TodayViewModel extends ViewModel {
         return momentState.getValue();
     }
 
-    public void getMoment(LocalDate localDate) {
-        int year = localDate.getYear();
-        int month = localDate.getMonthValue();
-        int date = localDate.getDayOfMonth();
-        long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(year, month, date);
+    public void getMoment(LocalDateTime now) {
+        long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(now);
 
         authenticationRepository.isTokenValid(new TodayViewModel.WriteViewTokenCallback() {
             @Override
@@ -145,11 +141,8 @@ public class TodayViewModel extends ViewModel {
         });
     }
 
-    public void getStory(LocalDate localDate) {
-        int year = localDate.getYear();
-        int month = localDate.getMonthValue();
-        int date = localDate.getDayOfMonth();
-        getStoryUseCase.getStory(year, month, date);
+    public void getStory(LocalDateTime now) {
+        getStoryUseCase.getStory(now);
     }
 
     public void notifyCompletion() {
@@ -158,9 +151,8 @@ public class TodayViewModel extends ViewModel {
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
 
-                LocalDate today = TimeConverter.getToday();
                 long[] todayTomorrowTimestamp = TimeConverter.getOneDayIntervalTimestamps(
-                    today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+                    LocalDateTime.now());
                 long start = todayTomorrowTimestamp[0];
                 long end = todayTomorrowTimestamp[1] + 1;
 
