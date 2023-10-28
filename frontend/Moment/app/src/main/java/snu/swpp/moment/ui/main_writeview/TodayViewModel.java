@@ -223,6 +223,9 @@ public class TodayViewModel extends ViewModel {
 
     public void saveScore(int score) {
         int story_id = getStoryUseCase.getStoryId();
+        if (story_id == -1) {
+            return;
+        }
         saveScoreUseCase.saveScore(story_id, score);
     }
 

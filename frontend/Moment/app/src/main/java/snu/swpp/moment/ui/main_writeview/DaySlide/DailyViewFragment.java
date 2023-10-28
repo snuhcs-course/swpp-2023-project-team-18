@@ -26,8 +26,10 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.DailyViewModel;
 import snu.swpp.moment.ui.main_writeview.DailyViewModelFactory;
+import snu.swpp.moment.ui.main_writeview.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
+import snu.swpp.moment.ui.main_writeview.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.TimeConverter;
@@ -45,6 +47,8 @@ public class DailyViewFragment extends Fragment {
     private StoryRemoteDataSource storyRemoteDataSource;
     private MomentRepository momentRepository;
     private StoryRepository storyRepository;
+    private GetStoryUseCase getStoryUseCase;
+    private SaveScoreUseCase saveScoreUseCase;
     private AuthenticationRepository authenticationRepository;
 
     private ListFooterContainer listFooterContainer;
@@ -76,9 +80,17 @@ public class DailyViewFragment extends Fragment {
             startActivity(intent);
         }
 
+        getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
+            new GetStoryUseCase(authenticationRepository, storyRepository));
+        saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
+            new SaveScoreUseCase(authenticationRepository, storyRepository));
+
         viewModel = Objects.requireNonNullElse(viewModel,
             new ViewModelProvider(this, new DailyViewModelFactory(
-                authenticationRepository, momentRepository, storyRepository)).get(
+                authenticationRepository,
+                momentRepository,
+                getStoryUseCase,
+                saveScoreUseCase)).get(
                 DailyViewModel.class));
 
         binding = DailyItemBinding.inflate(inflater, container, false);

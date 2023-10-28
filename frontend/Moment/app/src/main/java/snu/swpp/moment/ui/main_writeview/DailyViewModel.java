@@ -19,6 +19,7 @@ import snu.swpp.moment.utils.TimeConverter;
 public class DailyViewModel extends ViewModel {
 
     private final GetStoryUseCase getStoryUseCase;
+    private final SaveScoreUseCase saveScoreUseCase;
     private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
@@ -26,11 +27,13 @@ public class DailyViewModel extends ViewModel {
     public DailyViewModel(
         AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository,
-        StoryRepository storyRepository
+        GetStoryUseCase getStoryUseCase,
+        SaveScoreUseCase saveScoreUseCase
     ) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
-        this.getStoryUseCase = new GetStoryUseCase(authenticationRepository, storyRepository);
+        this.getStoryUseCase = getStoryUseCase;
+        this.saveScoreUseCase = saveScoreUseCase;
     }
 
     public void getMoment(int year, int month, int date) {
@@ -71,7 +74,11 @@ public class DailyViewModel extends ViewModel {
     }
 
     public void setScore(int score) {
-        // TODO
+        int story_id = getStoryUseCase.getStoryId();
+        if (story_id == -1) {
+            return;
+        }
+        saveScoreUseCase.saveScore(story_id, score);
     }
 
     public void observeMomentState(Observer<MomentUiState> observer) {

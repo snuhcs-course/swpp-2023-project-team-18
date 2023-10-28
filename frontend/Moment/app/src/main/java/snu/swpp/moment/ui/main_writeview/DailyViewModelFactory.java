@@ -11,16 +11,19 @@ public class DailyViewModelFactory implements ViewModelProvider.Factory {
 
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
-    private final StoryRepository storyRepository;
+    private final GetStoryUseCase getStoryUseCase;
+    private final SaveScoreUseCase saveScoreUseCase;
 
     public DailyViewModelFactory(
         AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository,
-        StoryRepository storyRepository
+        GetStoryUseCase getStoryUseCase,
+        SaveScoreUseCase saveScoreUseCase
     ) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
-        this.storyRepository = storyRepository;
+        this.getStoryUseCase = getStoryUseCase;
+        this.saveScoreUseCase = saveScoreUseCase;
     }
 
     @NonNull
@@ -30,7 +33,8 @@ public class DailyViewModelFactory implements ViewModelProvider.Factory {
             return (T) new DailyViewModel(
                 authenticationRepository,
                 momentRepository,
-                storyRepository
+                getStoryUseCase,
+                saveScoreUseCase
             );
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
