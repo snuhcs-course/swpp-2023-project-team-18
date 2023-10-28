@@ -100,7 +100,7 @@ public class DailyViewFragment extends Fragment {
 
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
-            if (error != null) {
+            if (error == null) {
                 // SUCCESS
                 int numMoments = momentUiState.getNumMoments();
                 if (numMoments > 0) {
