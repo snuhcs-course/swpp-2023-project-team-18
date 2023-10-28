@@ -60,6 +60,17 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
+    <!-- 다음 단계로 이동 선택 시 로딩 문구 -->
+    <TextView
+        android:id="@+id/loading_text"
+        style="@style/NORMAL_TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="@string/completion_loading"
+        android:visibility="gone" />
+
     <!-- 스크롤 시 맨 밑이 보이게 하기 위한 padding -->
     <View
         android:layout_width="match_parent"

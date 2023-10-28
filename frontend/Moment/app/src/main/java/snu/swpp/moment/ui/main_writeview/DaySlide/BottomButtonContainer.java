@@ -45,8 +45,10 @@ public class BottomButtonContainer {
             builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
                 // 네 -> 하루 마무리 시작
                 Date completeTime = new Date();
-                writingStory(completeTime);
+                listFooterContainer.showLoadingText(true);
                 // TODO: API 호출해서 마무리 시점 기록
+                listFooterContainer.showLoadingText(false);
+                writingStory(completeTime);
             });
             builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
             });
@@ -58,7 +60,9 @@ public class BottomButtonContainer {
     public void writingStory(Date completeTime) {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
+            listFooterContainer.showLoadingText(true);
             // TODO: 스토리 저장 API 호출
+            listFooterContainer.showLoadingText(false);
             selectingEmotion();
         });
 
@@ -69,7 +73,9 @@ public class BottomButtonContainer {
     public void selectingEmotion() {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
+            listFooterContainer.showLoadingText(true);
             // TODO: 감정 저장 API 호출
+            listFooterContainer.showLoadingText(false);
             writingTags();
         });
 
@@ -80,7 +86,9 @@ public class BottomButtonContainer {
     public void writingTags() {
         button.setText(R.string.next_stage_button);
         button.setOnClickListener(v -> {
+            listFooterContainer.showLoadingText(true);
             // TODO: 태그 저장 API 호출
+            listFooterContainer.showLoadingText(false);
             completionDone();
         });
 

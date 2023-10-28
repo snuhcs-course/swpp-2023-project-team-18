@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
@@ -14,19 +15,17 @@ public class ListFooterContainer {
 
     // 모먼트 작성
     private final MomentWriterContainer momentWriterContainer;
-
     // 스토리 작성
     private final StoryContainer storyContainer;
-
     // 감정 선택
     private final ConstraintLayout emotionWrapper;
     private final EmotionGridContainer emotionGridContainer;
-
     // 태그 입력
     private final TagBoxContainer tagBoxContainer;
-
     // 점수 선택
     private final ScoreContainer scoreContainer;
+    // 로딩 메시지
+    private final TextView loadingText;
 
     // 애니메이션 개체 묶음
     private final AnimationProvider animationProvider;
@@ -41,19 +40,17 @@ public class ListFooterContainer {
     public ListFooterContainer(@NonNull View view) {
         // 모먼트 작성
         momentWriterContainer = new MomentWriterContainer(view.findViewById(R.id.moment_writer));
-
         // 스토리 작성
         storyContainer = new StoryContainer(view.findViewById(R.id.story_wrapper));
-
         // 감정 선택
         emotionWrapper = view.findViewById(R.id.emotion_wrapper);
         emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
-
         // 태그 입력
         tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_wrapper));
-
         // 점수 선택
         scoreContainer = new ScoreContainer(view.findViewById(R.id.score_wrapper));
+        // 로딩 메시지
+        loadingText = view.findViewById(R.id.loading_text);
 
         // 애니메이션 개체 묶음
         animationProvider = new AnimationProvider(view);
@@ -182,6 +179,17 @@ public class ListFooterContainer {
     public void setUiSelectingScore() {
         scoreContainer.setUiVisible();
         setScrollToBottomSwitch();
+    }
+
+    public void showLoadingText(boolean on) {
+        if (on) {
+            loadingText.clearAnimation();
+            loadingText.startAnimation(animationProvider.fadeInOut);
+            loadingText.setVisibility(View.VISIBLE);
+        } else {
+            loadingText.setVisibility(View.GONE);
+            loadingText.clearAnimation();
+        }
     }
 
 
