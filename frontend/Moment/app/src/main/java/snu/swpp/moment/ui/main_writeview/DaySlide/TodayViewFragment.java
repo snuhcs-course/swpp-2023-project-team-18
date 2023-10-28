@@ -145,6 +145,7 @@ public class TodayViewFragment extends Fragment {
             if (error == null) {
                 // SUCCESS
                 listFooterContainer.updateUiWithRemoteData(savedStoryState);
+                bottomButtonContainer.setActivated(false);
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
                 Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
