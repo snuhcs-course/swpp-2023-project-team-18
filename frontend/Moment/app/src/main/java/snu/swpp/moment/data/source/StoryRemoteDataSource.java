@@ -1,5 +1,6 @@
 package snu.swpp.moment.data.source;
 
+import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +46,7 @@ public class StoryRemoteDataSource {
             @Override
             public void onResponse(Call<StoryGetResponse> call,
                 Response<StoryGetResponse> response) {
+                Log.d("APICall", "getStory: " + response.code());
                 if (response.isSuccessful()) {
                     StoryGetResponse result = response.body();
                     callBack.onSuccess(result.getStoryList());
@@ -69,10 +71,11 @@ public class StoryRemoteDataSource {
         StoryCompletionNotifyRequest request = new StoryCompletionNotifyRequest(start, end);
 
         service.notifyStoryCompletion(bearer, request).enqueue(
-            new Callback<StoryCompletionNotifyResponse>() {
+            new Callback<>() {
                 @Override
                 public void onResponse(Call<StoryCompletionNotifyResponse> call,
                     Response<StoryCompletionNotifyResponse> response) {
+                    Log.d("APICall", "notifyCompletion: " + response.code());
                     if (response.isSuccessful()) {
                         callback.onSuccess(response.body());
                     } else if (response.code() == 400) {
@@ -95,10 +98,11 @@ public class StoryRemoteDataSource {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
 
-        service.getAIGeneratedStory(bearer).enqueue(new Callback<AIStoryGetResponse>() {
+        service.getAIGeneratedStory(bearer).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<AIStoryGetResponse> call,
                 Response<AIStoryGetResponse> response) {
+                Log.d("APICall", "getAIGeneratedStory: " + response.code());
                 if (response.isSuccessful()) {
                     callback.onSuccess(response.body());
                 } else if (response.code() == 401) {
@@ -127,6 +131,7 @@ public class StoryRemoteDataSource {
             @Override
             public void onResponse(Call<StorySaveResponse> call,
                 Response<StorySaveResponse> response) {
+                Log.d("APICall", "saveStory: " + response.code());
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 } else if (response.code() == 401) {
@@ -152,6 +157,7 @@ public class StoryRemoteDataSource {
             @Override
             public void onResponse(Call<EmotionSaveResponse> call,
                 Response<EmotionSaveResponse> response) {
+                Log.d("APICall", "saveEmotion: " + response.code());
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 } else if (response.code() == 400) {
@@ -180,6 +186,7 @@ public class StoryRemoteDataSource {
             @Override
             public void onResponse(Call<ScoreSaveResponse> call,
                 Response<ScoreSaveResponse> response) {
+                Log.d("APICall", "saveScore: " + response.code());
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 } else if (response.code() == 401) {
@@ -208,6 +215,7 @@ public class StoryRemoteDataSource {
             @Override
             public void onResponse(Call<HashtagSaveResponse> call,
                 Response<HashtagSaveResponse> response) {
+                Log.d("APICall", "saveHashtags: " + response.code());
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 } else if (response.code() == 400) {

@@ -27,6 +27,7 @@ public class MomentRemoteDataSource {
             @Override
             public void onResponse(Call<MomentGetResponse> call,
                 Response<MomentGetResponse> response) {
+                Log.d("APICall", "getMoment: " + response.code());
                 if (response.isSuccessful()) {
                     MomentGetResponse result = response.body();
                     callback.onSuccess(result.getMomentList());
@@ -52,6 +53,7 @@ public class MomentRemoteDataSource {
             @Override
             public void onResponse(Call<MomentWriteResponse> call,
                 Response<MomentWriteResponse> response) {
+                Log.d("APICall", "writeMoment: " + response.code());
                 if (response.isSuccessful()) {
                     MomentWriteResponse result = response.body();
                     Log.d("MomentRemoteDataSource",
@@ -69,8 +71,5 @@ public class MomentRemoteDataSource {
                 callback.onFailure(new NoInternetException());
             }
         });
-
     }
-
-
 }
