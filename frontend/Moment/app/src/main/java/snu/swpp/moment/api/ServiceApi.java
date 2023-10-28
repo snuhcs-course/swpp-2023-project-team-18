@@ -64,7 +64,7 @@ public interface ServiceApi {
     @GET("api/writing/ai-story/")
     Call<AIStoryGetResponse> getAIGeneratedStory(@Header("Authorization") String bearerToken);
 
-    @GET("api/writing/stories/")
+    @POST("api/writing/stories/")
     Call<StorySaveResponse> saveStory(@Header("Authorization") String bearerToken,
         @Body StorySaveRequest data);
 
