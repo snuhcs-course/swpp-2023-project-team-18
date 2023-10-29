@@ -631,6 +631,27 @@ class GetStoryTest(TestCase):
         self.assertEqual(len(response.data["stories"]), 0)
 
 
+class DeleteStoryTest(TestCase):
+    def setUp(self):
+        test_user = User.objects.create(username="ay_test", nickname="ay_test")
+        test_user.set_password("123456")
+        story = Story.objects.create(user=test_user, created_at=intended_day)
+        story.save()
+        self.story_id = story.id
+
+    def test_delete_story(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="ay_test")
+        view = StoryView.as_view()
+        data = {"story_id": self.story_id}
+
+        request = factory.delete("writing/stories/", data=data)
+        force_authenticate(request, user=user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 204)
+
+
 class DayCompletionTest(TestCase):
     intended_day = datetime.datetime(
         year=2023, month=10, day=25, hour=3, minute=0, second=0

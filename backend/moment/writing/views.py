@@ -15,6 +15,7 @@ from .serializers import (
     StorySerializer,
     StoryQuerySerializer,
     StoryCreateSerializer,
+    StoryDeleteSerializer,
     EmotionCreateSerializer,
     EmotionQuerySerializer,
     ScoreCreateSerializer,
@@ -170,6 +171,20 @@ class StoryView(GenericAPIView):
         return Response(
             data={"message": "Success!"},
             status=201,
+        )
+
+    def delete(self, request: Request) -> Response:
+        body = StoryDeleteSerializer(data=request.data)
+        body.is_valid(raise_exception=True)
+
+        story_id = body.validated_data["story_id"]
+
+        story = Story.objects.get(id=story_id)
+        story.delete()
+
+        return Response(
+            data={"message": "Deleted story!"},
+            status=204,
         )
 
 
