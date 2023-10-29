@@ -75,6 +75,10 @@ class StoryCreateSerializer(serializers.Serializer):
     content = serializers.CharField(max_length=STORY_MAX_LENGTH)
 
 
+class StoryDeleteSerializer(serializers.Serializer):
+    story_id = serializers.IntegerField()
+
+
 class DayCompletionSerializer(serializers.Serializer):
     start = serializers.IntegerField()
     end = serializers.IntegerField()
