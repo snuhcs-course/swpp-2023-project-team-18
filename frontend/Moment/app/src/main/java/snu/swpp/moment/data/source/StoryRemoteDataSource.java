@@ -41,6 +41,8 @@ public class StoryRemoteDataSource {
     public void getStory(String access_token, long start, long end, StoryGetCallBack callBack) {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
+        Log.d("TIME", String.valueOf(start));
+        Log.d("TIME", String.valueOf(end));
         service.getStories(bearer, start, end).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<StoryGetResponse> call,
@@ -209,6 +211,7 @@ public class StoryRemoteDataSource {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
         HashtagSaveRequest request = new HashtagSaveRequest(story_id, content);
+        Log.d("Hashtag", content);
 
         service.saveHashtags(bearer, request).enqueue(new Callback<HashtagSaveResponse>() {
             @Override

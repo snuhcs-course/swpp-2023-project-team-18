@@ -164,8 +164,9 @@ public class DailyViewFragment extends Fragment {
         });
 
         LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        viewModel.getMoment(LocalDateTime.now());
-        viewModel.getStory(LocalDateTime.now());
+        LocalDateTime dateTime = date.atTime(3, 0);
+        viewModel.getMoment(dateTime);
+        viewModel.getStory(dateTime);
 
         Log.d("DailyViewFragment", "onCreateView() ended");
 

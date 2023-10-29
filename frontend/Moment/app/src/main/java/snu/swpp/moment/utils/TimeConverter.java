@@ -1,5 +1,6 @@
 package snu.swpp.moment.utils;
 
+import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class TimeConverter {
     }
 
     public static long convertLocalDateTimeToTimestamp(LocalDateTime localDateTime) {
+        Log.d("Time", String.valueOf(localDateTime.toEpochSecond(java.time.ZoneOffset.UTC)));
         return localDateTime.toEpochSecond(java.time.ZoneOffset.UTC);
     }
 

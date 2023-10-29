@@ -38,6 +38,7 @@ public class DailyViewModel extends ViewModel {
 
     public void getMoment(LocalDateTime now) {
         long[] dayInterval = TimeConverter.getOneDayIntervalTimestamps(now);
+        System.out.println("#DAYS " + now + ": " + dayInterval[0] + " " + dayInterval[1]);
 
         authenticationRepository.isTokenValid(new TokenCallBack() {
             @Override
