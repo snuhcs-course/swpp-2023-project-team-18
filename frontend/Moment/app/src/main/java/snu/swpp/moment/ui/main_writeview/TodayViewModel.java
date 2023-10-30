@@ -84,9 +84,7 @@ public class TodayViewModel extends ViewModel {
 
                         @Override
                         public void onFailure(Exception error) {
-                            momentState.setValue(
-                                new MomentUiState(error, new ArrayList<>())
-                            );
+                            momentState.setValue(MomentUiState.withError(error));
                         }
                     });
             }
@@ -110,9 +108,7 @@ public class TodayViewModel extends ViewModel {
 
                         @Override
                         public void onFailure(Exception error) {
-                            momentState.setValue(
-                                new MomentUiState(error, new ArrayList<>())
-                            );
+                            momentState.setValue(MomentUiState.withError(error));
                         }
                     });
             }
@@ -276,7 +272,7 @@ public class TodayViewModel extends ViewModel {
 
         @Override
         public void onFailure() {
-            momentState.setValue(new MomentUiState(new UnauthorizedAccessException(), null));
+            momentState.setValue(MomentUiState.withError(new UnauthorizedAccessException()));
         }
     }
 }

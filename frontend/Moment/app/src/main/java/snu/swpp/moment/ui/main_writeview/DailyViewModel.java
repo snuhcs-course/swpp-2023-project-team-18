@@ -55,17 +55,14 @@ public class DailyViewModel extends ViewModel {
 
                         @Override
                         public void onFailure(Exception error) {
-                            momentState.setValue(
-                                new MomentUiState(error, new ArrayList<>())
-                            );
+                            momentState.setValue(MomentUiState.withError(error));
                         }
                     });
             }
 
             @Override
             public void onFailure() {
-                momentState.setValue(
-                    new MomentUiState(new UnauthorizedAccessException(), new ArrayList<>()));
+                momentState.setValue(MomentUiState.withError(new UnauthorizedAccessException()));
             }
         });
     }
