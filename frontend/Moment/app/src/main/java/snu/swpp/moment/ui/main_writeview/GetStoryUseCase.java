@@ -87,7 +87,7 @@ public class GetStoryUseCase {
 
     public int getStoryId() {
         if (storyId == -1) {
-            System.out.printf("#DEBUG: story id is -1");
+            Log.d("GetStoryUseCase", "StoryId is not set yet (id=-1)");
         }
         return storyId;
     }
