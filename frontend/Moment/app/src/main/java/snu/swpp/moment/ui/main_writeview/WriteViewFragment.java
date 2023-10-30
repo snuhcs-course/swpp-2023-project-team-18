@@ -2,24 +2,20 @@ package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import android.os.Handler;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewAdapter;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
 import snu.swpp.moment.utils.TimeConverter;
 
@@ -29,15 +25,13 @@ public class WriteViewFragment extends Fragment {
     private final int DEFAULT_PAGE = 100;
     private int num_page = DEFAULT_PAGE;
     private FragmentWriteviewBinding binding;
+
     // ViewPager variables
     private ViewPager2 mPager;
-    // below tow indicator is not used. this is circle you can see in instagram
     private FragmentStateAdapter pagerAdapter;
-    private Handler slideHandler = new Handler(); // 슬라이드를 자동으로 변경하는 Handler
-    private AuthenticationRepository authenticationRepository;
-    //private CircleIndicator3 mIndicator;
-    // ViewPager variables end
+    private final Handler slideHandler = new Handler(); // 슬라이드를 자동으로 변경하는 Handler
 
+    private AuthenticationRepository authenticationRepository;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +39,7 @@ public class WriteViewFragment extends Fragment {
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
@@ -56,14 +50,13 @@ public class WriteViewFragment extends Fragment {
         View root = binding.getRoot();
 
         // 여기부터 slide가 가능해짐
-        //ViewPager2
         mPager = binding.viewpager;
-        pagerAdapter = new DailyViewAdapter(WriteViewFragment.this, num_page);
+        pagerAdapter = new SlideViewAdapter(WriteViewFragment.this, num_page);
         mPager.setAdapter(pagerAdapter);
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        // 최초의 페이지 설정은 이거로함 (numpage 보다 크면 마지막페이지가 세팅되는듯 - 아래 onPageChangeCallBack)
+        // 최초의 페이지 설정은 이거로 함 (numpage 보다 크면 마지막페이지가 세팅되는듯 - 아래 onPageChangeCallBack)
         mPager.setCurrentItem(num_page);
-        //offscreen 몇페이지가 로드되어있을지 설정 (Latency 감소)
+        // offscreen 몇 페이지가 로드되어 있을지 설정 (Latency 감소)
         mPager.setOffscreenPageLimit(3);
 
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -82,7 +75,7 @@ public class WriteViewFragment extends Fragment {
                         mPager.setCurrentItem(0, false);
                     }
                     LocalDate pageDate = TimeConverter.getToday().minusDays(num_page - index - 1);
-                    String formattedDate = TimeConverter.formatDate(pageDate);
+                    String formattedDate = TimeConverter.formatLocalDate(pageDate, "yyyy. MM. dd.");
                     MainActivity activity = (MainActivity) getActivity();
                     activity.setToolbarTitle(formattedDate);
                 }

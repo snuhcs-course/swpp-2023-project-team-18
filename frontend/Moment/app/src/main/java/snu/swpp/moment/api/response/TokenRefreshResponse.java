@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class TokenRefreshResponse {
 
     @SerializedName("access")
-    private String access;
+    private final String access;
 
     public TokenRefreshResponse(String access) {
         this.access = access;

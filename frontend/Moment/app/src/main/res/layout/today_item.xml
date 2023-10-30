@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/white">
+    android:paddingHorizontal="16dp">
+
     <ListView
-        android:id="@+id/listview_list"
+        android:id="@+id/todayMomentList"
         android:layout_width="match_parent"
-        android:layout_marginBottom="30dp"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:divider="#FFFFFF"
-        android:dividerHeight="15dp"
-        android:layout_weight="1" />
+        android:dividerHeight="15dp" />
+
     <Button
-        android:id="@+id/day_complete_button"
+        android:id="@+id/bottomButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:layout_marginRight="20dp"
-        android:shadowColor="@color/white"
         android:background="@drawable/day_completion_button"
-        android:text="@string/day_completetion_string"
-        android:fontFamily="@font/maruburi_light"
-        android:layout_marginBottom="10dp"/>
-</LinearLayout>
+        android:fontFamily="@font/maruburi_bold"
+        android:shadowColor="@color/white"
+        android:text="@string/day_complete_string" />
+
+</RelativeLayout>

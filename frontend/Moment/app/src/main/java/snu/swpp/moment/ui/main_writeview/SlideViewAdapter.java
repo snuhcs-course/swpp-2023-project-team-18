@@ -1,15 +1,17 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewFragment;
+import snu.swpp.moment.ui.main_writeview.DaySlide.TodayViewFragment;
 
 
-public class DailyViewAdapter extends FragmentStateAdapter {
+public class SlideViewAdapter extends FragmentStateAdapter {
 
     public int count;
 
-    public DailyViewAdapter(Fragment fa, int count) {
+    public SlideViewAdapter(Fragment fa, int count) {
         super(fa);
         this.count = count;
     }
@@ -21,10 +23,8 @@ public class DailyViewAdapter extends FragmentStateAdapter {
         if (index == count - 1) {
             return new TodayViewFragment();
         } else {
-            return new DailyViewFragment();
+            return new DailyViewFragment(count - index - 1);
         }
-
-
     }
 
     // 전체 페이지수

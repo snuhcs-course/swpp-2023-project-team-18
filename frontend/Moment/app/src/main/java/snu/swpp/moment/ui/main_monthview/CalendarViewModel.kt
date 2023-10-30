@@ -23,7 +23,7 @@ class CalendarViewModel : ViewModel() {
         "sad2" to 7,
         "angry1" to 8,
         "angry2" to 9,
-        "null" to 10
+        "invalid" to 10
     )
 
     fun setCurrentMonth(month: YearMonth) {
@@ -42,7 +42,7 @@ class CalendarViewModel : ViewModel() {
 
     // 서버에서 감정 리스트 가져오는 함수
     private fun getDayStatesMock(month: YearMonth): List<CalendarDayState> {
-        // FIXME: List 길이가 31이 아니면 IndexOutOfBound 에러가 남 (원인 불명)
+        // NOTE: List 길이가 31이 아니면 IndexOutOfBound 에러가 남 (원인 불명)
         val apiResult = List<CalendarDayState>(31) {
             CalendarDayState(emotionEnumMap.values.random(), it % 7 == 0)
         }
@@ -51,7 +51,6 @@ class CalendarViewModel : ViewModel() {
 
     // 서버에서 summary 가져오는 함수
     private fun getSummaryMock(date: LocalDate): CalendarDayInfoState {
-        // API call
         return CalendarDayInfoState(
             date = date,
             storyTitle = String.format("title %d", date.dayOfMonth),

@@ -7,15 +7,13 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import snu.swpp.moment.data.model.LoggedInUser;
-import snu.swpp.moment.data.model.Token;
+import snu.swpp.moment.data.model.LoggedInUserModel;
+import snu.swpp.moment.data.model.TokenModel;
 
 public class UserLocalDataSource {
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences.Editor editor;
     private final String DEFAULT_STRING = "";
 
     public UserLocalDataSource(Context context) throws GeneralSecurityException, IOException {
@@ -31,11 +29,11 @@ public class UserLocalDataSource {
         // read : shared prefernce, write : editor  -> secret_tokens에
     }
 
-    public void saveUser(LoggedInUser user) { //이거 있으면 회원가입, 로그인 다 access token으로 접근해야하니까
+    public void saveUser(LoggedInUserModel user) { // 이거 있으면 회원가입, 로그인 다 access token으로 접근해야하니까
         editor.putString("nickname", user.getNickName());
         editor.putString("access_token", user.getAccessToken());
         editor.putString("refresh_token", user.getRefreshToken());
-        editor.putString("created_at", user.getCreateAt()); //YYYY-MM-DDTHH:SS:...
+        editor.putString("created_at", user.getCreateAt()); // YYYY-MM-DDTHH:SS:...
         editor.apply(); // 이거 해야 적용됨
         // username은 오는데 저장은 따로 아직 안했음 (굳이?)
     }
@@ -45,10 +43,10 @@ public class UserLocalDataSource {
         editor.apply();
     }
 
-    public Token getToken() {
+    public TokenModel getToken() {
         String accessToken = sharedPreferences.getString("access_token", DEFAULT_STRING);
         String refreshToken = sharedPreferences.getString("refresh_token", DEFAULT_STRING);
-        return new Token(accessToken, refreshToken);
+        return new TokenModel(accessToken, refreshToken);
     }
 
     public boolean hasToken() {

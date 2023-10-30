@@ -1,19 +1,18 @@
 package snu.swpp.moment.ui.login;
 
-import android.util.Patterns;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.model.LoggedInUserModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.data.model.LoggedInUser;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResultState> loginResult = new MutableLiveData<>();
-    private AuthenticationRepository authenticationRepository;
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginResultState> loginResult = new MutableLiveData<>();
+    private final AuthenticationRepository authenticationRepository;
 
     LoginViewModel(AuthenticationRepository authenticationRepository) {
         this.authenticationRepository = authenticationRepository;
@@ -33,7 +32,7 @@ public class LoginViewModel extends ViewModel {
             "#Debug from ViewModel || username : " + username + "password : " + password);
         authenticationRepository.login(username, password, new AuthenticationCallBack() {
             @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
+            public void onSuccess(LoggedInUserModel loggedInUser) {
                 System.out.println("#Debug from ViewModel HIHIHIHIHIHIHIHI");
                 loginResult.setValue(
                     new LoginResultState(new LoggedInUserState(loggedInUser.getNickName())));

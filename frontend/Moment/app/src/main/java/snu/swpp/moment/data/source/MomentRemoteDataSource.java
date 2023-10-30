@@ -1,5 +1,6 @@
 package snu.swpp.moment.data.source;
 
+import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -10,33 +11,36 @@ import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.exception.NoInternetException;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.exception.UnknownErrorException;
 
 public class MomentRemoteDataSource {
 
     private ServiceApi service;
-    private MomentPair momentPair;
-    private Integer error;
-    private final int NO_INTERNET = 0;
 
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        service.getMoments(bearer, start, end).enqueue(new Callback<MomentGetResponse>() {
+        service.getMoments(bearer, start, end).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<MomentGetResponse> call,
                 Response<MomentGetResponse> response) {
+                Log.d("APICall", "getMoment: " + response.code());
                 if (response.isSuccessful()) {
                     MomentGetResponse result = response.body();
                     callback.onSuccess(result.getMomentList());
+                } else if (response.code() == 401) {
+                    callback.onFailure(new UnauthorizedAccessException());
                 } else {
-                    callback.onFailure(response.code());
+                    callback.onFailure(new UnknownErrorException());
                 }
             }
 
             @Override
             public void onFailure(Call<MomentGetResponse> call, Throwable t) {
-                callback.onFailure(NO_INTERNET);
+                Log.d("APICall", "getMoment: onFailure");
+                callback.onFailure(new NoInternetException());
             }
         });
     }
@@ -45,25 +49,28 @@ public class MomentRemoteDataSource {
         String bearer = "Bearer " + access_token;
         MomentWriteRequest request = new MomentWriteRequest(moment);
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        service.writeMoment(bearer, request).enqueue(new Callback<MomentWriteResponse>() {
+        service.writeMoment(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<MomentWriteResponse> call,
                 Response<MomentWriteResponse> response) {
+                Log.d("APICall", "writeMoment: " + response.code());
                 if (response.isSuccessful()) {
                     MomentWriteResponse result = response.body();
+                    Log.d("MomentRemoteDataSource",
+                        "Got AI reply: " + result.getMomentPair().getReply());
                     callback.onSuccess(result.getMomentPair());
+                } else if (response.code() == 401) {
+                    callback.onFailure(new UnauthorizedAccessException());
                 } else {
-                    callback.onFailure(response.code());
+                    callback.onFailure(new UnknownErrorException());
                 }
             }
 
             @Override
             public void onFailure(Call<MomentWriteResponse> call, Throwable t) {
-                callback.onFailure(NO_INTERNET);
+                Log.d("APICall", "writeMoment: onFailure");
+                callback.onFailure(new NoInternetException());
             }
         });
-
     }
-
-
 }

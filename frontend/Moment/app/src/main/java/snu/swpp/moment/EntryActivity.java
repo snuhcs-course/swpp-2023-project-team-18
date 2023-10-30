@@ -24,9 +24,9 @@ public class EntryActivity extends AppCompatActivity {
             authenticationRepository = AuthenticationRepository.getInstance(
                 getApplicationContext());
         } catch (GeneralSecurityException e) {
-            Toast.makeText(this, "개발자에게 연락하세요", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "개발자에게 연락하세요", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            Toast.makeText(this, "개발자에게 연락하세요", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "개발자에게 연락하세요", Toast.LENGTH_SHORT).show();
         }
 
         if (!authenticationRepository.isLoggedIn()) {

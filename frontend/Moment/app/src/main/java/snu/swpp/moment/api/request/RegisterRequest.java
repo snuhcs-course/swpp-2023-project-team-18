@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName;
 public class RegisterRequest {
 
     @SerializedName("username")
-    private String username;
+    private final String username;
 
     @SerializedName("password")
-    private String password;
+    private final String password;
 
     @SerializedName("nickname")
-    private String nickname;
+    private final String nickname;
 
     public RegisterRequest(String username, String password, String nickname) {
         this.username = username;

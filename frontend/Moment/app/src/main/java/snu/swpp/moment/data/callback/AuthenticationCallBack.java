@@ -1,10 +1,10 @@
 package snu.swpp.moment.data.callback;
 
-import snu.swpp.moment.data.model.LoggedInUser;
+import snu.swpp.moment.data.model.LoggedInUserModel;
 
 public interface AuthenticationCallBack {
 
-    void onSuccess(LoggedInUser loggedInUser);
+    void onSuccess(LoggedInUserModel loggedInUser);
 
     void onFailure(String errorMessage);
 }

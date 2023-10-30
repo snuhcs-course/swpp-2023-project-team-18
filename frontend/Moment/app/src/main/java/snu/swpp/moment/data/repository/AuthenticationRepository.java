@@ -3,12 +3,11 @@ package snu.swpp.moment.data.repository;
 import android.content.Context;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
-import snu.swpp.moment.data.model.LoggedInUser;
-import snu.swpp.moment.data.model.Token;
+import snu.swpp.moment.data.model.LoggedInUserModel;
+import snu.swpp.moment.data.model.TokenModel;
 import snu.swpp.moment.data.source.UserLocalDataSource;
 import snu.swpp.moment.data.source.UserRemoteDataSource;
 
@@ -20,12 +19,12 @@ public class AuthenticationRepository {
 
     private static volatile AuthenticationRepository instance;
 
-    private UserRemoteDataSource remoteDataSource;
-    private UserLocalDataSource localDataSource;
+    private final UserRemoteDataSource remoteDataSource;
+    private final UserLocalDataSource localDataSource;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
-    private LoggedInUser user = null;
+    private LoggedInUserModel user = null;
 
     // private constructor : singleton access
     private AuthenticationRepository(UserRemoteDataSource remoteDataSource,
@@ -48,7 +47,7 @@ public class AuthenticationRepository {
     }
 
     public void isTokenValid(TokenCallBack callBack) {
-        Token token = localDataSource.getToken();
+        TokenModel token = localDataSource.getToken();
         remoteDataSource.isTokenValid(token.getAccessToken(), new TokenCallBack() {
 
             @Override
@@ -88,7 +87,7 @@ public class AuthenticationRepository {
         localDataSource.logout();
     }
 
-    private void setLoggedInUser(LoggedInUser user) {
+    private void setLoggedInUser(LoggedInUserModel user) {
         this.user = user;
         localDataSource.saveUser(user);
 
@@ -99,7 +98,7 @@ public class AuthenticationRepository {
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
         remoteDataSource.login(username, password, new AuthenticationCallBack() {
             @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
+            public void onSuccess(LoggedInUserModel loggedInUser) {
                 setLoggedInUser(loggedInUser);
                 loginCallBack.onSuccess(loggedInUser);
             }
@@ -116,7 +115,7 @@ public class AuthenticationRepository {
         AuthenticationCallBack registerCallBack) {
         remoteDataSource.register(username, password, nickname, new AuthenticationCallBack() {
             @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
+            public void onSuccess(LoggedInUserModel loggedInUser) {
                 setLoggedInUser(loggedInUser);
                 registerCallBack.onSuccess(loggedInUser);
             }
@@ -128,7 +127,7 @@ public class AuthenticationRepository {
         });
     }
 
-    public Token getToken() {
+    public TokenModel getToken() {
         return localDataSource.getToken();
     }
 
