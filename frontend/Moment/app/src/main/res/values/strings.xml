@@ -44,6 +44,7 @@
     <string name="add_moment_help_text">새 모먼트 추가</string>
     <string name="moment_limit_help_text">모먼트는 1시간에 2개만 쓸 수 있어요</string>
     <string name="moment_reply_loading">AI의 답글을 기다리고 있어요</string>
+    <string name="no_moment">작성하신 모먼트가 없습니다</string>
     <string name="day_complete_string">하루 마무리하기</string>
     <string name="day_complete_popup">하루를 마무리하면 더 이상 모먼트를 작성할 수 없어요. 지금 마무리하실래요?</string>
 

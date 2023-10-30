@@ -111,6 +111,8 @@ public class DailyViewFragment extends Fragment {
                     }
 
                     listViewAdapter.notifyDataSetChanged();
+                } else {
+                    binding.noMomentText.setVisibility(View.VISIBLE);
                 }
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
