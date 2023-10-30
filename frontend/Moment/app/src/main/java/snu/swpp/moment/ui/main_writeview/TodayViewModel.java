@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -157,6 +158,8 @@ public class TodayViewModel extends ViewModel {
                         @Override
                         public void onSuccess(StoryCompletionNotifyResponse response) {
                             completionState.setValue(new CompletionState(null, response.getId()));
+                            Log.d("setStoryId", String.valueOf(response.getId()));
+                            getStoryUseCase.setStoryId(response.getId());
                         }
 
                         @Override
