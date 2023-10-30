@@ -167,6 +167,11 @@ class StoryView(GenericAPIView):
         story.content = content
         story.save()
 
+        log(
+            f"Successfully posted story",
+            place="StoryView.post",
+        )
+
         return Response(
             data={"message": "Success!"},
             status=201,
@@ -208,13 +213,13 @@ class StoryGenerateView(GenericAPIView):
 
         moment_contents = [moment_pair.moment for moment_pair in moment_pairs]
 
-        log(f"Moments: {moment_contents}", place="StoryGenerateView.get")
+        # log(f"Moments: {moment_contents}", place="StoryGenerateView.get")
 
         self.gpt_agent.reset_messages()
         prompt = StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
         self.gpt_agent.add_message(prompt)
 
-        log(f"Prompt: {prompt}", place="StoryGenerateView.get")
+        # log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
             title_and_story = self.gpt_agent.get_answer(
@@ -224,7 +229,11 @@ class StoryGenerateView(GenericAPIView):
             title, story = title_and_story.split(";")
 
         except GPTAgent.GPTError:
-            log(f"Error while calling GPT API", tag="error", place="MomentView.post")
+            log(
+                f"Error while calling GPT API",
+                tag="error",
+                place="StoryGenerateView.get",
+            )
 
             return Response(
                 data={"error": "GPT API call failed."},
@@ -232,10 +241,18 @@ class StoryGenerateView(GenericAPIView):
             )
 
         except ValueError:
+            log(
+                f"Error of response format: [title];[story]",
+                tag="error",
+                place="StoryGenerateView.get",
+            )
+
             return Response(
                 data={"error": "Please try again."},
                 status=500,
             )
+
+        log(f"Successfully generated story with AI", place="StoryGenerateView.get")
 
         return Response(
             data={"title": title, "story": story},
@@ -258,11 +275,17 @@ class DayCompletionView(GenericAPIView):
         curr_time = int(datetime.now().timestamp())
 
         log(
-            f"{curr_time}",
+            f"Current timestamp: {curr_time}",
             place="DayCompletionView.post",
         )
 
         if curr_time >= end:
+            log(
+                f"Current time exceeded intended time",
+                tag="error",
+                place="DayCompletionView.post",
+            )
+
             return Response(
                 data={"message": "Current time exceeded intended time"},
                 status=400,
@@ -276,6 +299,11 @@ class DayCompletionView(GenericAPIView):
             created_at=datetime.fromtimestamp(curr_time),
         )
         story.save()
+
+        log(
+            f"Successfully created empty story",
+            place="DayCompletionView.post",
+        )
 
         return Response(
             data={"id": story.id, "message": "Success!"},
@@ -319,6 +347,12 @@ class EmotionView(GenericAPIView):
         emotion = body.validated_data["emotion"]
 
         if not emotion in Emotions:
+            log(
+                f"Emotion string is invalid",
+                tag="error",
+                place="EmotionView.post",
+            )
+
             return Response(
                 data={"message": "Provided emotion string is invalid!"},
                 status=400,
@@ -330,6 +364,11 @@ class EmotionView(GenericAPIView):
 
         story.emotion = emotion
         story.save()
+
+        log(
+            f"Successfully posted emotion",
+            place="EmotionView.post",
+        )
 
         return Response(
             data={"message": "Success!"},
@@ -349,6 +388,8 @@ class ScoreView(GenericAPIView):
         story_id = body.validated_data["story_id"]
 
         if score < 1 or score > 5:
+            log(f"Invalid score", tag="error", place="ScoreView.post")
+
             return Response(
                 data={"message": "Invalid score"},
                 status=400,
@@ -360,6 +401,8 @@ class ScoreView(GenericAPIView):
                 user=user,
             ).latest("created_at")
         except Story.DoesNotExist:
+            log(f"Cannot modify this score", tag="error", place="ScoreView.post")
+
             return Response(
                 data={"message": "Cannot modify this score"},
                 status=400,
@@ -368,6 +411,8 @@ class ScoreView(GenericAPIView):
         story.score = score
         story.is_point_completed = True
         story.save()
+
+        log(f"Successfully saved score", place="ScoreView.post")
 
         return Response(
             data={"message": "Success!"},
@@ -413,6 +458,11 @@ class HashtagView(GenericAPIView):
                 id=story_id,
             )
         except Story.DoesNotExist:
+            log(
+                f"Provided story id does not exist",
+                tag="error",
+                place="HashtagView.post",
+            )
             return Response(
                 data={"message": "Cannot update this hashtag"},
                 status=400,
@@ -428,6 +478,11 @@ class HashtagView(GenericAPIView):
             curr_hashtag.save()
             story.hashtags.add(curr_hashtag)
         story.save()
+
+        log(
+            f"Successfully saved hashtags",
+            place="HashtagView.post",
+        )
 
         return Response(
             data={"message": "Success!"},
