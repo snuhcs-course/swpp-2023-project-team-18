@@ -130,7 +130,7 @@ public class TodayViewModel extends ViewModel {
 
                     @Override
                     public void onFailure(Exception error) {
-                        aiStoryState.setValue(new AiStoryState(error, "", ""));
+                        aiStoryState.setValue(AiStoryState.withError(error));
                     }
                 });
             }
@@ -161,7 +161,7 @@ public class TodayViewModel extends ViewModel {
 
                         @Override
                         public void onFailure(Exception error) {
-                            completionState.setValue(new CompletionState(error, -1));
+                            completionState.setValue(CompletionState.withError(error));
                         }
                     });
             }

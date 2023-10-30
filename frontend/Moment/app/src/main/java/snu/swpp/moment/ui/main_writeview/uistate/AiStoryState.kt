@@ -4,4 +4,11 @@ class AiStoryState(
     val error: Exception?,
     val title: String,
     val content: String,
-)
+) {
+    companion object {
+        @JvmStatic
+        fun withError(error: Exception): AiStoryState {
+            return AiStoryState(error, "", "")
+        }
+    }
+}
