@@ -93,6 +93,11 @@ public class ListFooterContainer {
         momentWriterContainer.setInvisible();
 
         if (storyUiState.isEmpty()) {
+            // 아직 스토리가 만들어지지 않았을 경우
+            return;
+        }
+        if (storyUiState.isEmotionInvalid()) {
+            // 모먼트 없이 자동으로 마무리되어서 감정이 invalid인 경우
             return;
         }
 

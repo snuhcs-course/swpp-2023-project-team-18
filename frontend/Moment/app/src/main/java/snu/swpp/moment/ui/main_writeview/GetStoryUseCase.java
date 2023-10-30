@@ -51,11 +51,13 @@ public class GetStoryUseCase {
                                 String title = storyInstance.getTitle();
                                 String content = storyInstance.getContent();
                                 int emotion = EmotionMap.getEmotionInt(storyInstance.getEmotion());
+
                                 List<HashtagModel> tags = storyInstance.getHashtags();
                                 List<String> parsedTags = new ArrayList<>();
                                 for (HashtagModel hashtagModel : tags) {
                                     parsedTags.add(hashtagModel.getContent());
                                 }
+
                                 int score = storyInstance.getScore();
                                 Date createdAt = storyInstance.getCreatedAt();
                                 boolean isPointCompleted = storyInstance.getIsPointCompleted();

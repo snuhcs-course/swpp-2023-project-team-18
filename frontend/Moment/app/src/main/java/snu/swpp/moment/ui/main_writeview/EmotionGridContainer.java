@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import java.util.Arrays;
 import java.util.List;
 import snu.swpp.moment.R;
+import snu.swpp.moment.utils.EmotionMap;
 
 public class EmotionGridContainer {
 
@@ -72,7 +73,7 @@ public class EmotionGridContainer {
     }
 
     public void selectEmotion(int emotion) {
-        if (emotion == 10) {
+        if (emotion == EmotionMap.INVALID_EMOTION) {
             return;
         }
         TextView textButton = textButtonList.get(emotion);

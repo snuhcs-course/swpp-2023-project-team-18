@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class EmotionMap {
 
+    public static final int INVALID_EMOTION = 10;
+
     private static final HashMap<String, Integer> emotionEnumMap = new HashMap<>() {{
         put("excited1", 0);
         put("excited2", 1);
@@ -16,7 +18,7 @@ public class EmotionMap {
         put("sad2", 7);
         put("angry1", 8);
         put("angry2", 9);
-        put("invalid", 10);
+        put("invalid", INVALID_EMOTION);
     }};
 
     private static final HashMap<Integer, String> reverseMap = new HashMap<>() {
@@ -31,13 +33,13 @@ public class EmotionMap {
             put(7, "sad2");
             put(8, "angry1");
             put(9, "angry2");
-            put(10, "invalid");
+            put(INVALID_EMOTION, "invalid");
         }
     };
 
     public static int getEmotionInt(String emotion) {
-        Integer emotionInt = emotionEnumMap.getOrDefault(emotion, 10);
-        return Objects.requireNonNullElse(emotionInt, 10);
+        Integer emotionInt = emotionEnumMap.getOrDefault(emotion, INVALID_EMOTION);
+        return Objects.requireNonNullElse(emotionInt, INVALID_EMOTION);
     }
 
     public static String getEmotion(int code) {

@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview.uistate
 
+import snu.swpp.moment.utils.EmotionMap
 import java.util.Date
 
 class StoryUiState(
@@ -40,4 +41,6 @@ class StoryUiState(
             isPointCompleted = false
         )
     }
+
+    fun isEmotionInvalid() = emotion == EmotionMap.INVALID_EMOTION
 }
