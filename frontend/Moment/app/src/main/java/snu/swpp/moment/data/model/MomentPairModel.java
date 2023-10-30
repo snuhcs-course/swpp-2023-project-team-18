@@ -1,24 +1,25 @@
 package snu.swpp.moment.data.model;
 
+import android.util.Log;
 import java.util.Date;
 import snu.swpp.moment.utils.TimeConverter;
 
 
-public class MomentPair {
+public class MomentPairModel {
 
     private final long id;
     private final String moment;
     private final String reply;
-    private final Date moment_created_at;
-    private final Date reply_created_at;
+    private final Date momentCreatedAt;
+    private final Date replyCreatedAt;
 
-    public MomentPair(long id, String moment, String reply, long moment_created_at,
-        long reply_created_at) {
+    public MomentPairModel(long id, String moment, String reply, long momentCreatedAt,
+        long replyCreatedAt) {
         this.id = id;
         this.moment = moment;
         this.reply = reply;
-        this.moment_created_at = TimeConverter.convertLongToDate(moment_created_at);
-        this.reply_created_at = TimeConverter.convertLongToDate(reply_created_at);
+        this.momentCreatedAt = TimeConverter.convertTimestampToDate(momentCreatedAt);
+        this.replyCreatedAt = TimeConverter.convertTimestampToDate(replyCreatedAt);
     }
 
     public String getMoment() {
@@ -30,10 +31,10 @@ public class MomentPair {
     }
 
     public Date getMomentCreatedTime() {
-        return moment_created_at;
+        return momentCreatedAt;
     }
 
     public Date getReplyCreatedTime() {
-        return reply_created_at;
+        return replyCreatedAt;
     }
 }

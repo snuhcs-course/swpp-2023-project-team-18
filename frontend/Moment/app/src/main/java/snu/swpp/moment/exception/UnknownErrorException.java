@@ -2,7 +2,7 @@ package snu.swpp.moment.exception;
 
 import androidx.annotation.Nullable;
 
-public class UnknownErrorException extends RuntimeException {
+public class UnknownErrorException extends Exception {
 
     @Nullable
     @Override

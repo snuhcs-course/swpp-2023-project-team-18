@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
-import snu.swpp.moment.data.model.LoggedInUser;
+import snu.swpp.moment.data.model.LoggedInUserModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 public class LoginViewModel extends ViewModel {
@@ -32,7 +32,7 @@ public class LoginViewModel extends ViewModel {
             "#Debug from ViewModel || username : " + username + "password : " + password);
         authenticationRepository.login(username, password, new AuthenticationCallBack() {
             @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
+            public void onSuccess(LoggedInUserModel loggedInUser) {
                 System.out.println("#Debug from ViewModel HIHIHIHIHIHIHIHI");
                 loginResult.setValue(
                     new LoginResultState(new LoggedInUserState(loggedInUser.getNickName())));

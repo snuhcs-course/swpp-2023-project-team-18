@@ -1,7 +1,6 @@
 package snu.swpp.moment.data.model
 
-class Hashtag(
+class HashtagModel(
     val id: Int,
     val content: String,
-) {
-}
+)

@@ -13,9 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
 import snu.swpp.moment.utils.TimeConverter;
@@ -36,6 +34,9 @@ public class StoryContainer {
     private boolean isTitleLimitExceeded = false;
     private boolean isContentLimitExceeded = false;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
+
+    // AI에게 부탁하기 버튼
+    private final MutableLiveData<Boolean> aiButtonSwitch = new MutableLiveData<>(false);
 
     private final int STORY_TITLE_MAX_LENGTH = 20;
     private final int STORY_CONTENT_MAX_LENGTH = 1000;
@@ -73,7 +74,7 @@ public class StoryContainer {
 
                     isTitleLimitExceeded = true;
                     checkLimitExceeded();
-                } else {
+                } else if (isTitleLimitExceeded) {
                     storyTitleEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
 
@@ -107,7 +108,7 @@ public class StoryContainer {
 
                     isContentLimitExceeded = true;
                     checkLimitExceeded();
-                } else {
+                } else if (isContentLimitExceeded) {
                     storyContentEditText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
 
@@ -125,14 +126,9 @@ public class StoryContainer {
                 builder.setMessage(R.string.ai_story_popup);
 
                 builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
-                    hideAiButton();
-
-                    // TODO: API 호출해서 AI 요약 받아오기
-                    Map<String, String> result = new HashMap<>() {{
-                        put("title", "AI 요약 제목");
-                        put("content", "AI 요약 내용");
-                    }};
-                    setStoryText(result.get("title"), result.get("content"));
+                    // AI 버튼 숨기고 API 호출
+                    setAiButtonVisibility(View.GONE);
+                    setAiButtonSwitch();
                 });
                 builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
                 });
@@ -168,10 +164,21 @@ public class StoryContainer {
         isLimitExceeded.observeForever(observer);
     }
 
+    public void observeAiButtonSwitch(Observer<Boolean> observer) {
+        aiButtonSwitch.observeForever(observer);
+    }
+
     public void setUiWritingStory(Date completeTime) {
+        // 과거 스토리: 서버에서 받아온 createdAt 표시
         storyWrapper.setVisibility(View.VISIBLE);
         setCompleteTimeText(completeTime);
         storyWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void setUiWritingStory() {
+        // 오늘 스토리: 현재 시간 표시
+        Date completeTime = new Date();
+        setUiWritingStory(completeTime);
     }
 
     public void setUiCompleteStory() {
@@ -181,12 +188,17 @@ public class StoryContainer {
     }
 
     public void setCompleteTimeText(Date completeTime) {
-        completeTimeText.setText(TimeConverter.formatTime(completeTime));
+        completeTimeText.setText(TimeConverter.formatDate(completeTime, "HH:mm"));
     }
 
     public void setStoryText(String title, String content) {
         storyTitleEditText.setText(title);
         storyContentEditText.setText(content);
+    }
+
+    public void setAiButtonVisibility(int visibility) {
+        storyAiButton.setVisibility(visibility);
+        aiButtonHelpText.setVisibility(visibility);
     }
 
     private void checkLimitExceeded() {
@@ -198,8 +210,8 @@ public class StoryContainer {
             String.format(Locale.getDefault(), "%d / %d", count, STORY_CONTENT_MAX_LENGTH));
     }
 
-    private void hideAiButton() {
-        storyAiButton.setVisibility(View.INVISIBLE);
-        aiButtonHelpText.setVisibility(View.INVISIBLE);
+    private void setAiButtonSwitch() {
+        aiButtonSwitch.setValue(true);
+        aiButtonSwitch.setValue(false);
     }
 }

@@ -11,29 +11,36 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
+import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
+import snu.swpp.moment.exception.NoInternetException;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.ui.main_writeview.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
 import snu.swpp.moment.ui.main_writeview.ListViewItem;
-import snu.swpp.moment.ui.main_writeview.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.KeyboardUtils;
+import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewFragment extends Fragment {
 
@@ -45,23 +52,29 @@ public class TodayViewFragment extends Fragment {
     private ListFooterContainer listFooterContainer;
 
     private TodayViewModel viewModel;
-    private MomentRemoteDataSource remoteDataSource;
-    private MomentRepository momentRepository;
-    private AuthenticationRepository authenticationRepository;
 
-    private final int NO_INTERNET = 0;
-    private final int ACCESS_TOKEN_EXPIRED = 1;
+    private AuthenticationRepository authenticationRepository;
+    private MomentRepository momentRepository;
+    private MomentRemoteDataSource momentRemoteDataSource;
+    private StoryRepository storyRepository;
+    private StoryRemoteDataSource storyRemoteDataSource;
+    private GetStoryUseCase getStoryUseCase;
+    private SaveScoreUseCase saveScoreUseCase;
+
+    private final int MOMENT_HOUR_LIMIT = 2;
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        if (remoteDataSource == null) {
-            remoteDataSource = new MomentRemoteDataSource();
-        }
-        if (momentRepository == null) {
-            momentRepository = new MomentRepository(remoteDataSource);
-        }
+        momentRemoteDataSource = Objects.requireNonNullElse(momentRemoteDataSource,
+            new MomentRemoteDataSource());
+        momentRepository = Objects.requireNonNullElse(momentRepository,
+            new MomentRepository(momentRemoteDataSource));
+        storyRemoteDataSource = Objects.requireNonNullElse(storyRemoteDataSource,
+            new StoryRemoteDataSource());
+        storyRepository = Objects.requireNonNullElse(storyRepository,
+            new StoryRepository(storyRemoteDataSource));
 
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
@@ -71,68 +84,84 @@ public class TodayViewFragment extends Fragment {
             startActivity(intent);
         }
 
+        getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
+            new GetStoryUseCase(authenticationRepository, storyRepository));
+        saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
+            new SaveScoreUseCase(authenticationRepository, storyRepository));
+
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
-                new TodayViewModelFactory(authenticationRepository, momentRepository))
+                new TodayViewModelFactory(authenticationRepository, momentRepository,
+                    storyRepository, getStoryUseCase, saveScoreUseCase))
                 .get(TodayViewModel.class);
         }
 
         binding = TodayItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Initialize ListView and related components
-        initializeListView(root);
-        KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
-
-        // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root, listFooterContainer);
-        bottomButtonContainer.viewingMoment();
-
-        return root;
-    }
-
-    private void initializeListView(View root) {
         listViewItems = new ArrayList<>();
 
-        viewModel.getMomentState().observe(getViewLifecycleOwner(), new Observer<MomentUiState>() {
-            @Override
-            public void onChanged(MomentUiState momentUiState) {
-                if (momentUiState.getError() == -1) {
-                    // 모먼트가 하나도 없으면 하단 버튼 비활성화
-                    int numMoments = momentUiState.getMomentPairsListSize();
-                    bottomButtonContainer.setActivated(numMoments != 0);
+        // moment GET API 호출
+        viewModel.observeMomentState(momentUiState -> {
+            Exception error = momentUiState.getError();
+            if (error == null) {
+                // 모먼트가 하나도 없으면 하단 버튼 비활성화
+                int numMoments = momentUiState.getNumMoments();
+                bottomButtonContainer.setActivated(numMoments != 0);
 
-                    if (numMoments > 0) {
-                        listViewItems.clear();
-                        for (MomentPair momentPair : momentUiState.getMomentPairsList()) {
-                            listViewItems.add(new ListViewItem(momentPair));
-                        }
+                if (numMoments > 0) {
+                    listViewItems.clear();
+                    for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                        listViewItems.add(new ListViewItem(momentPair));
+                    }
 
-                        listViewAdapter.notifyDataSetChanged();
-                        scrollToBottom();
-                    }
-                } else {
-                    if (momentUiState.getError() == NO_INTERNET) {
-                        Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                            .show();
-                    } else if (momentUiState.getError() == ACCESS_TOKEN_EXPIRED) {
-                        Toast.makeText(getContext(), R.string.token_expired_error,
-                            Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                            .show();
-                    }
+                    listViewAdapter.notifyDataSetChanged();
+                    scrollToBottom();
                 }
+            } else if (error instanceof NoInternetException) {
+                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                    .show();
+            } else if (error instanceof UnauthorizedAccessException) {
+                Toast.makeText(getContext(), R.string.token_expired_error,
+                    Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                    .show();
+            }
+
+        });
+        viewModel.getMoment(LocalDateTime.now());
+
+        // story GET API 호출
+        viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
+            if (savedStoryState.isEmpty()) {
+                return;
+            }
+
+            // story가 이미 있으면 마무리된 하루로 판정해 받아온 데이터 보여줌
+            Exception error = savedStoryState.getError();
+            if (error == null) {
+                // SUCCESS
+                listFooterContainer.updateUiWithRemoteData(savedStoryState);
+                bottomButtonContainer.setActivated(false, true);
+            } else if (error instanceof NoInternetException) {
+                // NO INTERNET
+                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                    .show();
+            } else if (error instanceof UnauthorizedAccessException) {
+                // ACCESS TOKEN EXPIRED
+                Toast.makeText(getContext(), R.string.token_expired_error,
+                    Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                    .show();
             }
         });
-
-        LocalDate today = LocalDate.now();
-        int year = today.getYear();
-        int month = today.getMonthValue();
-        int date = today.getDayOfMonth();
-        viewModel.getMoment(year, month, date);
+        viewModel.getStory(LocalDateTime.now());
 
         listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);
@@ -147,9 +176,10 @@ public class TodayViewFragment extends Fragment {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
                 Locale.getDefault());
 
-            int numMoments = viewModel.getMomentState().getValue().getMomentPairsListSize();
-            if (numMoments >= 2) {
-                String createdSecond = listViewItems.get(numMoments - 2).getInputTime();
+            int numMoments = viewModel.getMomentState().getNumMoments();
+            if (numMoments >= MOMENT_HOUR_LIMIT) {
+                String createdSecond = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
+                    .getInputTime();
 
                 try {
                     Date createdDate = inputFormat.parse(createdSecond);
@@ -188,20 +218,51 @@ public class TodayViewFragment extends Fragment {
             if (!text.isEmpty()) {
                 viewModel.writeMoment(text);
                 addItem(text);
-                listFooterContainer.setUiReadyToAddMoment();
+                // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
             }
         });
 
-        listFooterContainer.setScrollToBottomSwitchObserver(isSet -> {
+        listFooterContainer.observeScrollToBottomSwitch(isSet -> {
             if (isSet) {
                 scrollToBottom();
             }
         });
+
+        listFooterContainer.observeAiStoryCallSwitch(isSet -> {
+            if (isSet) {
+                viewModel.getAiStory();
+            }
+        });
+
+        listFooterContainer.observeScore(score -> {
+            if (score != null) {
+                viewModel.saveScore(score);
+            }
+        });
+
+        // 하단 버튼 관리 객체 초기화
+        bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
+        bottomButtonContainer.viewingMoment();
+
+        // 하루 마무리 API 호출 시 동작 설정
+        viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
+        viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
+        viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
+        viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
+        viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
+
+        // AI 답글 대기 중 동작 설정
+        listViewAdapter.observeWaitingAiReplySwitch(
+            bottomButtonContainer.waitingAiReplySwitchObserver());
+
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
+
+        return root;
     }
 
     private void addItem(String userInput) {
-        String currentTime = new SimpleDateFormat("yyyy.MM.dd. HH:mm").format(new Date());
-        listViewItems.add(new ListViewItem(userInput, currentTime, ""));
+        String currentTime = TimeConverter.formatDate(new Date(), "yyyy.MM.dd. HH:mm");
+        listViewItems.add(new ListViewItem(userInput, currentTime));
         listViewAdapter.notifyDataSetChanged();
         scrollToBottom();
     }

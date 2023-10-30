@@ -7,7 +7,7 @@ import snu.swpp.moment.api.response.RegisterResponse;
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
-public class LoggedInUser {
+public class LoggedInUserModel {
 
     private String username = null;
     private String nickName = null;
@@ -15,7 +15,7 @@ public class LoggedInUser {
     private String AccessToken = null;
     private String RefreshToken = null;
 
-    public LoggedInUser(RegisterResponse.User user, RegisterResponse.Token token) {
+    public LoggedInUserModel(RegisterResponse.User user, RegisterResponse.Token token) {
         this.username = user.getUsername();
         this.nickName = user.getNickname();
         this.AccessToken = token.getAccessToken();
@@ -23,7 +23,7 @@ public class LoggedInUser {
         this.createAt = LocalDateTime.now().toString();
     }
 
-    public LoggedInUser(LoginResponse.User user, LoginResponse.Token token) {
+    public LoggedInUserModel(LoginResponse.User user, LoginResponse.Token token) {
         this.username = user.getUsername();
         this.nickName = user.getNickname();
         this.createAt = user.getCreatedAt();
@@ -31,7 +31,7 @@ public class LoggedInUser {
         this.RefreshToken = token.getRefreshToken();
     }
 
-    public LoggedInUser(String username, String nickName, String createAt, String AccessToken,
+    public LoggedInUserModel(String username, String nickName, String createAt, String AccessToken,
         String RefreshToken) {
         this.username = username;
         this.nickName = nickName;

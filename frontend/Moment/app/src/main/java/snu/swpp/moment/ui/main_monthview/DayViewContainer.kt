@@ -22,7 +22,7 @@ class DayViewContainer(view: View) : ViewContainer(view) {
         view.setOnClickListener {
             if (day.position != DayPosition.MonthDate) {
                 return@setOnClickListener
-            } else if (viewModel.calendarDayStates.value!![day.date.dayOfMonth - 1].emotion == NULL_EMOTION) {
+            } else if (viewModel.calendarDayStates.value!![day.date.dayOfMonth - 1].emotion == INVALID_EMOTION) {
                 return@setOnClickListener
             }
 

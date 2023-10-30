@@ -6,16 +6,27 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import snu.swpp.moment.api.request.EmotionSaveRequest;
+import snu.swpp.moment.api.request.HashtagSaveRequest;
 import snu.swpp.moment.api.request.LoginRequest;
 import snu.swpp.moment.api.request.MomentWriteRequest;
 import snu.swpp.moment.api.request.RegisterRequest;
+import snu.swpp.moment.api.request.ScoreSaveRequest;
+import snu.swpp.moment.api.request.StoryCompletionNotifyRequest;
+import snu.swpp.moment.api.request.StorySaveRequest;
 import snu.swpp.moment.api.request.TokenRefreshRequest;
 import snu.swpp.moment.api.request.TokenVerifyRequest;
+import snu.swpp.moment.api.response.AIStoryGetResponse;
+import snu.swpp.moment.api.response.EmotionSaveResponse;
+import snu.swpp.moment.api.response.HashtagSaveResponse;
 import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
+import snu.swpp.moment.api.response.ScoreSaveResponse;
+import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.api.response.StoryGetResponse;
+import snu.swpp.moment.api.response.StorySaveResponse;
 import snu.swpp.moment.api.response.TokenRefreshResponse;
 import snu.swpp.moment.api.response.TokenVerifyResponse;
 
@@ -45,4 +56,27 @@ public interface ServiceApi {
     Call<StoryGetResponse> getStories(@Header("Authorization") String bearerToken,
         @Query("start") long start, @Query("end") long end);
 
+    @POST("api/writing/day-completion/")
+    Call<StoryCompletionNotifyResponse> notifyStoryCompletion(
+        @Header("Authorization") String bearerToken,
+        @Body StoryCompletionNotifyRequest data);
+
+    @GET("api/writing/ai-story/")
+    Call<AIStoryGetResponse> getAIGeneratedStory(@Header("Authorization") String bearerToken);
+
+    @POST("api/writing/stories/")
+    Call<StorySaveResponse> saveStory(@Header("Authorization") String bearerToken,
+        @Body StorySaveRequest data);
+
+    @POST("api/writing/emotions/")
+    Call<EmotionSaveResponse> saveEmotion(@Header("Authorization") String bearerToken,
+        @Body EmotionSaveRequest data);
+
+    @POST("api/writing/score/")
+    Call<ScoreSaveResponse> saveScore(@Header("Authorization") String bearerToken,
+        @Body ScoreSaveRequest data);
+
+    @POST("api/writing/hashtags/")
+    Call<HashtagSaveResponse> saveHashtags(@Header("Authorization") String bearerToken,
+        @Body HashtagSaveRequest data);
 }

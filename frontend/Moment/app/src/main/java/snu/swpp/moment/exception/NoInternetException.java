@@ -2,7 +2,7 @@ package snu.swpp.moment.exception;
 
 import androidx.annotation.Nullable;
 
-public class NoInternetException extends RuntimeException {
+public class NoInternetException extends Exception {
 
     @Nullable
     @Override

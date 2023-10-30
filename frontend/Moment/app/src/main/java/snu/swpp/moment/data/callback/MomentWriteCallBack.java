@@ -1,10 +1,10 @@
 package snu.swpp.moment.data.callback;
 
-import snu.swpp.moment.data.model.MomentPair;
+import snu.swpp.moment.data.model.MomentPairModel;
 
 public interface MomentWriteCallBack {
 
-    void onSuccess(MomentPair momentPair);
+    void onSuccess(MomentPairModel momentPair);
 
-    void onFailure(int error);
+    void onFailure(Exception error);
 }
