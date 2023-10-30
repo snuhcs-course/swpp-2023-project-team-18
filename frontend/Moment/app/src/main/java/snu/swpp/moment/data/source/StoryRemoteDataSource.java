@@ -41,8 +41,7 @@ public class StoryRemoteDataSource {
     public void getStory(String access_token, long start, long end, StoryGetCallBack callBack) {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
-        Log.d("TIME", String.valueOf(start));
-        Log.d("TIME", String.valueOf(end));
+        Log.d("StoryRemoteDataSource", "getStory start: " + start + ", end: " + end);
         service.getStories(bearer, start, end).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<StoryGetResponse> call,

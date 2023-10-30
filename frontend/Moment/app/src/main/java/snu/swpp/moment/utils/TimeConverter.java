@@ -5,23 +5,20 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
 public class TimeConverter {
 
-    public static long convertDateToTimestamp(Date date) {
-        return date.getTime() / 1000;
-    }
-
     public static Date convertTimestampToDate(Long timestamp) {
         return new Date(timestamp * 1000);
     }
 
+    /* 현지 시간을 기준으로 만들어진 LocalDateTime을 UTC timestamp로 변환 */
     public static long convertLocalDateTimeToTimestamp(LocalDateTime localDateTime) {
-        Log.d("Time", String.valueOf(localDateTime.toEpochSecond(java.time.ZoneOffset.UTC)));
-        return localDateTime.toEpochSecond(java.time.ZoneOffset.UTC);
+        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
     }
 
     public static LocalDate updateDateFromThree(LocalDate date, int hour) {
@@ -54,7 +51,12 @@ public class TimeConverter {
             start = start.minusDays(1);
         }
         LocalDateTime end = start.plusDays(1).minusSeconds(1);
-        return new long[]{convertLocalDateTimeToTimestamp(start),
-            convertLocalDateTimeToTimestamp(end)};
+        Log.d("TimeConverter", "start: " + start + ", end: " + end);
+
+        long startTimestamp = convertLocalDateTimeToTimestamp(start);
+        long endTimestamp = convertLocalDateTimeToTimestamp(end);
+        Log.d("TimeConverter",
+            "startTimestamp: " + startTimestamp + ", endTimestamp: " + endTimestamp);
+        return new long[]{startTimestamp, endTimestamp};
     }
 }
