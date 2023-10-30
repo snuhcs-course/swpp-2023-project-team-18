@@ -101,7 +101,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     private void setWaitingResponse(TextView textView) {
         // AI 답글 대기중 애니메이션 표시
-        textView.setText("\u00B7  \u00B7  \u00B7 \nAI가 일기를 읽고 있어요");    // 가운뎃점
+        textView.setText("\u00B7  \u00B7  \u00B7\nAI가 일기를 읽고 있어요");    // 가운뎃점
         textView.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
         textView.setAlpha(0.5f);
         textView.clearAnimation();
