@@ -218,7 +218,7 @@ public class TodayViewFragment extends Fragment {
             if (!text.isEmpty()) {
                 viewModel.writeMoment(text);
                 addItem(text);
-                listFooterContainer.setUiReadyToAddMoment();
+                // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
             }
         });
 
@@ -251,6 +251,10 @@ public class TodayViewFragment extends Fragment {
         viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
         viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
 
+        // AI 답글 대기 중 동작 설정
+        listViewAdapter.observeWaitingAiReplySwitch(
+            bottomButtonContainer.waitingAiReplySwitchObserver());
+
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
         return root;
@@ -258,7 +262,7 @@ public class TodayViewFragment extends Fragment {
 
     private void addItem(String userInput) {
         String currentTime = TimeConverter.formatDate(new Date(), "yyyy.MM.dd. HH:mm");
-        listViewItems.add(new ListViewItem(userInput, currentTime, ""));
+        listViewItems.add(new ListViewItem(userInput, currentTime));
         listViewAdapter.notifyDataSetChanged();
         scrollToBottom();
     }

@@ -113,6 +113,19 @@ public class BottomButtonContainer {
         setActivated(false, true);
     }
 
+    public Observer<Boolean> waitingAiReplySwitchObserver() {
+        // ListViewAdapter가 가지고 있는 LiveData에 등록해서 사용
+        return (Boolean isWaitingAiReply) -> {
+            if (isWaitingAiReply) {
+                setActivated(false);
+                listFooterContainer.setUiWaitingAiReply();
+            } else {
+                setActivated(true);
+                listFooterContainer.setUiReadyToAddMoment();
+            }
+        };
+    }
+
     public Observer<CompletionState> completionStateObserver() {
         return (CompletionState completionState) -> {
             listFooterContainer.showLoadingText(false);

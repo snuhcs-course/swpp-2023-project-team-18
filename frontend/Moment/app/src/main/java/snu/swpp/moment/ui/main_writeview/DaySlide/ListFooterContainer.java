@@ -178,6 +178,13 @@ public class ListFooterContainer {
         setScrollToBottomSwitch();
     }
 
+    public void setUiWaitingAiReply() {
+        // submit 누른 후 AI 답글 대기 중일 때
+        momentWriterContainer.setUiWaitingAiReply();
+
+        setBottomButtonState(false);
+    }
+
     public void setUiReadyToAddMoment() {
         // submit 버튼 눌렀을 때 입력창 사라지고 add 버튼 표시되는 동작
         momentWriterContainer.setUiReadyToAddMoment();

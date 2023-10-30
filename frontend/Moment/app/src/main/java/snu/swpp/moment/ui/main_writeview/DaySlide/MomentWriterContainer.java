@@ -107,13 +107,16 @@ public class MomentWriterContainer {
         momentEditTextWrapper.startAnimation(animationProvider.delayedFadeIn);
     }
 
-    public void setUiReadyToAddMoment() {
-        // submit 버튼 눌렀을 때 입력창 사라지고 add 버튼 표시되는 동작
+    public void setUiWaitingAiReply() {
+        // submit 직후 AI 답글 대기 중일 때 입력창 사라지는 동작
         momentEditText.setText("");
         submitButton.setVisibility(View.GONE);
         submitButtonInactive.setVisibility(View.VISIBLE);
         momentEditTextWrapper.setVisibility(View.GONE);
+    }
 
+    public void setUiReadyToAddMoment() {
+        // submit 후 AI 답글 받았을 때 add 버튼 표시되는 동작
         addButton.startAnimation(animationProvider.fadeIn);
         addButtonText.startAnimation(animationProvider.fadeIn);
         addButton.setVisibility(View.VISIBLE);
