@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -209,21 +210,17 @@ public class TodayViewModel extends ViewModel {
         });
     }
 
-    public void saveScore(int score) {
-        int story_id = getStoryUseCase.getStoryId();
-        if (story_id == -1) {
-            return;
-        }
-        saveScoreUseCase.saveScore(story_id, score);
-    }
-
     public void saveHashtags(String content) {
         authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                int story_id = getStoryUseCase.getStoryId();
-                storyRepository.saveHashtags(access_token, story_id, content,
+                int storyId = getStoryUseCase.getStoryId();
+                if (storyId == -1) {
+                    Log.d("TodayViewModel", "saveHashtags: StoryId is not set yet (id=-1)");
+                }
+
+                storyRepository.saveHashtags(access_token, storyId, content,
                     new HashtagSaveCallback() {
                         @Override
                         public void onSuccess() {
@@ -237,6 +234,15 @@ public class TodayViewModel extends ViewModel {
                     });
             }
         });
+    }
+
+    public void saveScore(int score) {
+        int storyId = getStoryUseCase.getStoryId();
+        if (storyId == -1) {
+            Log.d("TodayViewModel", "saveScore: StoryId is not set yet (id=-1)");
+            return;
+        }
+        saveScoreUseCase.saveScore(storyId, score);
     }
 
     public void observeMomentState(Observer<MomentUiState> observer) {

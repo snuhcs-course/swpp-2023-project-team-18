@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.time.LocalDateTime;
@@ -86,7 +87,7 @@ public class GetStoryUseCase {
 
     public int getStoryId() {
         if (storyId == -1) {
-            System.out.printf("#DEBUG: story id is -1");
+            Log.d("GetStoryUseCase", "StoryId is not set yet (id=-1)");
         }
         return storyId;
     }

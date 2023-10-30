@@ -139,7 +139,7 @@ public class DailyViewFragment extends Fragment {
         listFooterContainer = new ListFooterContainer(footerView);
 
         listFooterContainer.observeScore(score -> {
-            viewModel.setScore(score);
+            viewModel.saveScore(score);
         });
 
         viewModel.observeStoryState((StoryUiState storyUiState) -> {

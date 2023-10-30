@@ -1,10 +1,10 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -71,9 +71,10 @@ public class DailyViewModel extends ViewModel {
         getStoryUseCase.getStory(now);
     }
 
-    public void setScore(int score) {
+    public void saveScore(int score) {
         int story_id = getStoryUseCase.getStoryId();
         if (story_id == -1) {
+            Log.d("DailyViewModel", "saveScore: StoryId is not set yet (id=-1)");
             return;
         }
         saveScoreUseCase.saveScore(story_id, score);
