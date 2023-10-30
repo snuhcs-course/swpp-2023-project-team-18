@@ -23,7 +23,7 @@ class CalendarViewModel : ViewModel() {
         "sad2" to 7,
         "angry1" to 8,
         "angry2" to 9,
-        "null" to 10
+        "invalid" to 10
     )
 
     fun setCurrentMonth(month: YearMonth) {
