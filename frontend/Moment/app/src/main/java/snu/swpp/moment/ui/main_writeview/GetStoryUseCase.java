@@ -75,7 +75,7 @@ public class GetStoryUseCase {
 
                         @Override
                         public void onFailure(Exception error) {
-                            storyState.setValue(StoryUiState.empty());
+                            storyState.setValue(StoryUiState.withError(error));
                         }
                     });
             }
