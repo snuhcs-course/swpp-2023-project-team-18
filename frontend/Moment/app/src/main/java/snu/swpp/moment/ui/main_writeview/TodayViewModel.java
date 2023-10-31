@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import snu.swpp.moment.api.response.AIStoryGetResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
@@ -196,7 +195,7 @@ public class TodayViewModel extends ViewModel {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                String emotion = EmotionMap.getEmotion(emotionInt);
+                String emotion = EmotionMap.getEmotionString(emotionInt);
                 storyRepository.saveEmotion(access_token, emotion, new EmotionSaveCallback() {
                     @Override
                     public void onSuccess() {
