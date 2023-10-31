@@ -18,7 +18,7 @@ import snu.swpp.moment.api.response.ScoreSaveResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.api.response.StoryGetResponse;
 import snu.swpp.moment.api.response.StorySaveResponse;
-import snu.swpp.moment.data.callback.AIStoryCallback;
+import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.ScoreSaveCallback;
@@ -94,7 +94,7 @@ public class StoryRemoteDataSource {
             });
     }
 
-    public void getAIGeneratedStory(String access_token, AIStoryCallback callback) {
+    public void getAiGeneratedStory(String access_token, AiStoryCallback callback) {
         String bearer = "Bearer " + access_token;
         service = RetrofitClient.getClient().create(ServiceApi.class);
 
@@ -104,7 +104,7 @@ public class StoryRemoteDataSource {
                 Response<AIStoryGetResponse> response) {
                 Log.d("APICall", "getAIGeneratedStory: " + response.code());
                 if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
+                    callback.onSuccess(response.body().getTitle(), response.body().getContent());
                 } else if (response.code() == 401) {
                     callback.onFailure(new UnauthorizedAccessException());
                 } else if (response.code() == 500) {

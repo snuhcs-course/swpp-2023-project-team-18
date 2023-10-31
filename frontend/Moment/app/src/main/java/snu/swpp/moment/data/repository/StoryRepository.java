@@ -1,9 +1,8 @@
 package snu.swpp.moment.data.repository;
 
-import java.util.ArrayList;
-import snu.swpp.moment.api.response.AIStoryGetResponse;
+import java.util.List;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
-import snu.swpp.moment.data.callback.AIStoryCallback;
+import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.ScoreSaveCallback;
@@ -24,7 +23,7 @@ public class StoryRepository {
     public void getStory(String access_token, long start, long end, StoryGetCallBack callback) {
         remoteDataSource.getStory(access_token, start, end, new StoryGetCallBack() {
             @Override
-            public void onSuccess(ArrayList<StoryModel> story) {
+            public void onSuccess(List<StoryModel> story) {
                 callback.onSuccess(story);
             }
 
@@ -51,11 +50,11 @@ public class StoryRepository {
             });
     }
 
-    public void getAIGeneratedStory(String access_token, AIStoryCallback callback) {
-        remoteDataSource.getAIGeneratedStory(access_token, new AIStoryCallback() {
+    public void getAIGeneratedStory(String access_token, AiStoryCallback callback) {
+        remoteDataSource.getAiGeneratedStory(access_token, new AiStoryCallback() {
             @Override
-            public void onSuccess(AIStoryGetResponse response) {
-                callback.onSuccess(response);
+            public void onSuccess(String title, String content) {
+                callback.onSuccess(title, content);
             }
 
             @Override
