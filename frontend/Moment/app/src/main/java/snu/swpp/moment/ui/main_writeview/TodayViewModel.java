@@ -273,6 +273,10 @@ public class TodayViewModel extends ViewModel {
         tagsResultState.observeForever(observer);
     }
 
+    public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
+        scoreResultState.observeForever(observer);
+    }
+
 
     abstract class WriteViewTokenCallback implements TokenCallBack {
 
