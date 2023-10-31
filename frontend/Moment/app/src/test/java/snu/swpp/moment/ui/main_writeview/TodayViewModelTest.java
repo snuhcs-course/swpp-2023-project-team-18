@@ -27,6 +27,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
+import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StoryGetCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
@@ -41,6 +42,7 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 
@@ -192,7 +194,6 @@ public class TodayViewModelTest {
         // Given
         doAnswer(invocation -> {
             Object[] args = invocation.getArguments();
-            String moment = (String) args[1];
             MomentWriteCallBack callback = (MomentWriteCallBack) args[2];
 
             callback.onFailure(new NoInternetException());
@@ -321,7 +322,46 @@ public class TodayViewModelTest {
     }
 
     @Test
-    public void notifyCompletion() {
+    public void notifyCompletion_success() {
+        // Given
+        final int storyId = 111;
+        doAnswer(invocation -> {
+            StoryCompletionNotifyCallBack callback = (StoryCompletionNotifyCallBack) invocation.getArguments()[3];
+            callback.onSuccess(storyId);
+            return null;
+        }).when(storyDataSource).notifyCompletion(anyString(), anyLong(), anyLong(), any());
+
+        Observer<CompletionState> observer = completionState -> {
+            // Then
+            System.out.println(completionState.getStoryId());
+            assertNull(completionState.getError());
+            assertEquals(completionState.getStoryId(), storyId);
+        };
+        todayViewModel.observeCompletionState(observer);
+
+        // When
+        todayViewModel.notifyCompletion();
+    }
+
+    @Test
+    public void notifyCompletion_fail() {
+        // Given
+        doAnswer(invocation -> {
+            StoryCompletionNotifyCallBack callback = (StoryCompletionNotifyCallBack) invocation.getArguments()[3];
+            callback.onFailure(new NoInternetException());
+            return null;
+        }).when(storyDataSource).notifyCompletion(anyString(), anyLong(), anyLong(), any());
+
+        Observer<CompletionState> observer = completionState -> {
+            // Then
+            System.out.println(completionState.getStoryId());
+            assertTrue(completionState.getError() instanceof NoInternetException);
+            assertEquals(completionState.getStoryId(), -1);
+        };
+        todayViewModel.observeCompletionState(observer);
+
+        // When
+        todayViewModel.notifyCompletion();
     }
 
     @Test
