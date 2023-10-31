@@ -154,10 +154,10 @@ public class TodayViewModel extends ViewModel {
                 storyRepository.notifyCompletion(access_token, start, end,
                     new StoryCompletionNotifyCallBack() {
                         @Override
-                        public void onSuccess(StoryCompletionNotifyResponse response) {
-                            completionState.setValue(new CompletionState(null, response.getId()));
-                            Log.d("setStoryId", String.valueOf(response.getId()));
-                            getStoryUseCase.setStoryId(response.getId());
+                        public void onSuccess(int storyId) {
+                            completionState.setValue(new CompletionState(null, storyId));
+                            Log.d("setStoryId", String.valueOf(storyId));
+                            getStoryUseCase.setStoryId(storyId);
                         }
 
                         @Override

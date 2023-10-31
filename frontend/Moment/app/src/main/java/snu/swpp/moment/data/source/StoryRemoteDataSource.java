@@ -77,7 +77,7 @@ public class StoryRemoteDataSource {
                     Response<StoryCompletionNotifyResponse> response) {
                     Log.d("APICall", "notifyCompletion: " + response.code());
                     if (response.isSuccessful()) {
-                        callback.onSuccess(response.body());
+                        callback.onSuccess(response.body().getId());
                     } else if (response.code() == 400) {
                         callback.onFailure(new InvalidStoryCompletionTimeException());
                     } else if (response.code() == 401) {

@@ -39,8 +39,8 @@ public class StoryRepository {
         remoteDataSource.notifyCompletion(access_token, start, end,
             new StoryCompletionNotifyCallBack() {
                 @Override
-                public void onSuccess(StoryCompletionNotifyResponse response) {
-                    callback.onSuccess(response);
+                public void onSuccess(int storyId) {
+                    callback.onSuccess(storyId);
                 }
 
                 @Override
