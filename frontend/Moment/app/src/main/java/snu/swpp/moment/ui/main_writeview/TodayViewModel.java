@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import snu.swpp.moment.api.response.AIStoryGetResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
@@ -32,7 +33,8 @@ import snu.swpp.moment.utils.TimeConverter;
 public class TodayViewModel extends ViewModel {
 
     // 모먼트 작성
-    private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
+    private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>(
+        new MomentUiState(null, new ArrayList<>()));
 
     // 하루 마무리
     private final MutableLiveData<CompletionState> completionState = new MutableLiveData<>();
