@@ -458,9 +458,11 @@ public class TodayViewModelTest {
             callback.onSuccess();
             return null;
         }).when(storyDataSource).saveHashtags(anyString(), anyInt(), anyString(), any());
+        doReturn(111).when(getStoryUseCase).getStoryId();
 
         Observer<CompletionStoreResultState> observer = storeResultState -> {
             // Then
+            System.out.println("observer for saveHashtags");
             assertNull(storeResultState.getError());
         };
         todayViewModel.observeTagsResultState(observer);
@@ -477,9 +479,11 @@ public class TodayViewModelTest {
             callback.onFailure(new InvalidHashtagSaveRequestException());
             return null;
         }).when(storyDataSource).saveHashtags(anyString(), anyInt(), anyString(), any());
+        doReturn(111).when(getStoryUseCase).getStoryId();
 
         Observer<CompletionStoreResultState> observer = storeResultState -> {
             // Then
+            System.out.println("observer for saveHashtags");
             assertTrue(storeResultState.getError() instanceof InvalidHashtagSaveRequestException);
         };
         todayViewModel.observeTagsResultState(observer);
@@ -496,9 +500,11 @@ public class TodayViewModelTest {
             callback.onSuccess();
             return null;
         }).when(storyDataSource).saveScore(anyString(), anyInt(), anyInt(), any());
+        doReturn(111).when(getStoryUseCase).getStoryId();
 
         Observer<CompletionStoreResultState> observer = storeResultState -> {
             // Then
+            System.out.println("observer for saveScore");
             assertNull(storeResultState.getError());
         };
         todayViewModel.observeScoreResultState(observer);
@@ -515,9 +521,11 @@ public class TodayViewModelTest {
             callback.onFailure(new InvalidScoreSaveRequestException());
             return null;
         }).when(storyDataSource).saveScore(anyString(), anyInt(), anyInt(), any());
+        doReturn(111).when(getStoryUseCase).getStoryId();
 
         Observer<CompletionStoreResultState> observer = storeResultState -> {
             // Then
+            System.out.println("observer for saveScore");
             assertTrue(storeResultState.getError() instanceof InvalidScoreSaveRequestException);
         };
         todayViewModel.observeScoreResultState(observer);
