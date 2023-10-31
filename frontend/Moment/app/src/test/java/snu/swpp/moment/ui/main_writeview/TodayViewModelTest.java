@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
@@ -38,6 +39,7 @@ import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.exception.UnknownErrorException;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
@@ -61,11 +63,8 @@ public class TodayViewModelTest {
     @Spy
     @InjectMocks
     private StoryRepository storyRepository;
-    @Spy
-    @InjectMocks
+
     private GetStoryUseCase getStoryUseCase;
-    @Spy
-    @InjectMocks
     private SaveScoreUseCase saveScoreUseCase;
 
     // For testing with LiveData
@@ -81,6 +80,10 @@ public class TodayViewModelTest {
             return null;
         }).when(authenticationRepository).isTokenValid(any());
         doReturn(new TokenModel("access", "refresh")).when(authenticationRepository).getToken();
+
+        // usecase들은 annotation으로 정의했을 때 잘 안 됐음
+        getStoryUseCase = spy(new GetStoryUseCase(authenticationRepository, storyRepository));
+        saveScoreUseCase = spy(new SaveScoreUseCase(authenticationRepository, storyRepository));
 
         todayViewModel = new TodayViewModel(
             authenticationRepository,
@@ -256,7 +259,65 @@ public class TodayViewModelTest {
     }
 
     @Test
-    public void getStory() {
+    public void getStory_success() {
+        // Given
+        final StoryModel story = new StoryModel(
+            1,
+            "excited1",
+            0,
+            "title",
+            "content",
+            new ArrayList<>(),
+            0L,
+            false
+        );
+        doAnswer(invocation -> {
+            StoryGetCallBack callback = (StoryGetCallBack) invocation.getArguments()[3];
+            callback.onSuccess(Arrays.asList(story));
+            return null;
+        }).when(storyDataSource).getStory(anyString(), anyLong(), anyLong(), any());
+
+        Observer<StoryUiState> observer = storyUiState -> {
+            // Then
+            System.out.println(storyUiState.getContent() + " " + storyUiState.getTitle());
+            assertNull(storyUiState.getError());
+            assertFalse(storyUiState.isEmpty());
+            assertEquals(storyUiState.getTitle(), "title");
+            assertEquals(storyUiState.getContent(), "content");
+            assertEquals(storyUiState.getEmotion(), 0);
+            assertEquals(storyUiState.getTags().size(), 0);
+            assertFalse(storyUiState.isPointCompleted());
+        };
+        todayViewModel.observeSavedStoryState(observer);
+
+        // When
+        todayViewModel.getStory(LocalDateTime.now());
+    }
+
+    @Test
+    public void getStory_fail() {
+        // Given
+        doAnswer(invocation -> {
+            StoryGetCallBack callback = (StoryGetCallBack) invocation.getArguments()[3];
+            callback.onFailure(new UnknownErrorException());
+            return null;
+        }).when(storyDataSource).getStory(anyString(), anyLong(), anyLong(), any());
+
+        Observer<StoryUiState> observer = storyUiState -> {
+            // Then
+            System.out.println(storyUiState.getError());
+            assertTrue(storyUiState.getError() instanceof UnknownErrorException);
+            assertTrue(storyUiState.isEmpty());
+            assertEquals(storyUiState.getTitle(), "");
+            assertEquals(storyUiState.getContent(), "");
+            assertEquals(storyUiState.getEmotion(), 0);
+            assertEquals(storyUiState.getTags().size(), 0);
+            assertFalse(storyUiState.isPointCompleted());
+        };
+        todayViewModel.observeSavedStoryState(observer);
+
+        // When
+        todayViewModel.getStory(LocalDateTime.now());
     }
 
     @Test
