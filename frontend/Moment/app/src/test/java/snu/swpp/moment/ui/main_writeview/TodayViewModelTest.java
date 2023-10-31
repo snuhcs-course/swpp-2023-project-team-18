@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -25,10 +26,14 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import snu.swpp.moment.data.callback.AiStoryCallback;
+import snu.swpp.moment.data.callback.EmotionSaveCallback;
+import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
+import snu.swpp.moment.data.callback.ScoreSaveCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StoryGetCallBack;
+import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.model.StoryModel;
@@ -38,11 +43,16 @@ import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
+import snu.swpp.moment.exception.InvalidEmotionException;
+import snu.swpp.moment.exception.InvalidHashtagSaveRequestException;
+import snu.swpp.moment.exception.InvalidScoreSaveRequestException;
+import snu.swpp.moment.exception.InvalidStoryCompletionTimeException;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 
@@ -348,14 +358,14 @@ public class TodayViewModelTest {
         // Given
         doAnswer(invocation -> {
             StoryCompletionNotifyCallBack callback = (StoryCompletionNotifyCallBack) invocation.getArguments()[3];
-            callback.onFailure(new NoInternetException());
+            callback.onFailure(new InvalidStoryCompletionTimeException());
             return null;
         }).when(storyDataSource).notifyCompletion(anyString(), anyLong(), anyLong(), any());
 
         Observer<CompletionState> observer = completionState -> {
             // Then
             System.out.println(completionState.getStoryId());
-            assertTrue(completionState.getError() instanceof NoInternetException);
+            assertTrue(completionState.getError() instanceof InvalidStoryCompletionTimeException);
             assertEquals(completionState.getStoryId(), -1);
         };
         todayViewModel.observeCompletionState(observer);
@@ -365,46 +375,154 @@ public class TodayViewModelTest {
     }
 
     @Test
-    public void saveStory() {
+    public void saveStory_success() {
+        // Given
+        doAnswer(invocation -> {
+            StorySaveCallback callback = (StorySaveCallback) invocation.getArguments()[3];
+            callback.onSuccess();
+            return null;
+        }).when(storyDataSource).saveStory(anyString(), anyString(), anyString(), any());
+
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertNull(storeResultState.getError());
+        };
+        todayViewModel.observeStoryResultState(observer);
+
+        // When
+        todayViewModel.saveStory("title", "content");
     }
 
     @Test
-    public void saveEmotion() {
+    public void saveStory_fail() {
+        // Given
+        doAnswer(invocation -> {
+            StorySaveCallback callback = (StorySaveCallback) invocation.getArguments()[3];
+            callback.onFailure(new UnauthorizedAccessException());
+            return null;
+        }).when(storyDataSource).saveStory(anyString(), anyString(), anyString(), any());
+
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertTrue(storeResultState.getError() instanceof UnauthorizedAccessException);
+        };
+        todayViewModel.observeStoryResultState(observer);
+
+        // When
+        todayViewModel.saveStory("title", "content");
     }
 
     @Test
-    public void saveHashtags() {
+    public void saveEmotion_success() {
+        // Given
+        doAnswer(invocation -> {
+            EmotionSaveCallback callback = (EmotionSaveCallback) invocation.getArguments()[2];
+            callback.onSuccess();
+            return null;
+        }).when(storyDataSource).saveEmotion(anyString(), anyString(), any());
+
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertNull(storeResultState.getError());
+        };
+        todayViewModel.observeEmotionResultState(observer);
+
+        // When
+        todayViewModel.saveEmotion(0);
     }
 
     @Test
-    public void saveScore() {
+    public void saveEmotion_fail() {
+        // Given
+        doAnswer(invocation -> {
+            EmotionSaveCallback callback = (EmotionSaveCallback) invocation.getArguments()[2];
+            callback.onFailure(new InvalidEmotionException());
+            return null;
+        }).when(storyDataSource).saveEmotion(anyString(), anyString(), any());
+
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertTrue(storeResultState.getError() instanceof InvalidEmotionException);
+        };
+        todayViewModel.observeEmotionResultState(observer);
+
+        // When
+        todayViewModel.saveEmotion(0);
     }
 
     @Test
-    public void observeMomentState() {
+    public void saveHashtags_success() {
+        // Given
+        doAnswer(invocation -> {
+            HashtagSaveCallback callback = (HashtagSaveCallback) invocation.getArguments()[3];
+            callback.onSuccess();
+            return null;
+        }).when(storyDataSource).saveHashtags(anyString(), anyInt(), anyString(), any());
+
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertNull(storeResultState.getError());
+        };
+        todayViewModel.observeTagsResultState(observer);
+
+        // When
+        todayViewModel.saveHashtags("#tag");
     }
 
     @Test
-    public void observeSavedStoryState() {
+    public void saveHashtags_fail() {
+        // Given
+        doAnswer(invocation -> {
+            HashtagSaveCallback callback = (HashtagSaveCallback) invocation.getArguments()[3];
+            callback.onFailure(new InvalidHashtagSaveRequestException());
+            return null;
+        }).when(storyDataSource).saveHashtags(anyString(), anyInt(), anyString(), any());
+
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertTrue(storeResultState.getError() instanceof InvalidHashtagSaveRequestException);
+        };
+        todayViewModel.observeTagsResultState(observer);
+
+        // When
+        todayViewModel.saveHashtags("#tag");
     }
 
     @Test
-    public void observeCompletionState() {
+    public void saveScore_success() {
+        // Given
+        doAnswer(invocation -> {
+            ScoreSaveCallback callback = (ScoreSaveCallback) invocation.getArguments()[3];
+            callback.onSuccess();
+            return null;
+        }).when(storyDataSource).saveScore(anyString(), anyInt(), anyInt(), any());
+
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertNull(storeResultState.getError());
+        };
+        todayViewModel.observeScoreResultState(observer);
+
+        // When
+        todayViewModel.saveScore(3);
     }
 
     @Test
-    public void observeAiStoryState() {
-    }
+    public void saveScore_fail() {
+        // Given
+        doAnswer(invocation -> {
+            ScoreSaveCallback callback = (ScoreSaveCallback) invocation.getArguments()[3];
+            callback.onFailure(new InvalidScoreSaveRequestException());
+            return null;
+        }).when(storyDataSource).saveScore(anyString(), anyInt(), anyInt(), any());
 
-    @Test
-    public void observeStoryResultState() {
-    }
+        Observer<CompletionStoreResultState> observer = storeResultState -> {
+            // Then
+            assertTrue(storeResultState.getError() instanceof InvalidScoreSaveRequestException);
+        };
+        todayViewModel.observeScoreResultState(observer);
 
-    @Test
-    public void observeEmotionResultState() {
-    }
-
-    @Test
-    public void observeTagsResultState() {
+        // When
+        todayViewModel.saveScore(3);
     }
 }
