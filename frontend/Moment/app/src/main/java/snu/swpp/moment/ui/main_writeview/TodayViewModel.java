@@ -41,7 +41,6 @@ public class TodayViewModel extends ViewModel {
     private final MutableLiveData<CompletionStoreResultState> storyResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> emotionResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> tagsResultState = new MutableLiveData<>();
-    private final MutableLiveData<CompletionStoreResultState> scoreResultState = new MutableLiveData<>();
     private final SaveScoreUseCase saveScoreUseCase;
 
     private final GetStoryUseCase getStoryUseCase;
@@ -274,7 +273,7 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
-        scoreResultState.observeForever(observer);
+        saveScoreUseCase.observeScoreResultState(observer);
     }
 
 
