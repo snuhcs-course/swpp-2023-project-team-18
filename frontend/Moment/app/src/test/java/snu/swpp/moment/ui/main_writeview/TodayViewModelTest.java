@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.doReturn;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,18 +23,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
+import snu.swpp.moment.data.callback.StoryGetCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
+import snu.swpp.moment.data.model.StoryModel;
 import snu.swpp.moment.data.model.TokenModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
+import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TodayViewModelTest {
@@ -41,6 +49,8 @@ public class TodayViewModelTest {
 
     @Mock
     private MomentRemoteDataSource momentDataSource;
+    @Mock
+    private StoryRemoteDataSource storyDataSource;
 
     @Spy
     @InjectMocks
@@ -202,7 +212,47 @@ public class TodayViewModelTest {
     }
 
     @Test
-    public void getAiStory() {
+    public void getAiStory_success() {
+        // Given
+        doAnswer(invocation -> {
+            AiStoryCallback callback = (AiStoryCallback) invocation.getArguments()[1];
+            callback.onSuccess("title", "content");
+            return null;
+        }).when(storyDataSource).getAiGeneratedStory(anyString(), any());
+
+        Observer<AiStoryState> observer = aiStoryState -> {
+            // Then
+            System.out.println(aiStoryState.getContent() + " " + aiStoryState.getTitle());
+            assertNull(aiStoryState.getError());
+            assertEquals(aiStoryState.getTitle(), "title");
+            assertEquals(aiStoryState.getContent(), "content");
+        };
+        todayViewModel.observeAiStoryState(observer);
+
+        // When
+        todayViewModel.getAiStory();
+    }
+
+    @Test
+    public void getAiStory_fail() {
+        // Given
+        doAnswer(invocation -> {
+            AiStoryCallback callback = (AiStoryCallback) invocation.getArguments()[1];
+            callback.onFailure(new NoInternetException());
+            return null;
+        }).when(storyDataSource).getAiGeneratedStory(anyString(), any());
+
+        Observer<AiStoryState> observer = aiStoryState -> {
+            // Then
+            System.out.println(aiStoryState.getContent() + " " + aiStoryState.getTitle());
+            assertTrue(aiStoryState.getError() instanceof NoInternetException);
+            assertEquals(aiStoryState.getTitle(), "");
+            assertEquals(aiStoryState.getContent(), "");
+        };
+        todayViewModel.observeAiStoryState(observer);
+
+        // When
+        todayViewModel.getAiStory();
     }
 
     @Test
