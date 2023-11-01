@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
+        final Button loginButton = binding.loginButton;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
+                loginButton.setActivated(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }

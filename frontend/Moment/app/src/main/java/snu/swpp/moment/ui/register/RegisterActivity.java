@@ -71,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 registerButton.setEnabled(registerFormState.isDataValid());
+                registerButton.setActivated(registerFormState.isDataValid());
                 if (registerFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(registerFormState.getUsernameError()));
                 }

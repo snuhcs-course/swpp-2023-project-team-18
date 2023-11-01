@@ -22,21 +22,17 @@
         <!-- Timestamp TextView -->
         <TextView
             android:id="@+id/listitem_inputTime"
+            style="@style/SMALL_GRAY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/maruburi_light"
-            android:textColor="#808080"
-            android:textSize="12sp"
-            tools:text="Input Time" />
+            tools:text="03:00" />
         <TextView
             android:id="@+id/listitem_userInput"
+            style="@style/NORMAL_BLACK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/maruburi_light"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            tools:text="User Input" />
+            tools:text="모먼트 내용" />
         <ImageView
             android:id="@+id/dot_line"
             android:layout_width="match_parent"
@@ -46,21 +42,17 @@
             android:src="@drawable/dotted_line" />
         <TextView
             android:id="@+id/ai_text"
+            style="@style/SMALL_GRAY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/maruburi_light"
-            android:text="AI의 답글"
-            android:textColor="#808080"
-            android:textSize="12sp" />
+            android:text="AI의 답글" />
         <TextView
             android:id="@+id/listitem_serverResponse"
+            style="@style/NORMAL_BLACK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/maruburi_light"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            tools:text="Server Response" />
+            tools:text="AI 답글 내용" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

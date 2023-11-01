@@ -21,6 +21,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
         System.out.println("#DEBUG loginregister start");
         // Initialize the loginButton by referencing the XML layout
         loginButton = findViewById(R.id.main_login);
+        loginButton.setActivated(true);
         registerButton = findViewById(R.id.main_register);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
