@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="start"
-            android:text="AI의 답글" />
+            android:text="@string/ai_response_help_text" />
         <TextView
             android:id="@+id/listitem_serverResponse"
             style="@style/NORMAL_BLACK"
