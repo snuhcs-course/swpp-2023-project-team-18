@@ -204,16 +204,11 @@ public class TodayViewFragment extends Fragment {
             }
         });
 
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-            INPUT_METHOD_SERVICE);
         listFooterContainer.setSubmitButtonOnClickListener(v -> {
-            String text = listFooterContainer.getMomentInputText();
-
             // 소프트 키보드 숨기기
-            if (imm != null && getActivity().getCurrentFocus() != null) {
-                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-            }
+            KeyboardUtils.hideSoftKeyboard(getContext());
 
+            String text = listFooterContainer.getMomentInputText();
             if (!text.isEmpty()) {
                 // 새 item 추가
                 // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
