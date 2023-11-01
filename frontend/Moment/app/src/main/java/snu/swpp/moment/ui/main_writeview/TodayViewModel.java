@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import snu.swpp.moment.api.response.AIStoryGetResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;

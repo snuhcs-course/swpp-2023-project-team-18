@@ -49,7 +49,7 @@ public class EmotionGridContainer {
                     isFirstLoaded = false;
                     return;
                 }
-                
+
                 int previousSelectedEmotion = selectedEmotion.getValue();
                 if (previousSelectedEmotion > -1) {
                     TextView previousButton = textButtonList.get(previousSelectedEmotion);

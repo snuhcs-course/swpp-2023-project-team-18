@@ -12,7 +12,7 @@ class MomentUiState(
             return MomentUiState(error, emptyList())
         }
     }
-    
+
     fun getNumMoments(): Int {
         return momentPairList.size
     }
