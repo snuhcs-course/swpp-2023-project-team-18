@@ -43,6 +43,9 @@ public class ListFooterContainer {
     // AI 요약 API call을 위한 스위치
     private final MutableLiveData<Boolean> aiStoryCallSwitch = new MutableLiveData<>(false);
 
+    // 마무리 과정 중에 있는가? (이탈 방지 위해 사용)
+    private boolean isCompletionInProgress = false;
+
 
     public ListFooterContainer(@NonNull View view) {
         this.view = view;
@@ -139,6 +142,10 @@ public class ListFooterContainer {
         return tagBoxContainer.getTags();
     }
 
+    public boolean isCompletionInProgress() {
+        return isCompletionInProgress;
+    }
+
     public void setAddButtonOnClickListener(View.OnClickListener listener) {
         momentWriterContainer.setAddButtonOnClickListener(listener);
     }
@@ -181,6 +188,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public void setUiWaitingAiReply() {
@@ -188,6 +196,7 @@ public class ListFooterContainer {
         momentWriterContainer.setUiWaitingAiReply();
 
         setBottomButtonState(false);
+        isCompletionInProgress = false;
     }
 
     public void setUiReadyToAddMoment() {
@@ -196,6 +205,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public void setUiAddLimitExceeded() {
@@ -204,6 +214,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public void setUiWritingStory() {
@@ -214,6 +225,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
+        isCompletionInProgress = true;
     }
 
     public void setUiSelectingEmotion() {
@@ -224,16 +236,19 @@ public class ListFooterContainer {
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
+        isCompletionInProgress = true;
     }
 
     public void setUiWritingTags() {
         tagBoxContainer.setUiVisible();
         setScrollToBottomSwitch();
+        isCompletionInProgress = true;
     }
 
     public void setUiSelectingScore() {
         scoreContainer.setUiVisible();
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public Observer<AiStoryState> aiStoryObserver() {

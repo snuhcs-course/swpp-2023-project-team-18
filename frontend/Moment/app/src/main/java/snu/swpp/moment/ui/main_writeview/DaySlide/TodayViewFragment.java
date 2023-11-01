@@ -1,15 +1,15 @@
 package snu.swpp.moment.ui.main_writeview.DaySlide;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import java.text.ParseException;
@@ -251,6 +251,35 @@ public class TodayViewFragment extends Fragment {
         // AI 답글 대기 중 동작 설정
         listViewAdapter.observeWaitingAiReplySwitch(
             bottomButtonContainer.waitingAiReplySwitchObserver());
+
+        // 마무리 과정 중 뒤로가기 버튼 경고
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Log.d("TodayViewFragment",
+                    "handleOnBackPressed: called " + listFooterContainer.isCompletionInProgress());
+                if (!listFooterContainer.isCompletionInProgress()) {
+                    doOriginalAction();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),
+                    R.style.DialogTheme);
+                builder.setMessage(R.string.completion_back_button_popup)
+                    .setPositiveButton(R.string.popup_yes, (dialog, id) -> {
+                        doOriginalAction();
+                    })
+                    .setNegativeButton(R.string.popup_no, (dialog, id) -> {
+                    });
+                builder.create().show();
+            }
+
+            private void doOriginalAction() {
+                setEnabled(false);
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher()
+            .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 

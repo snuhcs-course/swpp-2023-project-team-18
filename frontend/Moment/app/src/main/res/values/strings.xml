@@ -64,6 +64,7 @@
     <string name="completion_loading">· · · \n잠시만 기다려주세요</string>
     <string name="please_retry">다시 시도해주세요.</string>
     <string name="auto_complete_warning">직접 점수를 매기지 않아 자동으로 입력되었으니 수정해주세요</string>
+    <string name="completion_back_button_popup">하루 마무리를 중단하면 지금까지의 내용이 제대로 저장되지 않을 수 있어요. 지금 중단하실래요?</string>
 
     <string name="popup_yes">네</string>
     <string name="popup_no">아니요</string>
