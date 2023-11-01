@@ -1,7 +1,7 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,19 +61,24 @@ public class ListViewAdapter extends BaseAdapter {
         momentText.setText(item.getUserInput());
         momentTimeText.setText(item.getTimestampText());
 
+        Log.d("ListViewAdapter",
+            String.format("getView() called: position %d, size %d, isWaitingAiReply: %s", position,
+                size, item.isWaitingAiReply()));
+
         if (item.isWaitingAiReply()) {
             // 애니메이션 표시 & bottom button 비활성화
             setWaitingResponse(aiReplyText);
             waitingAiReplySwitch.setValue(true);
         } else {
-            showUpdatedResponse(item.getAiReply(), aiReplyText);
+            aiReplyText.setText(item.getAiReply());
+
             if (position >= size) {
-                // 새로운 item이 추가된 경우
+                // 새로 추가된 item인 경우: AI 답글 애니메이션 보여줌
                 size = items.size();
                 aiReplyText.startAnimation(animationProvider.fadeIn);
 
                 if (getWaitingAiReplySwitch()) {
-                    // AI 답글 대기 중이었던 경우
+                    // AI 답글 대기 중이었던 경우: 대기 끝난 상태로 변경
                     waitingAiReplySwitch.setValue(false);
                 }
             }
@@ -89,14 +94,6 @@ public class ListViewAdapter extends BaseAdapter {
 
     public void observeWaitingAiReplySwitch(Observer<Boolean> observer) {
         waitingAiReplySwitch.observeForever(observer);
-    }
-
-    private void showUpdatedResponse(String response, TextView textView) {
-        textView.setText(response);
-        textView.setGravity(Gravity.START);
-        textView.setAlpha(1);
-        textView.clearAnimation();
-        textView.startAnimation(animationProvider.fadeIn);
     }
 
     private void setWaitingResponse(TextView textView) {

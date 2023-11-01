@@ -25,6 +25,7 @@
             style="@style/SMALL_GRAY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="start"
             tools:text="03:00" />
         <TextView
             android:id="@+id/listitem_userInput"
@@ -32,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:gravity="start"
             tools:text="모먼트 내용" />
         <ImageView
             android:id="@+id/dot_line"
@@ -46,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:gravity="start"
             android:text="AI의 답글" />
         <TextView
             android:id="@+id/listitem_serverResponse"
@@ -53,6 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:gravity="start"
             tools:text="AI 답글 내용" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
