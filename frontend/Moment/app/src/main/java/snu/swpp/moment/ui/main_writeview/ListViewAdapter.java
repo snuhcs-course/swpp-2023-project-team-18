@@ -82,7 +82,6 @@ public class ListViewAdapter extends BaseAdapter {
                     waitingAiReplySwitch.setValue(false);
                 }
             }
-
         }
 
         return convertView;

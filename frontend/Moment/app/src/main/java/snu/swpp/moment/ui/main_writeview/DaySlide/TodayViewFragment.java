@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -181,27 +180,21 @@ public class TodayViewFragment extends Fragment {
 
             int numMoments = viewModel.getMomentState().getNumMoments();
             if (numMoments >= MOMENT_HOUR_LIMIT) {
-                String createdSecond = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
-                    .getTimestampText();
+                Date createdAt = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
+                    .getCreatedAt();
+                Calendar createdCalendar = Calendar.getInstance();
+                createdCalendar.setTime(createdAt);
+                int createdHourValue = createdCalendar.get(
+                    Calendar.HOUR_OF_DAY); // This will give you the hour of createdSecond
 
-                try {
-                    Date createdDate = inputFormat.parse(createdSecond);
-                    Calendar createdCalendar = Calendar.getInstance();
-                    createdCalendar.setTime(createdDate);
-                    int createdHourValue = createdCalendar.get(
-                        Calendar.HOUR_OF_DAY); // This will give you the hour of createdSecond
+                Calendar currentCalendar = Calendar.getInstance();
+                int currentHourValue = currentCalendar.get(
+                    Calendar.HOUR_OF_DAY); // This will give you the current hour
 
-                    Calendar currentCalendar = Calendar.getInstance();
-                    int currentHourValue = currentCalendar.get(
-                        Calendar.HOUR_OF_DAY); // This will give you the current hour
-
-                    if (createdHourValue == currentHourValue) {
-                        listFooterContainer.setUiAddLimitExceeded();
-                    } else {
-                        listFooterContainer.setUiWritingMoment();
-                    }
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                if (createdHourValue == currentHourValue) {
+                    listFooterContainer.setUiAddLimitExceeded();
+                } else {
+                    listFooterContainer.setUiWritingMoment();
                 }
             } else {
                 listFooterContainer.setUiWritingMoment();
