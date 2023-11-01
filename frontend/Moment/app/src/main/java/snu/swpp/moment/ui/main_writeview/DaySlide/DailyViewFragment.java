@@ -37,7 +37,7 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public class DailyViewFragment extends Fragment {
 
-    private final int minusDays;
+    private int minusDays;
 
     private DailyItemBinding binding;
     private List<ListViewItem> listViewItems;
@@ -54,9 +54,11 @@ public class DailyViewFragment extends Fragment {
 
     private ListFooterContainer listFooterContainer;
 
-    public DailyViewFragment(int minusDays) {
-        this.minusDays = minusDays;
+    public static DailyViewFragment initialize(int minusDays) {
         Log.d("DailyViewFragment", "Initializing DailyViewFragment with minusDays: " + minusDays);
+        DailyViewFragment fragment = new DailyViewFragment();
+        fragment.minusDays = minusDays;
+        return fragment;
     }
 
 

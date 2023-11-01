@@ -23,7 +23,7 @@ public class SlideViewAdapter extends FragmentStateAdapter {
         if (index == count - 1) {
             return new TodayViewFragment();
         } else {
-            return new DailyViewFragment(count - index - 1);
+            return DailyViewFragment.initialize(count - index - 1);
         }
     }
 
