@@ -59,7 +59,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         ListViewItem item = items.get(position);
         momentText.setText(item.getUserInput());
-        momentTimeText.setText(item.getInputTime());
+        momentTimeText.setText(item.getTimestampText());
 
         if (item.isWaitingAiReply()) {
             // 애니메이션 표시 & bottom button 비활성화

@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.data.model.MomentPairModel;
 
@@ -8,27 +9,26 @@ public class ListViewItem {
 
     private final String userInput;
     private final String aiReply;
-    private final String inputTime;
+    private final String timestampText;
 
-    public ListViewItem(String userInput, String inputTime) {
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+    public ListViewItem(String userInput, Date inputTime) {
         this.userInput = userInput;
-        this.inputTime = inputTime;
+        this.timestampText = dateFormat.format(inputTime);
         this.aiReply = ""; // 초기에는 서버 응답이 없기 때문에 빈 문자열로 설정
     }
 
     public ListViewItem(MomentPairModel momentPair) {
         userInput = momentPair.getMoment();
-        inputTime = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault()).format(
-            momentPair.getMomentCreatedTime());
+        timestampText = dateFormat.format(momentPair.getMomentCreatedTime());
         aiReply = momentPair.getReply();
     }
 
-    // 사용자 입력
     public String getUserInput() {
         return userInput;
     }
 
-    // 서버 응답
     public String getAiReply() {
         return aiReply;
     }
@@ -39,7 +39,7 @@ public class ListViewItem {
     }
 
     // 입력 시간
-    public String getInputTime() {
-        return inputTime;
+    public String getTimestampText() {
+        return timestampText;
     }
 }

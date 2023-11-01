@@ -40,7 +40,6 @@ import snu.swpp.moment.ui.main_writeview.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.KeyboardUtils;
-import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewFragment extends Fragment {
 
@@ -101,7 +100,7 @@ public class TodayViewFragment extends Fragment {
 
         listViewItems = new ArrayList<>();
 
-        // moment GET API 호출
+        // moment GET API 호출 후 동작
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
             if (error == null) {
@@ -134,7 +133,7 @@ public class TodayViewFragment extends Fragment {
         });
         viewModel.getMoment(LocalDateTime.now());
 
-        // story GET API 호출
+        // story GET API 호출 후 동작
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
             if (savedStoryState.isEmpty()) {
                 return;
@@ -179,7 +178,7 @@ public class TodayViewFragment extends Fragment {
             int numMoments = viewModel.getMomentState().getNumMoments();
             if (numMoments >= MOMENT_HOUR_LIMIT) {
                 String createdSecond = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
-                    .getInputTime();
+                    .getTimestampText();
 
                 try {
                     Date createdDate = inputFormat.parse(createdSecond);
@@ -216,9 +215,12 @@ public class TodayViewFragment extends Fragment {
             }
 
             if (!text.isEmpty()) {
-                viewModel.writeMoment(text);
-                addItem(text);
+                // 새 item 추가
                 // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
+                viewModel.writeMoment(text);
+                listViewItems.add(new ListViewItem(text, new Date()));
+                listViewAdapter.notifyDataSetChanged();
+                scrollToBottom();
             }
         });
 
@@ -258,13 +260,6 @@ public class TodayViewFragment extends Fragment {
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
         return root;
-    }
-
-    private void addItem(String userInput) {
-        String currentTime = TimeConverter.formatDate(new Date(), "yyyy.MM.dd. HH:mm");
-        listViewItems.add(new ListViewItem(userInput, currentTime));
-        listViewAdapter.notifyDataSetChanged();
-        scrollToBottom();
     }
 
     private void scrollToBottom() {
