@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.EmotionMap;
 
@@ -17,7 +18,8 @@ public class EmotionGridContainer {
 
     private final List<TextView> textButtonList;
     private final MutableLiveData<Integer> selectedEmotion = new MutableLiveData<>(-1);
-    private boolean isFrozen = false;
+
+    private boolean isFirstLoaded = false;
 
 
     public EmotionGridContainer(View view) {
@@ -43,6 +45,11 @@ public class EmotionGridContainer {
             TextView textButton = textButtonList.get(i);
             final int _i = i;
             textButton.setOnClickListener(v -> {
+                if (isFirstLoaded) {
+                    isFirstLoaded = false;
+                    return;
+                }
+                
                 int previousSelectedEmotion = selectedEmotion.getValue();
                 if (previousSelectedEmotion > -1) {
                     TextView previousButton = textButtonList.get(previousSelectedEmotion);
@@ -65,11 +72,7 @@ public class EmotionGridContainer {
 
     public int getSelectedEmotion() {
         Integer value = selectedEmotion.getValue();
-        if (value != null) {
-            return value;
-        } else {
-            return -1;
-        }
+        return Objects.requireNonNullElse(value, -1);
     }
 
     public void selectEmotion(int emotion) {
@@ -77,6 +80,7 @@ public class EmotionGridContainer {
             return;
         }
         TextView textButton = textButtonList.get(emotion);
+        isFirstLoaded = true;
         textButton.performClick();
     }
 
@@ -89,6 +93,5 @@ public class EmotionGridContainer {
             TextView textButton = textButtonList.get(i);
             textButton.setClickable(false);
         }
-        isFrozen = true;
     }
 }
