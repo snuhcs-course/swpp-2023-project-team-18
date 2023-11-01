@@ -104,6 +104,117 @@ public class TodayViewFragment extends Fragment {
 
         listViewItems = new ArrayList<>();
 
+        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        binding.todayMomentList.setAdapter(listViewAdapter);
+        View footerView = LayoutInflater.from(getContext())
+            .inflate(R.layout.listview_footer, binding.todayMomentList, false);
+        binding.todayMomentList.addFooterView(footerView);
+
+        // list footer 관리 객체 초기화
+        listFooterContainer = new ListFooterContainer(footerView);
+
+        listFooterContainer.setAddButtonOnClickListener(v -> {
+            int numMoments = viewModel.getMomentState().getNumMoments();
+            if (numMoments >= MOMENT_HOUR_LIMIT) {
+                Date createdAt = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
+                    .getCreatedAt();
+                Calendar createdCalendar = Calendar.getInstance();
+                createdCalendar.setTime(createdAt);
+                int createdHourValue = createdCalendar.get(
+                    Calendar.HOUR_OF_DAY); // This will give you the hour of createdSecond
+
+                Calendar currentCalendar = Calendar.getInstance();
+                int currentHourValue = currentCalendar.get(
+                    Calendar.HOUR_OF_DAY); // This will give you the current hour
+
+                if (createdHourValue == currentHourValue) {
+                    listFooterContainer.setUiAddLimitExceeded();
+                } else {
+                    listFooterContainer.setUiWritingMoment();
+                }
+            } else {
+                listFooterContainer.setUiWritingMoment();
+            }
+        });
+
+        listFooterContainer.setSubmitButtonOnClickListener(v -> {
+            // 소프트 키보드 숨기기
+            KeyboardUtils.hideSoftKeyboard(getContext());
+
+            String text = listFooterContainer.getMomentInputText();
+            if (!text.isEmpty()) {
+                // 새 item 추가
+                // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
+                viewModel.writeMoment(text);
+                listViewItems.add(new ListViewItem(text, new Date()));
+                listViewAdapter.notifyDataSetChanged();
+                scrollToBottom();
+            }
+        });
+
+        listFooterContainer.observeScrollToBottomSwitch(isSet -> {
+            if (isSet) {
+                Log.d("TodayViewFragment", "scrollToBottom switch set");
+                scrollToBottom();
+            }
+        });
+
+        listFooterContainer.observeAiStoryCallSwitch(isSet -> {
+            if (isSet) {
+                viewModel.getAiStory();
+            }
+        });
+
+        listFooterContainer.observeScore(score -> {
+            if (score != null) {
+                viewModel.saveScore(score);
+            }
+        });
+
+        // 하단 버튼 관리 객체 초기화
+        bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
+        bottomButtonContainer.viewingMoment();
+
+        // 하루 마무리 API 호출 시 동작 설정
+        viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
+        viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
+        viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
+        viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
+        viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
+
+        // AI 답글 대기 중 동작 설정
+        listViewAdapter.observeWaitingAiReplySwitch(
+            bottomButtonContainer.waitingAiReplySwitchObserver());
+
+        // 마무리 과정 중 뒤로가기 버튼 경고
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Log.d("TodayViewFragment",
+                    "handleOnBackPressed: called " + listFooterContainer.isCompletionInProgress());
+                if (!listFooterContainer.isCompletionInProgress()) {
+                    doOriginalAction();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),
+                    R.style.DialogTheme);
+                builder.setMessage(R.string.completion_back_button_popup)
+                    .setPositiveButton(R.string.popup_yes, (dialog, id) -> {
+                        doOriginalAction();
+                    })
+                    .setNegativeButton(R.string.popup_no, (dialog, id) -> {
+                    });
+                builder.create().show();
+            }
+
+            private void doOriginalAction() {
+                setEnabled(false);
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher()
+            .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
+
         // moment GET API 호출 후 동작
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
@@ -165,119 +276,6 @@ public class TodayViewFragment extends Fragment {
             }
         });
         viewModel.getStory(LocalDateTime.now());
-
-        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
-        binding.todayMomentList.setAdapter(listViewAdapter);
-        View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, binding.todayMomentList, false);
-        binding.todayMomentList.addFooterView(footerView);
-
-        // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView);
-
-        listFooterContainer.setAddButtonOnClickListener(v -> {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm",
-                Locale.getDefault());
-
-            int numMoments = viewModel.getMomentState().getNumMoments();
-            if (numMoments >= MOMENT_HOUR_LIMIT) {
-                Date createdAt = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
-                    .getCreatedAt();
-                Calendar createdCalendar = Calendar.getInstance();
-                createdCalendar.setTime(createdAt);
-                int createdHourValue = createdCalendar.get(
-                    Calendar.HOUR_OF_DAY); // This will give you the hour of createdSecond
-
-                Calendar currentCalendar = Calendar.getInstance();
-                int currentHourValue = currentCalendar.get(
-                    Calendar.HOUR_OF_DAY); // This will give you the current hour
-
-                if (createdHourValue == currentHourValue) {
-                    listFooterContainer.setUiAddLimitExceeded();
-                } else {
-                    listFooterContainer.setUiWritingMoment();
-                }
-            } else {
-                listFooterContainer.setUiWritingMoment();
-            }
-        });
-
-        listFooterContainer.setSubmitButtonOnClickListener(v -> {
-            // 소프트 키보드 숨기기
-            KeyboardUtils.hideSoftKeyboard(getContext());
-
-            String text = listFooterContainer.getMomentInputText();
-            if (!text.isEmpty()) {
-                // 새 item 추가
-                // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
-                viewModel.writeMoment(text);
-                listViewItems.add(new ListViewItem(text, new Date()));
-                listViewAdapter.notifyDataSetChanged();
-                scrollToBottom();
-            }
-        });
-
-        listFooterContainer.observeScrollToBottomSwitch(isSet -> {
-            if (isSet) {
-                scrollToBottom();
-            }
-        });
-
-        listFooterContainer.observeAiStoryCallSwitch(isSet -> {
-            if (isSet) {
-                viewModel.getAiStory();
-            }
-        });
-
-        listFooterContainer.observeScore(score -> {
-            if (score != null) {
-                viewModel.saveScore(score);
-            }
-        });
-
-        // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
-        bottomButtonContainer.viewingMoment();
-
-        // 하루 마무리 API 호출 시 동작 설정
-        viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
-        viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
-        viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
-        viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
-        viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
-
-        // AI 답글 대기 중 동작 설정
-        listViewAdapter.observeWaitingAiReplySwitch(
-            bottomButtonContainer.waitingAiReplySwitchObserver());
-
-        // 마무리 과정 중 뒤로가기 버튼 경고
-        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                Log.d("TodayViewFragment",
-                    "handleOnBackPressed: called " + listFooterContainer.isCompletionInProgress());
-                if (!listFooterContainer.isCompletionInProgress()) {
-                    doOriginalAction();
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),
-                    R.style.DialogTheme);
-                builder.setMessage(R.string.completion_back_button_popup)
-                    .setPositiveButton(R.string.popup_yes, (dialog, id) -> {
-                        doOriginalAction();
-                    })
-                    .setNegativeButton(R.string.popup_no, (dialog, id) -> {
-                    });
-                builder.create().show();
-            }
-
-            private void doOriginalAction() {
-                setEnabled(false);
-                requireActivity().getOnBackPressedDispatcher().onBackPressed();
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher()
-            .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
