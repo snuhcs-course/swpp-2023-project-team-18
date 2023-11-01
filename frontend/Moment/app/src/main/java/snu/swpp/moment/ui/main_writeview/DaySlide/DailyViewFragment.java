@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,10 @@ public class DailyViewFragment extends Fragment {
     private AuthenticationRepository authenticationRepository;
 
     private ListFooterContainer listFooterContainer;
+
+    private final Handler refreshHandler = new Handler();
+    private final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
+    private LocalDateTime lastRefreshedTime = LocalDateTime.now();
 
     public static DailyViewFragment initialize(int minusDays) {
         Log.d("DailyViewFragment", "Initializing DailyViewFragment with minusDays: " + minusDays);
@@ -172,9 +177,40 @@ public class DailyViewFragment extends Fragment {
         viewModel.getMoment(dateTime);
         viewModel.getStory(dateTime);
 
-        Log.d("DailyViewFragment", "onCreateView() ended");
+        // 날짜 변화 확인해서 GET API 다시 호출
+        Runnable refreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                LocalDateTime now = LocalDateTime.now();
+                Log.d("DailyViewFragment", String.format("run: %s", now));
 
+                // 하루가 지났을 때
+                if (isOutdated()) {
+                    Log.d("DailyViewFragment", "run: Reloading fragment");
+                    viewModel.getMoment(now);
+                    viewModel.getStory(now);
+                    updateRefreshTime();
+                }
+                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+            }
+        };
+        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
+        updateRefreshTime();
+
+        Log.d("DailyViewFragment", "onCreateView() ended");
         return root;
+    }
+
+    private void updateRefreshTime() {
+        lastRefreshedTime = LocalDateTime.now();
+    }
+
+    private boolean isOutdated() {
+        LocalDateTime now = LocalDateTime.now();
+        if (lastRefreshedTime.getDayOfMonth() == now.getDayOfMonth()) {
+            return false;
+        }
+        return now.getHour() >= 3;
     }
 
     @Override

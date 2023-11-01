@@ -62,6 +62,7 @@ public class TodayViewFragment extends Fragment {
 
     private final Handler refreshHandler = new Handler();
     private final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
+    private LocalDateTime lastRefreshedTime = LocalDateTime.now();
 
     private final int MOMENT_HOUR_LIMIT = 2;
 
@@ -278,24 +279,25 @@ public class TodayViewFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher()
             .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
-        // 날짜 변화 확인
+        // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
             @Override
             public void run() {
                 LocalDateTime now = LocalDateTime.now();
                 Log.d("TodayViewFragment", String.format("run: %s", now));
 
-                // fragment 새로고침: 매일 3:00~3:10 사이, 하루 마무리 진행 중이 아닐 때
-                if (now.getHour() == 3 && now.getMinute() <= REFRESH_INTERVAL
-                    && !listFooterContainer.isCompletionInProgress()) {
+                // 하루가 지났고 하루 마무리 진행 중이 아닐 때
+                if (isOutdated() && !listFooterContainer.isCompletionInProgress()) {
                     Log.d("TodayViewFragment", "run: Reloading fragment");
                     viewModel.getMoment(now);
                     viewModel.getStory(now);
+                    updateRefreshTime();
                 }
                 refreshHandler.postDelayed(this, REFRESH_INTERVAL);
             }
         };
         refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
+        updateRefreshTime();
 
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
@@ -305,6 +307,18 @@ public class TodayViewFragment extends Fragment {
     private void scrollToBottom() {
         binding.todayMomentList.post(() -> binding.todayMomentList.smoothScrollToPosition(
             binding.todayMomentList.getCount() - 1));
+    }
+
+    private void updateRefreshTime() {
+        lastRefreshedTime = LocalDateTime.now();
+    }
+
+    private boolean isOutdated() {
+        LocalDateTime now = LocalDateTime.now();
+        if (lastRefreshedTime.getDayOfMonth() == now.getDayOfMonth()) {
+            return false;
+        }
+        return now.getHour() >= 3;
     }
 
     @Override
