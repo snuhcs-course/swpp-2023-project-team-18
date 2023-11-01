@@ -23,7 +23,8 @@
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Moment.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".DummyActivity"
@@ -32,7 +33,8 @@
         <activity
             android:name=".EntryActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -42,17 +44,20 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".LoginRegisterActivity"
             android:exported="true"
-            android:screenOrientation="portrait" /> <!-- Change exported value if needed -->
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".ui.register.RegisterActivity"
             android:exported="true"
-            android:screenOrientation="portrait" /> <!-- Change exported value if needed -->
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
     </application>
 
