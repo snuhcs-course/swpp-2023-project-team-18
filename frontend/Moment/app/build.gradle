@@ -62,13 +62,16 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.7.4'
     implementation 'androidx.navigation:navigation-ui:2.7.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // calendar
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.kizitonwose.calendar:view:2.4.0")
     implementation("com.kizitonwose.calendar:compose:2.4.0")
 
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
