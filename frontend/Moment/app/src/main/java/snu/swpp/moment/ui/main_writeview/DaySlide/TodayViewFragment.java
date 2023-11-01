@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.DaySlide;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,9 @@ public class TodayViewFragment extends Fragment {
     private StoryRemoteDataSource storyRemoteDataSource;
     private GetStoryUseCase getStoryUseCase;
     private SaveScoreUseCase saveScoreUseCase;
+
+    private final Handler refreshHandler = new Handler();
+    private final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
 
     private final int MOMENT_HOUR_LIMIT = 2;
 
@@ -280,6 +284,25 @@ public class TodayViewFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher()
             .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
+
+        // 날짜 변화 확인
+        Runnable refreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                LocalDateTime now = LocalDateTime.now();
+                Log.d("TodayViewFragment", String.format("run: %s", now));
+
+                // fragment 새로고침: 매일 3:00~3:10 사이, 하루 마무리 진행 중이 아닐 때
+                if (now.getHour() == 3 && now.getMinute() <= REFRESH_INTERVAL
+                    && !listFooterContainer.isCompletionInProgress()) {
+                    Log.d("TodayViewFragment", "run: Reloading fragment");
+                    viewModel.getMoment(now);
+                    viewModel.getStory(now);
+                }
+                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+            }
+        };
+        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
 
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
 
