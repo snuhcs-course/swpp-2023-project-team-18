@@ -19,8 +19,6 @@ public class EmotionGridContainer {
     private final List<TextView> textButtonList;
     private final MutableLiveData<Integer> selectedEmotion = new MutableLiveData<>(-1);
 
-    private boolean isFirstLoaded = false;
-
 
     public EmotionGridContainer(View view) {
         textButtonList = Arrays.asList(
@@ -45,11 +43,6 @@ public class EmotionGridContainer {
             TextView textButton = textButtonList.get(i);
             final int _i = i;
             textButton.setOnClickListener(v -> {
-                if (isFirstLoaded) {
-                    isFirstLoaded = false;
-                    return;
-                }
-
                 int previousSelectedEmotion = selectedEmotion.getValue();
                 if (previousSelectedEmotion > -1) {
                     TextView previousButton = textButtonList.get(previousSelectedEmotion);
@@ -80,7 +73,6 @@ public class EmotionGridContainer {
             return;
         }
         TextView textButton = textButtonList.get(emotion);
-        isFirstLoaded = true;
         textButton.performClick();
     }
 
