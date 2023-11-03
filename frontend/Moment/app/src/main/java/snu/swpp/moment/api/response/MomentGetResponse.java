@@ -10,7 +10,7 @@ public class MomentGetResponse {
     @SerializedName("moments")
     private List<Moment> momentList;
 
-    private class Moment {
+    private static class Moment {
 
         @SerializedName("id")
         private int id;

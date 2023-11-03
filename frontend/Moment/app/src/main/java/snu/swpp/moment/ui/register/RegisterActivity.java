@@ -45,69 +45,60 @@ public class RegisterActivity extends AppCompatActivity {
         final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
 
-        registerViewModel.getRegisterFormState().observe(this, new Observer<RegisterFormState>() {
-            @Override
-            public void onChanged(@Nullable RegisterFormState registerFormState) {
-                if (registerFormState == null) {
-                    return;
-                }
-                registerButton.setEnabled(registerFormState.isDataValid());
-                if (registerFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(registerFormState.getUsernameError()));
-                }
-                if (registerFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(registerFormState.getPasswordError()));
-                }
-                if (registerFormState.getPasswordDiffError() != null) {
-                    passwordCheckEditText.setError(
-                        getString(registerFormState.getPasswordDiffError()));
-                }
+        registerViewModel.getRegisterFormState().observe(this, registerFormState -> {
+            if (registerFormState == null) {
+                return;
+            }
+            registerButton.setEnabled(registerFormState.isDataValid());
+            if (registerFormState.getUsernameError() != null) {
+                usernameEditText.setError(getString(registerFormState.getUsernameError()));
+            }
+            if (registerFormState.getPasswordError() != null) {
+                passwordEditText.setError(getString(registerFormState.getPasswordError()));
+            }
+            if (registerFormState.getPasswordDiffError() != null) {
+                passwordCheckEditText.setError(
+                    getString(registerFormState.getPasswordDiffError()));
             }
         });
 
-        registerViewModel.getRegisterFormState().observe(this, new Observer<RegisterFormState>() {
-            @Override
-            public void onChanged(@Nullable RegisterFormState registerFormState) {
-                if (registerFormState == null) {
-                    return;
-                }
-                registerButton.setEnabled(registerFormState.isDataValid());
-                registerButton.setActivated(registerFormState.isDataValid());
-                if (registerFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(registerFormState.getUsernameError()));
-                }
-                if (registerFormState.getPasswordError() != null) {
-                    passwordCheckEditText.setError(getString(registerFormState.getPasswordError()));
-                }
-                if (registerFormState.getPasswordDiffError() != null) {
-                    passwordCheckEditText.setError(
-                        getString(registerFormState.getPasswordDiffError()));
-                }
+        registerViewModel.getRegisterFormState().observe(this, registerFormState -> {
+            if (registerFormState == null) {
+                return;
+            }
+            registerButton.setEnabled(registerFormState.isDataValid());
+            registerButton.setActivated(registerFormState.isDataValid());
+            if (registerFormState.getUsernameError() != null) {
+                usernameEditText.setError(getString(registerFormState.getUsernameError()));
+            }
+            if (registerFormState.getPasswordError() != null) {
+                passwordCheckEditText.setError(getString(registerFormState.getPasswordError()));
+            }
+            if (registerFormState.getPasswordDiffError() != null) {
+                passwordCheckEditText.setError(
+                    getString(registerFormState.getPasswordDiffError()));
             }
         });
 
-        registerViewModel.getRegisterResult().observe(this, new Observer<RegisterResultState>() {
-            @Override
-            public void onChanged(@Nullable RegisterResultState registerResult) {
-                if (registerResult == null) {
-                    Toast.makeText(RegisterActivity.this, R.string.unknown_error,
-                            Toast.LENGTH_SHORT)
-                        .show();
-                }
-                //loadingProgressBar.setVisibility(View.GONE);
-                if (registerResult.getError() != null) {
-                    showLoginFailed(registerResult.getError());
-                }
-                if (registerResult.getSuccess() != null) {
-                    updateUiWithUser(registerResult.getSuccess());
-                    Intent registerIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                    startActivity(registerIntent);
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                //finish();
+        registerViewModel.getRegisterResult().observe(this, registerResult -> {
+            if (registerResult == null) {
+                Toast.makeText(RegisterActivity.this, R.string.unknown_error,
+                        Toast.LENGTH_SHORT)
+                    .show();
             }
+            //loadingProgressBar.setVisibility(View.GONE);
+            if (registerResult.getError() != null) {
+                showLoginFailed(registerResult.getError());
+            }
+            if (registerResult.getSuccess() != null) {
+                updateUiWithUser(registerResult.getSuccess());
+                Intent registerIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(registerIntent);
+            }
+            setResult(Activity.RESULT_OK);
+
+            //Complete and destroy login activity once successful
+            //finish();
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -151,15 +142,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = usernameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                String nickname = nicknameEditText.getText().toString();
+        registerButton.setOnClickListener(v -> {
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            String nickname = nicknameEditText.getText().toString();
 
-                registerViewModel.register(username, password, nickname);
-            }
+            registerViewModel.register(username, password, nickname);
         });
 
         View root = binding.getRoot();

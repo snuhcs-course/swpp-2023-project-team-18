@@ -24,20 +24,14 @@ public class LoginRegisterActivity extends AppCompatActivity {
         loginButton.setActivated(true);
         registerButton = findViewById(R.id.main_register);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginRegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
+        loginButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginRegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginRegisterActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
+        registerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginRegisterActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
 
         // Login register activity, back press action

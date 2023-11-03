@@ -5,7 +5,7 @@ package snu.swpp.moment.ui.register;
  */
 class RegisterUserState {
 
-    private String nickname;
+    private final String nickname;
     //... other data fields that may be accessible to the UI
 
     RegisterUserState(String nickname) {

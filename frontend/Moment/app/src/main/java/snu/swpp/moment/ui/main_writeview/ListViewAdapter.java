@@ -16,7 +16,7 @@ import snu.swpp.moment.utils.AnimationProvider;
 
 public class ListViewAdapter extends BaseAdapter {
 
-    private List<ListViewItem> items = null;
+    private List<ListViewItem> items;
     private final Context context;
 
     private int size;

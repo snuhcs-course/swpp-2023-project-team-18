@@ -40,15 +40,19 @@ public class LoginViewModel extends ViewModel {
 
             @Override
             public void onFailure(String errorMessage) {
-                if (errorMessage.equals(
-                    "{\"error\":[\"Unable to log in with provided credentials.\"]}")) {
-                    loginResult.setValue(new LoginResultState(R.string.wrong_password));
-                } else if (errorMessage.equals("Server")) {
-                    loginResult.setValue(new LoginResultState(R.string.server_error));
-                } else if (errorMessage.equals("NO INTERNET")) {
-                    loginResult.setValue(new LoginResultState(R.string.internet_error));
-                } else {
-                    loginResult.setValue(new LoginResultState(R.string.unknown_error));
+                switch (errorMessage) {
+                    case "{\"error\":[\"Unable to log in with provided credentials.\"]}":
+                        loginResult.setValue(new LoginResultState(R.string.wrong_password));
+                        break;
+                    case "Server":
+                        loginResult.setValue(new LoginResultState(R.string.server_error));
+                        break;
+                    case "NO INTERNET":
+                        loginResult.setValue(new LoginResultState(R.string.internet_error));
+                        break;
+                    default:
+                        loginResult.setValue(new LoginResultState(R.string.unknown_error));
+                        break;
                 }
             }
         });

@@ -1,7 +1,6 @@
 package snu.swpp.moment.data.repository;
 
 import java.util.List;
-import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
