@@ -34,6 +34,7 @@ import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetStoryUseCaseTest {
+
     private GetStoryUseCase useCase;
     @Mock
     private StoryRemoteDataSource dataSource;
