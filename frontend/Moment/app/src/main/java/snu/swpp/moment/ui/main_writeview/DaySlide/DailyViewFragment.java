@@ -123,8 +123,6 @@ public class DailyViewFragment extends Fragment {
                     }
 
                     listViewAdapter.notifyDataSetChanged(false);
-                    binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
-                        binding.dailyMomentList.getCount() - 1));
                 } else {
                     binding.noMomentText.setVisibility(View.VISIBLE);
                 }
@@ -163,6 +161,10 @@ public class DailyViewFragment extends Fragment {
             if (error == null) {
                 // SUCCESS
                 listFooterContainer.updateUiWithRemoteData(storyUiState);
+                if (!storyUiState.isEmpty()) {
+                    binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
+                        binding.dailyMomentList.getCount() - 1));
+                }
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
                 Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
