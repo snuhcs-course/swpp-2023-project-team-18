@@ -83,6 +83,7 @@ public class GetStoryUseCaseTest {
 
         Observer<StoryUiState> observer = storyUiState -> {
             // Then
+            System.out.println("observer for success");
             assertNull(storyUiState.getError());
             assertFalse(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "title");
@@ -107,6 +108,7 @@ public class GetStoryUseCaseTest {
 
         Observer<StoryUiState> observer = storyUiState -> {
             // Then
+            System.out.println("observer for failure");
             assertTrue(storyUiState.getError() instanceof UnknownErrorException);
             assertTrue(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "");

@@ -110,6 +110,7 @@ public class DailyViewModelTest {
 
         Observer<MomentUiState> observer = momentUiState -> {
             // Then
+            System.out.println("observer for getMoment success");
             assertNull(momentUiState.getError());
             assertEquals(momentUiState.getMomentPairList().get(0), momentPair);
         };
@@ -133,6 +134,7 @@ public class DailyViewModelTest {
 
         Observer<MomentUiState> observer = momentUiState -> {
             // Then
+            System.out.println("observer for getMoment failure");
             assertTrue(momentUiState.getError() instanceof UnauthorizedAccessException);
             assertEquals(momentUiState.getMomentPairList().size(), 0);
         };
@@ -165,6 +167,7 @@ public class DailyViewModelTest {
 
         Observer<StoryUiState> observer = storyUiState -> {
             // Then
+            System.out.println("observer for getStory success");
             assertNull(storyUiState.getError());
             assertFalse(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "title");
@@ -192,6 +195,7 @@ public class DailyViewModelTest {
 
         Observer<StoryUiState> observer = storyUiState -> {
             // Then
+            System.out.println("observer for getStory failure");
             assertTrue(storyUiState.getError() instanceof UnknownErrorException);
             assertTrue(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "");
@@ -220,6 +224,7 @@ public class DailyViewModelTest {
 
         Observer<CompletionStoreResultState> observer = storeResultState -> {
             // Then
+            System.out.println("observer for saveScore success");
             assertNull(storeResultState.getError());
         };
         viewModel.observeScoreResultState(observer);
@@ -240,6 +245,7 @@ public class DailyViewModelTest {
 
         Observer<CompletionStoreResultState> observer = storeResultState -> {
             // Then
+            System.out.println("observer for saveScore failure");
             assertTrue(storeResultState.getError() instanceof InvalidScoreSaveRequestException);
         };
         viewModel.observeScoreResultState(observer);
