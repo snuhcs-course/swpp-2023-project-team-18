@@ -12,6 +12,7 @@ import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.TimeConverter;
@@ -34,6 +35,10 @@ public class DailyViewModel extends ViewModel {
         this.momentRepository = momentRepository;
         this.getStoryUseCase = getStoryUseCase;
         this.saveScoreUseCase = saveScoreUseCase;
+    }
+
+    public MomentUiState getMomentState() {
+        return momentState.getValue();
     }
 
     public void getMoment(LocalDateTime now) {
@@ -86,5 +91,9 @@ public class DailyViewModel extends ViewModel {
 
     public void observeStoryState(Observer<StoryUiState> observer) {
         getStoryUseCase.observeStoryState(observer);
+    }
+
+    public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
+        saveScoreUseCase.observeScoreResultState(observer);
     }
 }
