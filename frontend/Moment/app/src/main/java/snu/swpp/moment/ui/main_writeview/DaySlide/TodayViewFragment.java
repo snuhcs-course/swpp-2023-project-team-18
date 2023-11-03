@@ -262,7 +262,7 @@ public class TodayViewFragment extends Fragment {
             Exception error = savedStoryState.getError();
             if (error == null) {
                 // SUCCESS
-                listFooterContainer.updateUiWithRemoteData(savedStoryState);
+                listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
                 bottomButtonContainer.setActivated(false, true);
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET

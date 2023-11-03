@@ -14,6 +14,7 @@ public class ScoreContainer {
 
     private final ConstraintLayout scoreWrapper;
     private final SeekBar scoreSeekBar;
+    private final TextView scoreHelpText;
     private final TextView scoreText;
     private final TextView autoCompleteWarnText;
 
@@ -25,6 +26,7 @@ public class ScoreContainer {
     public ScoreContainer(@NonNull View view) {
         scoreWrapper = (ConstraintLayout) view;
         scoreSeekBar = view.findViewById(R.id.scoreSeekBar);
+        scoreHelpText = view.findViewById(R.id.scoreHelpText);
         scoreText = view.findViewById(R.id.scoreText);
         autoCompleteWarnText = view.findViewById(R.id.autoCompleteWarnText);
         animationProvider = new AnimationProvider(view);
@@ -66,6 +68,10 @@ public class ScoreContainer {
     public void setUiVisible() {
         scoreWrapper.setVisibility(View.VISIBLE);
         scoreWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void setHelpText(String text) {
+        scoreHelpText.setText(text);
     }
 
     public void showAutoCompleteWarnText(boolean visible) {

@@ -160,7 +160,7 @@ public class DailyViewFragment extends Fragment {
             Exception error = storyUiState.getError();
             if (error == null) {
                 // SUCCESS
-                listFooterContainer.updateUiWithRemoteData(storyUiState);
+                listFooterContainer.updateUiWithRemoteData(storyUiState, false);
                 if (!storyUiState.isEmpty()) {
                     binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
                         binding.dailyMomentList.getCount() - 1));

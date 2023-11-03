@@ -9,7 +9,7 @@
     tools:layout_height="200dp">
 
     <TextView
-        android:id="@+id/tag_help_text"
+        android:id="@+id/tagHelpText"
         style="@style/SMALL_GRAY"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         android:textColorHint="@color/darkgray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tag_help_text" />
+        app:layout_constraintTop_toBottomOf="@+id/tagHelpText" />
 
     <TextView
         android:id="@+id/tagLimitHelpText"

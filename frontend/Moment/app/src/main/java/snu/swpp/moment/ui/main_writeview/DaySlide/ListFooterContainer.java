@@ -25,6 +25,7 @@ public class ListFooterContainer {
     // 감정 선택
     private final ConstraintLayout emotionWrapper;
     private final EmotionGridContainer emotionGridContainer;
+    private final TextView emotionHelpText;
     // 태그 입력
     private final TagBoxContainer tagBoxContainer;
     // 점수 선택
@@ -57,6 +58,7 @@ public class ListFooterContainer {
         // 감정 선택
         emotionWrapper = view.findViewById(R.id.emotion_wrapper);
         emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
+        emotionHelpText = view.findViewById(R.id.emotion_help_text);
         // 태그 입력
         tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_wrapper));
         // 점수 선택
@@ -92,7 +94,7 @@ public class ListFooterContainer {
         });
     }
 
-    public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState) {
+    public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState, boolean isToday) {
         momentWriterContainer.setInvisible();
 
         if (storyUiState.isEmpty()) {
@@ -103,6 +105,8 @@ public class ListFooterContainer {
             // 모먼트 없이 자동으로 마무리되어서 감정이 invalid인 경우
             return;
         }
+
+        setHelpTextAfterCompleted(isToday);
 
         storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
         storyContainer.setStoryText(storyUiState.getStoryTitle(), storyUiState.getStoryContent());
@@ -297,5 +301,12 @@ public class ListFooterContainer {
     private void setAiStoryCallSwitch() {
         aiStoryCallSwitch.setValue(true);
         aiStoryCallSwitch.setValue(false);
+    }
+
+    private void setHelpTextAfterCompleted(boolean isToday) {
+        String day = isToday ? "오늘" : "이날";
+        emotionHelpText.setText(day + "의 감정");
+        tagBoxContainer.setHelpText(day + "의 태그");
+        scoreContainer.setHelpText(day + "의 점수");
     }
 }

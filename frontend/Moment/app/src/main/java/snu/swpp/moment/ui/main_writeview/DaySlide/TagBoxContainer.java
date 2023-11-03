@@ -21,6 +21,7 @@ public class TagBoxContainer {
 
     private final ConstraintLayout tagWrapper;
     private final EditText tagEditText;
+    private final TextView tagHelpText;
     private final TextView limitHelpText;
     private final AnimationProvider animationProvider;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
@@ -31,6 +32,7 @@ public class TagBoxContainer {
     public TagBoxContainer(@NonNull View view) {
         tagWrapper = (ConstraintLayout) view;
         tagEditText = view.findViewById(R.id.tagsEditText);
+        tagHelpText = view.findViewById(R.id.tagHelpText);
         limitHelpText = view.findViewById(R.id.tagLimitHelpText);
         animationProvider = new AnimationProvider(view);
 
@@ -82,6 +84,10 @@ public class TagBoxContainer {
     public void setUiVisible() {
         tagWrapper.setVisibility(View.VISIBLE);
         tagWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void setHelpText(String text) {
+        tagHelpText.setText(text);
     }
 
     public void freeze() {
