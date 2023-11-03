@@ -2,11 +2,13 @@ package snu.swpp.moment.ui.login;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.model.LoggedInUserModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
+import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 
 public class LoginViewModel extends ViewModel {
 
@@ -56,5 +58,13 @@ public class LoginViewModel extends ViewModel {
 
     public void loginDataChanged(String username, String password) {
         loginFormState.setValue(new LoginFormState(true));
+    }
+
+    public void observeLoginFormState(Observer<LoginFormState> observer) {
+        loginFormState.observeForever(observer);
+    }
+
+    public void observeLoginResultState(Observer<LoginResultState> observer) {
+        loginResult.observeForever(observer);
     }
 }
