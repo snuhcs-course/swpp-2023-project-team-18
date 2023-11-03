@@ -309,72 +309,110 @@ class AutoCompletionTest(TestCase):
 
 
 class GetHashtagTest(TestCase):
+    timestamp1 = 1698200500
+    timestamp2 = 1698200586
+    content1 = "content1"
+    content2 = "content2"
     hashtag1 = "h2"
     hashtag2 = "h1"
+    hashtag3 = "h3"
+    other_hashtag = "h4"
 
     def setUp(self):
         test_user = User.objects.create(username="impri", nickname="impri")
         test_user.set_password("123456")
-        other_user = User.objects.create(username="other_user", nickname="other_user")
+        other_user = User.objects.create(username="otheruser", nickname="impri")
         other_user.set_password("123456")
-        story = Story.objects.create(created_at=intended_day, user=test_user)
-        self.story_pk = story.pk
-        hashtag1 = Hashtag(content=self.hashtag1)
-        hashtag1.save()
-        hashtag2 = Hashtag(content=self.hashtag2)
-        hashtag2.save()
-        story.hashtags.add(hashtag1)
-        story.hashtags.add(hashtag2)
-        story.save()
+        test_user_hashtag1 = Hashtag.objects.create(content=self.hashtag1)
+        test_user_hashtag2 = Hashtag.objects.create(content=self.hashtag2)
+        test_user_hashtag3 = Hashtag.objects.create(content=self.hashtag3)
+        other_user_hashtag = Hashtag.objects.create(content=self.other_hashtag)
+        test_user_hashtag1.save()
+        test_user_hashtag2.save()
+        test_user_hashtag3.save()
+        other_user_hashtag.save()
+        story1 = Story.objects.create(
+            created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            user=test_user,
+            content=self.content1,
+        )
+        story2 = Story.objects.create(
+            created_at=datetime.datetime.fromtimestamp(self.timestamp2),
+            user=test_user,
+            content=self.content2,
+            is_point_completed=True,
+        )
+        other_story = Story.objects.create(
+            created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            user=other_user,
+            content=self.content1,
+        )
+        story1.hashtags.add(test_user_hashtag1)
+        story1.hashtags.add(test_user_hashtag2)
+        story2.hashtags.add(test_user_hashtag2)
+        story2.hashtags.add(test_user_hashtag3)
+        other_story.hashtags.add(test_user_hashtag1)
+        other_story.hashtags.add(other_user_hashtag)
+        story1.save()
+        story2.save()
+        other_story.save()
 
-    def test_get_hashtag_success(self):
+    def test_get_hashtags_without_time(self):
         factory = APIRequestFactory()
         user = User.objects.get(username="impri")
         view = HashtagView.as_view()
 
-        params = {"story_id": self.story_pk}
-        request = factory.get("writing/hashtags/", params)
-        force_authenticate(request, user)
-        response = view(request)
-
-        self.assertEquals(response.status_code, 200)
-        self.assertEqual(response.data["hashtags"][0]["content"], self.hashtag1)
-        self.assertEqual(response.data["hashtags"][1]["content"], self.hashtag2)
-
-    """  def test_get_hashtag_wrong_story(self):
-        factory = APIRequestFactory()
-        user = User.objects.get(username="impri")
-        view = HashtagView.as_view()
-
-        params = {"story_id": self.story_pk + 1}
-        request = factory.get("writing/hashtags/", params)
-        force_authenticate(request, user)
+        request = factory.get("writing/hashtags/")
+        force_authenticate(request, user=user)
         response = view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_hashtag_other_user(self):
+    def test_get_hashtags_success(self):
         factory = APIRequestFactory()
-        user = User.objects.get(username="other_user")
-        view = HashtagView.as_view() 
+        user = User.objects.get(username="impri")
+        view = HashtagView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp2}
 
-        params = {"story_id": self.story_pk}
         request = factory.get("writing/hashtags/", params)
-        force_authenticate(request, user)
+        force_authenticate(request, user=user)
         response = view(request)
-        self.assertEqual(response.status_code, 400)"""
+        self.assertEqual(len(response.data["hashtags"]), 3)
+        self.assertEqual(response.data["hashtags"][0]["content"], self.hashtag1)
+        self.assertEqual(response.data["hashtags"][1]["content"], self.hashtag2)
+        self.assertEqual(response.data["hashtags"][2]["content"], self.hashtag3)
+
+    def test_get_only_one_story_hashtags(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = HashtagView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp1}
+
+        request = factory.get("writing/hashtags/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(len(response.data["hashtags"]), 2)
+        self.assertEqual(response.data["hashtags"][0]["content"], self.hashtag1)
+        self.assertEqual(response.data["hashtags"][1]["content"], self.hashtag2)
 
 
 class SaveHashtagTest(TestCase):
     hashtag_string = "# h2#h1 ##"
+    hashtag_string2 = "#h1#h1#h3"
     hashtag1 = "h2"
     hashtag2 = "h1"
+    hashtag3 = "h3"
 
     def setUp(self):
         test_user = User.objects.create(username="impri", nickname="impri")
         test_user.set_password("123456")
         story = Story.objects.create(created_at=intended_day, user=test_user)
+        story2 = Story.objects.create(
+            created_at=intended_day + datetime.timedelta(days=1), user=test_user
+        )
         self.story_pk = story.pk
+        self.story2_pk = story2.pk
         story.save()
+        story2.save()
 
     def test_post_hashtag_success(self):
         factory = APIRequestFactory()
@@ -384,11 +422,20 @@ class SaveHashtagTest(TestCase):
         request = factory.post("writing/hashtags/", data=data)
         force_authenticate(request, user=user)
         response = view(request)
-        added_hashtags = Story.objects.get(pk=self.story_pk).hashtags.all()
+        data = {"story_id": self.story2_pk, "content": self.hashtag_string2}
+        request = factory.post("writing/hashtags/", data=data)
+        force_authenticate(request, user=user)
+        response = view(request)
+        added_hashtags1 = Story.objects.get(pk=self.story_pk).hashtags.all()
+        added_hashtags2 = Story.objects.get(pk=self.story2_pk).hashtags.all()
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(len(added_hashtags), 2)
-        self.assertEqual(added_hashtags[0].content, self.hashtag1)
-        self.assertEqual(added_hashtags[1].content, self.hashtag2)
+        self.assertEqual(len(added_hashtags1), 2)
+        self.assertEqual(added_hashtags1[0].content, self.hashtag1)
+        self.assertEqual(added_hashtags1[1].content, self.hashtag2)
+        self.assertEqual(len(added_hashtags2), 2)
+        self.assertEqual(added_hashtags2[0].content, self.hashtag2)
+        self.assertEqual(added_hashtags2[1].content, self.hashtag3)
+        self.assertEqual(len(Hashtag.objects.all()), 3)
 
     def test_post_hashtag_wrong_story_id(self):
         factory = APIRequestFactory()
