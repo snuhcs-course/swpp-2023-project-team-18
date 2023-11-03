@@ -528,16 +528,10 @@ class HashtagView(GenericAPIView):
             )
 
         hashtags = [
-            hashtag.strip()
-            for hashtag in content.split("#")
-            if hashtag.strip() is not ""
+            hashtag.strip() for hashtag in content.split("#") if hashtag.strip() != ""
         ]
         for hashtag in hashtags:
-            try:
-                curr_hashtag = Hashtag.objects.get(content=hashtag)
-            except Hashtag.DoesNotExist:
-                curr_hashtag = Hashtag.objects.create(content=hashtag)
-                curr_hashtag.save()
+            curr_hashtag, _ = Hashtag.objects.get_or_create(content=hashtag)
 
             story.hashtags.add(curr_hashtag)
         story.save()
