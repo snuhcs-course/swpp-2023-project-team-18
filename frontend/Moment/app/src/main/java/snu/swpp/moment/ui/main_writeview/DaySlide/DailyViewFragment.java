@@ -117,7 +117,9 @@ public class DailyViewFragment extends Fragment {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
 
-                    listViewAdapter.notifyDataSetChanged();
+                    listViewAdapter.notifyDataSetChanged(false);
+                    binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
+                        binding.dailyMomentList.getCount() - 1));
                 } else {
                     binding.noMomentText.setVisibility(View.VISIBLE);
                 }
