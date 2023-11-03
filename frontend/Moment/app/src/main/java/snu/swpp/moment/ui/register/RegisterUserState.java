@@ -8,7 +8,7 @@ class RegisterUserState {
     private String nickname;
     //... other data fields that may be accessible to the UI
 
-    RegisterUserState(String displayName) {
+    RegisterUserState(String nickname) {
         this.nickname = nickname;
     }
 

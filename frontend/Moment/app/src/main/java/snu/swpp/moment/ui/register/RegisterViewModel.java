@@ -3,6 +3,7 @@ package snu.swpp.moment.ui.register;
 import android.util.Patterns;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
@@ -99,5 +100,13 @@ public class RegisterViewModel extends ViewModel {
     // Password check
     private boolean isPasswordCheckValid(String password, String passwordCheck) {
         return (password.equals(passwordCheck));
+    }
+
+    public void observeRegisterFormState(Observer<RegisterFormState> observer) {
+        registerFormState.observeForever(observer);
+    }
+
+    public void observeRegisterResultState(Observer<RegisterResultState> observer) {
+        registerResult.observeForever(observer);
     }
 }
