@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
@@ -176,9 +177,12 @@ public class TodayViewFragment extends Fragment {
         bottomButtonContainer.viewingMoment();
 
         // 하루 마무리 API 호출 시 동작 설정
+        MainActivity activity = (MainActivity) getActivity();
+        viewModel.observeCompletionState(activity.completionStateObserver());
         viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
         viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
         viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
+        viewModel.observeTagsResultState(activity.tagsResultObserver());
         viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
         viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
 
