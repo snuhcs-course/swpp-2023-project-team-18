@@ -148,7 +148,7 @@ public class TodayViewFragment extends Fragment {
                 // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
                 viewModel.writeMoment(text);
                 listViewItems.add(new ListViewItem(text, new Date()));
-                listViewAdapter.notifyDataSetChanged();
+                listViewAdapter.notifyDataSetChanged(true);
                 scrollToBottom();
             }
         });
@@ -233,7 +233,7 @@ public class TodayViewFragment extends Fragment {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
 
-                    listViewAdapter.notifyDataSetChanged();
+                    listViewAdapter.notifyDataSetChanged(false);
                     scrollToBottom();
                 }
             } else if (error instanceof NoInternetException) {

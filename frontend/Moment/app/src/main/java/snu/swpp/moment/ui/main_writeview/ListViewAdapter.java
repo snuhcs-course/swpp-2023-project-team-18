@@ -20,6 +20,7 @@ public class ListViewAdapter extends BaseAdapter {
     private final Context context;
 
     private int size;
+    private boolean isShowingAnimation = true;
     private final AnimationProvider animationProvider;
 
     private final MutableLiveData<Boolean> waitingAiReplySwitch = new MutableLiveData<>();
@@ -76,7 +77,9 @@ public class ListViewAdapter extends BaseAdapter {
             if (position >= size) {
                 // 새로 추가된 item인 경우: AI 답글 애니메이션 보여줌
                 size = items.size();
-                aiReplyText.startAnimation(animationProvider.fadeIn);
+                if (isShowingAnimation) {
+                    aiReplyText.startAnimation(animationProvider.fadeIn);
+                }
 
                 if (getWaitingAiReplySwitch()) {
                     // AI 답글 대기 중이었던 경우: 대기 끝난 상태로 변경
@@ -86,6 +89,12 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public void notifyDataSetChanged(boolean withAnimation) {
+        isShowingAnimation = withAnimation;
+        notifyDataSetChanged();
+        isShowingAnimation = true;
     }
 
     public boolean getWaitingAiReplySwitch() {
@@ -113,11 +122,3 @@ public class ListViewAdapter extends BaseAdapter {
         }
     }
 }
-
-
-
-
-
-
-
-
