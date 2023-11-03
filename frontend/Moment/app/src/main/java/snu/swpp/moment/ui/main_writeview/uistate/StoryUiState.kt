@@ -6,8 +6,8 @@ import java.util.Date
 class StoryUiState(
     val error: Exception?,  // 성공 시 null
     val isEmpty: Boolean,   // 저장된 story가 없으면 true
-    val storyTitle: String,
-    val storyContent: String,
+    val title: String,
+    val content: String,
     val emotion: Int,
     val tags: List<String>,
     val score: Int,
@@ -19,8 +19,8 @@ class StoryUiState(
         fun empty() = StoryUiState(
             error = null,
             isEmpty = true,
-            storyTitle = "",
-            storyContent = "",
+            title = "",
+            content = "",
             emotion = 0,
             tags = listOf(),
             score = 0,
@@ -32,8 +32,8 @@ class StoryUiState(
         fun withError(error: Exception) = StoryUiState(
             error = error,
             isEmpty = true,
-            storyTitle = "",
-            storyContent = "",
+            title = "",
+            content = "",
             emotion = 0,
             tags = listOf(),
             score = 0,

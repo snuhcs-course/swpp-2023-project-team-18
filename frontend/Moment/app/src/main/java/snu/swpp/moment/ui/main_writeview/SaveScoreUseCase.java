@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import snu.swpp.moment.data.callback.ScoreSaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
@@ -44,5 +45,9 @@ public class SaveScoreUseCase {
                     new CompletionStoreResultState(new UnauthorizedAccessException()));
             }
         });
+    }
+
+    public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
+        scoreResultState.observeForever(observer);
     }
 }

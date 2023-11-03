@@ -43,7 +43,7 @@ public class GetStoryUseCase {
                 storyRepository.getStory(access_token, dayInterval[0], dayInterval[1],
                     new StoryGetCallBack() {
                         @Override
-                        public void onSuccess(ArrayList<StoryModel> story) {
+                        public void onSuccess(List<StoryModel> story) {
                             if (story.isEmpty()) {
                                 storyState.setValue(StoryUiState.empty());
                             } else {
@@ -75,7 +75,7 @@ public class GetStoryUseCase {
 
                         @Override
                         public void onFailure(Exception error) {
-                            storyState.setValue(StoryUiState.empty());
+                            storyState.setValue(StoryUiState.withError(error));
                         }
                     });
             }

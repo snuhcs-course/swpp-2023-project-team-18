@@ -1,5 +1,6 @@
 package snu.swpp.moment.utils;
 
+import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -42,7 +43,8 @@ public class EmotionMap {
         return Objects.requireNonNullElse(emotionInt, INVALID_EMOTION);
     }
 
-    public static String getEmotion(int code) {
+    @NonNull
+    public static String getEmotionString(int code) {
         String emotionStr = reverseMap.getOrDefault(code, "invalid");
         return Objects.requireNonNullElse(emotionStr, "invalid");
     }

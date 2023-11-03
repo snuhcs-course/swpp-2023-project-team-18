@@ -4,7 +4,7 @@ import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 
 public interface StoryCompletionNotifyCallBack {
 
-    void onSuccess(StoryCompletionNotifyResponse response);
+    void onSuccess(int storyId);
 
     void onFailure(Exception error);
 }
