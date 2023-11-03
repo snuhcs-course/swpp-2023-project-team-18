@@ -4,7 +4,7 @@ from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
-from django.db.models import Model
+from django.db.models import Q
 
 from user.models import User
 from .models import MomentPair, Story, Hashtag
@@ -486,10 +486,9 @@ class HashtagView(GenericAPIView):
 
         start_date = datetime.fromtimestamp(params.validated_data["start"])
         end_date = datetime.fromtimestamp(params.validated_data["end"])
-
-        hashtags = Hashtag.objects.filter(
-            story__created_at__range=(start_date, end_date), user=user
-        )
+        date_condition = Q(story__created_at__range=(start_date, end_date))
+        user_condition = Q(story__user=user)
+        hashtags = Hashtag.objects.filter((date_condition & user_condition)).distinct()
 
         serializer = self.get_serializer(hashtags, many=True)
 
@@ -535,8 +534,8 @@ class HashtagView(GenericAPIView):
         ]
         for hashtag in hashtags:
             try:
-                curr_hashtag = Hashtag.objects.get(user=user, content=hashtag)
-            except Model.DoesNotExist:
+                curr_hashtag = Hashtag.objects.get(content=hashtag)
+            except Hashtag.DoesNotExist:
                 curr_hashtag = Hashtag.objects.create(content=hashtag)
                 curr_hashtag.save()
 
