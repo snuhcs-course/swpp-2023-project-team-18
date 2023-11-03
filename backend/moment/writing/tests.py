@@ -2,14 +2,16 @@ import datetime
 from unittest.mock import patch
 
 from django.test import TestCase
+from django.core.cache import cache
 from rest_framework.test import APIRequestFactory, force_authenticate
 from freezegun import freeze_time
 
 from user.models import User
 from writing.models import MomentPair, Story, Hashtag
 from writing.utils.gpt import GPTAgent
-from writing.utils.prompt import StoryGenerateTemplate
+from writing.utils.prompt import StoryGenerateTemplate, MomentReplyTemplate
 from writing.views import (
+    MomentView,
     DayCompletionView,
     StoryView,
     StoryGenerateView,
@@ -27,8 +29,195 @@ intended_day = datetime.datetime(
 intended_gmt = datetime.datetime(
     year=2023, month=10, day=25, hour=18, minute=0, second=0
 )
+ai_sample_moment = "ai_sample_moment"
 ai_sample_title = "ai_sample_title"
 ai_sample_story = "ai_sample_story"
+
+
+class SaveMomentTest(TestCase):
+    content = "moment"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+
+    @freeze_time(lambda: intended_day)
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value=f"{ai_sample_moment}")
+    @patch(
+        "writing.utils.gpt.GPTAgent.add_message",
+    )
+    def test_save_moment_success(self, mock_add, mock_get):
+        cache.clear()  # to avoid throttling issues
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        new_moment = MomentPair.objects.get(user=user)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(new_moment.moment, self.content)
+        self.assertEqual(new_moment.reply, ai_sample_moment)
+        self.assertEqual(
+            new_moment.moment_created_at.timestamp(), intended_day.timestamp()
+        )
+        self.assertEqual(
+            new_moment.moment_created_at.timestamp(), intended_day.timestamp()
+        )
+        mock_add.assert_called_with(MomentReplyTemplate.get_prompt(moment=self.content))
+        cache.clear()
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", side_effect=GPTAgent.GPTError())
+    def test_save_moment_api_fail(self, mock_get):
+        cache.clear()
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(len(MomentPair.objects.filter(user=user)), 0)
+        self.assertEqual(response.status_code, 500)
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value=f"{ai_sample_moment}")
+    def test_save_moment_throttle_fail(self, mock_get):
+        cache.clear()
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        with freeze_time(lambda: intended_day):
+            view(request)
+        with freeze_time(lambda: intended_day + datetime.timedelta(minutes=30)):
+            view(request)
+        with freeze_time(
+            lambda: intended_day + datetime.timedelta(minutes=59, seconds=59)
+        ):
+            response = view(request)
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(len(MomentPair.objects.filter(user=user)), 2)
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value=f"{ai_sample_moment}")
+    def test_save_moment_throttle_enabled_after_hour(self, mock_get):
+        cache.clear()
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        with freeze_time(lambda: intended_day):
+            view(request)
+        with freeze_time(lambda: intended_day):
+            view(request)
+        with freeze_time(lambda: intended_day + datetime.timedelta(hours=1)):
+            response = view(request)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(MomentPair.objects.filter(user=user)), 3)
+        cache.clear()
+
+
+class GetMomentTest(TestCase):
+    timestamp1 = 1698200500
+    timestamp2 = 1698200586
+    content1 = "content1"
+    content2 = "content2"
+    reply1 = "reply1"
+    reply2 = "reply2"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        other_user = User.objects.create(username="otheruser", nickname="impri")
+        other_user.set_password("123456")
+
+        moment1 = MomentPair.objects.create(
+            moment_created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            reply_created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            user=test_user,
+            moment=self.content1,
+            reply=self.reply1,
+        )
+        moment2 = MomentPair.objects.create(
+            moment_created_at=datetime.datetime.fromtimestamp(self.timestamp2),
+            reply_created_at=datetime.datetime.fromtimestamp(self.timestamp2),
+            user=test_user,
+            moment=self.content2,
+            reply=self.reply2,
+        )
+        moment1.save()
+        moment2.save()
+
+    def test_get_moments_without_time(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+
+        request = factory.get("writing/moments/")
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_moments_success(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp2}
+
+        request = factory.get("writing/moments/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(
+            response.data["moments"][0]["moment_created_at"], self.timestamp1
+        )
+        self.assertEqual(
+            response.data["moments"][1]["moment_created_at"], self.timestamp2
+        )
+        self.assertEqual(
+            response.data["moments"][0]["reply_created_at"], self.timestamp1
+        )
+        self.assertEqual(
+            response.data["moments"][1]["reply_created_at"], self.timestamp2
+        )
+        self.assertEqual(response.data["moments"][0]["moment"], self.content1)
+        self.assertEqual(response.data["moments"][1]["moment"], self.content2)
+        self.assertEqual(response.data["moments"][0]["reply"], self.reply1)
+        self.assertEqual(response.data["moments"][1]["reply"], self.reply2)
+
+    def test_get_only_one_story(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp1}
+
+        request = factory.get("writing/moments/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(
+            response.data["moments"][0]["moment_created_at"], self.timestamp1
+        )
+        self.assertEqual(len(response.data["moments"]), 1)
+
+    def test_not_get_others_stories(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="otheruser")
+        view = MomentView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp2}
+
+        request = factory.get("writing/stories/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(len(response.data["moments"]), 0)
 
 
 class AutoCompletionTest(TestCase):
