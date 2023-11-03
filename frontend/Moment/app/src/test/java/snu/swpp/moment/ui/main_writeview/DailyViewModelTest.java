@@ -163,7 +163,6 @@ public class DailyViewModelTest {
             return null;
         }).when(storyDataSource).getStory(anyString(), anyLong(), anyLong(), any());
 
-
         Observer<StoryUiState> observer = storyUiState -> {
             // Then
             assertNull(storyUiState.getError());
@@ -193,7 +192,6 @@ public class DailyViewModelTest {
 
         Observer<StoryUiState> observer = storyUiState -> {
             // Then
-            System.out.println(storyUiState.getError());
             assertTrue(storyUiState.getError() instanceof UnknownErrorException);
             assertTrue(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "");
