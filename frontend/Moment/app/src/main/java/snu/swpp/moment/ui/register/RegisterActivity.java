@@ -167,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(RegisterUserState model) {
-        String welcome = getString(R.string.welcome);
+        String welcome = model.getNickname() + "님 환영합니다!";
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
