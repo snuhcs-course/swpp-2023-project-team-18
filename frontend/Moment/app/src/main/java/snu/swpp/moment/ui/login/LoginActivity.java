@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.databinding.ActivityLoginBinding;
+import snu.swpp.moment.utils.KeyboardUtils;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -135,6 +136,9 @@ public class LoginActivity extends AppCompatActivity {
                     passwordEditText.getText().toString());
             }
         });
+
+        View root = binding.getRoot();
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, this);
     }
 
 

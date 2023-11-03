@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.ActivityRegisterBinding;
+import snu.swpp.moment.utils.KeyboardUtils;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -160,6 +161,9 @@ public class RegisterActivity extends AppCompatActivity {
                 registerViewModel.register(username, password, nickname);
             }
         });
+
+        View root = binding.getRoot();
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, this);
     }
 
     private void updateUiWithUser(RegisterUserState model) {
