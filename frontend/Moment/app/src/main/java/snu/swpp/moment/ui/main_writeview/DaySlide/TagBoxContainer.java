@@ -25,6 +25,7 @@ public class TagBoxContainer {
     private final AnimationProvider animationProvider;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
 
+    private int characterCount = 0;
     private final int MAX_TAGS = 10;
 
     public TagBoxContainer(@NonNull View view) {
@@ -57,6 +58,11 @@ public class TagBoxContainer {
                     tagEditText.setTextColor(
                         ContextCompat.getColor(tagEditText.getContext(), R.color.black));
                 }
+
+                if (s.toString().length() > characterCount && s.toString().endsWith(" ")) {
+                    s.append("#");
+                }
+                characterCount = s.toString().length();
             }
         });
     }
