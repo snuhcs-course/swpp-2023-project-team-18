@@ -34,7 +34,8 @@ class HashtagSerializer(serializers.ModelSerializer):
 
 
 class HashtagQuerySerializer(serializers.Serializer):
-    story_id = serializers.IntegerField()
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
 
 
 class HashtagCreateSerializer(serializers.Serializer):
