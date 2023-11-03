@@ -109,7 +109,7 @@ public class ListFooterContainer {
         setHelpTextAfterCompleted(isToday);
 
         storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
-        storyContainer.setStoryText(storyUiState.getStoryTitle(), storyUiState.getStoryContent());
+        storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
         storyContainer.freeze();
         storyContainer.setUiCompleteStory();
 

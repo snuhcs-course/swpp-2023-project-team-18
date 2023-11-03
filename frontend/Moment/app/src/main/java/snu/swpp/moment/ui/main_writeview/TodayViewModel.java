@@ -6,9 +6,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDateTime;
 import java.util.List;
-import snu.swpp.moment.api.response.AIStoryGetResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
-import snu.swpp.moment.data.callback.AIStoryCallback;
+import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
@@ -32,7 +31,8 @@ import snu.swpp.moment.utils.TimeConverter;
 public class TodayViewModel extends ViewModel {
 
     // 모먼트 작성
-    private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
+    private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>(
+        new MomentUiState(null, new ArrayList<>()));
 
     // 하루 마무리
     private final MutableLiveData<CompletionState> completionState = new MutableLiveData<>();
@@ -40,7 +40,6 @@ public class TodayViewModel extends ViewModel {
     private final MutableLiveData<CompletionStoreResultState> storyResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> emotionResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> tagsResultState = new MutableLiveData<>();
-    private final MutableLiveData<CompletionStoreResultState> scoreResultState = new MutableLiveData<>();
     private final SaveScoreUseCase saveScoreUseCase;
 
     private final GetStoryUseCase getStoryUseCase;
@@ -120,11 +119,9 @@ public class TodayViewModel extends ViewModel {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                storyRepository.getAIGeneratedStory(access_token, new AIStoryCallback() {
+                storyRepository.getAIGeneratedStory(access_token, new AiStoryCallback() {
                     @Override
-                    public void onSuccess(AIStoryGetResponse response) {
-                        String title = response.getTitle();
-                        String content = response.getStory();
+                    public void onSuccess(String title, String content) {
                         aiStoryState.setValue(new AiStoryState(null, title, content));
                     }
 
@@ -155,10 +152,10 @@ public class TodayViewModel extends ViewModel {
                 storyRepository.notifyCompletion(access_token, start, end,
                     new StoryCompletionNotifyCallBack() {
                         @Override
-                        public void onSuccess(StoryCompletionNotifyResponse response) {
-                            completionState.setValue(new CompletionState(null, response.getId()));
-                            Log.d("setStoryId", String.valueOf(response.getId()));
-                            getStoryUseCase.setStoryId(response.getId());
+                        public void onSuccess(int storyId) {
+                            completionState.setValue(new CompletionState(null, storyId));
+                            Log.d("setStoryId", String.valueOf(storyId));
+                            getStoryUseCase.setStoryId(storyId);
                         }
 
                         @Override
@@ -197,7 +194,7 @@ public class TodayViewModel extends ViewModel {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                String emotion = EmotionMap.getEmotion(emotionInt);
+                String emotion = EmotionMap.getEmotionString(emotionInt);
                 storyRepository.saveEmotion(access_token, emotion, new EmotionSaveCallback() {
                     @Override
                     public void onSuccess() {
@@ -274,6 +271,10 @@ public class TodayViewModel extends ViewModel {
 
     public void observeTagsResultState(Observer<CompletionStoreResultState> observer) {
         tagsResultState.observeForever(observer);
+    }
+
+    public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
+        saveScoreUseCase.observeScoreResultState(observer);
     }
 
 
