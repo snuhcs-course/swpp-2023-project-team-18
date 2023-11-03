@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.component;
 
 import android.graphics.Typeface;
 import android.util.Log;

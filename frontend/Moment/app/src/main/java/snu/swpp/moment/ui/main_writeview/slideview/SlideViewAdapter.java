@@ -1,10 +1,8 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.slideview;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import snu.swpp.moment.ui.main_writeview.DaySlide.DailyViewFragment;
-import snu.swpp.moment.ui.main_writeview.DaySlide.TodayViewFragment;
 
 
 public class SlideViewAdapter extends FragmentStateAdapter {

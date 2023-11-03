@@ -17,6 +17,7 @@ import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
+import snu.swpp.moment.ui.main_writeview.slideview.SlideViewAdapter;
 import snu.swpp.moment.utils.TimeConverter;
 
 

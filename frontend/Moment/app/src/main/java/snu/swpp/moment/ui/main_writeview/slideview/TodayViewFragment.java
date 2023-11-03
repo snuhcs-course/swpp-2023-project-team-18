@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview.slideview;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,12 +31,12 @@ import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.TodayItemBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
-import snu.swpp.moment.ui.main_writeview.GetStoryUseCase;
-import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
-import snu.swpp.moment.ui.main_writeview.ListViewItem;
-import snu.swpp.moment.ui.main_writeview.SaveScoreUseCase;
-import snu.swpp.moment.ui.main_writeview.TodayViewModel;
-import snu.swpp.moment.ui.main_writeview.TodayViewModelFactory;
+import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
+import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
+import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
+import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
+import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModelFactory;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.KeyboardUtils;
 

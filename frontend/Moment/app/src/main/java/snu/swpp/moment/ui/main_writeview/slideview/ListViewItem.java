@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.slideview;
 
 import java.util.Date;
 import snu.swpp.moment.data.model.MomentPairModel;

@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.viewmodel;
 
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;

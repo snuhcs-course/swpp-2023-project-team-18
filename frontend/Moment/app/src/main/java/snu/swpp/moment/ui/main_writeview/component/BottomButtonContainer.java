@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview.component;
 
 import android.util.Log;
 import android.view.View;
@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
-import snu.swpp.moment.ui.main_writeview.TodayViewModel;
+import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 

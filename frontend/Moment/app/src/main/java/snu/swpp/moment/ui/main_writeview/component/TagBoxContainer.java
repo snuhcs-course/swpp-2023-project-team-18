@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview.component;
 
 import android.text.Editable;
 import android.text.TextWatcher;
