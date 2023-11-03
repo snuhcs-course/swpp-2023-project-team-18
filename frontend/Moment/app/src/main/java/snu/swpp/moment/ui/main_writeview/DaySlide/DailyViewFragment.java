@@ -106,6 +106,11 @@ public class DailyViewFragment extends Fragment {
 
         listViewItems = new ArrayList<>();
 
+        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
+        LocalDateTime dateTime = date.atTime(3, 0);
+        viewModel.getMoment(dateTime);
+        viewModel.getStory(dateTime);
+
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
             if (error == null) {
@@ -173,11 +178,6 @@ public class DailyViewFragment extends Fragment {
                     .show();
             }
         });
-
-        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        LocalDateTime dateTime = date.atTime(3, 0);
-        viewModel.getMoment(dateTime);
-        viewModel.getStory(dateTime);
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
