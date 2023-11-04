@@ -9,7 +9,6 @@ import snu.swpp.moment.data.model.StoryModel
 import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
 import snu.swpp.moment.exception.UnauthorizedAccessException
-import snu.swpp.moment.ui.main_writeview.uistate.MonthStoryState
 import snu.swpp.moment.utils.TimeConverter
 import java.lang.Exception
 import java.time.LocalDate
@@ -51,10 +50,12 @@ class CalendarViewModel(
             override fun onSuccess() {
                 val accessToken = authenticationRepository.token.accessToken;
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
-                    object: StoryGetCallBack {
-                        override fun onSuccess(story: MutableList<StoryModel>) {
-                            fillEmptyStory(story, month)
-                            monthStoryState.value = MonthStoryState(null, story);
+                    object : StoryGetCallBack {
+                        override fun onSuccess(storyList: MutableList<StoryModel>) {
+                            fillEmptyStory(storyList, month)
+                            val datInfoStateList =
+                                storyList.map { CalendarDayInfoState.fromStoryModel(it) }
+                            monthStoryState.value = MonthStoryState(null, datInfoStateList);
                         }
 
                         override fun onFailure(error: Exception) {
@@ -76,16 +77,16 @@ class CalendarViewModel(
         val endDate = month.atEndOfMonth();
         while (!date.isAfter(endDate)) {
             val story = storyList[index]
-            val createdAt = TimeConverter.convertDateToLocalDate(story.createdAt);
+            val createdAt = TimeConverter.convertDateToLocalDate(story.createdAt)
             if (createdAt.isAfter(date)) {
                 storyList.add(index, StoryModel.empty())
             }
-            index++;
+            index++
             date = date.plusDays(1)
         }
     }
 
-    fun getStoryOfDay(datOfMonth: Int): StoryModel {
+    fun getStoryOfDay(datOfMonth: Int): CalendarDayInfoState {
         return monthStoryState.value!!.storyList[datOfMonth - 1]
     }
 

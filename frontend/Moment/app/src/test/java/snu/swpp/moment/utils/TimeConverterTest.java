@@ -126,10 +126,20 @@ public class TimeConverterTest {
 
     @Test
     public void convertDateToLocalDate() {
-        Date date = new Date(2023 - 1900, 11 - 1, 3, 8 + hourDiff, 17, 39);
-        LocalDate convertedLocalDate = TimeConverter.convertDateToLocalDate(date);
+        Date date;
+        LocalDate convertedLocalDate;
+        LocalDate answer;
 
-        LocalDate answer = LocalDate.of(2023, 11, 3);
+        date = new Date(2023 - 1900, 11 - 1, 3, 8, 17, 39);
+        answer = LocalDate.of(2023, 11, 3);
+        convertedLocalDate = TimeConverter.convertDateToLocalDate(date);
+        System.out.println("convertedLocalDate: " + convertedLocalDate.toString());
+        assertTrue(answer.isEqual(convertedLocalDate));
+
+        date = new Date(2023 - 1900, 11 - 1, 3, 2, 17, 39);
+        answer = LocalDate.of(2023, 11, 2);
+        convertedLocalDate = TimeConverter.convertDateToLocalDate(date);
+        System.out.println("convertedLocalDate: " + convertedLocalDate.toString());
         assertTrue(answer.isEqual(convertedLocalDate));
     }
 }
