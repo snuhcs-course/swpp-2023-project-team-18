@@ -14,20 +14,20 @@ import java.lang.Exception
 import java.time.LocalDate
 import java.time.YearMonth
 
-class CalendarViewModel(
+class MonthViewModel(
     private val authenticationRepository: AuthenticationRepository,
     private val storyRepository: StoryRepository
 ) : ViewModel() {
-    
+
     private val currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
     private val selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
 
     // 달력 밑에 보여주기 위한 현재 선택된 날짜의 정보
-    private val calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
-        MutableLiveData<CalendarDayInfoState?>()
+    private val calendarDayState: MutableLiveData<CalendarDayState?> =
+        MutableLiveData<CalendarDayState?>()
 
     // 한 달 동안의 정보
-    private val monthStoryState = MutableLiveData<MonthStoryState>()
+    private val calendarMonthState = MutableLiveData<CalendarMonthState>()
 
     fun getCurrentMonth(): YearMonth = currentMonth.value!!
 
@@ -41,9 +41,9 @@ class CalendarViewModel(
     fun setSelectedDate(date: LocalDate?) {
         selectedDate.value = date
         if (date == null) {
-            calendarDayInfoState.value = null
+            calendarDayState.value = null
         } else {
-            calendarDayInfoState.value = getStoryOfDay(date.dayOfMonth)
+            calendarDayState.value = getStoryOfDay(date.dayOfMonth)
         }
     }
 
@@ -58,19 +58,20 @@ class CalendarViewModel(
                         override fun onSuccess(storyList: MutableList<StoryModel>) {
                             fillEmptyStory(storyList, month)
                             val datInfoStateList =
-                                storyList.map { CalendarDayInfoState.fromStoryModel(it) }
-                            monthStoryState.value = MonthStoryState(null, datInfoStateList);
+                                storyList.map { CalendarDayState.fromStoryModel(it) }
+                            calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
                         }
 
                         override fun onFailure(error: Exception) {
-                            monthStoryState.value = MonthStoryState.withError(error)
+                            calendarMonthState.value = CalendarMonthState.withError(error)
                         }
 
                     })
             }
 
             override fun onFailure() {
-                monthStoryState.value = MonthStoryState.withError(UnauthorizedAccessException())
+                calendarMonthState.value =
+                    CalendarMonthState.withError(UnauthorizedAccessException())
             }
         })
     }
@@ -90,11 +91,11 @@ class CalendarViewModel(
         }
     }
 
-    fun getStoryOfDay(datOfMonth: Int): CalendarDayInfoState {
-        return monthStoryState.value!!.storyList[datOfMonth - 1]
+    fun getStoryOfDay(datOfMonth: Int): CalendarDayState {
+        return calendarMonthState.value!!.storyList[datOfMonth - 1]
     }
 
-    fun observerCalendarDayInfoState(observer: Observer<CalendarDayInfoState?>) {
-        calendarDayInfoState.observeForever(observer)
+    fun observerCalendarDayInfoState(observer: Observer<CalendarDayState?>) {
+        calendarDayState.observeForever(observer)
     }
 }

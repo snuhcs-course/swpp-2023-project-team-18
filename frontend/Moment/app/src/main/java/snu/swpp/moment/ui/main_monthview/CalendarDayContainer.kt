@@ -14,13 +14,13 @@ import snu.swpp.moment.R
 
 
 // 각 날짜 칸
-class DayViewContainer(view: View) : ViewContainer(view) {
+class CalendarDayContainer(view: View) : ViewContainer(view) {
     val textView: TextView = view.findViewById(R.id.calendarDayText)
     val imageView: ImageView = view.findViewById(R.id.calendarDayImage)
     val divider: View = view.findViewById(R.id.divider)
     val autoCompletedDot: View = view.findViewById(R.id.autoCompletedDot)
 
-    fun initialize(calendarView: CalendarView, viewModel: CalendarViewModel, day: CalendarDay) {
+    fun initialize(calendarView: CalendarView, viewModel: MonthViewModel, day: CalendarDay) {
         // 날짜 선택 시 동작
         view.setOnClickListener {
             // 한 달의 날짜 범위를 벗어나거나 스토리가 없는 날은 클릭할 수 없음
@@ -61,13 +61,14 @@ class DayViewContainer(view: View) : ViewContainer(view) {
         }
     }
 
-    fun setUiMonthDate(dayInfoState: CalendarDayInfoState) {
-        if (dayInfoState.isEmotionInvalid) {
+    fun setUiMonthDate(calendarDayState: CalendarDayState) {
+        if (calendarDayState.isEmotionInvalid) {
             return
         }
-        imageView.setImageResource(dayInfoState.emotionImage)
+        imageView.setImageResource(calendarDayState.emotionImage)
         imageView.visibility = View.VISIBLE
-        autoCompletedDot.visibility = if (dayInfoState.isAutoCompleted) View.VISIBLE else View.GONE
+        autoCompletedDot.visibility =
+            if (calendarDayState.isAutoCompleted) View.VISIBLE else View.GONE
     }
 
     fun setUiOutDate() {

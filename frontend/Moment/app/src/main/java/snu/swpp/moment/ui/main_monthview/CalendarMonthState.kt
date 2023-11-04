@@ -1,12 +1,12 @@
 package snu.swpp.moment.ui.main_monthview
 
-class MonthStoryState(
+class CalendarMonthState(
     val error: Exception?,
-    val storyList: List<CalendarDayInfoState>
+    val storyList: List<CalendarDayState>
 ) {
     companion object {
         @JvmStatic
-        fun withError(error: Exception) = MonthStoryState(
+        fun withError(error: Exception) = CalendarMonthState(
             error = error,
             storyList = listOf()
         )

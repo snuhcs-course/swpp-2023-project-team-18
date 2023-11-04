@@ -26,7 +26,7 @@ import java.util.Locale
 
 class MonthViewFragment : Fragment() {
 
-    private lateinit var viewModel: CalendarViewModel
+    private lateinit var viewModel: MonthViewModel
     private lateinit var binding: FragmentMonthviewBinding
 
 
@@ -37,7 +37,7 @@ class MonthViewFragment : Fragment() {
         binding = FragmentMonthviewBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        viewModel = ViewModelProvider(this)[CalendarViewModel::class.java]
+        viewModel = ViewModelProvider(this)[MonthViewModel::class.java]
 
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
@@ -83,10 +83,10 @@ class MonthViewFragment : Fragment() {
         }
 
         // 각 날짜 칸
-        binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
-            override fun create(view: View) = DayViewContainer(view)
+        binding.calendarView.dayBinder = object : MonthDayBinder<CalendarDayContainer> {
+            override fun create(view: View) = CalendarDayContainer(view)
 
-            override fun bind(container: DayViewContainer, data: CalendarDay) {
+            override fun bind(container: CalendarDayContainer, data: CalendarDay) {
                 container.initialize(binding.calendarView, viewModel, data)
 
                 val dayOfMonth = data.date.dayOfMonth
