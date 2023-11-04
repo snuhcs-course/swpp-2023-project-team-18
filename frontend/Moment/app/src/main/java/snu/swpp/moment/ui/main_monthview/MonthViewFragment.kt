@@ -36,7 +36,7 @@ class MonthViewFragment : Fragment() {
     private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
     private val viewModel: MonthViewModel = ViewModelProvider(
         this,
-        CalendarViewModelFactory(authenticationRepository, storyRepository)
+        MonthViewModelFactory(authenticationRepository, storyRepository)
     )[MonthViewModel::class.java]
 
     override fun onCreateView(

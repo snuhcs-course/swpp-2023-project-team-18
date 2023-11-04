@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
 
-class CalendarViewModelFactory(
+class MonthViewModelFactory(
     private val authenticationRepository: AuthenticationRepository,
     private val storyRepository: StoryRepository
 ) : ViewModelProvider.Factory {
