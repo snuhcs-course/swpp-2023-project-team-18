@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_monthview
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
 import snu.swpp.moment.exception.UnauthorizedAccessException
 import snu.swpp.moment.utils.TimeConverter
+import snu.swpp.moment.utils.fillEmptyStory
 import java.lang.Exception
 import java.time.LocalDate
 import java.time.YearMonth
@@ -23,11 +25,11 @@ class MonthViewModel(
     private val selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
 
     // 달력 밑에 보여주기 위한 현재 선택된 날짜의 정보
-    private val calendarDayState: MutableLiveData<CalendarDayState?> =
+    private val selectedDayState: MutableLiveData<CalendarDayState?> =
         MutableLiveData<CalendarDayState?>()
 
     // 한 달 동안의 정보
-    private val calendarMonthState = MutableLiveData<CalendarMonthState>()
+    private val calendarMonthState = MutableLiveData<CalendarMonthState?>()
 
     fun getCurrentMonth(): YearMonth = currentMonth.value!!
 
@@ -41,9 +43,9 @@ class MonthViewModel(
     fun setSelectedDate(date: LocalDate?) {
         selectedDate.value = date
         if (date == null) {
-            calendarDayState.value = null
+            selectedDayState.value = null
         } else {
-            calendarDayState.value = getStoryOfDay(date.dayOfMonth)
+            selectedDayState.value = getDayState(date.dayOfMonth)
         }
     }
 
@@ -56,9 +58,11 @@ class MonthViewModel(
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
                     object : StoryGetCallBack {
                         override fun onSuccess(storyList: MutableList<StoryModel>) {
-                            fillEmptyStory(storyList, month)
                             val datInfoStateList =
-                                storyList.map { CalendarDayState.fromStoryModel(it) }
+                                fillEmptyStory(
+                                    storyList,
+                                    month
+                                ).map { CalendarDayState.fromStoryModel(it) }
                             calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
                         }
 
@@ -76,26 +80,18 @@ class MonthViewModel(
         })
     }
 
-    private fun fillEmptyStory(storyList: MutableList<StoryModel>, month: YearMonth) {
-        var index = 0;
-        var date = LocalDate.of(month.year, month.month, 1);
-        val endDate = month.atEndOfMonth();
-        while (!date.isAfter(endDate)) {
-            val story = storyList[index]
-            val createdAt = TimeConverter.convertDateToLocalDate(story.createdAt)
-            if (createdAt.isAfter(date)) {
-                storyList.add(index, StoryModel.empty())
-            }
-            index++
-            date = date.plusDays(1)
+    fun getDayState(datOfMonth: Int): CalendarDayState? {
+        if (calendarMonthState.value == null) {
+            Log.d("MonthViewModel", "getDayState: calendarMonthState.value == null")
         }
+        return calendarMonthState.value?.storyList?.get(datOfMonth - 1)
     }
 
-    fun getStoryOfDay(datOfMonth: Int): CalendarDayState {
-        return calendarMonthState.value!!.storyList[datOfMonth - 1]
+    fun observerCalendarMonthState(observer: Observer<CalendarMonthState?>) {
+        calendarMonthState.observeForever(observer)
     }
 
-    fun observerCalendarDayInfoState(observer: Observer<CalendarDayState?>) {
-        calendarDayState.observeForever(observer)
+    fun observerSelectedDayState(observer: Observer<CalendarDayState?>) {
+        selectedDayState.observeForever(observer)
     }
 }

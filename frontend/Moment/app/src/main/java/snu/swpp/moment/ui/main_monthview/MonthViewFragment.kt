@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_monthview
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +61,14 @@ class MonthViewFragment : Fragment() {
 
         viewModel.setCurrentMonth(currentMonth)
         binding.calendarView.scrollToMonth(currentMonth)
+
+        viewModel.observerCalendarMonthState {
+            if (it == null) {
+                return@observerCalendarMonthState
+            }
+            binding.calendarView.notifyCalendarChanged()
+        }
+
         // 스크롤 할 때 각 달 사이의 간격
         val monthMargin = 10
         binding.calendarView.monthMargins = MarginValues(monthMargin, 0, monthMargin, 0)
@@ -110,16 +119,21 @@ class MonthViewFragment : Fragment() {
                 } else if (data.date.monthValue != viewModel.getCurrentMonth().monthValue) {
                     container.setUiScrolling()
                 } else {
-                    container.setUiMonthDate(viewModel.getStoryOfDay(dayOfMonth))
+                    val calendarDayState = viewModel.getDayState(dayOfMonth)
+                    if (calendarDayState != null) {
+                        container.setUiMonthDate(calendarDayState)
+                    } else {
+                        Log.d("MonthViewFragment", "calendarDayState is null")
+                    }
                 }
                 container.setDividerLineVisible(!isFinalWeekOfMonth(data))
             }
         }
 
         // 달력 아래 요약 정보
-        viewModel.observerCalendarDayInfoState {
+        viewModel.observerSelectedDayState {
             if (it == null) {
-                return@observerCalendarDayInfoState
+                return@observerSelectedDayState
             }
 
             binding.daySummaryContainer.root.visibility = View.VISIBLE

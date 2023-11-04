@@ -26,7 +26,9 @@ class CalendarDayContainer(view: View) : ViewContainer(view) {
             // 한 달의 날짜 범위를 벗어나거나 스토리가 없는 날은 클릭할 수 없음
             if (day.position != DayPosition.MonthDate) {
                 return@setOnClickListener
-            } else if (viewModel.getStoryOfDay(day.date.dayOfMonth).isEmotionInvalid) {
+            }
+            val calendarDayState = viewModel.getDayState(day.date.dayOfMonth)
+            if (calendarDayState == null || calendarDayState.isEmotionInvalid) {
                 return@setOnClickListener
             }
 
