@@ -2,7 +2,6 @@ package snu.swpp.moment.ui.main_writeview.slideview;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,8 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,14 +32,15 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModelFactory;
-import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.KeyboardUtils;
+import snu.swpp.moment.utils.TimeConverter;
 
-public class TodayViewFragment extends Fragment {
+public class TodayViewFragment extends BaseWritePageFragment {
 
     private TodayItemBinding binding;
     private List<ListViewItem> listViewItems;
@@ -58,10 +58,6 @@ public class TodayViewFragment extends Fragment {
     private StoryRemoteDataSource storyRemoteDataSource;
     private GetStoryUseCase getStoryUseCase;
     private SaveScoreUseCase saveScoreUseCase;
-
-    private final Handler refreshHandler = new Handler();
-    private final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
-    private LocalDateTime lastRefreshedTime = LocalDateTime.now();
 
     private final int MOMENT_HOUR_LIMIT = 2;
 
@@ -305,21 +301,15 @@ public class TodayViewFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public String getToolbarTitle() {
+        LocalDate today = LocalDate.now();
+        return TimeConverter.formatLocalDate(today, "yyyy. MM. dd.");
+    }
+
     private void scrollToBottom() {
         binding.todayMomentList.post(() -> binding.todayMomentList.smoothScrollToPosition(
             binding.todayMomentList.getCount() - 1));
-    }
-
-    private void updateRefreshTime() {
-        lastRefreshedTime = LocalDateTime.now();
-    }
-
-    private boolean isOutdated() {
-        LocalDateTime now = LocalDateTime.now();
-        if (lastRefreshedTime.getDayOfMonth() == now.getDayOfMonth()) {
-            return false;
-        }
-        return now.getHour() >= 3;
     }
 
     @Override

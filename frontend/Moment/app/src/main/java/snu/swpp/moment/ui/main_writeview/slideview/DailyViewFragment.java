@@ -2,13 +2,11 @@ package snu.swpp.moment.ui.main_writeview.slideview;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,15 +25,15 @@ import snu.swpp.moment.databinding.DailyItemBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModel;
 import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModelFactory;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
-import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
-import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.TimeConverter;
 
-public class DailyViewFragment extends Fragment {
+public class DailyViewFragment extends BaseWritePageFragment {
 
     private int minusDays;
 
@@ -53,10 +51,6 @@ public class DailyViewFragment extends Fragment {
     private AuthenticationRepository authenticationRepository;
 
     private ListFooterContainer listFooterContainer;
-
-    private final Handler refreshHandler = new Handler();
-    private final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
-    private LocalDateTime lastRefreshedTime = LocalDateTime.now();
 
     public static DailyViewFragment initialize(int minusDays) {
         Log.d("DailyViewFragment", "Initializing DailyViewFragment with minusDays: " + minusDays);
@@ -204,16 +198,10 @@ public class DailyViewFragment extends Fragment {
         return root;
     }
 
-    private void updateRefreshTime() {
-        lastRefreshedTime = LocalDateTime.now();
-    }
-
-    private boolean isOutdated() {
-        LocalDateTime now = LocalDateTime.now();
-        if (lastRefreshedTime.getDayOfMonth() == now.getDayOfMonth()) {
-            return false;
-        }
-        return now.getHour() >= 3;
+    @Override
+    public String getToolbarTitle() {
+        LocalDate date = getCurrentDateTime().toLocalDate();
+        return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.");
     }
 
     private LocalDateTime getCurrentDateTime() {

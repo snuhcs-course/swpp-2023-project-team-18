@@ -16,7 +16,7 @@ public class SlideViewAdapter extends FragmentStateAdapter {
 
     @NonNull
     @Override
-    public Fragment createFragment(int position) {
+    public BaseWritePageFragment createFragment(int position) {
         int index = getRealPosition(position);
         if (index == count - 1) {
             return new TodayViewFragment();
