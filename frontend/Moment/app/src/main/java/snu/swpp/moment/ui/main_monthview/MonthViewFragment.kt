@@ -124,12 +124,16 @@ class MonthViewFragment : Fragment() {
 
                     if (calendarDayState == null) {
                         // 처음에 아직 API response 안 옴
-                        Log.d("MonthViewFragment", "calendarDayState is null")
+                        Log.d("MonthViewFragment", "calendarDayState is null (day $dayOfMonth)")
                     } else if (!viewModel.monthChangedSwitch) {
                         // 아직 API response 안 옴
-                        Log.d("MonthViewFragment", "monthChangedSwitch is false")
+                        Log.d("MonthViewFragment", "monthChangedSwitch is false (day $dayOfMonth)")
                     } else {
                         container.setUiMonthDate(calendarDayState)
+                        Log.d(
+                            "MonthViewFragment",
+                            "setUiMonthDate (day $dayOfMonth, ${calendarDayState.isEmotionInvalid})"
+                        )
                     }
                 }
                 container.setDividerLineVisible(!isFinalWeekOfMonth(data))
@@ -160,6 +164,11 @@ class MonthViewFragment : Fragment() {
                 binding.daySummaryContainer.infoAutoCompletedText.visibility = View.INVISIBLE
                 binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
             }
+        }
+
+        binding.daySummaryContainer.dayNavigateButton.isActivated = true
+        binding.daySummaryContainer.dayNavigateButton.setOnClickListener {
+            (requireActivity() as MainActivity).navigateToWriteViewPage(viewModel.getSelectedDate())
         }
 
         return view

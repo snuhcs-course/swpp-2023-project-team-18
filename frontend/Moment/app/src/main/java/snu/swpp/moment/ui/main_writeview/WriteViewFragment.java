@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import snu.swpp.moment.LoginRegisterActivity;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
 import snu.swpp.moment.ui.main_writeview.slideview.SlideViewAdapter;
@@ -31,6 +32,7 @@ public class WriteViewFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
+        Log.d("WriteViewFragment", "onCreateView");
 
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
@@ -70,6 +72,16 @@ public class WriteViewFragment extends Fragment {
             }
         });
 
+        // 한달보기 탭에서 버튼을 눌러 넝머왔을 때 동작
+        ((MainActivity) getActivity()).observeWriteDestinationDate(localDate -> {
+            Log.d("WriteViewFragment", "observeWriteDestinationDate: " + localDate);
+            Log.d("WriteViewFragment", "viewpager: " + binding.viewpager);
+            long minusDays = ChronoUnit.DAYS.between(
+                localDate, TimeConverter.getToday()
+            );
+            binding.viewpager.setCurrentItem(numPages - (int) minusDays - 1, true);
+        });
+
         return root;
     }
 
@@ -86,11 +98,5 @@ public class WriteViewFragment extends Fragment {
         created_at = TimeConverter.updateDateFromThree(created_at, hour);
 
         return (int) ChronoUnit.DAYS.between(created_at, today) + 1;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }
