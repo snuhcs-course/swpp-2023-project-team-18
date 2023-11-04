@@ -1,16 +1,13 @@
 package snu.swpp.moment.ui.main_monthview
 
-import android.graphics.Typeface
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -22,18 +19,31 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.MainActivity
-import snu.swpp.moment.R
+import snu.swpp.moment.data.repository.AuthenticationRepository
+import snu.swpp.moment.data.repository.StoryRepository
+import snu.swpp.moment.data.source.StoryRemoteDataSource
 import snu.swpp.moment.databinding.FragmentMonthviewBinding
-import snu.swpp.moment.utils.isLastWeek
+import snu.swpp.moment.utils.isFinalWeekOfMonth
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
 class MonthViewFragment : Fragment() {
 
-    private lateinit var viewModel: CalendarViewModel
     private lateinit var binding: FragmentMonthviewBinding
 
+    private val authenticationRepository: AuthenticationRepository =
+        AuthenticationRepository.getInstance(context)
+    private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
+    private lateinit var viewModel: MonthViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = ViewModelProvider(
+            this,
+            MonthViewModelFactory(authenticationRepository, storyRepository)
+        )[MonthViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +51,6 @@ class MonthViewFragment : Fragment() {
     ): View {
         binding = FragmentMonthviewBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        viewModel = ViewModelProvider(this)[CalendarViewModel::class.java]
 
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
@@ -88,90 +96,51 @@ class MonthViewFragment : Fragment() {
         }
 
         // 각 날짜 칸
-        binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
-            override fun create(view: View) = DayViewContainer(view)
+        binding.calendarView.dayBinder = object : MonthDayBinder<CalendarDayContainer> {
+            override fun create(view: View) = CalendarDayContainer(view)
 
-            override fun bind(container: DayViewContainer, data: CalendarDay) {
+            override fun bind(container: CalendarDayContainer, data: CalendarDay) {
                 container.initialize(binding.calendarView, viewModel, data)
-                if (isLastWeek(data)) {
-                    // 마지막 줄 구분선 제거
-                    container.divider.visibility = View.GONE
-                } else {
-                    container.divider.visibility = View.VISIBLE
-                }
 
-                // 날짜 text
-                container.textView.text = data.date.dayOfMonth.toString()
-                if (data.date == viewModel.selectedDate.value) {
-                    // 선택된 날짜는 빨간 색으로 표시
-                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.red))
-                    val typeface: Typeface =
-                        ResourcesCompat.getFont(context!!, R.font.maruburi_bold)!!
-                    container.textView.typeface = typeface
-                } else {
-                    container.textView.setTextColor(
-                        ContextCompat.getColor(
-                            context!!,
-                            R.color.black
-                        )
-                    )
-                    val typeface: Typeface =
-                        ResourcesCompat.getFont(context!!, R.font.maruburi_light)!!
-                    container.textView.typeface = typeface
-                }
+                val dayOfMonth = data.date.dayOfMonth
+                container.updateDateText(dayOfMonth, data.date == viewModel.getSelectedDate())
 
                 if (data.position != DayPosition.MonthDate) {
-                    // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
-                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
-                    container.imageView.visibility = View.INVISIBLE
-                    container.autoCompletedDot.visibility = View.GONE
-                } else if (data.date.monthValue != viewModel.currentMonth.value!!.monthValue) {
-                    // 스크롤 도중 이전/다음 달은 내용 안 보여줌
-                    container.imageView.setImageResource(android.R.color.transparent)
-                    container.autoCompletedDot.visibility = View.GONE
+                    container.setUiOutDate()
+                } else if (data.date.monthValue != viewModel.getCurrentMonth().monthValue) {
+                    container.setUiScrolling()
                 } else {
-                    // 감정 아이콘
-                    if (viewModel.calendarDayStates.value != null) {
-                        val calendarDayState =
-                            viewModel.calendarDayStates.value!![data.date.dayOfMonth - 1]
-                        container.imageView.setImageResource(calendarDayState.emotionImage)
-                        container.imageView.visibility = View.VISIBLE
-                        container.autoCompletedDot.visibility =
-                            if (calendarDayState.isAutoCompleted) View.VISIBLE else View.GONE
-                    }
+                    container.setUiMonthDate(viewModel.getStoryOfDay(dayOfMonth))
                 }
+                container.setDividerLineVisible(!isFinalWeekOfMonth(data))
             }
         }
 
         // 달력 아래 요약 정보
-        val daySummaryObserver = Observer<CalendarDayInfoState?> { it ->
-            if (it != null) {
-                binding.daySummaryContainer.root.visibility = View.VISIBLE
-                binding.daySummaryContainer.daySummaryDateText.text = "%d. %d. %d. %s".format(
-                    it.date.year,
-                    it.date.monthValue,
-                    it.date.dayOfMonth,
-                    it.date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
-                )
-                binding.daySummaryContainer.dayStoryTitleText.text = it.storyTitle
-                binding.daySummaryContainer.dayStoryContentText.text = it.storyContent
-                binding.daySummaryContainer.dayEmotionImage.setImageResource(
-                    it.emotionImage
-                )
-                binding.daySummaryContainer.dayEmotionText.text = it.emotionKoreanText
-                binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
-                binding.daySummaryContainer.dayScoreText.text = it.score.toString()
+        viewModel.observerCalendarDayInfoState {
+            if (it == null) {
+                return@observerCalendarDayInfoState
+            }
 
-                if (it.isAutoCompleted) {
-                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.VISIBLE
-                    binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.VISIBLE
-                } else {
-                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.INVISIBLE
-                    binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
-                }
+            binding.daySummaryContainer.root.visibility = View.VISIBLE
+            binding.daySummaryContainer.daySummaryDateText.text = it.dateText
+            binding.daySummaryContainer.dayStoryTitleText.text = it.storyTitle
+            binding.daySummaryContainer.dayStoryContentText.text = it.storyContent
+            binding.daySummaryContainer.dayEmotionImage.setImageResource(
+                it.emotionImage
+            )
+            binding.daySummaryContainer.dayEmotionText.text = it.emotionKoreanText
+            binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
+            binding.daySummaryContainer.dayScoreText.text = it.score.toString()
+
+            if (it.isAutoCompleted) {
+                binding.daySummaryContainer.infoAutoCompletedText.visibility = View.VISIBLE
+                binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.VISIBLE
+            } else {
+                binding.daySummaryContainer.infoAutoCompletedText.visibility = View.INVISIBLE
+                binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
             }
         }
-        viewModel.calendarDayInfoState.observe(viewLifecycleOwner, daySummaryObserver)
 
         return view
     }

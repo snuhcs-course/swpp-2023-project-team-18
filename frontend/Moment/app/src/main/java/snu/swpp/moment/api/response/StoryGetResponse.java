@@ -59,9 +59,8 @@ public class StoryGetResponse {
                 storyResponse.content,
                 convertHashtags(storyResponse.hashtags),
                 storyResponse.createdAt,
-                storyResponse.is_point_completed,
-                false)
-            );
+                storyResponse.is_point_completed
+            ));
         }
         return result;
     }
