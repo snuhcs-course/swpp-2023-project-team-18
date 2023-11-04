@@ -66,6 +66,7 @@ class MonthViewFragment : Fragment() {
             if (it == null) {
                 return@observerCalendarMonthState
             }
+            Log.d("MonthViewFragment", "calendarMonthState changed -> notifyCalendarChanged()")
             binding.calendarView.notifyCalendarChanged()
         }
 
@@ -120,10 +121,15 @@ class MonthViewFragment : Fragment() {
                     container.setUiScrolling()
                 } else {
                     val calendarDayState = viewModel.getDayState(dayOfMonth)
-                    if (calendarDayState != null) {
-                        container.setUiMonthDate(calendarDayState)
-                    } else {
+
+                    if (calendarDayState == null) {
+                        // 처음에 아직 API response 안 옴
                         Log.d("MonthViewFragment", "calendarDayState is null")
+                    } else if (!viewModel.monthChangedSwitch) {
+                        // 아직 API response 안 옴
+                        Log.d("MonthViewFragment", "monthChangedSwitch is false")
+                    } else {
+                        container.setUiMonthDate(calendarDayState)
                     }
                 }
                 container.setDividerLineVisible(!isFinalWeekOfMonth(data))

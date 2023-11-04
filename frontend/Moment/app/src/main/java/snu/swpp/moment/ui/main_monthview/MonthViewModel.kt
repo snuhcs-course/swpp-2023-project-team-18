@@ -31,10 +31,14 @@ class MonthViewModel(
     // 한 달 동안의 정보
     private val calendarMonthState = MutableLiveData<CalendarMonthState?>()
 
+    // 달이 바뀐 직후 set 되는 switch
+    var monthChangedSwitch: Boolean = false
+
     fun getCurrentMonth(): YearMonth = currentMonth.value!!
 
     fun setCurrentMonth(month: YearMonth) {
         currentMonth.value = month
+        monthChangedSwitch = false
         getStory(month)
     }
 
@@ -64,6 +68,7 @@ class MonthViewModel(
                                     month
                                 ).map { CalendarDayState.fromStoryModel(it) }
                             calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
+                            monthChangedSwitch = true
                         }
 
                         override fun onFailure(error: Exception) {
