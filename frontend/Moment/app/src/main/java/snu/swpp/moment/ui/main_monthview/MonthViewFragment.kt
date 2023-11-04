@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_monthview
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,10 +35,15 @@ class MonthViewFragment : Fragment() {
     private val authenticationRepository: AuthenticationRepository =
         AuthenticationRepository.getInstance(context)
     private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
-    private val viewModel: MonthViewModel = ViewModelProvider(
-        this,
-        MonthViewModelFactory(authenticationRepository, storyRepository)
-    )[MonthViewModel::class.java]
+    private lateinit var viewModel: MonthViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = ViewModelProvider(
+            this,
+            MonthViewModelFactory(authenticationRepository, storyRepository)
+        )[MonthViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
