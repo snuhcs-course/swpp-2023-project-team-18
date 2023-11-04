@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import re
 
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
@@ -527,9 +528,7 @@ class HashtagView(GenericAPIView):
                 status=400,
             )
 
-        hashtags = [
-            hashtag.strip() for hashtag in content.split("#") if hashtag.strip() != ""
-        ]
+        hashtags = [hashtag[1:] for hashtag in re.findall("#\\w+", content)]
         for hashtag in hashtags:
             curr_hashtag, _ = Hashtag.objects.get_or_create(content=hashtag)
 

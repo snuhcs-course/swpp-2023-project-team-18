@@ -396,7 +396,7 @@ class GetHashtagTest(TestCase):
 
 
 class SaveHashtagTest(TestCase):
-    hashtag_string = "# h2#h1 ##"
+    hashtag_string = "#h2 dsjfl##h1 ## # 23"
     hashtag_string2 = "#h1#h1#h3"
     hashtag1 = "h2"
     hashtag2 = "h1"
