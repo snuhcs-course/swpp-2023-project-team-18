@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -105,6 +106,19 @@ public class TimeConverterTest {
 
         long answer1 = TimeConverter.convertLocalDateTimeToTimestamp(startDate);
         long answer2 = TimeConverter.convertLocalDateTimeToTimestamp(endDate);
+
+        assertEquals(answer1, timestamps[0]);
+        assertEquals(answer2, timestamps[1]);
+    }
+
+    @Test
+    public void getOneMonthTimestamps() {
+        YearMonth yearMonth = YearMonth.of(2023, 11);
+        long[] timestamps = TimeConverter.getOneMonthTimestamps(yearMonth);
+
+        long secondDiff = 3600 * hourDiff;
+        long answer1 = 1698807600L - secondDiff; // 현지 시각 2023년 11월 1일 오전 3:00:00
+        long answer2 = 1701399599L - secondDiff; // 현지 시각 2023년 12월 1일 오전 2:59:59
 
         assertEquals(answer1, timestamps[0]);
         assertEquals(answer2, timestamps[1]);
