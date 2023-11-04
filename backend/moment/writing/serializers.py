@@ -71,8 +71,8 @@ class StoryQuerySerializer(serializers.Serializer):
 
 
 class StoryCreateSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=STORY_TITLE_MAX_LENGTH)
-    content = serializers.CharField(max_length=STORY_MAX_LENGTH)
+    title = serializers.CharField(max_length=STORY_TITLE_MAX_LENGTH, allow_blank=True)
+    content = serializers.CharField(max_length=STORY_MAX_LENGTH, allow_blank=True)
 
 
 class StoryDeleteSerializer(serializers.Serializer):
