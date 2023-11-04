@@ -40,7 +40,7 @@ class HashtagQuerySerializer(serializers.Serializer):
 
 class HashtagCreateSerializer(serializers.Serializer):
     story_id = serializers.IntegerField()
-    content = serializers.CharField()
+    content = serializers.CharField(allow_blank=True)
 
 
 # Serializer for stories
