@@ -1,7 +1,9 @@
 package snu.swpp.moment.ui.main_monthview
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import snu.swpp.moment.ui.main_writeview.uistate.MonthStoryState
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -11,6 +13,8 @@ class CalendarViewModel : ViewModel() {
     var calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
         MutableLiveData<CalendarDayInfoState?>()
     var calendarDayStates: MutableLiveData<List<CalendarDayState>> = MutableLiveData(listOf())
+
+    private val monthStoryState = MutableLiveData<MonthStoryState>()
 
     private val emotionEnumMap: Map<String, Int> = mapOf(
         "excited1" to 0,
@@ -40,6 +44,16 @@ class CalendarViewModel : ViewModel() {
         }
     }
 
+    fun getStory(month: YearMonth) {
+        // TODO
+        //  api 부르고 MonthStoryState 업데이트
+    }
+
+    fun observeMonthStoryState(observer: Observer<MonthStoryState>) {
+        // TODO:
+    }
+
+    // FIXME ("Deprecated")
     // 서버에서 감정 리스트 가져오는 함수
     private fun getDayStatesMock(month: YearMonth): List<CalendarDayState> {
         // NOTE: List 길이가 31이 아니면 IndexOutOfBound 에러가 남 (원인 불명)
