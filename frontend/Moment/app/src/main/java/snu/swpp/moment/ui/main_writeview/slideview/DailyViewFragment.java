@@ -192,6 +192,7 @@ public class DailyViewFragment extends Fragment {
                     Log.d("DailyViewFragment", "run: Reloading fragment");
                     viewModel.getMoment(now);
                     viewModel.getStory(now);
+                    listViewAdapter.notifyDataSetChanged(false);
                     updateRefreshTime();
                 }
                 refreshHandler.postDelayed(this, REFRESH_INTERVAL);
