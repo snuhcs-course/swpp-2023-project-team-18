@@ -105,10 +105,9 @@ public class DailyViewFragment extends Fragment {
 
         listViewItems = new ArrayList<>();
 
-        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        LocalDateTime dateTime = date.atTime(3, 0);
-        viewModel.getMoment(dateTime);
-        viewModel.getStory(dateTime);
+        LocalDateTime currentDateTime = getCurrentDateTime();
+        viewModel.getMoment(currentDateTime);
+        viewModel.getStory(currentDateTime);
 
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
@@ -184,14 +183,14 @@ public class DailyViewFragment extends Fragment {
         Runnable refreshRunnable = new Runnable() {
             @Override
             public void run() {
-                LocalDateTime now = LocalDateTime.now();
-                Log.d("DailyViewFragment", String.format("run: %s", now));
+                Log.d("DailyViewFragment", String.format("run: %s", LocalDateTime.now()));
 
                 // 하루가 지났을 때
                 if (isOutdated()) {
                     Log.d("DailyViewFragment", "run: Reloading fragment");
-                    viewModel.getMoment(now);
-                    viewModel.getStory(now);
+                    LocalDateTime currentDateTime = getCurrentDateTime();
+                    viewModel.getMoment(currentDateTime);
+                    viewModel.getStory(currentDateTime);
                     listViewAdapter.notifyDataSetChanged(false);
                     updateRefreshTime();
                 }
@@ -215,6 +214,12 @@ public class DailyViewFragment extends Fragment {
             return false;
         }
         return now.getHour() >= 3;
+    }
+
+    private LocalDateTime getCurrentDateTime() {
+        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
+        LocalDateTime current = date.atTime(3, 0, 0);
+        return current;
     }
 
     @Override
