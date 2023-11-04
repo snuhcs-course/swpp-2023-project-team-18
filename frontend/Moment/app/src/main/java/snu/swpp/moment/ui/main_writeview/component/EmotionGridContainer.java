@@ -35,7 +35,7 @@ public class EmotionGridContainer {
         );
 
         Typeface maruburiLight = ResourcesCompat.getFont(view.getContext(),
-            R.font.maruburi_light);
+            R.font.maruburi_regular);
         Typeface maruburiBold = ResourcesCompat.getFont(view.getContext(),
             R.font.maruburi_bold);
 

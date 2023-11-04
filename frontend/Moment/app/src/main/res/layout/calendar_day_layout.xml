@@ -8,16 +8,14 @@
     <!-- 날짜 숫자 -->
     <TextView
         android:id="@+id/calendarDayText"
+        style="@style/SMALL_BLACK"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingTop="5dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:fontFamily="@font/maruburi_light"
         android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -58,7 +58,7 @@ class CalendarDayContainer(view: View) : ViewContainer(view) {
                 ContextCompat.getColor(view.context!!, R.color.black)
             )
             val typeface: Typeface =
-                ResourcesCompat.getFont(view.context!!, R.font.maruburi_light)!!
+                ResourcesCompat.getFont(view.context!!, R.font.maruburi_regular)!!
             textView.typeface = typeface
         }
     }

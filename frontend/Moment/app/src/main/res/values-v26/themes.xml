@@ -4,6 +4,6 @@
     <style name="CustomButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/custom_button_background</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:font">@font/maruburi_light</item>
+        <item name="android:font">@font/maruburi_regular</item>
     </style>
 </resources>
