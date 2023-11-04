@@ -14,6 +14,7 @@ public class StoryModel {
     private final List<HashtagModel> hashtags;
     private final Date createdAt;
     private final boolean isPointCompleted;
+    private boolean isEmpty;
 
     public StoryModel(int id, String emotion, int score, String title, String content,
         List<HashtagModel> hashtags, Long createdAt, boolean isPointCompleted) {
@@ -25,6 +26,7 @@ public class StoryModel {
         this.hashtags = hashtags;
         this.createdAt = TimeConverter.convertTimestampToDate(createdAt);
         this.isPointCompleted = isPointCompleted;
+        this.isEmpty = false;
     }
 
     public int getId() {
@@ -57,5 +59,20 @@ public class StoryModel {
 
     public boolean getIsPointCompleted() {
         return isPointCompleted;
+    }
+
+    public static StoryModel empty() {
+        StoryModel empty = new StoryModel(
+            -1,
+            "invalid",
+            3,
+            "",
+            "",
+            null,
+            0L,
+            false
+        );
+        empty.isEmpty = true;
+        return empty;
     }
 }
