@@ -75,6 +75,12 @@ public class TimeConverter {
     }
 
     public static LocalDate convertDateToLocalDate(Date date) {
-        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate result = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println("date: " + date + ", result: " + result);
+        System.out.println("date: " + date.getHours());
+        if (date.getHours() < 3) {
+            result = result.minusDays(1);
+        }
+        return result;
     }
 }
