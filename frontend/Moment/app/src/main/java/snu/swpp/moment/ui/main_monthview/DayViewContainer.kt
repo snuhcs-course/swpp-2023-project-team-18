@@ -8,6 +8,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.R
+import snu.swpp.moment.utils.INVALID_EMOTION
 
 
 // 각 날짜 칸

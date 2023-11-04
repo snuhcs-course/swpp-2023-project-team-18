@@ -24,6 +24,7 @@ import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.MainActivity
 import snu.swpp.moment.R
 import snu.swpp.moment.databinding.FragmentMonthviewBinding
+import snu.swpp.moment.utils.isLastWeek
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
