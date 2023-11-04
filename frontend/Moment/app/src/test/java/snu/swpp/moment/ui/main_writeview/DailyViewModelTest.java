@@ -160,6 +160,7 @@ public class DailyViewModelTest {
             "content",
             new ArrayList<>(),
             0L,
+            false,
             false
         );
         doAnswer(invocation -> {

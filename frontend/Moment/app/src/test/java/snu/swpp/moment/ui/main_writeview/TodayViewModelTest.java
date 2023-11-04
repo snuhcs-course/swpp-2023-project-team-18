@@ -283,6 +283,7 @@ public class TodayViewModelTest {
             "content",
             new ArrayList<>(),
             0L,
+            false,
             false
         );
         doAnswer(invocation -> {
