@@ -13,6 +13,16 @@ public abstract class BaseWritePageFragment extends Fragment {
     protected final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
     protected final int STARTING_HOUR = 3;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setToolbarTitle();
+        if (isOutdated()) {
+            Log.d("BaseWritePageFragment", "Outdated, refreshing...");
+            callApisToRefresh();
+        }
+    }
+
     public void setToolbarTitle() {
         MainActivity mainActivity = (MainActivity) getActivity();
         if (mainActivity != null) {
@@ -22,7 +32,9 @@ public abstract class BaseWritePageFragment extends Fragment {
         }
     }
 
-    public abstract String getDateText();
+    protected abstract void callApisToRefresh();
+
+    protected abstract String getDateText();
 
     protected void updateRefreshTime() {
         lastRefreshedTime = LocalDateTime.now();
@@ -34,12 +46,5 @@ public abstract class BaseWritePageFragment extends Fragment {
             return false;
         }
         return now.getHour() >= STARTING_HOUR;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("BaseWritePageFragment", "onResume");
-        setToolbarTitle();
     }
 }

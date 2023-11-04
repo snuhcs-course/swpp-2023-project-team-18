@@ -97,11 +97,17 @@ public class DailyViewFragment extends BaseWritePageFragment {
         binding = DailyItemBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // ListView setup
         listViewItems = new ArrayList<>();
+        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        listViewAdapter.setAnimation(false);
+        
+        binding.dailyMomentList.setAdapter(listViewAdapter);
+        View footerView = LayoutInflater.from(getContext())
+            .inflate(R.layout.listview_footer, null, false);
+        binding.dailyMomentList.addFooterView(footerView);
 
-        LocalDateTime currentDateTime = getCurrentDateTime();
-        viewModel.getMoment(currentDateTime);
-        viewModel.getStory(currentDateTime);
+        callApisToRefresh();
 
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
@@ -134,12 +140,6 @@ public class DailyViewFragment extends BaseWritePageFragment {
                     .show();
             }
         });
-
-        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
-        binding.dailyMomentList.setAdapter(listViewAdapter);
-        View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, null, false);
-        binding.dailyMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
         listFooterContainer = new ListFooterContainer(footerView);
@@ -182,10 +182,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 // 하루가 지났을 때
                 if (isOutdated()) {
                     Log.d("DailyViewFragment", "run: Reloading fragment");
-                    LocalDateTime currentDateTime = getCurrentDateTime();
-                    viewModel.getMoment(currentDateTime);
-                    viewModel.getStory(currentDateTime);
-                    listViewAdapter.notifyDataSetChanged(false);
+                    callApisToRefresh();
                     updateRefreshTime();
                 }
                 refreshHandler.postDelayed(this, REFRESH_INTERVAL);
@@ -199,7 +196,14 @@ public class DailyViewFragment extends BaseWritePageFragment {
     }
 
     @Override
-    public String getDateText() {
+    protected void callApisToRefresh() {
+        LocalDateTime currentDateTime = getCurrentDateTime();
+        viewModel.getMoment(currentDateTime);
+        viewModel.getStory(currentDateTime);
+    }
+
+    @Override
+    protected String getDateText() {
         LocalDate date = getCurrentDateTime().toLocalDate();
         return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.");
     }

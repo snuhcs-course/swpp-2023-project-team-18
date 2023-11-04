@@ -244,7 +244,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
 
         });
-        viewModel.getMoment(LocalDateTime.now());
 
         // story GET API 호출 후 동작
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
@@ -273,7 +272,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     .show();
             }
         });
-        viewModel.getStory(LocalDateTime.now());
+
+        callApisToRefresh();
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
@@ -285,9 +285,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 // 하루가 지났고 하루 마무리 진행 중이 아닐 때
                 if (isOutdated() && !listFooterContainer.isCompletionInProgress()) {
                     Log.d("TodayViewFragment", "run: Reloading fragment");
-                    viewModel.getMoment(now);
-                    viewModel.getStory(now);
-                    listViewAdapter.notifyDataSetChanged(false);
+                    callApisToRefresh();
                     updateRefreshTime();
                 }
                 refreshHandler.postDelayed(this, REFRESH_INTERVAL);
@@ -302,7 +300,14 @@ public class TodayViewFragment extends BaseWritePageFragment {
     }
 
     @Override
-    public String getDateText() {
+    protected void callApisToRefresh() {
+        LocalDateTime now = LocalDateTime.now();
+        viewModel.getMoment(now);
+        viewModel.getStory(now);
+    }
+
+    @Override
+    protected String getDateText() {
         LocalDate today = LocalDate.now();
         return TimeConverter.formatLocalDate(today, "yyyy. MM. dd.");
     }
