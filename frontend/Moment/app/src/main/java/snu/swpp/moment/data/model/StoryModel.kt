@@ -13,7 +13,6 @@ class StoryModel(
     val hashtags: List<HashtagModel> = listOf(),
     createdAt: Long?,
     val isPointCompleted: Boolean,
-    val isEmpty: Boolean = false,
 ) {
     val createdAt: Date
 
@@ -24,11 +23,6 @@ class StoryModel(
     val emotionInt: Int
         get() {
             return EmotionMap.getEmotionInt(emotion)
-        }
-
-    val isEmotionInvalid: Boolean
-        get() {
-            return emotionInt == EmotionMap.INVALID_EMOTION
         }
 
     companion object {
@@ -42,7 +36,6 @@ class StoryModel(
             listOf(),
             0L,
             false,
-            isEmpty = true,
         )
     }
 }
