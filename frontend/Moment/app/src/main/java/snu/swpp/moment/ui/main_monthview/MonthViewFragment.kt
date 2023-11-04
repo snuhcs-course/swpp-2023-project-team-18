@@ -1,16 +1,12 @@
 package snu.swpp.moment.ui.main_monthview
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -22,7 +18,6 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.MainActivity
-import snu.swpp.moment.R
 import snu.swpp.moment.databinding.FragmentMonthviewBinding
 import snu.swpp.moment.utils.isFinalWeekOfMonth
 import java.time.YearMonth
@@ -93,54 +88,18 @@ class MonthViewFragment : Fragment() {
 
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.initialize(binding.calendarView, viewModel, data)
-                if (isFinalWeekOfMonth(data)) {
-                    // 마지막 줄 구분선 제거
-                    container.divider.visibility = View.GONE
-                } else {
-                    container.divider.visibility = View.VISIBLE
-                }
 
                 val dayOfMonth = data.date.dayOfMonth
-
-                // 날짜 text
-                container.textView.text = dayOfMonth.toString()
-                if (data.date == viewModel.getSelectedDate()) {
-                    // 선택된 날짜는 빨간 색으로 표시
-                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.red))
-                    val typeface: Typeface =
-                        ResourcesCompat.getFont(context!!, R.font.maruburi_bold)!!
-                    container.textView.typeface = typeface
-                } else {
-                    container.textView.setTextColor(
-                        ContextCompat.getColor(
-                            context!!,
-                            R.color.black
-                        )
-                    )
-                    val typeface: Typeface =
-                        ResourcesCompat.getFont(context!!, R.font.maruburi_light)!!
-                    container.textView.typeface = typeface
-                }
+                container.updateDateText(dayOfMonth, data.date == viewModel.getSelectedDate())
 
                 if (data.position != DayPosition.MonthDate) {
-                    // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
-                    container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
-                    container.imageView.visibility = View.INVISIBLE
-                    container.autoCompletedDot.visibility = View.GONE
+                    container.setUiOutDate()
                 } else if (data.date.monthValue != viewModel.getCurrentMonth().monthValue) {
-                    // 스크롤 도중 이전/다음 달은 내용 안 보여줌
-                    container.imageView.setImageResource(android.R.color.transparent)
-                    container.autoCompletedDot.visibility = View.GONE
+                    container.setUiScrolling()
                 } else {
-                    // 감정 아이콘
-                    if (!viewModel.getStoryOfDay(dayOfMonth).isEmotionInvalid) {
-                        val storyModel = viewModel.getStoryOfDay(dayOfMonth)
-                        container.imageView.setImageResource(convertEmotionImage(storyModel.emotionInt))
-                        container.imageView.visibility = View.VISIBLE
-                        container.autoCompletedDot.visibility =
-                            if (storyModel.isPointCompleted) View.GONE else View.VISIBLE
-                    }
+                    container.setUiMonthDate(viewModel.getStoryOfDay(dayOfMonth))
                 }
+                container.setDividerLineVisible(!isFinalWeekOfMonth(data))
             }
         }
 

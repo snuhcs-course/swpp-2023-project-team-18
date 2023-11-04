@@ -1,8 +1,11 @@
 package snu.swpp.moment.ui.main_monthview
 
+import android.graphics.Typeface
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.view.CalendarView
@@ -36,6 +39,55 @@ class DayViewContainer(view: View) : ViewContainer(view) {
                     calendarView.notifyDateChanged(currentSelection)
                 }
             }
+        }
+    }
+
+    fun updateDateText(day: Int, selected: Boolean) {
+        textView.text = day.toString()
+
+        if (selected) {
+            // 선택된 날짜: Red + Bold
+            textView.setTextColor(ContextCompat.getColor(view.context!!, R.color.red))
+            val typeface: Typeface =
+                ResourcesCompat.getFont(view.context!!, R.font.maruburi_bold)!!
+            textView.typeface = typeface
+        } else {
+            textView.setTextColor(
+                ContextCompat.getColor(view.context!!, R.color.black)
+            )
+            val typeface: Typeface =
+                ResourcesCompat.getFont(view.context!!, R.font.maruburi_light)!!
+            textView.typeface = typeface
+        }
+    }
+
+    fun setUiMonthDate(dayInfoState: CalendarDayInfoState) {
+        if (dayInfoState.isEmotionInvalid) {
+            return
+        }
+        imageView.setImageResource(dayInfoState.emotionImage)
+        imageView.visibility = View.VISIBLE
+        autoCompletedDot.visibility = if (dayInfoState.isAutoCompleted) View.VISIBLE else View.GONE
+    }
+
+    fun setUiOutDate() {
+        // 이전/다음 달의 날짜는 회색으로 표시 & 이미지 숨김
+        textView.setTextColor(ContextCompat.getColor(view.context!!, R.color.gray))
+        imageView.visibility = View.INVISIBLE
+        autoCompletedDot.visibility = View.GONE
+    }
+
+    fun setUiScrolling() {
+        // 스크롤 도중 이전/다음 달은 내용 안 보여줌
+        imageView.setImageResource(android.R.color.transparent)
+        autoCompletedDot.visibility = View.GONE
+    }
+
+    fun setDividerLineVisible(visible: Boolean) {
+        if (visible) {
+            divider.visibility = View.VISIBLE
+        } else {
+            divider.visibility = View.GONE
         }
     }
 }
