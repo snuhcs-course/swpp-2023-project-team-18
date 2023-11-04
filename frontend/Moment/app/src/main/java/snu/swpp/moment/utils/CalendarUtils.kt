@@ -33,7 +33,7 @@ fun convertEmotionKoreanText(emotion: Int): String {
     return emotionKoreanTextList[emotion]
 }
 
-fun isLastWeek(day: CalendarDay): Boolean {
+fun isFinalWeekOfMonth(day: CalendarDay): Boolean {
     val date = day.date
     if (day.position == DayPosition.InDate) return false
 
@@ -46,7 +46,6 @@ fun isLastWeek(day: CalendarDay): Boolean {
         val firstSat = date.with(TemporalAdjusters.firstDayOfMonth())
             .with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
         return date.isAfter(firstSat.plusDays(28))
-
     }
     return false
 }

@@ -24,6 +24,7 @@ import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.MainActivity
 import snu.swpp.moment.R
 import snu.swpp.moment.databinding.FragmentMonthviewBinding
+import snu.swpp.moment.utils.isFinalWeekOfMonth
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
@@ -92,7 +93,7 @@ class MonthViewFragment : Fragment() {
 
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.initialize(binding.calendarView, viewModel, data)
-                if (isLastWeek(data)) {
+                if (isFinalWeekOfMonth(data)) {
                     // 마지막 줄 구분선 제거
                     container.divider.visibility = View.GONE
                 } else {
