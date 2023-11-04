@@ -18,6 +18,9 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.MainActivity
+import snu.swpp.moment.data.repository.AuthenticationRepository
+import snu.swpp.moment.data.repository.StoryRepository
+import snu.swpp.moment.data.source.StoryRemoteDataSource
 import snu.swpp.moment.databinding.FragmentMonthviewBinding
 import snu.swpp.moment.utils.isFinalWeekOfMonth
 import java.time.YearMonth
@@ -26,9 +29,15 @@ import java.util.Locale
 
 class MonthViewFragment : Fragment() {
 
-    private lateinit var viewModel: MonthViewModel
     private lateinit var binding: FragmentMonthviewBinding
 
+    private val authenticationRepository: AuthenticationRepository =
+        AuthenticationRepository.getInstance(context)
+    private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
+    private val viewModel: MonthViewModel = ViewModelProvider(
+        this,
+        CalendarViewModelFactory(authenticationRepository, storyRepository)
+    )[MonthViewModel::class.java]
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +45,6 @@ class MonthViewFragment : Fragment() {
     ): View {
         binding = FragmentMonthviewBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        viewModel = ViewModelProvider(this)[MonthViewModel::class.java]
 
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
