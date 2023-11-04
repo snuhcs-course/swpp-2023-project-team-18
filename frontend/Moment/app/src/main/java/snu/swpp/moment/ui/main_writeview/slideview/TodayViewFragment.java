@@ -225,7 +225,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 if (numMoments > 0) {
                     listViewItems.clear();
                     listViewAdapter.setAnimation(false);
-                    
+
                     for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
@@ -288,6 +288,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 // 하루가 지났고 하루 마무리 진행 중이 아닐 때
                 if (isOutdated() && !listFooterContainer.isCompletionInProgress()) {
                     Log.d("TodayViewFragment", "run: Reloading fragment");
+                    setToolbarTitle();
                     callApisToRefresh();
                     updateRefreshTime();
                 }

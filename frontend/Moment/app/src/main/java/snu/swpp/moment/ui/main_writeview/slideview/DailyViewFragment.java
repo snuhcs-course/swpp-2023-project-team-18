@@ -101,7 +101,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
         listViewItems = new ArrayList<>();
         listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
         listViewAdapter.setAnimation(false);
-        
+
         binding.dailyMomentList.setAdapter(listViewAdapter);
         View footerView = LayoutInflater.from(getContext())
             .inflate(R.layout.listview_footer, null, false);
@@ -181,6 +181,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 // 하루가 지났을 때
                 if (isOutdated()) {
                     Log.d("DailyViewFragment", "run: Reloading fragment");
+                    setToolbarTitle();
                     callApisToRefresh();
                     updateRefreshTime();
                 }
