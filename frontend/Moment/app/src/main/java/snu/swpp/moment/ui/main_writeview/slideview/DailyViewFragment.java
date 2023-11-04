@@ -199,7 +199,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
     }
 
     @Override
-    public String getToolbarTitle() {
+    public String getDateText() {
         LocalDate date = getCurrentDateTime().toLocalDate();
         return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.");
     }

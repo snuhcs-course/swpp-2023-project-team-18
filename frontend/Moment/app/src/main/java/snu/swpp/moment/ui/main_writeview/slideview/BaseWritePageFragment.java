@@ -16,13 +16,13 @@ public abstract class BaseWritePageFragment extends Fragment {
     public void setToolbarTitle() {
         MainActivity mainActivity = (MainActivity) getActivity();
         if (mainActivity != null) {
-            mainActivity.setToolbarTitle(getToolbarTitle());
+            mainActivity.setToolbarTitle(getDateText());
         } else {
             throw new RuntimeException("MainActivity is null");
         }
     }
 
-    public abstract String getToolbarTitle();
+    public abstract String getDateText();
 
     protected void updateRefreshTime() {
         lastRefreshedTime = LocalDateTime.now();

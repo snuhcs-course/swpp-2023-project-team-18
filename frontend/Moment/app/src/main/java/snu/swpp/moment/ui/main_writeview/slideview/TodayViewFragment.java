@@ -302,7 +302,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
     }
 
     @Override
-    public String getToolbarTitle() {
+    public String getDateText() {
         LocalDate today = LocalDate.now();
         return TimeConverter.formatLocalDate(today, "yyyy. MM. dd.");
     }
