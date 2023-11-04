@@ -2,13 +2,11 @@ package snu.swpp.moment.ui.login;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.model.LoggedInUserModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 
 public class LoginViewModel extends ViewModel {
 
