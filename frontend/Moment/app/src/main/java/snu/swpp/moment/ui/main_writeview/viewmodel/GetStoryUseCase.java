@@ -60,7 +60,7 @@ public class GetStoryUseCase {
 
                                 int score = storyInstance.getScore();
                                 Date createdAt = storyInstance.getCreatedAt();
-                                boolean isPointCompleted = storyInstance.getIsPointCompleted();
+                                boolean isPointCompleted = storyInstance.isPointCompleted();
 
                                 storyId = storyInstance.getId();
 
