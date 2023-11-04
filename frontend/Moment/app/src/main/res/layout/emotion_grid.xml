@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/excited1Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_column="0"
@@ -61,11 +61,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="설렘"
-        android:textColor="@color/black" />
+        android:text="설렘" />
     <TextView
         android:id="@+id/happy1Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -73,11 +72,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="기쁨"
-        android:textColor="@color/black" />
+        android:text="기쁨" />
     <TextView
         android:id="@+id/normal1Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -85,11 +83,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="평범"
-        android:textColor="@color/black" />
+        android:text="평범" />
     <TextView
         android:id="@+id/sad1Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -97,11 +94,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="슬픔"
-        android:textColor="@color/black" />
+        android:text="슬픔" />
     <TextView
         android:id="@+id/angry1Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -109,11 +105,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="짜증"
-        android:textColor="@color/black" />
+        android:text="짜증" />
     <TextView
         android:id="@+id/excited2Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -121,11 +116,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="신남"
-        android:textColor="@color/black" />
+        android:text="신남" />
     <TextView
         android:id="@+id/happy2Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -133,11 +127,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="행복"
-        android:textColor="@color/black" />
+        android:text="행복" />
     <TextView
         android:id="@+id/normal2Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -145,11 +138,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="모름"
-        android:textColor="@color/black" />
+        android:text="모름" />
     <TextView
         android:id="@+id/sad2Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -157,11 +149,10 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="우울"
-        android:textColor="@color/black" />
+        android:text="우울" />
     <TextView
         android:id="@+id/angry2Button"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
@@ -169,7 +160,6 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
-        android:text="화남"
-        android:textColor="@color/black" />
+        android:text="화남" />
 
 </GridLayout>

@@ -30,10 +30,6 @@ import java.util.Locale
 
 class MonthViewFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MonthViewFragment()
-    }
-
     private lateinit var viewModel: CalendarViewModel
     private lateinit var binding: FragmentMonthviewBinding
 

@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview.component;
 
 import android.util.Log;
 import android.view.View;
@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
-import snu.swpp.moment.ui.main_writeview.TodayViewModel;
+import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 
@@ -34,16 +34,17 @@ public class BottomButtonContainer {
     }
 
     public void setActivated(boolean activated, boolean completed) {
-        button.setActivated(activated);
-        button.setEnabled(activated);
+        setActivated(activated);
         if (completed) {
             button.setText(R.string.completed_day);
         }
-        Log.d("BottomButtonContainer", "setActivated: " + activated);
+        Log.d("BottomButtonContainer", "setActivated: " + activated + ", " + completed);
     }
 
     public void setActivated(boolean activated) {
-        setActivated(activated, false);
+        button.setActivated(activated);
+        button.setEnabled(activated);
+        Log.d("BottomButtonContainer", "setActivated: " + activated);
     }
 
     /* 모먼트 작성 중: 하루 마무리하기 버튼 */

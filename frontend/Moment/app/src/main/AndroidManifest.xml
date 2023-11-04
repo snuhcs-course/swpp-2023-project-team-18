@@ -21,15 +21,20 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Moment.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".DummyActivity"
             android:exported="false" />
 
         <activity
             android:name=".EntryActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -37,21 +42,22 @@
         </activity>
 
         <activity
-            android:name=".TestPage"
-            android:exported="false" />
-
-        <activity
             android:name=".ui.login.LoginActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
-        <!-- Added LoginRegisterActivity and RegisterActivity -->
         <activity
             android:name=".LoginRegisterActivity"
-            android:exported="true" /> <!-- Change exported value if needed -->
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".ui.register.RegisterActivity"
-            android:exported="true" /> <!-- Change exported value if needed -->
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
     </application>
 

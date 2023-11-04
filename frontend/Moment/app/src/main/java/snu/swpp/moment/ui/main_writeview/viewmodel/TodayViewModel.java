@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.viewmodel;
 
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
@@ -169,21 +168,23 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void saveStory(String title, String content) {
+        final String titleToSave = (title.isEmpty()) ? "제목 없음" : title;
         authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                storyRepository.saveStory(access_token, title, content, new StorySaveCallback() {
-                    @Override
-                    public void onSuccess() {
-                        storyResultState.setValue(new CompletionStoreResultState(null));
-                    }
+                storyRepository.saveStory(access_token, titleToSave, content,
+                    new StorySaveCallback() {
+                        @Override
+                        public void onSuccess() {
+                            storyResultState.setValue(new CompletionStoreResultState(null));
+                        }
 
-                    @Override
-                    public void onFailure(Exception error) {
-                        storyResultState.setValue(new CompletionStoreResultState(error));
-                    }
-                });
+                        @Override
+                        public void onFailure(Exception error) {
+                            storyResultState.setValue(new CompletionStoreResultState(error));
+                        }
+                    });
             }
         });
     }

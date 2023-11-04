@@ -1,6 +1,5 @@
 package snu.swpp.moment.data.model;
 
-import android.util.Log;
 import java.util.Date;
 import snu.swpp.moment.utils.TimeConverter;
 

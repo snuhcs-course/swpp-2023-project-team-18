@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.component;
 
 import android.graphics.Typeface;
 import android.util.Log;
@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.EmotionMap;
 
@@ -17,7 +18,6 @@ public class EmotionGridContainer {
 
     private final List<TextView> textButtonList;
     private final MutableLiveData<Integer> selectedEmotion = new MutableLiveData<>(-1);
-    private boolean isFrozen = false;
 
 
     public EmotionGridContainer(View view) {
@@ -65,11 +65,7 @@ public class EmotionGridContainer {
 
     public int getSelectedEmotion() {
         Integer value = selectedEmotion.getValue();
-        if (value != null) {
-            return value;
-        } else {
-            return -1;
-        }
+        return Objects.requireNonNullElse(value, -1);
     }
 
     public void selectEmotion(int emotion) {
@@ -89,6 +85,5 @@ public class EmotionGridContainer {
             TextView textButton = textButtonList.get(i);
             textButton.setClickable(false);
         }
-        isFrozen = true;
     }
 }

@@ -17,6 +17,7 @@ import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
+import snu.swpp.moment.ui.main_writeview.slideview.SlideViewAdapter;
 import snu.swpp.moment.utils.TimeConverter;
 
 
@@ -55,7 +56,7 @@ public class WriteViewFragment extends Fragment {
         mPager.setAdapter(pagerAdapter);
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         // 최초의 페이지 설정은 이거로 함 (numpage 보다 크면 마지막페이지가 세팅되는듯 - 아래 onPageChangeCallBack)
-        mPager.setCurrentItem(num_page);
+        mPager.setCurrentItem(num_page, false);
         // offscreen 몇 페이지가 로드되어 있을지 설정 (Latency 감소)
         mPager.setOffscreenPageLimit(3);
 

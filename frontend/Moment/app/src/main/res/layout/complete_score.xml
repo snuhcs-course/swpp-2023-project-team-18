@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/scoreHelpText"
-        style="@style/HELP_TEXT"
+        style="@style/SMALL_GRAY"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -49,7 +49,7 @@
             android:textColor="@color/red"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/scoreUnitText"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +74,7 @@
 
     <TextView
         android:id="@+id/autoCompleteWarnText"
-        style="@style/WARN_TEXT"
+        style="@style/SMALL_RED"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

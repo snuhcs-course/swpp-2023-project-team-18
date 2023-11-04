@@ -127,7 +127,7 @@ public class StoryRemoteDataSource {
         service = RetrofitClient.getClient().create(ServiceApi.class);
         StorySaveRequest request = new StorySaveRequest(title, content);
 
-        service.saveStory(bearer, request).enqueue(new Callback<StorySaveResponse>() {
+        service.saveStory(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<StorySaveResponse> call,
                 Response<StorySaveResponse> response) {
@@ -153,7 +153,7 @@ public class StoryRemoteDataSource {
         service = RetrofitClient.getClient().create(ServiceApi.class);
         EmotionSaveRequest request = new EmotionSaveRequest(emotion);
 
-        service.saveEmotion(bearer, request).enqueue(new Callback<EmotionSaveResponse>() {
+        service.saveEmotion(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<EmotionSaveResponse> call,
                 Response<EmotionSaveResponse> response) {
@@ -182,7 +182,7 @@ public class StoryRemoteDataSource {
         service = RetrofitClient.getClient().create(ServiceApi.class);
         ScoreSaveRequest request = new ScoreSaveRequest(story_id, score);
 
-        service.saveScore(bearer, request).enqueue(new Callback<ScoreSaveResponse>() {
+        service.saveScore(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<ScoreSaveResponse> call,
                 Response<ScoreSaveResponse> response) {
@@ -212,7 +212,7 @@ public class StoryRemoteDataSource {
         HashtagSaveRequest request = new HashtagSaveRequest(story_id, content);
         Log.d("StoryRemoteDataSource", "saving hashtags: " + content);
 
-        service.saveHashtags(bearer, request).enqueue(new Callback<HashtagSaveResponse>() {
+        service.saveHashtags(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<HashtagSaveResponse> call,
                 Response<HashtagSaveResponse> response) {

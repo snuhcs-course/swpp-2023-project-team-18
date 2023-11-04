@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/emotion_help_text"
-            style="@style/HELP_TEXT"
+            style="@style/SMALL_GRAY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -63,7 +63,7 @@
     <!-- 다음 단계로 이동 선택 시 로딩 문구 -->
     <TextView
         android:id="@+id/loading_text"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

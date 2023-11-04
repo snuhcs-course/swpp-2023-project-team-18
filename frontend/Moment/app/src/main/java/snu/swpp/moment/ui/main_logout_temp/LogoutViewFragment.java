@@ -34,14 +34,11 @@ public class LogoutViewFragment extends Fragment {
         try {
             authenticationRepository = AuthenticationRepository.getInstance(getContext());
             System.out.println("#DEBUG: go home");
-            logoutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("#DEBUG: logout button clicked");
-                    authenticationRepository.logout();
-                    Intent logoutIntent = new Intent(getActivity(), EntryActivity.class);
-                    startActivity(logoutIntent);
-                }
+            logoutButton.setOnClickListener(v -> {
+                System.out.println("#DEBUG: logout button clicked");
+                authenticationRepository.logout();
+                Intent logoutIntent = new Intent(getActivity(), EntryActivity.class);
+                startActivity(logoutIntent);
             });
         } catch (GeneralSecurityException e) {
             System.out.println("#DEBUG: General");

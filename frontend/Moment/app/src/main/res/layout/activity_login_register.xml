@@ -41,13 +41,13 @@
 
     <Button
         android:id="@+id/main_login"
+        style="@style/NORMAL_WHITE_BOLD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/start_login"
-        android:fontFamily="@font/maruburi_light"
-        android:textSize="15sp"
-        android:elevation="0dp" />
+        android:background="@drawable/day_completion_button"
+        android:elevation="0dp"
+        android:text="@string/start_login" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,19 +55,17 @@
         android:gravity="center_vertical">
 
         <TextView
+            style="@style/NORMAL_GRAY"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/offer_register"
-            android:fontFamily="@font/maruburi_light"
-            android:textSize="15sp" />
+            android:text="@string/offer_register" />
 
         <Button
             android:id="@+id/main_register"
+            style="@style/NORMAL_BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/maruburi_light"
-            android:textSize="15sp"
             android:text="@string/start_register"
             android:textColor="@android:color/black" />
     </LinearLayout>
