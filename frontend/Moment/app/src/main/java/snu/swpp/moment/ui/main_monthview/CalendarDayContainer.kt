@@ -65,12 +65,14 @@ class CalendarDayContainer(view: View) : ViewContainer(view) {
 
     fun setUiMonthDate(calendarDayState: CalendarDayState) {
         if (calendarDayState.isEmotionInvalid) {
-            return
+            imageView.visibility = View.INVISIBLE
+            autoCompletedDot.visibility = View.GONE
+        } else {
+            imageView.setImageResource(calendarDayState.emotionImage)
+            imageView.visibility = View.VISIBLE
+            autoCompletedDot.visibility =
+                if (calendarDayState.isAutoCompleted) View.VISIBLE else View.GONE
         }
-        imageView.setImageResource(calendarDayState.emotionImage)
-        imageView.visibility = View.VISIBLE
-        autoCompletedDot.visibility =
-            if (calendarDayState.isAutoCompleted) View.VISIBLE else View.GONE
     }
 
     fun setUiOutDate() {
