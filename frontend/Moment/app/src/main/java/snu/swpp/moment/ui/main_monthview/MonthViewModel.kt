@@ -60,23 +60,19 @@ class MonthViewModel(
             override fun onSuccess() {
                 val accessToken = authenticationRepository.token.accessToken;
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
-                    object : StoryGetCallBack {
-                        override fun onSuccess(storyList: MutableList<StoryModel>) {
-                            val datInfoStateList =
-                                fillEmptyStory(
-                                    storyList,
-                                    month
-                                ).map { CalendarDayState.fromStoryModel(it) }
-                            calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
-                            monthChangedSwitch = true
-                        }
+                        object : StoryGetCallBack {
+                            override fun onSuccess(storyList: MutableList<StoryModel>) {
+                                val calendarDayStateList = storyList.map { CalendarDayState.fromStoryModel(it) }
+                                val datInfoStateList = fillEmptyStory(calendarDayStateList, month)
+                                calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
+                            }
 
-                        override fun onFailure(error: Exception) {
-                            calendarMonthState.value = CalendarMonthState.withError(error)
-                        }
+                            override fun onFailure(error: Exception) {
+                                calendarMonthState.value = CalendarMonthState.withError(error)
+                            }
 
-                    })
-            }
+                        })
+    }
 
             override fun onFailure() {
                 calendarMonthState.value =

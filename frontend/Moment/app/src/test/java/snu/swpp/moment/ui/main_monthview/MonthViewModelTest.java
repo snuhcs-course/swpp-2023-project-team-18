@@ -1,17 +1,22 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_monthview;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
-import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,20 +32,19 @@ import snu.swpp.moment.data.model.TokenModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
-import snu.swpp.moment.exception.UnknownErrorException;
-import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
-import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetStoryUseCaseTest {
+public class MonthViewModelTest {
 
-    private GetStoryUseCase useCase;
+    private MonthViewModel viewModel;
+
     @Mock
-    private StoryRemoteDataSource dataSource;
+    private StoryRemoteDataSource storyDataSource;
 
     @Spy
     @InjectMocks
     private AuthenticationRepository authenticationRepository;
+
 
     @Spy
     @InjectMocks
@@ -58,7 +62,8 @@ public class GetStoryUseCaseTest {
         }).when(authenticationRepository).isTokenValid(any());
         doReturn(new TokenModel("access", "refresh"))
             .when(authenticationRepository).getToken();
-        useCase = new GetStoryUseCase(authenticationRepository, storyRepository);
+
+        viewModel = new MonthViewModel(authenticationRepository, storyRepository);
     }
 
     @Test
@@ -71,54 +76,29 @@ public class GetStoryUseCaseTest {
             "title",
             "content",
             new ArrayList<>(),
-            0L,
+            1698999459L, // GMT 2023.11.3 8:17:39
             false
         );
         doAnswer(invocation -> {
             StoryGetCallBack callback = (StoryGetCallBack) invocation.getArguments()[3];
             callback.onSuccess(Arrays.asList(story));
             return null;
-        }).when(dataSource).getStory(anyString(), anyLong(), anyLong(), any());
+        }).when(storyDataSource).getStory(anyString(), anyLong(), anyLong(), any());
 
-        Observer<StoryUiState> observer = storyUiState -> {
+        Observer<CalendarMonthState> observer = calendarMonthState -> {
             // Then
-            System.out.println("observer for success");
-            assertNull(storyUiState.getError());
-            assertFalse(storyUiState.isEmpty());
-            assertEquals(storyUiState.getTitle(), "title");
-            assertEquals(storyUiState.getContent(), "content");
-            assertEquals(storyUiState.getEmotion(), 0);
-            assertEquals(storyUiState.getTags().size(), 0);
-            assertFalse(storyUiState.isPointCompleted());
+            System.out.println("observer for getStory success");
+            List<CalendarDayState> monthList = calendarMonthState.getStoryList();
+            CalendarDayState day1state = calendarMonthState.getStoryList().get(0);
+            CalendarDayState day3state = calendarMonthState.getStoryList().get(2);
+            assertNull(calendarMonthState.getError());
+            assertEquals(31, monthList.size());
+            assertTrue(day1state.isEmotionInvalid());
+            assertFalse(day3state.isEmotionInvalid());
         };
-        useCase.observeStoryState(observer);
+        viewModel.observerCalendarMonthState(observer);
 
-        // When
-        useCase.getStory(LocalDateTime.now());
-    }
-
-    @Test
-    public void getStory_fail() {
-        doAnswer(invocation -> {
-            StoryGetCallBack callback = (StoryGetCallBack) invocation.getArguments()[3];
-            callback.onFailure(new UnknownErrorException());
-            return null;
-        }).when(dataSource).getStory(anyString(), anyLong(), anyLong(), any());
-
-        Observer<StoryUiState> observer = storyUiState -> {
-            // Then
-            System.out.println("observer for failure");
-            assertTrue(storyUiState.getError() instanceof UnknownErrorException);
-            assertTrue(storyUiState.isEmpty());
-            assertEquals(storyUiState.getTitle(), "");
-            assertEquals(storyUiState.getContent(), "");
-            assertEquals(storyUiState.getEmotion(), 0);
-            assertEquals(storyUiState.getTags().size(), 0);
-            assertFalse(storyUiState.isPointCompleted());
-        };
-        useCase.observeStoryState(observer);
-
-        // When
-        useCase.getStory(LocalDateTime.now());
+        viewModel.getStory(YearMonth.of(2023, 11));
     }
 }
+

@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_monthview
 
+import snu.swpp.moment.data.model.HashtagModel
 import snu.swpp.moment.data.model.StoryModel
 import snu.swpp.moment.utils.EmotionMap
 import snu.swpp.moment.utils.TimeConverter
@@ -34,6 +35,17 @@ class CalendarDayState(
                 isAutoCompleted = !model.isPointCompleted,
             )
         }
+
+        @JvmStatic
+        fun empty() = CalendarDayState(
+                date = LocalDate.MAX,
+                storyTitle = "",
+                storyContent = "",
+                emotion = EmotionMap.INVALID_EMOTION,
+                tags = listOf(),
+                score = -1,
+                isAutoCompleted = false
+        )
     }
 
     val dateText = "%d. %d. %d. %s".format(
