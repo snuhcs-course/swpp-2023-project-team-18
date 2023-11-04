@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 
-import android.util.Log;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -47,7 +46,6 @@ public class RegisterViewModelTest extends TestCase {
     @Before
     public void setup() {
         registerViewModel = new RegisterViewModel(authenticationRepository);
-
     }
 
     @Test

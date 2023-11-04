@@ -23,11 +23,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.model.LoggedInUserModel;
-import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.source.UserLocalDataSource;
 import snu.swpp.moment.data.source.UserRemoteDataSource;
-import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LoginViewModelTest extends TestCase {
@@ -51,7 +49,6 @@ public class LoginViewModelTest extends TestCase {
     @Before
     public void setup() {
         loginViewModel = new LoginViewModel(authenticationRepository);
-
     }
 
     @Test
