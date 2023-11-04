@@ -3,11 +3,23 @@ package snu.swpp.moment.ui.main_monthview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import snu.swpp.moment.data.callback.AuthenticationCallBack
+import snu.swpp.moment.data.callback.StoryGetCallBack
+import snu.swpp.moment.data.callback.TokenCallBack
+import snu.swpp.moment.data.model.StoryModel
+import snu.swpp.moment.data.repository.AuthenticationRepository
+import snu.swpp.moment.data.repository.StoryRepository
+import snu.swpp.moment.exception.UnauthorizedAccessException
 import snu.swpp.moment.ui.main_writeview.uistate.MonthStoryState
+import snu.swpp.moment.utils.TimeConverter
+import java.lang.Exception
 import java.time.LocalDate
 import java.time.YearMonth
 
-class CalendarViewModel : ViewModel() {
+class CalendarViewModel(
+        private val authenticationRepository: AuthenticationRepository,
+        private val storyRepository: StoryRepository
+) : ViewModel() {
     var currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
     var selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
     var calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
@@ -45,12 +57,48 @@ class CalendarViewModel : ViewModel() {
     }
 
     fun getStory(month: YearMonth) {
-        // TODO
         //  api 부르고 MonthStoryState 업데이트
+        val startEndTimes = TimeConverter.getOneMonthTimestamps(month);
+        authenticationRepository.isTokenValid(object : TokenCallBack {
+            override fun onSuccess() {
+                val accessToken = authenticationRepository.token.accessToken;
+                storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
+                        object: StoryGetCallBack {
+                            override fun onSuccess(story: MutableList<StoryModel>) {
+                                fillEmptyStory(story, month)
+                                monthStoryState.value = MonthStoryState(null, story);
+                            }
+
+                            override fun onFailure(error: Exception) {
+                                monthStoryState.value = MonthStoryState.withError(error)
+                            }
+
+                        })
+            }
+
+            override fun onFailure() {
+                monthStoryState.value = MonthStoryState.withError(UnauthorizedAccessException())
+            }
+        })
+    }
+
+    private fun fillEmptyStory(storyList: MutableList<StoryModel>, month: YearMonth) {
+        var index = 0;
+        var date = LocalDate.of(month.year, month.month, 1);
+        val endDate = month.atEndOfMonth();
+        while (!date.isAfter(endDate)) {
+            val story = storyList[index]
+            val createdAt = TimeConverter.convertDateToLocalDate(story.createdAt);
+            if (createdAt.isAfter(date)) {
+                storyList.add(index, StoryModel.empty())
+            }
+            index++;
+            date = date.plusDays(1)
+        }
     }
 
     fun observeMonthStoryState(observer: Observer<MonthStoryState>) {
-        // TODO:
+        monthStoryState.observeForever(observer);
     }
 
     // FIXME ("Deprecated")

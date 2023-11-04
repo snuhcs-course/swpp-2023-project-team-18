@@ -73,4 +73,8 @@ public class TimeConverter {
 
         return new long[]{startTimestamp, endTimestamp};
     }
+
+    public static LocalDate convertDateToLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
 }

@@ -123,4 +123,13 @@ public class TimeConverterTest {
         assertEquals(answer1, timestamps[0]);
         assertEquals(answer2, timestamps[1]);
     }
+
+    @Test
+    public void convertDateToLocalDate() {
+        Date date = new Date(2023 - 1900, 11 - 1, 3, 8 + hourDiff, 17, 39);
+        LocalDate convertedLocalDate = TimeConverter.convertDateToLocalDate(date);
+
+        LocalDate answer = LocalDate.of(2023, 11, 3);
+        assertTrue(answer.isEqual(convertedLocalDate));
+    }
 }
