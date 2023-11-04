@@ -100,27 +100,4 @@ class CalendarViewModel(
     fun observeMonthStoryState(observer: Observer<MonthStoryState>) {
         monthStoryState.observeForever(observer);
     }
-
-    // FIXME ("Deprecated")
-    // 서버에서 감정 리스트 가져오는 함수
-    private fun getDayStatesMock(month: YearMonth): List<CalendarDayState> {
-        // NOTE: List 길이가 31이 아니면 IndexOutOfBound 에러가 남 (원인 불명)
-        val apiResult = List<CalendarDayState>(31) {
-            CalendarDayState(emotionEnumMap.values.random(), it % 7 == 0)
-        }
-        return apiResult
-    }
-
-    // 서버에서 summary 가져오는 함수
-    private fun getSummaryMock(date: LocalDate): CalendarDayInfoState {
-        return CalendarDayInfoState(
-            date = date,
-            storyTitle = String.format("title %d", date.dayOfMonth),
-            storyContent = "story",
-            emotion = calendarDayStates.value!![date.dayOfMonth - 1].emotion,
-            tags = listOf("tag1", "tag2"),
-            score = 0,
-            isAutoCompleted = calendarDayStates.value!![date.dayOfMonth - 1].isAutoCompleted,
-        )
-    }
 }
