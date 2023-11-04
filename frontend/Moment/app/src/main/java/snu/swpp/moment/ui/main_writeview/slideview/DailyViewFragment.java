@@ -119,8 +119,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
                     for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
-
-                    listViewAdapter.notifyDataSetChanged(false);
+                    listViewAdapter.notifyDataSetChanged();
                 } else {
                     binding.noMomentText.setVisibility(View.VISIBLE);
                 }

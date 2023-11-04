@@ -141,8 +141,9 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 // 새 item 추가
                 // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
                 viewModel.writeMoment(text);
+                listViewAdapter.setAnimation(true);
                 listViewItems.add(new ListViewItem(text, new Date()));
-                listViewAdapter.notifyDataSetChanged(true);
+                listViewAdapter.notifyDataSetChanged();
                 scrollToBottom();
             }
         });
@@ -223,11 +224,13 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
                 if (numMoments > 0) {
                     listViewItems.clear();
+                    listViewAdapter.setAnimation(false);
+                    
                     for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
 
-                    listViewAdapter.notifyDataSetChanged(false);
+                    listViewAdapter.notifyDataSetChanged();
                     scrollToBottom();
                 }
             } else if (error instanceof NoInternetException) {

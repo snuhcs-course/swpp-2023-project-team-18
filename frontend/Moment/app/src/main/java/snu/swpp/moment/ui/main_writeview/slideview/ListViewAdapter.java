@@ -91,10 +91,8 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void notifyDataSetChanged(boolean withAnimation) {
-        isShowingAnimation = withAnimation;
-        notifyDataSetChanged();
-        isShowingAnimation = true;
+    public void setAnimation(boolean set) {
+        isShowingAnimation = set;
     }
 
     public boolean getWaitingAiReplySwitch() {
