@@ -20,13 +20,14 @@ class DayViewContainer(view: View) : ViewContainer(view) {
     fun initialize(calendarView: CalendarView, viewModel: CalendarViewModel, day: CalendarDay) {
         // 날짜 선택 시 동작
         view.setOnClickListener {
+            // 한 달의 날짜 범위를 벗어나거나 스토리가 없는 날은 클릭할 수 없음
             if (day.position != DayPosition.MonthDate) {
                 return@setOnClickListener
-            } else if (viewModel.calendarDayStates.value!![day.date.dayOfMonth - 1].emotion == INVALID_EMOTION) {
+            } else if (viewModel.getStoryOfDay(day.date.dayOfMonth).isEmotionInvalid) {
                 return@setOnClickListener
             }
 
-            val currentSelection = viewModel.selectedDate.value
+            val currentSelection = viewModel.getSelectedDate()
             if (currentSelection != day.date) {
                 // 날짜 선택
                 viewModel.setSelectedDate(day.date)

@@ -99,9 +99,11 @@ class MonthViewFragment : Fragment() {
                     container.divider.visibility = View.VISIBLE
                 }
 
+                val dayOfMonth = data.date.dayOfMonth
+
                 // 날짜 text
-                container.textView.text = data.date.dayOfMonth.toString()
-                if (data.date == viewModel.selectedDate.value) {
+                container.textView.text = dayOfMonth.toString()
+                if (data.date == viewModel.getSelectedDate()) {
                     // 선택된 날짜는 빨간 색으로 표시
                     container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.red))
                     val typeface: Typeface =
@@ -124,53 +126,48 @@ class MonthViewFragment : Fragment() {
                     container.textView.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
                     container.imageView.visibility = View.INVISIBLE
                     container.autoCompletedDot.visibility = View.GONE
-                } else if (data.date.monthValue != viewModel.currentMonth.value!!.monthValue) {
+                } else if (data.date.monthValue != viewModel.getCurrentMonth().monthValue) {
                     // 스크롤 도중 이전/다음 달은 내용 안 보여줌
                     container.imageView.setImageResource(android.R.color.transparent)
                     container.autoCompletedDot.visibility = View.GONE
                 } else {
                     // 감정 아이콘
-                    if (viewModel.calendarDayStates.value != null) {
-                        val calendarDayState =
-                            viewModel.calendarDayStates.value!![data.date.dayOfMonth - 1]
-                        container.imageView.setImageResource(calendarDayState.emotionImage)
+                    if (!viewModel.getStoryOfDay(dayOfMonth).isEmotionInvalid) {
+                        val storyModel = viewModel.getStoryOfDay(dayOfMonth)
+                        container.imageView.setImageResource(convertEmotionImage(storyModel.emotionInt))
                         container.imageView.visibility = View.VISIBLE
                         container.autoCompletedDot.visibility =
-                            if (calendarDayState.isAutoCompleted) View.VISIBLE else View.GONE
+                            if (storyModel.isPointCompleted) View.GONE else View.VISIBLE
                     }
                 }
             }
         }
 
         // 달력 아래 요약 정보
-        val daySummaryObserver = Observer<CalendarDayInfoState?> { it ->
-            if (it != null) {
-                binding.daySummaryContainer.root.visibility = View.VISIBLE
-                binding.daySummaryContainer.daySummaryDateText.text = "%d. %d. %d. %s".format(
-                    it.date.year,
-                    it.date.monthValue,
-                    it.date.dayOfMonth,
-                    it.date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
-                )
-                binding.daySummaryContainer.dayStoryTitleText.text = it.storyTitle
-                binding.daySummaryContainer.dayStoryContentText.text = it.storyContent
-                binding.daySummaryContainer.dayEmotionImage.setImageResource(
-                    it.emotionImage
-                )
-                binding.daySummaryContainer.dayEmotionText.text = it.emotionKoreanText
-                binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
-                binding.daySummaryContainer.dayScoreText.text = it.score.toString()
+        viewModel.observerCalendarDayInfoState {
+            if (it == null) {
+                return@observerCalendarDayInfoState
+            }
 
-                if (it.isAutoCompleted) {
-                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.VISIBLE
-                    binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.VISIBLE
-                } else {
-                    binding.daySummaryContainer.infoAutoCompletedText.visibility = View.INVISIBLE
-                    binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
-                }
+            binding.daySummaryContainer.root.visibility = View.VISIBLE
+            binding.daySummaryContainer.daySummaryDateText.text = it.dateText
+            binding.daySummaryContainer.dayStoryTitleText.text = it.storyTitle
+            binding.daySummaryContainer.dayStoryContentText.text = it.storyContent
+            binding.daySummaryContainer.dayEmotionImage.setImageResource(
+                it.emotionImage
+            )
+            binding.daySummaryContainer.dayEmotionText.text = it.emotionKoreanText
+            binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
+            binding.daySummaryContainer.dayScoreText.text = it.score.toString()
+
+            if (it.isAutoCompleted) {
+                binding.daySummaryContainer.infoAutoCompletedText.visibility = View.VISIBLE
+                binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.VISIBLE
+            } else {
+                binding.daySummaryContainer.infoAutoCompletedText.visibility = View.INVISIBLE
+                binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
             }
         }
-        viewModel.calendarDayInfoState.observe(viewLifecycleOwner, daySummaryObserver)
 
         return view
     }

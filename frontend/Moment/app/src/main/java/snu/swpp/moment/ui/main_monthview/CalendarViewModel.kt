@@ -3,7 +3,6 @@ package snu.swpp.moment.ui.main_monthview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import snu.swpp.moment.data.callback.AuthenticationCallBack
 import snu.swpp.moment.data.callback.StoryGetCallBack
 import snu.swpp.moment.data.callback.TokenCallBack
 import snu.swpp.moment.data.model.StoryModel
@@ -17,42 +16,31 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class CalendarViewModel(
-        private val authenticationRepository: AuthenticationRepository,
-        private val storyRepository: StoryRepository
+    private val authenticationRepository: AuthenticationRepository,
+    private val storyRepository: StoryRepository
 ) : ViewModel() {
-    var currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
-    var selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
-    var calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
-        MutableLiveData<CalendarDayInfoState?>()
-    var calendarDayStates: MutableLiveData<List<CalendarDayState>> = MutableLiveData(listOf())
+    private val currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
+    private val selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
 
+    private val calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
+        MutableLiveData<CalendarDayInfoState?>()
     private val monthStoryState = MutableLiveData<MonthStoryState>()
 
-    private val emotionEnumMap: Map<String, Int> = mapOf(
-        "excited1" to 0,
-        "excited2" to 1,
-        "happy1" to 2,
-        "happy2" to 3,
-        "normal1" to 4,
-        "normal2" to 5,
-        "sad1" to 6,
-        "sad2" to 7,
-        "angry1" to 8,
-        "angry2" to 9,
-        "invalid" to 10
-    )
+    fun getCurrentMonth(): YearMonth = currentMonth.value!!
 
     fun setCurrentMonth(month: YearMonth) {
         currentMonth.value = month
-        calendarDayStates.value = getDayStatesMock(month)   // 한달 정보 로드
+        getStory(month)
     }
+
+    fun getSelectedDate(): LocalDate? = selectedDate.value
 
     fun setSelectedDate(date: LocalDate?) {
         selectedDate.value = date
         if (date == null) {
             calendarDayInfoState.value = null
         } else {
-            calendarDayInfoState.value = getSummaryMock(date)   // 아래쪽에 보여줄 정보 로드
+            // TODO: 갖고 있는 한달 데이터 리스트에서 하나 추출해서 set value
         }
     }
 
@@ -63,17 +51,17 @@ class CalendarViewModel(
             override fun onSuccess() {
                 val accessToken = authenticationRepository.token.accessToken;
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
-                        object: StoryGetCallBack {
-                            override fun onSuccess(story: MutableList<StoryModel>) {
-                                fillEmptyStory(story, month)
-                                monthStoryState.value = MonthStoryState(null, story);
-                            }
+                    object: StoryGetCallBack {
+                        override fun onSuccess(story: MutableList<StoryModel>) {
+                            fillEmptyStory(story, month)
+                            monthStoryState.value = MonthStoryState(null, story);
+                        }
 
-                            override fun onFailure(error: Exception) {
-                                monthStoryState.value = MonthStoryState.withError(error)
-                            }
+                        override fun onFailure(error: Exception) {
+                            monthStoryState.value = MonthStoryState.withError(error)
+                        }
 
-                        })
+                    })
             }
 
             override fun onFailure() {
@@ -97,7 +85,15 @@ class CalendarViewModel(
         }
     }
 
+    fun getStoryOfDay(datOfMonth: Int): StoryModel {
+        return monthStoryState.value!!.storyList[datOfMonth - 1]
+    }
+
     fun observeMonthStoryState(observer: Observer<MonthStoryState>) {
-        monthStoryState.observeForever(observer);
+        monthStoryState.observeForever(observer)
+    }
+
+    fun observerCalendarDayInfoState(observer: Observer<CalendarDayInfoState?>) {
+        calendarDayInfoState.observeForever(observer)
     }
 }
