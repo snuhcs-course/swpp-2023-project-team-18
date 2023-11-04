@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_monthview
+package snu.swpp.moment.utils
 
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -24,8 +24,6 @@ private val emotionImageList: List<Int> = listOf(
 private val emotionKoreanTextList: List<String> = listOf(
     "설렘", "신남", "기쁨", "행복", "평범", "모름", "슬픔", "우울", "짜증", "화남", "",
 )
-
-const val INVALID_EMOTION = 10
 
 fun convertEmotionImage(emotion: Int): Int {
     return emotionImageList[emotion]
