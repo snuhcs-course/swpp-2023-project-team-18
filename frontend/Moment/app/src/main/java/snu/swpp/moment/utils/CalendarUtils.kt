@@ -5,27 +5,28 @@ import com.kizitonwose.calendar.core.DayPosition
 import snu.swpp.moment.R
 import java.time.DayOfWeek
 import snu.swpp.moment.data.model.StoryModel
+import snu.swpp.moment.ui.main_monthview.CalendarDayState
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.TemporalAdjusters
 
 
 private val emotionImageList: List<Int> = listOf(
-    R.drawable.icon_sunny,
-    R.drawable.icon_sunny,
-    R.drawable.icon_sun_cloud,
-    R.drawable.icon_sun_cloud,
-    R.drawable.icon_cloud,
-    R.drawable.icon_cloud,
-    R.drawable.icon_rain,
-    R.drawable.icon_rain,
-    R.drawable.icon_lightning,
-    R.drawable.icon_lightning,
-    android.R.color.transparent,
+        R.drawable.icon_sunny,
+        R.drawable.icon_sunny,
+        R.drawable.icon_sun_cloud,
+        R.drawable.icon_sun_cloud,
+        R.drawable.icon_cloud,
+        R.drawable.icon_cloud,
+        R.drawable.icon_rain,
+        R.drawable.icon_rain,
+        R.drawable.icon_lightning,
+        R.drawable.icon_lightning,
+        android.R.color.transparent,
 )
 
 private val emotionKoreanTextList: List<String> = listOf(
-    "설렘", "신남", "기쁨", "행복", "평범", "모름", "슬픔", "우울", "짜증", "화남", "",
+        "설렘", "신남", "기쁨", "행복", "평범", "모름", "슬픔", "우울", "짜증", "화남", "",
 )
 
 fun convertEmotionImage(emotion: Int): Int {
@@ -42,7 +43,7 @@ fun isFinalWeekOfMonth(day: CalendarDay): Boolean {
 
     if (day.position == DayPosition.OutDate) {
         val firstSat = date.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth())
-            .with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
+                .with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
         return date.isAfter(firstSat.plusDays(28))
     }
     if (day.position == DayPosition.MonthDate) {
@@ -54,22 +55,23 @@ fun isFinalWeekOfMonth(day: CalendarDay): Boolean {
     return false
 }
 
-fun fillEmptyStory(storyList: MutableList<StoryModel>, month: YearMonth): List<StoryModel> {
-    val result = mutableListOf<StoryModel>()
+fun fillEmptyStory(storyList: List<CalendarDayState>, month: YearMonth)
+        : List<CalendarDayState> {
+    val result = mutableListOf<CalendarDayState>()
     var date = LocalDate.of(month.year, month.month, 1);
     var index = 0;
     for (i in 0..30) {
         if (index < storyList.size) {
             val story = storyList[index]
-            val createdAt = TimeConverter.convertDateToLocalDate(story.createdAt);
+            val createdAt = story.date
             if (createdAt.isAfter(date)) {
-                result.add(StoryModel.empty());
+                result.add(CalendarDayState.empty());
             } else {
                 result.add(story)
                 index++;
             }
         } else {
-            result.add(StoryModel.empty());
+            result.add(CalendarDayState.empty());
         }
         date = date.plusDays(1)
     }

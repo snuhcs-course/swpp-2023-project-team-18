@@ -17,8 +17,8 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class MonthViewModel(
-    private val authenticationRepository: AuthenticationRepository,
-    private val storyRepository: StoryRepository
+        private val authenticationRepository: AuthenticationRepository,
+        private val storyRepository: StoryRepository
 ) : ViewModel() {
 
     private val currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
@@ -26,7 +26,7 @@ class MonthViewModel(
 
     // 달력 밑에 보여주기 위한 현재 선택된 날짜의 정보
     private val selectedDayState: MutableLiveData<CalendarDayState?> =
-        MutableLiveData<CalendarDayState?>()
+            MutableLiveData<CalendarDayState?>()
 
     // 한 달 동안의 정보
     private val calendarMonthState = MutableLiveData<CalendarMonthState?>()
@@ -56,26 +56,23 @@ class MonthViewModel(
             override fun onSuccess() {
                 val accessToken = authenticationRepository.token.accessToken;
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
-                    object : StoryGetCallBack {
-                        override fun onSuccess(storyList: MutableList<StoryModel>) {
-                            val datInfoStateList =
-                                fillEmptyStory(
-                                    storyList,
-                                    month
-                                ).map { CalendarDayState.fromStoryModel(it) }
-                            calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
-                        }
+                        object : StoryGetCallBack {
+                            override fun onSuccess(storyList: MutableList<StoryModel>) {
+                                val calendarDayStateList = storyList.map { CalendarDayState.fromStoryModel(it) }
+                                val datInfoStateList = fillEmptyStory(calendarDayStateList, month)
+                                calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
+                            }
 
-                        override fun onFailure(error: Exception) {
-                            calendarMonthState.value = CalendarMonthState.withError(error)
-                        }
+                            override fun onFailure(error: Exception) {
+                                calendarMonthState.value = CalendarMonthState.withError(error)
+                            }
 
-                    })
+                        })
             }
 
             override fun onFailure() {
                 calendarMonthState.value =
-                    CalendarMonthState.withError(UnauthorizedAccessException())
+                        CalendarMonthState.withError(UnauthorizedAccessException())
             }
         })
     }
