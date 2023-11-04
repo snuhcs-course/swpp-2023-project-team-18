@@ -1,7 +1,8 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview.slideview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,19 +26,18 @@ import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.DailyItemBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
-import snu.swpp.moment.ui.main_writeview.DailyViewModel;
-import snu.swpp.moment.ui.main_writeview.DailyViewModelFactory;
-import snu.swpp.moment.ui.main_writeview.GetStoryUseCase;
-import snu.swpp.moment.ui.main_writeview.ListViewAdapter;
-import snu.swpp.moment.ui.main_writeview.ListViewItem;
-import snu.swpp.moment.ui.main_writeview.SaveScoreUseCase;
+import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModel;
+import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModelFactory;
+import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
+import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class DailyViewFragment extends Fragment {
 
-    private final int minusDays;
+    private int minusDays;
 
     private DailyItemBinding binding;
     private List<ListViewItem> listViewItems;
@@ -54,9 +54,15 @@ public class DailyViewFragment extends Fragment {
 
     private ListFooterContainer listFooterContainer;
 
-    public DailyViewFragment(int minusDays) {
-        this.minusDays = minusDays;
+    private final Handler refreshHandler = new Handler();
+    private final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
+    private LocalDateTime lastRefreshedTime = LocalDateTime.now();
+
+    public static DailyViewFragment initialize(int minusDays) {
         Log.d("DailyViewFragment", "Initializing DailyViewFragment with minusDays: " + minusDays);
+        DailyViewFragment fragment = new DailyViewFragment();
+        fragment.minusDays = minusDays;
+        return fragment;
     }
 
 
@@ -99,6 +105,11 @@ public class DailyViewFragment extends Fragment {
 
         listViewItems = new ArrayList<>();
 
+        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
+        LocalDateTime dateTime = date.atTime(3, 0);
+        viewModel.getMoment(dateTime);
+        viewModel.getStory(dateTime);
+
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
             if (error == null) {
@@ -110,7 +121,7 @@ public class DailyViewFragment extends Fragment {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
 
-                    listViewAdapter.notifyDataSetChanged();
+                    listViewAdapter.notifyDataSetChanged(false);
                 } else {
                     binding.noMomentText.setVisibility(View.VISIBLE);
                 }
@@ -148,7 +159,11 @@ public class DailyViewFragment extends Fragment {
             Exception error = storyUiState.getError();
             if (error == null) {
                 // SUCCESS
-                listFooterContainer.updateUiWithRemoteData(storyUiState);
+                listFooterContainer.updateUiWithRemoteData(storyUiState, false);
+                if (!storyUiState.isEmpty()) {
+                    binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
+                        binding.dailyMomentList.getCount() - 1));
+                }
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
                 Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
@@ -165,14 +180,40 @@ public class DailyViewFragment extends Fragment {
             }
         });
 
-        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        LocalDateTime dateTime = date.atTime(3, 0);
-        viewModel.getMoment(dateTime);
-        viewModel.getStory(dateTime);
+        // 날짜 변화 확인해서 GET API 다시 호출
+        Runnable refreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                LocalDateTime now = LocalDateTime.now();
+                Log.d("DailyViewFragment", String.format("run: %s", now));
+
+                // 하루가 지났을 때
+                if (isOutdated()) {
+                    Log.d("DailyViewFragment", "run: Reloading fragment");
+                    viewModel.getMoment(now);
+                    viewModel.getStory(now);
+                    updateRefreshTime();
+                }
+                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+            }
+        };
+        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
+        updateRefreshTime();
 
         Log.d("DailyViewFragment", "onCreateView() ended");
-
         return root;
+    }
+
+    private void updateRefreshTime() {
+        lastRefreshedTime = LocalDateTime.now();
+    }
+
+    private boolean isOutdated() {
+        LocalDateTime now = LocalDateTime.now();
+        if (lastRefreshedTime.getDayOfMonth() == now.getDayOfMonth()) {
+            return false;
+        }
+        return now.getHour() >= 3;
     }
 
     @Override

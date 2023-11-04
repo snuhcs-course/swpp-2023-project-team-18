@@ -1,7 +1,7 @@
-package snu.swpp.moment.ui.main_writeview;
+package snu.swpp.moment.ui.main_writeview.slideview;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +16,11 @@ import snu.swpp.moment.utils.AnimationProvider;
 
 public class ListViewAdapter extends BaseAdapter {
 
-    private List<ListViewItem> items = null;
+    private List<ListViewItem> items;
     private final Context context;
 
     private int size;
+    private boolean isShowingAnimation = true;
     private final AnimationProvider animationProvider;
 
     private final MutableLiveData<Boolean> waitingAiReplySwitch = new MutableLiveData<>();
@@ -59,28 +60,41 @@ public class ListViewAdapter extends BaseAdapter {
 
         ListViewItem item = items.get(position);
         momentText.setText(item.getUserInput());
-        momentTimeText.setText(item.getInputTime());
+        momentTimeText.setText(item.getTimestampText());
+
+        Log.d("ListViewAdapter",
+            String.format("getView() called: position %d, size %d, isWaitingAiReply: %s", position,
+                size, item.isWaitingAiReply()));
 
         if (item.isWaitingAiReply()) {
             // 애니메이션 표시 & bottom button 비활성화
-            setWaitingResponse(aiReplyText);
+            showWaitingAnimation(aiReplyText, true);
             waitingAiReplySwitch.setValue(true);
         } else {
-            showUpdatedResponse(item.getAiReply(), aiReplyText);
+            showWaitingAnimation(aiReplyText, false);
+            aiReplyText.setText(item.getAiReply());
+
             if (position >= size) {
-                // 새로운 item이 추가된 경우
+                // 새로 추가된 item인 경우: AI 답글 애니메이션 보여줌
                 size = items.size();
-                aiReplyText.startAnimation(animationProvider.fadeIn);
+                if (isShowingAnimation) {
+                    aiReplyText.startAnimation(animationProvider.fadeIn);
+                }
 
                 if (getWaitingAiReplySwitch()) {
-                    // AI 답글 대기 중이었던 경우
+                    // AI 답글 대기 중이었던 경우: 대기 끝난 상태로 변경
                     waitingAiReplySwitch.setValue(false);
                 }
             }
-
         }
 
         return convertView;
+    }
+
+    public void notifyDataSetChanged(boolean withAnimation) {
+        isShowingAnimation = withAnimation;
+        notifyDataSetChanged();
+        isShowingAnimation = true;
     }
 
     public boolean getWaitingAiReplySwitch() {
@@ -91,28 +105,20 @@ public class ListViewAdapter extends BaseAdapter {
         waitingAiReplySwitch.observeForever(observer);
     }
 
-    private void showUpdatedResponse(String response, TextView textView) {
-        textView.setText(response);
-        textView.setGravity(Gravity.START);
-        textView.setAlpha(1);
-        textView.clearAnimation();
-        textView.startAnimation(animationProvider.fadeIn);
-    }
-
-    private void setWaitingResponse(TextView textView) {
-        // AI 답글 대기중 애니메이션 표시
-        textView.setText("\u00B7  \u00B7  \u00B7\nAI가 일기를 읽고 있어요");    // 가운뎃점
-        textView.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
-        textView.setAlpha(0.5f);
-        textView.clearAnimation();
-        textView.startAnimation(animationProvider.fadeInOut);
+    private void showWaitingAnimation(TextView textView, boolean activate) {
+        if (activate) {
+            // AI 답글 대기중 애니메이션 표시
+            textView.setText("· · ·\nAI가 일기를 읽고 있어요");    // 가운뎃점
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            textView.setAlpha(0.5f);
+            textView.clearAnimation();
+            textView.startAnimation(animationProvider.fadeInOut);
+        } else {
+            // AI 답글 대기중 애니메이션 제거
+            textView.setText("");
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            textView.setAlpha(1.0f);
+            textView.clearAnimation();
+        }
     }
 }
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview.component;
 
 import android.view.View;
 import android.widget.TextView;
@@ -9,7 +9,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
-import snu.swpp.moment.ui.main_writeview.EmotionGridContainer;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.AnimationProvider;
@@ -25,6 +24,7 @@ public class ListFooterContainer {
     // 감정 선택
     private final ConstraintLayout emotionWrapper;
     private final EmotionGridContainer emotionGridContainer;
+    private final TextView emotionHelpText;
     // 태그 입력
     private final TagBoxContainer tagBoxContainer;
     // 점수 선택
@@ -43,6 +43,9 @@ public class ListFooterContainer {
     // AI 요약 API call을 위한 스위치
     private final MutableLiveData<Boolean> aiStoryCallSwitch = new MutableLiveData<>(false);
 
+    // 마무리 과정 중에 있는가? (이탈 방지 위해 사용)
+    private boolean isCompletionInProgress = false;
+
 
     public ListFooterContainer(@NonNull View view) {
         this.view = view;
@@ -54,6 +57,7 @@ public class ListFooterContainer {
         // 감정 선택
         emotionWrapper = view.findViewById(R.id.emotion_wrapper);
         emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
+        emotionHelpText = view.findViewById(R.id.emotion_help_text);
         // 태그 입력
         tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_wrapper));
         // 점수 선택
@@ -89,7 +93,7 @@ public class ListFooterContainer {
         });
     }
 
-    public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState) {
+    public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState, boolean isToday) {
         momentWriterContainer.setInvisible();
 
         if (storyUiState.isEmpty()) {
@@ -100,6 +104,8 @@ public class ListFooterContainer {
             // 모먼트 없이 자동으로 마무리되어서 감정이 invalid인 경우
             return;
         }
+
+        setHelpTextAfterCompleted(isToday);
 
         storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
         storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
@@ -137,6 +143,10 @@ public class ListFooterContainer {
 
     public String getTags() {
         return tagBoxContainer.getTags();
+    }
+
+    public boolean isCompletionInProgress() {
+        return isCompletionInProgress;
     }
 
     public void setAddButtonOnClickListener(View.OnClickListener listener) {
@@ -181,6 +191,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public void setUiWaitingAiReply() {
@@ -188,6 +199,7 @@ public class ListFooterContainer {
         momentWriterContainer.setUiWaitingAiReply();
 
         setBottomButtonState(false);
+        isCompletionInProgress = false;
     }
 
     public void setUiReadyToAddMoment() {
@@ -196,6 +208,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public void setUiAddLimitExceeded() {
@@ -204,6 +217,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public void setUiWritingStory() {
@@ -214,6 +228,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
+        isCompletionInProgress = true;
     }
 
     public void setUiSelectingEmotion() {
@@ -224,16 +239,19 @@ public class ListFooterContainer {
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
+        isCompletionInProgress = true;
     }
 
     public void setUiWritingTags() {
         tagBoxContainer.setUiVisible();
         setScrollToBottomSwitch();
+        isCompletionInProgress = true;
     }
 
     public void setUiSelectingScore() {
         scoreContainer.setUiVisible();
         setScrollToBottomSwitch();
+        isCompletionInProgress = false;
     }
 
     public Observer<AiStoryState> aiStoryObserver() {
@@ -282,5 +300,12 @@ public class ListFooterContainer {
     private void setAiStoryCallSwitch() {
         aiStoryCallSwitch.setValue(true);
         aiStoryCallSwitch.setValue(false);
+    }
+
+    private void setHelpTextAfterCompleted(boolean isToday) {
+        String day = isToday ? "오늘" : "이날";
+        emotionHelpText.setText(day + "의 감정");
+        tagBoxContainer.setHelpText(day + "의 태그");
+        scoreContainer.setHelpText(day + "의 점수");
     }
 }

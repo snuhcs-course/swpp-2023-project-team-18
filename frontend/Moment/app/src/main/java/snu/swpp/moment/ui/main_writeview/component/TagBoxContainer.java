@@ -1,4 +1,4 @@
-package snu.swpp.moment.ui.main_writeview.DaySlide;
+package snu.swpp.moment.ui.main_writeview.component;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,15 +21,18 @@ public class TagBoxContainer {
 
     private final ConstraintLayout tagWrapper;
     private final EditText tagEditText;
+    private final TextView tagHelpText;
     private final TextView limitHelpText;
     private final AnimationProvider animationProvider;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
 
+    private int characterCount = 0;
     private final int MAX_TAGS = 10;
 
     public TagBoxContainer(@NonNull View view) {
         tagWrapper = (ConstraintLayout) view;
         tagEditText = view.findViewById(R.id.tagsEditText);
+        tagHelpText = view.findViewById(R.id.tagHelpText);
         limitHelpText = view.findViewById(R.id.tagLimitHelpText);
         animationProvider = new AnimationProvider(view);
 
@@ -57,6 +60,11 @@ public class TagBoxContainer {
                     tagEditText.setTextColor(
                         ContextCompat.getColor(tagEditText.getContext(), R.color.black));
                 }
+
+                if (s.toString().length() > characterCount && s.toString().endsWith(" ")) {
+                    s.append("#");
+                }
+                characterCount = s.toString().length();
             }
         });
     }
@@ -76,6 +84,10 @@ public class TagBoxContainer {
     public void setUiVisible() {
         tagWrapper.setVisibility(View.VISIBLE);
         tagWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void setHelpText(String text) {
+        tagHelpText.setText(text);
     }
 
     public void freeze() {

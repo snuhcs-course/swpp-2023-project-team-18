@@ -24,44 +24,43 @@
 
     <EditText
         android:id="@+id/register_username"
+        style="@style/NORMAL_BLACK"
+        android:textColorHint="@color/darkgray"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/register_id"
-        android:fontFamily="@font/maruburi_light"
-        android:textSize="15sp"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.75"
-        app:layout_constraintTop_toBottomOf="@id/image_above_edittext" />
+        app:layout_constraintTop_toBottomOf="@id/image_above_edittext"
+        app:layout_constraintWidth_percent="0.75" />
 
     <EditText
         android:id="@+id/register_nickname"
+        style="@style/NORMAL_BLACK"
+        android:textColorHint="@color/darkgray"
         android:layout_width="0dp"
         android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
         android:hint="@string/register_nickname"
-        android:fontFamily="@font/maruburi_light"
-        android:textSize="15sp"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintWidth_percent="0.75"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_username"
-        app:layout_constraintBottom_toTopOf="@+id/register_password"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/register_password" />
 
     <EditText
         android:id="@+id/register_password"
+        style="@style/NORMAL_BLACK"
+        android:textColorHint="@color/darkgray"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/password"
-        android:fontFamily="@font/maruburi_light"
-        android:textSize="15sp"
         android:imeActionLabel="@string/action_sign_in_short"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
@@ -72,12 +71,12 @@
 
     <EditText
         android:id="@+id/register_password_check"
+        style="@style/NORMAL_BLACK"
+        android:textColorHint="@color/darkgray"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/password_check"
-        android:fontFamily="@font/maruburi_light"
-        android:textSize="15sp"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
@@ -88,15 +87,15 @@
         app:layout_constraintTop_toBottomOf="@+id/register_password" />
     <Button
         android:id="@+id/register"
+        style="@style/NORMAL_WHITE_BOLD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="64dp"
+        android:layout_gravity="start"
+        android:background="@drawable/day_completion_button"
         android:enabled="false"
         android:text="@string/action_sign_in"
-        android:fontFamily="@font/maruburi_light"
-        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -120,6 +119,6 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-<!--
+    <!--
 
--->
+    -->

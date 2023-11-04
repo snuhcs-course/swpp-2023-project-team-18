@@ -13,7 +13,7 @@ public class StoryModel {
     private final String content;
     private final List<HashtagModel> hashtags;
     private final Date createdAt;
-    private boolean isPointCompleted;
+    private final boolean isPointCompleted;
 
     public StoryModel(int id, String emotion, int score, String title, String content,
         List<HashtagModel> hashtags, Long createdAt, boolean isPointCompleted) {

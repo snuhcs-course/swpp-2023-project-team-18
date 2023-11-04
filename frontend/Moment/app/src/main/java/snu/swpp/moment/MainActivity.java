@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -15,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.databinding.ActivityMainBinding;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,4 +106,32 @@ public class MainActivity extends AppCompatActivity {
         }
         toolbarTitle.setText(title);
     }
+
+    public Observer<CompletionState> completionStateObserver() {
+        return (CompletionState completionState) -> {
+            if (completionState.getError() == null) {
+                System.out.println("#HAMBURGER: disable started");
+                getSupportActionBar().setHomeButtonEnabled(false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } else {
+                System.out.println("#HAMBURGER: disable not started");
+                getSupportActionBar().setHomeButtonEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        };
+    }
+
+    public Observer<CompletionStoreResultState> tagsResultObserver() {
+        return (CompletionStoreResultState completionStoreResultState) -> {
+            if (completionStoreResultState.getError() == null) {
+                System.out.println("#HAMBURGER: back to enable");
+                getSupportActionBar().setHomeButtonEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            } else {
+                System.out.println("#HAMBURGER: stay disabled");
+            }
+        };
+    }
+
+
 }

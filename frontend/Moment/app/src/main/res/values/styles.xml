@@ -1,26 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="NORMAL_TEXT">
+    <style name="NORMAL_BLACK">
         <item name="android:fontFamily">@font/maruburi_light</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="BOLD_TEXT">
+    <style name="NORMAL_BLACK_BOLD">
         <item name="android:fontFamily">@font/maruburi_bold</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="HELP_TEXT">
+    <style name="NORMAL_WHITE_BOLD">
+        <item name="android:fontFamily">@font/maruburi_bold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NORMAL_GRAY">
         <item name="android:fontFamily">@font/maruburi_light</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/darkgray</item>
     </style>
 
-    <style name="WARN_TEXT">
+    <style name="NORMAL_RED">
         <item name="android:fontFamily">@font/maruburi_light</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="SMALL_GRAY">
+        <item name="android:fontFamily">@font/maruburi_light</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/darkgray</item>
+    </style>
+
+    <style name="SMALL_RED">
+        <item name="android:fontFamily">@font/maruburi_light</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="BIG_BLACK">
+        <item name="android:fontFamily">@font/maruburi_light</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 

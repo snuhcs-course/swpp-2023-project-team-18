@@ -29,14 +29,11 @@ public class DummyActivity extends AppCompatActivity {
             authenticationRepository = AuthenticationRepository.getInstance(
                 getApplicationContext());
             System.out.println("#DEBUG: go home");
-            logoutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("#DEBUG: logout button clicked");
-                    authenticationRepository.logout();
-                    Intent logoutIntent = new Intent(DummyActivity.this, EntryActivity.class);
-                    startActivity(logoutIntent);
-                }
+            logoutButton.setOnClickListener(v -> {
+                System.out.println("#DEBUG: logout button clicked");
+                authenticationRepository.logout();
+                Intent logoutIntent = new Intent(DummyActivity.this, EntryActivity.class);
+                startActivity(logoutIntent);
             });
         } catch (GeneralSecurityException e) {
             System.out.println("#DEBUG: General");
