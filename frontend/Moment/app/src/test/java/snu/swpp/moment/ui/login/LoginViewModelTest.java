@@ -72,7 +72,7 @@ public class LoginViewModelTest extends TestCase {
 
         Observer<LoginResultState> loginResultStateObserver = LoginResultState -> {
         };
-        loginViewModel.observeLoginResultState(loginResultStateObserver);
+        loginViewModel.getLoginResult().observeForever(loginResultStateObserver);
 
         // When
         loginViewModel.login(loggedInUser.getUsername(), "yay");
@@ -94,7 +94,7 @@ public class LoginViewModelTest extends TestCase {
 
         Observer<LoginResultState> loginResultStateObserver = LoginResultState -> {
         };
-        loginViewModel.observeLoginResultState(loginResultStateObserver);
+        loginViewModel.getLoginResult().observeForever(loginResultStateObserver);
 
         // When
         loginViewModel.login("", "");
@@ -117,7 +117,7 @@ public class LoginViewModelTest extends TestCase {
 
         Observer<LoginResultState> loginResultStateObserver = LoginResultState -> {
         };
-        loginViewModel.observeLoginResultState(loginResultStateObserver);
+        loginViewModel.getLoginResult().observeForever(loginResultStateObserver);
 
         // When
         loginViewModel.login("", "");
@@ -140,7 +140,7 @@ public class LoginViewModelTest extends TestCase {
 
         Observer<LoginResultState> loginResultStateObserver = LoginResultState -> {
         };
-        loginViewModel.observeLoginResultState(loginResultStateObserver);
+        loginViewModel.getLoginResult().observeForever(loginResultStateObserver);
 
         // When
         loginViewModel.login("", "");
@@ -163,7 +163,7 @@ public class LoginViewModelTest extends TestCase {
 
         Observer<LoginResultState> loginResultStateObserver = LoginResultState -> {
         };
-        loginViewModel.observeLoginResultState(loginResultStateObserver);
+        loginViewModel.getLoginResult().observeForever(loginResultStateObserver);
 
         // When
         loginViewModel.login("", "");
@@ -179,7 +179,7 @@ public class LoginViewModelTest extends TestCase {
     public void loginDataChanged_success() {
         Observer<LoginFormState> loginFormStateObserver = LoginFormState -> {
         };
-        loginViewModel.observeLoginFormState(loginFormStateObserver);
+        loginViewModel.getLoginFormState().observeForever(loginFormStateObserver);
 
         loginViewModel.loginDataChanged("", "");
         LiveData<LoginFormState> loginFormState = loginViewModel.getLoginFormState();

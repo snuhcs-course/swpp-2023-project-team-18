@@ -59,12 +59,4 @@ public class LoginViewModel extends ViewModel {
     public void loginDataChanged(String username, String password) {
         loginFormState.setValue(new LoginFormState(true));
     }
-
-    public void observeLoginFormState(Observer<LoginFormState> observer) {
-        loginFormState.observeForever(observer);
-    }
-
-    public void observeLoginResultState(Observer<LoginResultState> observer) {
-        loginResult.observeForever(observer);
-    }
 }

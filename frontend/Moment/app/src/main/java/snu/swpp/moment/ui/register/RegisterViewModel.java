@@ -101,12 +101,4 @@ public class RegisterViewModel extends ViewModel {
     private boolean isPasswordCheckValid(String password, String passwordCheck) {
         return (password.equals(passwordCheck));
     }
-
-    public void observeRegisterFormState(Observer<RegisterFormState> observer) {
-        registerFormState.observeForever(observer);
-    }
-
-    public void observeRegisterResultState(Observer<RegisterResultState> observer) {
-        registerResult.observeForever(observer);
-    }
 }

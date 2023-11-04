@@ -68,7 +68,7 @@ public class RegisterViewModelTest extends TestCase {
 
         Observer<RegisterResultState> registerResultStateObserver = RegisterResultState -> {
         };
-        registerViewModel.observeRegisterResultState(registerResultStateObserver);
+        registerViewModel.getRegisterResult().observeForever(registerResultStateObserver);
 
         // When
         registerViewModel.register(loggedInUser.getUsername(), "yay", loggedInUser.getNickName());
@@ -90,7 +90,7 @@ public class RegisterViewModelTest extends TestCase {
 
         Observer<RegisterResultState> registerResultStateObserver = RegisterResultState -> {
         };
-        registerViewModel.observeRegisterResultState(registerResultStateObserver);
+        registerViewModel.getRegisterResult().observeForever(registerResultStateObserver);
 
         // When
         registerViewModel.register("", "", "");
@@ -113,7 +113,7 @@ public class RegisterViewModelTest extends TestCase {
 
         Observer<RegisterResultState> registerResultStateObserver = RegisterResultState -> {
         };
-        registerViewModel.observeRegisterResultState(registerResultStateObserver);
+        registerViewModel.getRegisterResult().observeForever(registerResultStateObserver);
 
         // When
         registerViewModel.register("", "", "");
@@ -136,7 +136,7 @@ public class RegisterViewModelTest extends TestCase {
 
         Observer<RegisterResultState> registerResultStateObserver = RegisterResultState -> {
         };
-        registerViewModel.observeRegisterResultState(registerResultStateObserver);
+        registerViewModel.getRegisterResult().observeForever(registerResultStateObserver);
 
         // When
         registerViewModel.register("", "", "");
@@ -159,7 +159,7 @@ public class RegisterViewModelTest extends TestCase {
 
         Observer<RegisterResultState> registerResultStateObserver = RegisterResultState -> {
         };
-        registerViewModel.observeRegisterResultState(registerResultStateObserver);
+        registerViewModel.getRegisterResult().observeForever(registerResultStateObserver);
 
         // When
         registerViewModel.register("", "", "");
@@ -175,7 +175,7 @@ public class RegisterViewModelTest extends TestCase {
     public void registerDataChanged_userNameNull_setInvalidUsername() {
         Observer<RegisterFormState> registerFormStateObserver = RegisterFormState -> {
         };
-        registerViewModel.observeRegisterFormState(registerFormStateObserver);
+        registerViewModel.getRegisterFormState().observeForever(registerFormStateObserver);
 
         registerViewModel.registerDataChanged(null, "", "");
         LiveData<RegisterFormState> registerFormState = registerViewModel.getRegisterFormState();
@@ -190,7 +190,7 @@ public class RegisterViewModelTest extends TestCase {
     public void registerDataChanged_passwordNull_setInvalidPassword() {
         Observer<RegisterFormState> registerFormStateObserver = RegisterFormState -> {
         };
-        registerViewModel.observeRegisterFormState(registerFormStateObserver);
+        registerViewModel.getRegisterFormState().observeForever(registerFormStateObserver);
 
         registerViewModel.registerDataChanged("test_username", null, "");
         LiveData<RegisterFormState> registerFormState = registerViewModel.getRegisterFormState();
@@ -205,7 +205,7 @@ public class RegisterViewModelTest extends TestCase {
     public void registerDataChanged_passwordInvalid_setInvalidPassword() {
         Observer<RegisterFormState> registerFormStateObserver = RegisterFormState -> {
         };
-        registerViewModel.observeRegisterFormState(registerFormStateObserver);
+        registerViewModel.getRegisterFormState().observeForever(registerFormStateObserver);
 
         registerViewModel.registerDataChanged("test_username", "yay", "");
         LiveData<RegisterFormState> registerFormState = registerViewModel.getRegisterFormState();
@@ -220,7 +220,7 @@ public class RegisterViewModelTest extends TestCase {
     public void registerDataChanged_passwordCheckInvalid_setInvalidPasswordCheck() {
         Observer<RegisterFormState> registerFormStateObserver = RegisterFormState -> {
         };
-        registerViewModel.observeRegisterFormState(registerFormStateObserver);
+        registerViewModel.getRegisterFormState().observeForever(registerFormStateObserver);
 
         registerViewModel.registerDataChanged("test_username", "yayayay", "");
         LiveData<RegisterFormState> registerFormState = registerViewModel.getRegisterFormState();
@@ -235,7 +235,7 @@ public class RegisterViewModelTest extends TestCase {
     public void registerDataChanged_success() {
         Observer<RegisterFormState> registerFormStateObserver = RegisterFormState -> {
         };
-        registerViewModel.observeRegisterFormState(registerFormStateObserver);
+        registerViewModel.getRegisterFormState().observeForever(registerFormStateObserver);
 
         registerViewModel.registerDataChanged("test_username", "yayayay", "yayayay");
         LiveData<RegisterFormState> registerFormState = registerViewModel.getRegisterFormState();
