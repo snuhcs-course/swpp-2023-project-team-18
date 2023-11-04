@@ -72,7 +72,6 @@ public class GetStoryUseCaseTest {
             "content",
             new ArrayList<>(),
             0L,
-            false,
             false
         );
         doAnswer(invocation -> {
