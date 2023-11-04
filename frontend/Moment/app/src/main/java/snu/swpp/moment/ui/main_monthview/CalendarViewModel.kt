@@ -18,11 +18,15 @@ class CalendarViewModel(
     private val authenticationRepository: AuthenticationRepository,
     private val storyRepository: StoryRepository
 ) : ViewModel() {
+    
     private val currentMonth: MutableLiveData<YearMonth> = MutableLiveData(YearMonth.now())
     private val selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
 
+    // 달력 밑에 보여주기 위한 현재 선택된 날짜의 정보
     private val calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
         MutableLiveData<CalendarDayInfoState?>()
+
+    // 한 달 동안의 정보
     private val monthStoryState = MutableLiveData<MonthStoryState>()
 
     fun getCurrentMonth(): YearMonth = currentMonth.value!!
@@ -39,7 +43,7 @@ class CalendarViewModel(
         if (date == null) {
             calendarDayInfoState.value = null
         } else {
-            // TODO: 갖고 있는 한달 데이터 리스트에서 하나 추출해서 set value
+            calendarDayInfoState.value = getStoryOfDay(date.dayOfMonth)
         }
     }
 
@@ -88,10 +92,6 @@ class CalendarViewModel(
 
     fun getStoryOfDay(datOfMonth: Int): CalendarDayInfoState {
         return monthStoryState.value!!.storyList[datOfMonth - 1]
-    }
-
-    fun observeMonthStoryState(observer: Observer<MonthStoryState>) {
-        monthStoryState.observeForever(observer)
     }
 
     fun observerCalendarDayInfoState(observer: Observer<CalendarDayInfoState?>) {
