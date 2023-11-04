@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
@@ -28,9 +27,9 @@ import snu.swpp.moment.data.model.TokenModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
-import snu.swpp.moment.data.source.UserLocalDataSource;
 import snu.swpp.moment.exception.UnknownErrorException;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
+import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetStoryUseCaseTest {
