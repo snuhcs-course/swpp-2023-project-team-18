@@ -59,9 +59,8 @@ fun isLastWeek(day: CalendarDay): Boolean {
 fun fillEmptyStory(storyList: MutableList<StoryModel>, month: YearMonth): List<StoryModel> {
     val result = mutableListOf<StoryModel>()
     var date = LocalDate.of(month.year, month.month, 1);
-    val endDate = month.atEndOfMonth();
     var index = 0;
-    while (!date.isAfter(endDate)) {
+    for (i in 0..30) {
         if (index < storyList.size) {
             val story = storyList[index]
             val createdAt = TimeConverter.convertDateToLocalDate(story.createdAt);

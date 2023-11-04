@@ -3,7 +3,6 @@ package snu.swpp.moment.ui.main_monthview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import snu.swpp.moment.data.callback.AuthenticationCallBack
 import snu.swpp.moment.data.callback.StoryGetCallBack
 import snu.swpp.moment.data.callback.TokenCallBack
 import snu.swpp.moment.data.model.StoryModel
@@ -12,6 +11,7 @@ import snu.swpp.moment.data.repository.StoryRepository
 import snu.swpp.moment.exception.UnauthorizedAccessException
 import snu.swpp.moment.ui.main_writeview.uistate.MonthStoryState
 import snu.swpp.moment.utils.TimeConverter
+import snu.swpp.moment.utils.fillEmptyStory
 import java.lang.Exception
 import java.time.LocalDate
 import java.time.YearMonth
@@ -24,7 +24,8 @@ class CalendarViewModel(
     var selectedDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
     var calendarDayInfoState: MutableLiveData<CalendarDayInfoState?> =
         MutableLiveData<CalendarDayInfoState?>()
-    var calendarDayStates: MutableLiveData<List<CalendarDayState>> = MutableLiveData(listOf())
+    var calendarDayStates: MutableLiveData<List<CalendarDayState>> =
+            MutableLiveData<List<CalendarDayState>>();
 
     private val monthStoryState = MutableLiveData<MonthStoryState>()
 
@@ -44,7 +45,7 @@ class CalendarViewModel(
 
     fun setCurrentMonth(month: YearMonth) {
         currentMonth.value = month
-        calendarDayStates.value = getDayStatesMock(month)   // 한달 정보 로드
+        getStory(month)  // 한달 정보 로드
     }
 
     fun setSelectedDate(date: LocalDate?) {
@@ -52,7 +53,7 @@ class CalendarViewModel(
         if (date == null) {
             calendarDayInfoState.value = null
         } else {
-            calendarDayInfoState.value = getSummaryMock(date)   // 아래쪽에 보여줄 정보 로드
+            //calendarDayInfoState.value = getSummaryMock(date)   // 아래쪽에 보여줄 정보 로드
         }
     }
 
@@ -65,8 +66,8 @@ class CalendarViewModel(
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
                         object: StoryGetCallBack {
                             override fun onSuccess(story: MutableList<StoryModel>) {
-                                fillEmptyStory(story, month)
-                                monthStoryState.value = MonthStoryState(null, story);
+                                val convertedList = fillEmptyStory(story, month)
+                                monthStoryState.value = MonthStoryState(null, convertedList);
                             }
 
                             override fun onFailure(error: Exception) {
@@ -80,21 +81,6 @@ class CalendarViewModel(
                 monthStoryState.value = MonthStoryState.withError(UnauthorizedAccessException())
             }
         })
-    }
-
-    private fun fillEmptyStory(storyList: MutableList<StoryModel>, month: YearMonth) {
-        var index = 0;
-        var date = LocalDate.of(month.year, month.month, 1);
-        val endDate = month.atEndOfMonth();
-        while (!date.isAfter(endDate)) {
-            val story = storyList[index]
-            val createdAt = TimeConverter.convertDateToLocalDate(story.createdAt);
-            if (createdAt.isAfter(date)) {
-                storyList.add(index, StoryModel.empty())
-            }
-            index++;
-            date = date.plusDays(1)
-        }
     }
 
     fun observeMonthStoryState(observer: Observer<MonthStoryState>) {
