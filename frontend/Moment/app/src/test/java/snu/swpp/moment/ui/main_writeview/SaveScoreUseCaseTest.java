@@ -25,6 +25,7 @@ import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.exception.InvalidScoreSaveRequestException;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
+import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SaveScoreUseCaseTest {

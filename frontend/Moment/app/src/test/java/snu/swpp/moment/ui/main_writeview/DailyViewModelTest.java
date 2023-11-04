@@ -41,6 +41,9 @@ import snu.swpp.moment.exception.UnknownErrorException;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
+import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModel;
+import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
+import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 import snu.swpp.moment.utils.TimeConverter;
 
 @RunWith(MockitoJUnitRunner.class)
