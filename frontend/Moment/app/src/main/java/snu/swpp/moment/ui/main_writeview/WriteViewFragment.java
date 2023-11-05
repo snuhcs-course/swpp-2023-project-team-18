@@ -28,6 +28,7 @@ public class WriteViewFragment extends Fragment {
 
     private SlideViewAdapter slideViewAdapter;
     private int numPages = -1;
+    private boolean isInTodayView;
     private final int OFF_SCREEN_PAGE_LIMIT = 3;
 
     private AuthenticationRepository authenticationRepository;
@@ -59,6 +60,7 @@ public class WriteViewFragment extends Fragment {
         binding.viewpager.setCurrentItem(numPages, false);
         binding.backToTodayButton.setVisibility(View.GONE);
         animationProvider = new AnimationProvider(binding.backToTodayButton);
+        isInTodayView = true;
         // 항상 로딩 상태로 둘 페이지 수 설정
         binding.viewpager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
 
@@ -82,12 +84,15 @@ public class WriteViewFragment extends Fragment {
                 super.onPageSelected(position);
 
                 if (position == numPages - 1) {
+                    isInTodayView = true;
                     binding.backToTodayButton.setVisibility(View.GONE);
-                } else if (position == numPages - 2) {
+                } else if (isInTodayView && (position == numPages - 2)) {
                     binding.backToTodayButton.setVisibility(View.VISIBLE);
                     binding.backToTodayButton.startAnimation(animationProvider.fadeIn);
                     binding.backToTodayButton.setActivated(true);
+                    isInTodayView = false;
                 } else {
+                    isInTodayView = false;
                     binding.backToTodayButton.setVisibility(View.VISIBLE);
                     binding.backToTodayButton.setActivated(true);
                 }
