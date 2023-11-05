@@ -20,8 +20,9 @@ public class ScoreContainer {
 
     private final AnimationProvider animationProvider;
 
-    private int score = 3;
+    private int score = -1;
     private final MutableLiveData<Boolean> saveScoreSwitch = new MutableLiveData<>(false);
+    private final int DEFAULT_SCORE = 3;
 
     public ScoreContainer(@NonNull View view) {
         scoreWrapper = (ConstraintLayout) view;
@@ -47,6 +48,8 @@ public class ScoreContainer {
                 setSaveScoreSwitch();
             }
         });
+
+        setScore(DEFAULT_SCORE);
     }
 
     public int getScore() {
