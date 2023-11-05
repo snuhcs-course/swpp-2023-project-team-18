@@ -27,7 +27,7 @@ public class WriteViewFragment extends Fragment {
 
     private SlideViewAdapter slideViewAdapter;
     private int numPages = -1;
-    private boolean isInTodayView;
+    private boolean isInTodayPage = true;
     private final int OFF_SCREEN_PAGE_LIMIT = 3;
 
     private AuthenticationRepository authenticationRepository;
@@ -51,17 +51,22 @@ public class WriteViewFragment extends Fragment {
         binding = FragmentWriteviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.backToTodayButton.setActivated(true);
+        animationProvider = new AnimationProvider(binding.backToTodayButton);
+
         slideViewAdapter = new SlideViewAdapter(WriteViewFragment.this, numPages);
         binding.viewpager.setAdapter(slideViewAdapter);
         binding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         // 처음에 보여줄 페이지 설정
-        binding.viewpager.setCurrentItem(numPages, false);
-        binding.backToTodayButton.setVisibility(View.GONE);
-        animationProvider = new AnimationProvider(binding.backToTodayButton);
-        isInTodayView = true;
+        binding.viewpager.setCurrentItem(numPages - 1, false);
         // 항상 로딩 상태로 둘 페이지 수 설정
         binding.viewpager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
+
+        // 오늘로 돌아가기 버튼
+        binding.backToTodayButton.setOnClickListener(
+            v -> binding.viewpager.setCurrentItem(numPages - 1, true));
+        showBackToTodayButton(false, false);
 
         binding.viewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -82,25 +87,11 @@ public class WriteViewFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
 
-                if (position == numPages - 1) {
-                    isInTodayView = true;
-                    binding.backToTodayButton.setVisibility(View.GONE);
-                } else if (isInTodayView && (position == numPages - 2)) {
-                    binding.backToTodayButton.setVisibility(View.VISIBLE);
-                    binding.backToTodayButton.startAnimation(animationProvider.fadeIn);
-                    binding.backToTodayButton.setActivated(true);
-                    isInTodayView = false;
-                } else {
-                    isInTodayView = false;
-                    binding.backToTodayButton.setVisibility(View.VISIBLE);
-                    binding.backToTodayButton.setActivated(true);
-                }
+                boolean newValue = position == numPages - 1;
+                showBackToTodayButton(!newValue, isInTodayPage && !newValue);
+                isInTodayPage = newValue;
             }
         });
-
-        // 오늘로 돌아가기 버튼
-        binding.backToTodayButton.setOnClickListener(
-            v -> binding.viewpager.setCurrentItem(numPages - 1, true));
 
         // 한달보기 탭에서 버튼을 눌러 넘어왔을 때 동작
         MainActivity mainActivity = (MainActivity) requireActivity();
@@ -118,18 +109,35 @@ public class WriteViewFragment extends Fragment {
     }
 
     private int calculateNumPages() {
-        int hour;
-        LocalDate created_at, today;
         String dateInString = authenticationRepository.getCreatedAt();
         if (dateInString.isBlank()) {
             return -1;
         }
-        today = TimeConverter.getToday();
-        created_at = LocalDate.parse(dateInString.substring(0, 10));
-        hour = Integer.parseInt(dateInString.substring(11, 13));
-        created_at = TimeConverter.updateDateFromThree(created_at, hour);
+        LocalDate today = TimeConverter.getToday();
+        LocalDate createdAt = LocalDate.parse(dateInString.substring(0, 10));
+        int hour = Integer.parseInt(dateInString.substring(11, 13));
+        createdAt = TimeConverter.updateDateFromThree(createdAt, hour);
 
-        return (int) ChronoUnit.DAYS.between(created_at, today) + 1;
+        return (int) ChronoUnit.DAYS.between(createdAt, today) + 1;
+    }
+
+    private void showBackToTodayButton(boolean show, boolean withAnimation) {
+        if (show) {
+            binding.backToTodayButton.setVisibility(View.VISIBLE);
+            if (withAnimation) {
+                binding.backToTodayButton.startAnimation(animationProvider.fadeIn);
+            }
+        } else {
+            binding.backToTodayButton.setVisibility(View.GONE);
+            binding.backToTodayButton.startAnimation(animationProvider.fadeOut);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("WriteViewFragment", "onResume");
+        super.onResume();
+        showBackToTodayButton(!isInTodayPage, false);
     }
 
     @Override
