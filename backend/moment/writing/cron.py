@@ -105,7 +105,7 @@ def get_ai_title_and_story_from_moments(
     )
     try:
         title_and_story = gpt_agent.get_answer(
-            timeout=15, max_trial=5
+            timeout=30, max_trial=5
         )  # TODO: need more testing
         title, story = title_and_story.split(";")
         return title, story

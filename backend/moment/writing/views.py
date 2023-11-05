@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta
+import re
+from collections import Counter
 
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
+from django.db.models import Q
 
 from user.models import User
 from .models import MomentPair, Story, Hashtag
@@ -481,14 +484,20 @@ class HashtagView(GenericAPIView):
         params.is_valid(raise_exception=True)
         user = User.objects.get(pk=request.user.id)
 
-        story_id = params.validated_data["story_id"]
-
-        story = Story.objects.get(id=story_id)
-
-        hashtags = story.hashtags.all()
+        start_date = datetime.fromtimestamp(params.validated_data["start"])
+        end_date = datetime.fromtimestamp(params.validated_data["end"])
+        date_condition = Q(story__created_at__range=(start_date, end_date))
+        user_condition = Q(story__user=user)
+        hashtags = Hashtag.objects.filter((date_condition & user_condition))
 
         serializer = self.get_serializer(hashtags, many=True)
+        serializer.data
 
+        content_list = []
+        for ser_data in serializer.data:
+            content_list.append(ser_data["content"])
+
+        ans = Counter(content_list)
         log(
             f"Successfully queried hashtags (length: {len(serializer.data)})",
             username=user.username,
@@ -496,7 +505,7 @@ class HashtagView(GenericAPIView):
         )
 
         return Response(
-            data={"hashtags": serializer.data},
+            data={"hashtags": dict(ans)},
             status=200,
         )
 
@@ -524,14 +533,10 @@ class HashtagView(GenericAPIView):
                 status=400,
             )
 
-        hashtags = [
-            hashtag.strip()
-            for hashtag in content.split("#")
-            if hashtag.strip() is not ""
-        ]
+        hashtags = [hashtag[1:] for hashtag in re.findall("#\\w+", content)]
         for hashtag in hashtags:
-            curr_hashtag = Hashtag(content=hashtag)
-            curr_hashtag.save()
+            curr_hashtag, _ = Hashtag.objects.get_or_create(content=hashtag)
+
             story.hashtags.add(curr_hashtag)
         story.save()
 
