@@ -132,7 +132,7 @@ class MonthViewFragment : Fragment() {
                         container.setUiMonthDate(calendarDayState)
                         Log.d(
                             "MonthViewFragment",
-                            "setUiMonthDate (day $dayOfMonth, ${calendarDayState.isEmotionInvalid})"
+                            "setUiMonthDate (day $dayOfMonth, isEmotionInvalid=${calendarDayState.isEmotionInvalid})"
                         )
                     }
                 }

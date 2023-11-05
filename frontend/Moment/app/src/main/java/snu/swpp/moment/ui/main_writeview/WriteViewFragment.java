@@ -1,7 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;

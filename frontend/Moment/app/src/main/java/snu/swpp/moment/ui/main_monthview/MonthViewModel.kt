@@ -12,7 +12,6 @@ import snu.swpp.moment.data.repository.StoryRepository
 import snu.swpp.moment.exception.UnauthorizedAccessException
 import snu.swpp.moment.utils.TimeConverter
 import snu.swpp.moment.utils.fillEmptyStory
-import java.lang.Exception
 import java.time.LocalDate
 import java.time.YearMonth
 
