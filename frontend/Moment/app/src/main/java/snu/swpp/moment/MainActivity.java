@@ -1,6 +1,7 @@
 package snu.swpp.moment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
@@ -139,11 +140,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToWriteViewPage(LocalDate date) {
+        Log.d("MainActivity", "navigateToWriteViewPage: " + date);
         navController.navigate(R.id.WriteView);
         writeDestinationDate.setValue(date);
     }
 
     public void observeWriteDestinationDate(Observer<LocalDate> observer) {
+        Log.d("MainActivity", "observer for writeDestinationDate set");
         writeDestinationDate.observe(this, observer);
+    }
+
+    public void unobserveWriteDestinationDate() {
+        Log.d("MainActivity", "observer for writeDestinationDate removed");
+        writeDestinationDate.removeObservers(this);
+    }
+
+    public void resetWriteDestinationDate() {
+        writeDestinationDate.setValue(null);
     }
 }

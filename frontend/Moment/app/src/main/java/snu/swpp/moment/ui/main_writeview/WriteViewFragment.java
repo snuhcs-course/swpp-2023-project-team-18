@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -99,20 +98,20 @@ public class WriteViewFragment extends Fragment {
             }
         });
 
-        binding.backToTodayButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.viewpager.setCurrentItem(numPages - 1, true);
-            }
-        });
+        // 오늘로 돌아가기 버튼
+        binding.backToTodayButton.setOnClickListener(
+            v -> binding.viewpager.setCurrentItem(numPages - 1, true));
 
         // 한달보기 탭에서 버튼을 눌러 넘어왔을 때 동작
-        ((MainActivity) getActivity()).observeWriteDestinationDate(localDate -> {
-            Log.d("WriteViewFragment", "observeWriteDestinationDate: " + localDate);
-            long minusDays = ChronoUnit.DAYS.between(
-                localDate, TimeConverter.getToday()
-            );
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.observeWriteDestinationDate(localDate -> {
+            Log.d("WriteViewFragment", "writeDestinationDateObserver: " + localDate);
+            if (localDate == null) {
+                return;
+            }
+            long minusDays = ChronoUnit.DAYS.between(localDate, TimeConverter.getToday());
             binding.viewpager.setCurrentItem(numPages - (int) minusDays - 1, true);
+            mainActivity.resetWriteDestinationDate();
         });
 
         return root;
@@ -131,5 +130,11 @@ public class WriteViewFragment extends Fragment {
         created_at = TimeConverter.updateDateFromThree(created_at, hour);
 
         return (int) ChronoUnit.DAYS.between(created_at, today) + 1;
+    }
+
+    @Override
+    public void onDestroyView() {
+        ((MainActivity) requireActivity()).unobserveWriteDestinationDate();
+        super.onDestroyView();
     }
 }
