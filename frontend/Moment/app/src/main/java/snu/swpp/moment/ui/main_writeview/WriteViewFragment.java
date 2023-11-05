@@ -1,10 +1,12 @@
 package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
 import snu.swpp.moment.ui.main_writeview.slideview.SlideViewAdapter;
+import snu.swpp.moment.utils.AnimationProvider;
 import snu.swpp.moment.utils.TimeConverter;
 
 
@@ -29,6 +32,8 @@ public class WriteViewFragment extends Fragment {
     private final int OFF_SCREEN_PAGE_LIMIT = 3;
 
     private AuthenticationRepository authenticationRepository;
+
+    private AnimationProvider animationProvider;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +58,8 @@ public class WriteViewFragment extends Fragment {
 
         // 처음에 보여줄 페이지 설정
         binding.viewpager.setCurrentItem(numPages, false);
+        binding.backToTodayButton.setVisibility(View.GONE);
+        animationProvider = new AnimationProvider(binding.backToTodayButton);
         // 항상 로딩 상태로 둘 페이지 수 설정
         binding.viewpager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
 
@@ -69,6 +76,29 @@ public class WriteViewFragment extends Fragment {
                         binding.viewpager.setCurrentItem(0, false);
                     }
                 }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+
+                if (position == numPages - 1) {
+                    binding.backToTodayButton.setVisibility(View.GONE);
+                } else if (position == numPages - 2) {
+                    binding.backToTodayButton.setVisibility(View.VISIBLE);
+                    binding.backToTodayButton.startAnimation(animationProvider.fadeIn);
+                    binding.backToTodayButton.setActivated(true);
+                } else {
+                    binding.backToTodayButton.setVisibility(View.VISIBLE);
+                    binding.backToTodayButton.setActivated(true);
+                }
+            }
+        });
+
+        binding.backToTodayButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.viewpager.setCurrentItem(numPages - 1, true);
             }
         });
 
