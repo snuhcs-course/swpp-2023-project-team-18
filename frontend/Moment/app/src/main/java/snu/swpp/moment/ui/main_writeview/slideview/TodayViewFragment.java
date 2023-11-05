@@ -161,9 +161,9 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         });
 
-        listFooterContainer.observeScore(score -> {
-            if (score != null) {
-                viewModel.saveScore(score);
+        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
+            if (saveScoreSwitch) {
+                viewModel.saveScore(listFooterContainer.getScore());
             }
         });
 

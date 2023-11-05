@@ -141,6 +141,10 @@ public class ListFooterContainer {
         return emotionGridContainer.getSelectedEmotion();
     }
 
+    public int getScore() {
+        return scoreContainer.getScore();
+    }
+
     public String getTags() {
         return tagBoxContainer.getTags();
     }
@@ -169,8 +173,8 @@ public class ListFooterContainer {
         aiStoryCallSwitch.observeForever(observer);
     }
 
-    public void observeScore(Observer<Integer> observer) {
-        scoreContainer.observeScore(observer);
+    public void observeSaveScoreSwitch(Observer<Boolean> observer) {
+        scoreContainer.observeSaveScoreSwitch(observer);
     }
 
     public void freezeStoryEditText() {
