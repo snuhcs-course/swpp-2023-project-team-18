@@ -254,9 +254,7 @@ class StoryGenerateView(GenericAPIView):
         # log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
-            title_and_story = self.gpt_agent.get_answer(
-                timeout=15, max_trial=2
-            )  # TODO: need more testing
+            title_and_story = self.gpt_agent.get_answer(timeout=20, max_trial=2)
 
             title, story = title_and_story.split(";")
 
