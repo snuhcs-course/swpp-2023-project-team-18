@@ -105,13 +105,13 @@ def get_ai_title_and_story_from_moments(
     )
     try:
         title_and_story = gpt_agent.get_answer(
-            timeout=15, max_trial=5
+            timeout=30, max_trial=5
         )  # TODO: need more testing
         title, story = title_and_story.split(";")
         return title, story
     except GPTAgent.GPTError:
         log("Error while calling GPT API", place="auto_completion_job")
-        return ("", "")
+        return ("", "마무리하는 과정에서 문제가 발생했어요")
     except ValueError:
         log("Invalid format", place="auto_completion_job")
-        return ("", "")
+        return ("", "마무리하는 과정에서 문제가 발생했어요")

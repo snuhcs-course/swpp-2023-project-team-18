@@ -34,12 +34,13 @@ class HashtagSerializer(serializers.ModelSerializer):
 
 
 class HashtagQuerySerializer(serializers.Serializer):
-    story_id = serializers.IntegerField()
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
 
 
 class HashtagCreateSerializer(serializers.Serializer):
     story_id = serializers.IntegerField()
-    content = serializers.CharField()
+    content = serializers.CharField(allow_blank=True)
 
 
 # Serializer for stories
@@ -71,8 +72,8 @@ class StoryQuerySerializer(serializers.Serializer):
 
 
 class StoryCreateSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=STORY_TITLE_MAX_LENGTH)
-    content = serializers.CharField(max_length=STORY_MAX_LENGTH)
+    title = serializers.CharField(max_length=STORY_TITLE_MAX_LENGTH, allow_blank=True)
+    content = serializers.CharField(max_length=STORY_MAX_LENGTH, allow_blank=True)
 
 
 class StoryDeleteSerializer(serializers.Serializer):

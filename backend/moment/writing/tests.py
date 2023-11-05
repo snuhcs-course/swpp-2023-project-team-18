@@ -2,14 +2,16 @@ import datetime
 from unittest.mock import patch
 
 from django.test import TestCase
+from django.core.cache import cache
 from rest_framework.test import APIRequestFactory, force_authenticate
 from freezegun import freeze_time
 
 from user.models import User
 from writing.models import MomentPair, Story, Hashtag
 from writing.utils.gpt import GPTAgent
-from writing.utils.prompt import StoryGenerateTemplate
+from writing.utils.prompt import StoryGenerateTemplate, MomentReplyTemplate
 from writing.views import (
+    MomentView,
     DayCompletionView,
     StoryView,
     StoryGenerateView,
@@ -27,8 +29,195 @@ intended_day = datetime.datetime(
 intended_gmt = datetime.datetime(
     year=2023, month=10, day=25, hour=18, minute=0, second=0
 )
+ai_sample_moment = "ai_sample_moment"
 ai_sample_title = "ai_sample_title"
 ai_sample_story = "ai_sample_story"
+
+
+class SaveMomentTest(TestCase):
+    content = "moment"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+
+    @freeze_time(lambda: intended_day)
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value=f"{ai_sample_moment}")
+    @patch(
+        "writing.utils.gpt.GPTAgent.add_message",
+    )
+    def test_save_moment_success(self, mock_add, mock_get):
+        cache.clear()  # to avoid throttling issues
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        new_moment = MomentPair.objects.get(user=user)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(new_moment.moment, self.content)
+        self.assertEqual(new_moment.reply, ai_sample_moment)
+        self.assertEqual(
+            new_moment.moment_created_at.timestamp(), intended_day.timestamp()
+        )
+        self.assertEqual(
+            new_moment.moment_created_at.timestamp(), intended_day.timestamp()
+        )
+        mock_add.assert_called_with(MomentReplyTemplate.get_prompt(moment=self.content))
+        cache.clear()
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", side_effect=GPTAgent.GPTError())
+    def test_save_moment_api_fail(self, mock_get):
+        cache.clear()
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        response = view(request)
+
+        self.assertEqual(len(MomentPair.objects.filter(user=user)), 0)
+        self.assertEqual(response.status_code, 500)
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value=f"{ai_sample_moment}")
+    def test_save_moment_throttle_fail(self, mock_get):
+        cache.clear()
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        with freeze_time(lambda: intended_day):
+            view(request)
+        with freeze_time(lambda: intended_day + datetime.timedelta(minutes=30)):
+            view(request)
+        with freeze_time(
+            lambda: intended_day + datetime.timedelta(minutes=59, seconds=59)
+        ):
+            response = view(request)
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(len(MomentPair.objects.filter(user=user)), 2)
+
+    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value=f"{ai_sample_moment}")
+    def test_save_moment_throttle_enabled_after_hour(self, mock_get):
+        cache.clear()
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        data = {"moment": self.content}
+
+        request = factory.post("writing/moments/", data=data)
+        force_authenticate(request, user)
+        with freeze_time(lambda: intended_day):
+            view(request)
+        with freeze_time(lambda: intended_day):
+            view(request)
+        with freeze_time(lambda: intended_day + datetime.timedelta(hours=1)):
+            response = view(request)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(MomentPair.objects.filter(user=user)), 3)
+        cache.clear()
+
+
+class GetMomentTest(TestCase):
+    timestamp1 = 1698200500
+    timestamp2 = 1698200586
+    content1 = "content1"
+    content2 = "content2"
+    reply1 = "reply1"
+    reply2 = "reply2"
+
+    def setUp(self):
+        test_user = User.objects.create(username="impri", nickname="impri")
+        test_user.set_password("123456")
+        other_user = User.objects.create(username="otheruser", nickname="impri")
+        other_user.set_password("123456")
+
+        moment1 = MomentPair.objects.create(
+            moment_created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            reply_created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            user=test_user,
+            moment=self.content1,
+            reply=self.reply1,
+        )
+        moment2 = MomentPair.objects.create(
+            moment_created_at=datetime.datetime.fromtimestamp(self.timestamp2),
+            reply_created_at=datetime.datetime.fromtimestamp(self.timestamp2),
+            user=test_user,
+            moment=self.content2,
+            reply=self.reply2,
+        )
+        moment1.save()
+        moment2.save()
+
+    def test_get_moments_without_time(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+
+        request = factory.get("writing/moments/")
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_moments_success(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp2}
+
+        request = factory.get("writing/moments/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(
+            response.data["moments"][0]["moment_created_at"], self.timestamp1
+        )
+        self.assertEqual(
+            response.data["moments"][1]["moment_created_at"], self.timestamp2
+        )
+        self.assertEqual(
+            response.data["moments"][0]["reply_created_at"], self.timestamp1
+        )
+        self.assertEqual(
+            response.data["moments"][1]["reply_created_at"], self.timestamp2
+        )
+        self.assertEqual(response.data["moments"][0]["moment"], self.content1)
+        self.assertEqual(response.data["moments"][1]["moment"], self.content2)
+        self.assertEqual(response.data["moments"][0]["reply"], self.reply1)
+        self.assertEqual(response.data["moments"][1]["reply"], self.reply2)
+
+    def test_get_only_one_story(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = MomentView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp1}
+
+        request = factory.get("writing/moments/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(
+            response.data["moments"][0]["moment_created_at"], self.timestamp1
+        )
+        self.assertEqual(len(response.data["moments"]), 1)
+
+    def test_not_get_others_stories(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="otheruser")
+        view = MomentView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp2}
+
+        request = factory.get("writing/stories/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(len(response.data["moments"]), 0)
 
 
 class AutoCompletionTest(TestCase):
@@ -120,72 +309,110 @@ class AutoCompletionTest(TestCase):
 
 
 class GetHashtagTest(TestCase):
+    timestamp1 = 1698200500
+    timestamp2 = 1698200586
+    content1 = "content1"
+    content2 = "content2"
     hashtag1 = "h2"
     hashtag2 = "h1"
+    hashtag3 = "h3"
+    other_hashtag = "h4"
 
     def setUp(self):
         test_user = User.objects.create(username="impri", nickname="impri")
         test_user.set_password("123456")
-        other_user = User.objects.create(username="other_user", nickname="other_user")
+        other_user = User.objects.create(username="otheruser", nickname="impri")
         other_user.set_password("123456")
-        story = Story.objects.create(created_at=intended_day, user=test_user)
-        self.story_pk = story.pk
-        hashtag1 = Hashtag(content=self.hashtag1)
-        hashtag1.save()
-        hashtag2 = Hashtag(content=self.hashtag2)
-        hashtag2.save()
-        story.hashtags.add(hashtag1)
-        story.hashtags.add(hashtag2)
-        story.save()
+        test_user_hashtag1 = Hashtag.objects.create(content=self.hashtag1)
+        test_user_hashtag2 = Hashtag.objects.create(content=self.hashtag2)
+        test_user_hashtag3 = Hashtag.objects.create(content=self.hashtag3)
+        other_user_hashtag = Hashtag.objects.create(content=self.other_hashtag)
+        test_user_hashtag1.save()
+        test_user_hashtag2.save()
+        test_user_hashtag3.save()
+        other_user_hashtag.save()
+        story1 = Story.objects.create(
+            created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            user=test_user,
+            content=self.content1,
+        )
+        story2 = Story.objects.create(
+            created_at=datetime.datetime.fromtimestamp(self.timestamp2),
+            user=test_user,
+            content=self.content2,
+            is_point_completed=True,
+        )
+        other_story = Story.objects.create(
+            created_at=datetime.datetime.fromtimestamp(self.timestamp1),
+            user=other_user,
+            content=self.content1,
+        )
+        story1.hashtags.add(test_user_hashtag1)
+        story1.hashtags.add(test_user_hashtag2)
+        story2.hashtags.add(test_user_hashtag2)
+        story2.hashtags.add(test_user_hashtag3)
+        other_story.hashtags.add(test_user_hashtag1)
+        other_story.hashtags.add(other_user_hashtag)
+        story1.save()
+        story2.save()
+        other_story.save()
 
-    def test_get_hashtag_success(self):
+    def test_get_hashtags_without_time(self):
         factory = APIRequestFactory()
         user = User.objects.get(username="impri")
         view = HashtagView.as_view()
 
-        params = {"story_id": self.story_pk}
-        request = factory.get("writing/hashtags/", params)
-        force_authenticate(request, user)
-        response = view(request)
-
-        self.assertEquals(response.status_code, 200)
-        self.assertEqual(response.data["hashtags"][0]["content"], self.hashtag1)
-        self.assertEqual(response.data["hashtags"][1]["content"], self.hashtag2)
-
-    """  def test_get_hashtag_wrong_story(self):
-        factory = APIRequestFactory()
-        user = User.objects.get(username="impri")
-        view = HashtagView.as_view()
-
-        params = {"story_id": self.story_pk + 1}
-        request = factory.get("writing/hashtags/", params)
-        force_authenticate(request, user)
+        request = factory.get("writing/hashtags/")
+        force_authenticate(request, user=user)
         response = view(request)
         self.assertEqual(response.status_code, 400)
 
-    def test_get_hashtag_other_user(self):
+    def test_get_hashtags_success(self):
         factory = APIRequestFactory()
-        user = User.objects.get(username="other_user")
-        view = HashtagView.as_view() 
+        user = User.objects.get(username="impri")
+        view = HashtagView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp2}
 
-        params = {"story_id": self.story_pk}
         request = factory.get("writing/hashtags/", params)
-        force_authenticate(request, user)
+        force_authenticate(request, user=user)
         response = view(request)
-        self.assertEqual(response.status_code, 400)"""
+        self.assertEqual(len(response.data["hashtags"].keys()), 3)
+        self.assertEqual(response.data["hashtags"][self.hashtag1], 1)
+        self.assertEqual(response.data["hashtags"][self.hashtag2], 2)
+        self.assertEqual(response.data["hashtags"][self.hashtag3], 1)
+
+    def test_get_only_one_story_hashtags(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="impri")
+        view = HashtagView.as_view()
+        params = {"start": self.timestamp1, "end": self.timestamp1}
+
+        request = factory.get("writing/hashtags/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(len(response.data["hashtags"].keys()), 2)
+        self.assertEqual(response.data["hashtags"][self.hashtag1], 1)
+        self.assertEqual(response.data["hashtags"][self.hashtag2], 1)
 
 
 class SaveHashtagTest(TestCase):
-    hashtag_string = "# h2#h1 ##"
+    hashtag_string = "#h2 dsjfl##h1 ## # 23"
+    hashtag_string2 = "#h1#h1#h3"
     hashtag1 = "h2"
     hashtag2 = "h1"
+    hashtag3 = "h3"
 
     def setUp(self):
         test_user = User.objects.create(username="impri", nickname="impri")
         test_user.set_password("123456")
         story = Story.objects.create(created_at=intended_day, user=test_user)
+        story2 = Story.objects.create(
+            created_at=intended_day + datetime.timedelta(days=1), user=test_user
+        )
         self.story_pk = story.pk
+        self.story2_pk = story2.pk
         story.save()
+        story2.save()
 
     def test_post_hashtag_success(self):
         factory = APIRequestFactory()
@@ -195,11 +422,20 @@ class SaveHashtagTest(TestCase):
         request = factory.post("writing/hashtags/", data=data)
         force_authenticate(request, user=user)
         response = view(request)
-        added_hashtags = Story.objects.get(pk=self.story_pk).hashtags.all()
+        data = {"story_id": self.story2_pk, "content": self.hashtag_string2}
+        request = factory.post("writing/hashtags/", data=data)
+        force_authenticate(request, user=user)
+        response = view(request)
+        added_hashtags1 = Story.objects.get(pk=self.story_pk).hashtags.all()
+        added_hashtags2 = Story.objects.get(pk=self.story2_pk).hashtags.all()
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(len(added_hashtags), 2)
-        self.assertEqual(added_hashtags[0].content, self.hashtag1)
-        self.assertEqual(added_hashtags[1].content, self.hashtag2)
+        self.assertEqual(len(added_hashtags1), 2)
+        self.assertEqual(added_hashtags1[0].content, self.hashtag1)
+        self.assertEqual(added_hashtags1[1].content, self.hashtag2)
+        self.assertEqual(len(added_hashtags2), 2)
+        self.assertEqual(added_hashtags2[0].content, self.hashtag2)
+        self.assertEqual(added_hashtags2[1].content, self.hashtag3)
+        self.assertEqual(len(Hashtag.objects.all()), 3)
 
     def test_post_hashtag_wrong_story_id(self):
         factory = APIRequestFactory()
