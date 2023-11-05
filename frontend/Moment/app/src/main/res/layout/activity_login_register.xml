@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/day_completion_button"
+        android:background="@drawable/button"
         android:elevation="0dp"
         android:text="@string/start_login" />
     <LinearLayout

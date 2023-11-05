@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview.component;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +44,19 @@ public class ListFooterContainer {
     // AI 요약 API call을 위한 스위치
     private final MutableLiveData<Boolean> aiStoryCallSwitch = new MutableLiveData<>(false);
 
-    // 마무리 과정 중에 있는가? (이탈 방지 위해 사용)
-    private boolean isCompletionInProgress = false;
+    private enum ListFooterState {
+        INVISIBLE,
+        MOMENT_WRITING,
+        MOMENT_WAITING_AI_REPLY,
+        MOMENT_READY_TO_ADD,
+        MOMENT_ADD_LIMIT_EXCEEDED,
+        STORY_WRITING,
+        EMOTION_SELECTING,
+        TAG_WRITING,
+        SCORE_SELECTING
+    }
+
+    private ListFooterState state = ListFooterState.INVISIBLE;
 
 
     public ListFooterContainer(@NonNull View view) {
@@ -98,10 +110,12 @@ public class ListFooterContainer {
 
         if (storyUiState.isEmpty()) {
             // 아직 스토리가 만들어지지 않았을 경우
+            state = ListFooterState.INVISIBLE;
             return;
         }
         if (storyUiState.isEmotionInvalid()) {
             // 모먼트 없이 자동으로 마무리되어서 감정이 invalid인 경우
+            state = ListFooterState.INVISIBLE;
             return;
         }
 
@@ -123,6 +137,8 @@ public class ListFooterContainer {
         scoreContainer.setScore(storyUiState.getScore());
         scoreContainer.setUiVisible();
         scoreContainer.showAutoCompleteWarnText(!storyUiState.isPointCompleted());
+
+        state = ListFooterState.SCORE_SELECTING;
     }
 
     public String getMomentInputText() {
@@ -141,12 +157,19 @@ public class ListFooterContainer {
         return emotionGridContainer.getSelectedEmotion();
     }
 
+    public int getScore() {
+        return scoreContainer.getScore();
+    }
+
     public String getTags() {
         return tagBoxContainer.getTags();
     }
 
     public boolean isCompletionInProgress() {
-        return isCompletionInProgress;
+        Log.d("ListFooterContainer", "isCompletionInProgress: " + state.name());
+        return (state == ListFooterState.STORY_WRITING ||
+            state == ListFooterState.EMOTION_SELECTING ||
+            state == ListFooterState.TAG_WRITING);
     }
 
     public void setAddButtonOnClickListener(View.OnClickListener listener) {
@@ -169,8 +192,8 @@ public class ListFooterContainer {
         aiStoryCallSwitch.observeForever(observer);
     }
 
-    public void observeScore(Observer<Integer> observer) {
-        scoreContainer.observeScore(observer);
+    public void observeSaveScoreSwitch(Observer<Boolean> observer) {
+        scoreContainer.observeSaveScoreSwitch(observer);
     }
 
     public void freezeStoryEditText() {
@@ -191,7 +214,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
-        isCompletionInProgress = false;
+        state = ListFooterState.MOMENT_WRITING;
     }
 
     public void setUiWaitingAiReply() {
@@ -199,7 +222,7 @@ public class ListFooterContainer {
         momentWriterContainer.setUiWaitingAiReply();
 
         setBottomButtonState(false);
-        isCompletionInProgress = false;
+        state = ListFooterState.MOMENT_WAITING_AI_REPLY;
     }
 
     public void setUiReadyToAddMoment() {
@@ -208,7 +231,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
-        isCompletionInProgress = false;
+        state = ListFooterState.MOMENT_READY_TO_ADD;
     }
 
     public void setUiAddLimitExceeded() {
@@ -217,7 +240,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
-        isCompletionInProgress = false;
+        state = ListFooterState.MOMENT_ADD_LIMIT_EXCEEDED;
     }
 
     public void setUiWritingStory() {
@@ -228,7 +251,7 @@ public class ListFooterContainer {
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
-        isCompletionInProgress = true;
+        state = ListFooterState.STORY_WRITING;
     }
 
     public void setUiSelectingEmotion() {
@@ -239,19 +262,19 @@ public class ListFooterContainer {
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
-        isCompletionInProgress = true;
+        state = ListFooterState.EMOTION_SELECTING;
     }
 
     public void setUiWritingTags() {
         tagBoxContainer.setUiVisible();
         setScrollToBottomSwitch();
-        isCompletionInProgress = true;
+        state = ListFooterState.TAG_WRITING;
     }
 
     public void setUiSelectingScore() {
         scoreContainer.setUiVisible();
         setScrollToBottomSwitch();
-        isCompletionInProgress = false;
+        state = ListFooterState.SCORE_SELECTING;
     }
 
     public Observer<AiStoryState> aiStoryObserver() {

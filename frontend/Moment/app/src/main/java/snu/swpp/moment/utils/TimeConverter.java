@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -58,5 +59,26 @@ public class TimeConverter {
         Log.d("TimeConverter",
             "startTimestamp: " + startTimestamp + ", endTimestamp: " + endTimestamp);
         return new long[]{startTimestamp, endTimestamp};
+    }
+
+    public static long[] getOneMonthTimestamps(YearMonth yearMonth) {
+        LocalDate startDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), 1);
+        LocalDate endDate = yearMonth.atEndOfMonth().plusDays(1);
+
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(2, 59, 59));
+
+        long startTimestamp = convertLocalDateTimeToTimestamp(startDateTime);
+        long endTimestamp = convertLocalDateTimeToTimestamp(endDateTime);
+
+        return new long[]{startTimestamp, endTimestamp};
+    }
+
+    public static LocalDate convertDateToLocalDate(Date date) {
+        LocalDate result = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (date.getHours() < 3) {
+            result = result.minusDays(1);
+        }
+        return result;
     }
 }

@@ -161,9 +161,9 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         });
 
-        listFooterContainer.observeScore(score -> {
-            if (score != null) {
-                viewModel.saveScore(score);
+        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
+            if (saveScoreSwitch) {
+                viewModel.saveScore(listFooterContainer.getScore());
             }
         });
 
@@ -190,9 +190,11 @@ public class TodayViewFragment extends BaseWritePageFragment {
             @Override
             public void handleOnBackPressed() {
                 Log.d("TodayViewFragment",
-                    "handleOnBackPressed: called " + listFooterContainer.isCompletionInProgress());
+                    "handleOnBackPressed: called / isCompletionInProgress="
+                        + listFooterContainer.isCompletionInProgress());
                 if (!listFooterContainer.isCompletionInProgress()) {
                     doOriginalAction();
+                    return;
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),

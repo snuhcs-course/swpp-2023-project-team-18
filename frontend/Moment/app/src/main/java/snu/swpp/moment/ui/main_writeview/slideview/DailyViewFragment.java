@@ -143,8 +143,10 @@ public class DailyViewFragment extends BaseWritePageFragment {
         // list footer 관리 객체 초기화
         listFooterContainer = new ListFooterContainer(footerView);
 
-        listFooterContainer.observeScore(score -> {
-            viewModel.saveScore(score);
+        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
+            if (saveScoreSwitch) {
+                viewModel.saveScore(listFooterContainer.getScore());
+            }
         });
 
         viewModel.observeStoryState((StoryUiState storyUiState) -> {

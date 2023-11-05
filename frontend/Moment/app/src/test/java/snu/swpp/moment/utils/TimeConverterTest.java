@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -108,5 +109,37 @@ public class TimeConverterTest {
 
         assertEquals(answer1, timestamps[0]);
         assertEquals(answer2, timestamps[1]);
+    }
+
+    @Test
+    public void getOneMonthTimestamps() {
+        YearMonth yearMonth = YearMonth.of(2023, 11);
+        long[] timestamps = TimeConverter.getOneMonthTimestamps(yearMonth);
+
+        long secondDiff = 3600 * hourDiff;
+        long answer1 = 1698807600L - secondDiff; // 현지 시각 2023년 11월 1일 오전 3:00:00
+        long answer2 = 1701399599L - secondDiff; // 현지 시각 2023년 12월 1일 오전 2:59:59
+
+        assertEquals(answer1, timestamps[0]);
+        assertEquals(answer2, timestamps[1]);
+    }
+
+    @Test
+    public void convertDateToLocalDate() {
+        Date date;
+        LocalDate convertedLocalDate;
+        LocalDate answer;
+
+        date = new Date(2023 - 1900, 11 - 1, 3, 8, 17, 39);
+        answer = LocalDate.of(2023, 11, 3);
+        convertedLocalDate = TimeConverter.convertDateToLocalDate(date);
+        System.out.println("convertedLocalDate: " + convertedLocalDate.toString());
+        assertTrue(answer.isEqual(convertedLocalDate));
+
+        date = new Date(2023 - 1900, 11 - 1, 3, 2, 17, 39);
+        answer = LocalDate.of(2023, 11, 2);
+        convertedLocalDate = TimeConverter.convertDateToLocalDate(date);
+        System.out.println("convertedLocalDate: " + convertedLocalDate.toString());
+        assertTrue(answer.isEqual(convertedLocalDate));
     }
 }

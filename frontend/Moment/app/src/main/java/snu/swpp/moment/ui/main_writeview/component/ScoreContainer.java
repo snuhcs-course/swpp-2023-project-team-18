@@ -20,7 +20,8 @@ public class ScoreContainer {
 
     private final AnimationProvider animationProvider;
 
-    private final MutableLiveData<Integer> score = new MutableLiveData<>();
+    private int score = -1;
+    private final MutableLiveData<Boolean> saveScoreSwitch = new MutableLiveData<>(false);
     private final int DEFAULT_SCORE = 3;
 
     public ScoreContainer(@NonNull View view) {
@@ -30,8 +31,6 @@ public class ScoreContainer {
         scoreText = view.findViewById(R.id.scoreText);
         autoCompleteWarnText = view.findViewById(R.id.autoCompleteWarnText);
         animationProvider = new AnimationProvider(view);
-
-        setScore(DEFAULT_SCORE);
 
         scoreSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -44,25 +43,23 @@ public class ScoreContainer {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                score.setValue(seekBar.getProgress());
-                scoreText.setText(String.valueOf(getScore()));
+                setScore(seekBar.getProgress());
                 showAutoCompleteWarnText(false);
+                setSaveScoreSwitch();
             }
         });
+
+        setScore(DEFAULT_SCORE);
     }
 
     public int getScore() {
-        Integer value = score.getValue();
-        if (value == null) {
-            return DEFAULT_SCORE;
-        }
-        return value;
+        return score;
     }
 
     public void setScore(int score) {
-        this.score.setValue(score);
-        scoreSeekBar.setProgress(score);
+        this.score = score;
         scoreText.setText(String.valueOf(score));
+        scoreSeekBar.setProgress(score);
     }
 
     public void setUiVisible() {
@@ -82,7 +79,12 @@ public class ScoreContainer {
         }
     }
 
-    public void observeScore(Observer<Integer> observer) {
-        score.observeForever(observer);
+    public void setSaveScoreSwitch() {
+        saveScoreSwitch.setValue(true);
+        saveScoreSwitch.setValue(false);
+    }
+
+    public void observeSaveScoreSwitch(Observer<Boolean> observer) {
+        saveScoreSwitch.observeForever(observer);
     }
 }

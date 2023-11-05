@@ -43,11 +43,11 @@ public class GetStoryUseCase {
                 storyRepository.getStory(access_token, dayInterval[0], dayInterval[1],
                     new StoryGetCallBack() {
                         @Override
-                        public void onSuccess(List<StoryModel> story) {
-                            if (story.isEmpty()) {
+                        public void onSuccess(List<StoryModel> storyList) {
+                            if (storyList.isEmpty()) {
                                 storyState.setValue(StoryUiState.empty());
                             } else {
-                                StoryModel storyInstance = story.get(0);
+                                StoryModel storyInstance = storyList.get(0);
                                 String title = storyInstance.getTitle();
                                 String content = storyInstance.getContent();
                                 int emotion = EmotionMap.getEmotionInt(storyInstance.getEmotion());
@@ -60,7 +60,7 @@ public class GetStoryUseCase {
 
                                 int score = storyInstance.getScore();
                                 Date createdAt = storyInstance.getCreatedAt();
-                                boolean isPointCompleted = storyInstance.getIsPointCompleted();
+                                boolean isPointCompleted = storyInstance.isPointCompleted();
 
                                 storyId = storyInstance.getId();
 

@@ -22,8 +22,8 @@ public class StoryRepository {
     public void getStory(String access_token, long start, long end, StoryGetCallBack callback) {
         remoteDataSource.getStory(access_token, start, end, new StoryGetCallBack() {
             @Override
-            public void onSuccess(List<StoryModel> story) {
-                callback.onSuccess(story);
+            public void onSuccess(List<StoryModel> storyList) {
+                callback.onSuccess(storyList);
             }
 
             @Override

@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
-import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
+import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 
 public class BottomButtonContainer {
 
