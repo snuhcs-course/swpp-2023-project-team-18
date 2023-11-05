@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import re
+from collections import Counter
 
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
@@ -489,10 +490,16 @@ class HashtagView(GenericAPIView):
         end_date = datetime.fromtimestamp(params.validated_data["end"])
         date_condition = Q(story__created_at__range=(start_date, end_date))
         user_condition = Q(story__user=user)
-        hashtags = Hashtag.objects.filter((date_condition & user_condition)).distinct()
+        hashtags = Hashtag.objects.filter((date_condition & user_condition))
 
         serializer = self.get_serializer(hashtags, many=True)
+        serializer.data
 
+        content_list = []
+        for ser_data in serializer.data:
+            content_list.append(ser_data["content"])
+
+        ans = Counter(content_list)
         log(
             f"Successfully queried hashtags (length: {len(serializer.data)})",
             username=user.username,
@@ -500,7 +507,7 @@ class HashtagView(GenericAPIView):
         )
 
         return Response(
-            data={"hashtags": serializer.data},
+            data={"hashtags": dict(ans)},
             status=200,
         )
 

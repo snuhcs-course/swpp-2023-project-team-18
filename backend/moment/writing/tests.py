@@ -376,10 +376,10 @@ class GetHashtagTest(TestCase):
         request = factory.get("writing/hashtags/", params)
         force_authenticate(request, user=user)
         response = view(request)
-        self.assertEqual(len(response.data["hashtags"]), 3)
-        self.assertEqual(response.data["hashtags"][0]["content"], self.hashtag1)
-        self.assertEqual(response.data["hashtags"][1]["content"], self.hashtag2)
-        self.assertEqual(response.data["hashtags"][2]["content"], self.hashtag3)
+        self.assertEqual(len(response.data["hashtags"].keys()), 3)
+        self.assertEqual(response.data["hashtags"][self.hashtag1], 1)
+        self.assertEqual(response.data["hashtags"][self.hashtag2], 2)
+        self.assertEqual(response.data["hashtags"][self.hashtag3], 1)
 
     def test_get_only_one_story_hashtags(self):
         factory = APIRequestFactory()
@@ -390,9 +390,9 @@ class GetHashtagTest(TestCase):
         request = factory.get("writing/hashtags/", params)
         force_authenticate(request, user=user)
         response = view(request)
-        self.assertEqual(len(response.data["hashtags"]), 2)
-        self.assertEqual(response.data["hashtags"][0]["content"], self.hashtag1)
-        self.assertEqual(response.data["hashtags"][1]["content"], self.hashtag2)
+        self.assertEqual(len(response.data["hashtags"].keys()), 2)
+        self.assertEqual(response.data["hashtags"][self.hashtag1], 1)
+        self.assertEqual(response.data["hashtags"][self.hashtag2], 1)
 
 
 class SaveHashtagTest(TestCase):
