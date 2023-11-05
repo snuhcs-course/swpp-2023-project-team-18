@@ -106,10 +106,9 @@ public class WriteViewFragment extends Fragment {
             }
         });
 
-        // 한달보기 탭에서 버튼을 눌러 넝머왔을 때 동작
+        // 한달보기 탭에서 버튼을 눌러 넘어왔을 때 동작
         ((MainActivity) getActivity()).observeWriteDestinationDate(localDate -> {
             Log.d("WriteViewFragment", "observeWriteDestinationDate: " + localDate);
-            Log.d("WriteViewFragment", "viewpager: " + binding.viewpager);
             long minusDays = ChronoUnit.DAYS.between(
                 localDate, TimeConverter.getToday()
             );
