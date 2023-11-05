@@ -190,9 +190,11 @@ public class TodayViewFragment extends BaseWritePageFragment {
             @Override
             public void handleOnBackPressed() {
                 Log.d("TodayViewFragment",
-                    "handleOnBackPressed: called " + listFooterContainer.isCompletionInProgress());
+                    "handleOnBackPressed: called / isCompletionInProgress="
+                        + listFooterContainer.isCompletionInProgress());
                 if (!listFooterContainer.isCompletionInProgress()) {
                     doOriginalAction();
+                    return;
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),
