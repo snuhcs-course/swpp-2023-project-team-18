@@ -18,7 +18,7 @@ def auto_completion_job():
         log(message=f"processing {user.username}", place="auto_completion_job")
         last_days_moment_contents = get_last_days_moment_contents(user, now)
         last_days_story = get_last_days_story(user, now)
-        if last_days_story != None:
+        if last_days_story is not None:
             log(
                 message=f"{user.username} already finished the day",
                 place="auto_completion_job",

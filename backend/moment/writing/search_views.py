@@ -7,6 +7,7 @@ from .models import Story
 from .search_serializers import HashtagCompleteSerializer
 from .utils import log
 
+
 class HashtagCompleteView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = HashtagCompleteSerializer
