@@ -3,5 +3,5 @@ from rest_framework import serializers
 from .models import Hashtag
 
 
-class HashtagCompleteSerializer(serializers.ModelSerializer):
-    pass
+class HashtagCompleteSerializer(serializers.Serializer):
+    tag_query = serializers.CharField()

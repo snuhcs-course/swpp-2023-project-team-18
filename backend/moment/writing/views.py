@@ -534,7 +534,11 @@ class HashtagView(GenericAPIView):
             )
 
         hashtags = [hashtag[1:] for hashtag in re.findall("#\\w+", content)]
+        print(hashtags)
         for hashtag in hashtags:
+            objects = Hashtag.objects.all()
+            for obj in objects:
+                print(obj.content)
             curr_hashtag, _ = Hashtag.objects.get_or_create(content=hashtag)
 
             story.hashtags.add(curr_hashtag)
