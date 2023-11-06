@@ -3,7 +3,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 
-from .models import Hashtag
+from .models import Hashtag, Story
 from .search_serializers import HashtagCompleteSerializer
 from django.db.models import Q
 from django.db.models.functions import Length
@@ -19,13 +19,16 @@ class HashtagCompleteView(GenericAPIView):
 
         tag_query = params.validated_data["tag_query"]
 
-        result = Hashtag.objects.filter(Q(content__contains=tag_query)).order_by(
-            Length("content").asc()
-        )
+        stories = Story.objects.filter(user_id=request.user.id)
+        tag_set = set()
+        for story in stories:
+            for tag in story.hashtags.all():
+                if tag_query not in tag.content:
+                    continue
+                tag_set.add(tag.content)
 
-        tag_list = []
-        for curr_res in result:
-            tag_list.append(curr_res.content)
+
+        tag_list = sorted(list(tag_set), key=lambda x: len(x))
 
         return Response(
             data={"hashtags": tag_list},
