@@ -3,11 +3,9 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 
-from .models import Hashtag, Story
+from .models import Story
 from .search_serializers import HashtagCompleteSerializer
-from django.db.models import Q
-from django.db.models.functions import Length
-
+from .utils import log
 
 class HashtagCompleteView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -28,6 +26,12 @@ class HashtagCompleteView(GenericAPIView):
                 tag_set.add(tag.content)
 
         tag_list = sorted(list(tag_set), key=lambda x: len(x))
+
+        log(
+            f"Successfully queried tags for auto completion (length: {len(tag_list)})",
+            username=request.user.username,
+            place="HashtagCompleteView.get",
+        )
 
         return Response(
             data={"hashtags": tag_list},
