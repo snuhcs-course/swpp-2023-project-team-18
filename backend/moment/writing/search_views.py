@@ -27,7 +27,6 @@ class HashtagCompleteView(GenericAPIView):
                     continue
                 tag_set.add(tag.content)
 
-
         tag_list = sorted(list(tag_set), key=lambda x: len(x))
 
         return Response(
