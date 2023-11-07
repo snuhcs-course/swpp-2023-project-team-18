@@ -6,26 +6,26 @@ from user.models import User
 from .constants import Emotions
 from .utils.gpt import GPTAgent
 from .utils.prompt import StoryGenerateTemplate
-from .utils.log import log
+from .utils.log import print_log
 
 
 def auto_completion_job():
     users = User.objects.all()
     now = datetime.datetime.now()
     gpt_agent = GPTAgent()
-    log(message="starting auto completion job...", place="auto_completion_job")
+    print_log(message="starting auto completion job...", place="auto_completion_job")
     for user in users:
-        log(message=f"processing {user.username}", place="auto_completion_job")
+        print_log(message=f"processing {user.username}", place="auto_completion_job")
         last_days_moment_contents = get_last_days_moment_contents(user, now)
         last_days_story = get_last_days_story(user, now)
         if last_days_story is not None:
-            log(
+            print_log(
                 message=f"{user.username} already finished the day",
                 place="auto_completion_job",
             )
             continue
         if len(last_days_moment_contents) == 0:
-            log(
+            print_log(
                 message=f"{user.username} hasn't written any moments",
                 place="auto_completion_job",
             )
@@ -47,7 +47,7 @@ def auto_completion_job():
             ai_title, ai_story = get_ai_title_and_story_from_moments(
                 last_days_moment_contents, gpt_agent
             )
-            log(
+            print_log(
                 message="generated story for user {user.username}",
                 place="auto_completion_job",
             )
@@ -110,8 +110,8 @@ def get_ai_title_and_story_from_moments(
         title, story = title_and_story.split(";")
         return title, story
     except GPTAgent.GPTError:
-        log("Error while calling GPT API", place="auto_completion_job")
-        return ("", "마무리하는 과정에서 문제가 발생했어요")
+        print_log("Error while calling GPT API", place="auto_completion_job")
+        return "", "마무리하는 과정에서 문제가 발생했어요"
     except ValueError:
-        log("Invalid format", place="auto_completion_job")
-        return ("", "마무리하는 과정에서 문제가 발생했어요")
+        print_log("Invalid format", place="auto_completion_job")
+        return "", "마무리하는 과정에서 문제가 발생했어요"

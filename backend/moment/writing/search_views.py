@@ -5,7 +5,7 @@ from rest_framework.request import Request
 
 from .models import Story
 from .search_serializers import HashtagCompleteSerializer
-from .utils.log import log
+from .utils.log import print_log
 
 
 class HashtagCompleteView(GenericAPIView):
@@ -28,7 +28,7 @@ class HashtagCompleteView(GenericAPIView):
 
         tag_list = sorted(list(tag_set), key=lambda x: len(x))
 
-        log(
+        print_log(
             f"Successfully queried tags for auto completion (length: {len(tag_list)})",
             username=request.user.username,
             place="HashtagCompleteView.get",
