@@ -1,17 +1,19 @@
 import datetime
 from typing import List, Tuple
 
-from .models import MomentPair, Story
+from django.utils import timezone
+
 from user.models import User
 from .constants import Emotions
+from .models import MomentPair, Story
 from .utils.gpt import GPTAgent
-from .utils.prompt import StoryGenerateTemplate
 from .utils.log import print_log
+from .utils.prompt import StoryGenerateTemplate
 
 
 def auto_completion_job():
     users = User.objects.all()
-    now = datetime.datetime.now()
+    now = timezone.now()
     gpt_agent = GPTAgent()
     print_log(message="starting auto completion job...", place="auto_completion_job")
     for user in users:

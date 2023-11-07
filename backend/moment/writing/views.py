@@ -7,6 +7,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 from django.db.models import Q
+from django.utils import timezone
 
 from user.models import User
 from .models import MomentPair, Story, Hashtag
@@ -109,8 +110,8 @@ class MomentView(GenericAPIView):
             moment=body.data["moment"],
             reply=reply,
             story=None,
-            moment_created_at=datetime.now(),
-            reply_created_at=datetime.now(),
+            moment_created_at=timezone.now(),
+            reply_created_at=timezone.now(),
         )
         moment_pair.save()
 
@@ -307,7 +308,7 @@ class DayCompletionView(GenericAPIView):
         start = body.validated_data["start"]
         end = body.validated_data["end"]
 
-        curr_time = int(datetime.now().timestamp())
+        curr_time = int(timezone.now().timestamp())
 
         print_log(
             f"Current timestamp: {curr_time}",
