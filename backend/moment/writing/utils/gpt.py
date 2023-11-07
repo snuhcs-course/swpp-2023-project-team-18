@@ -9,7 +9,6 @@ from writing.constants import OPENAI_API_KEY
 from writing.utils.log import log
 
 openai.api_key = OPENAI_API_KEY
-multiprocessing.set_start_method("fork")
 
 
 def timeout(func: Callable):
