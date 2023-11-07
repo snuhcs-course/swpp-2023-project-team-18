@@ -11,7 +11,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +31,8 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
+import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
@@ -48,6 +49,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     private BottomButtonContainer bottomButtonContainer;
     private ListFooterContainer listFooterContainer;
+    private NudgeHeaderContainer nudgeHeaderContainer;
 
     private TodayViewModel viewModel;
 
@@ -100,7 +102,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);
-        View footerView = LayoutInflater.from(getContext())
+
+        // list header & footer 등록
+        View headerView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.nudge_header, binding.todayMomentList, false);
+        binding.todayMomentList.addHeaderView(headerView);
+        View footerView = LayoutInflater.from(requireContext())
             .inflate(R.layout.listview_footer, binding.todayMomentList, false);
         binding.todayMomentList.addFooterView(footerView);
 
@@ -164,6 +171,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 viewModel.saveScore(listFooterContainer.getScore());
             }
         });
+
+        // nudge header 관리 객체 초기화
+        nudgeHeaderContainer = new NudgeHeaderContainer(headerView);
+        // TODO: API로 받아온 UiState를 observe 해서 내용 update
+        final String nudgeContent = "요즘은 계속 우울한 나날을 보내고 계신 것 같아요. 오늘은 기분이 어때요? 어떤 재미있는 계획이 있나요?";
+        nudgeHeaderContainer.updateUi(new NudgeUiState(null, false, nudgeContent));
 
         // 하단 버튼 관리 객체 초기화
         bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
