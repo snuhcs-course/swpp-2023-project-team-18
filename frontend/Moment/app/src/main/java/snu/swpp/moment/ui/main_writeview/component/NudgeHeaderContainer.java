@@ -5,6 +5,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.utils.AnimationProvider;
@@ -15,6 +17,8 @@ public class NudgeHeaderContainer {
     private final TextView nudgeHelpText;
     private final TextView nudgeText;
     private final Button deleteButton;
+
+    private final MutableLiveData<Boolean> deleteSwitch = new MutableLiveData<>(false);
 
     private final AnimationProvider animationProvider;
 
@@ -57,5 +61,14 @@ public class NudgeHeaderContainer {
             nudgeText.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setDeleteSwitch() {
+        deleteSwitch.setValue(true);
+        deleteSwitch.setValue(false);
+    }
+
+    public void observeDeleteSwitch(Observer<Boolean> observer) {
+        deleteSwitch.observeForever(observer);
     }
 }

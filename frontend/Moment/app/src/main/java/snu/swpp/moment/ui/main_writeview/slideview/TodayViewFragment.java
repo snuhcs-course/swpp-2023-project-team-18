@@ -178,6 +178,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
         final String nudgeContent = "요즘은 계속 우울한 나날을 보내고 계신 것 같아요. 오늘은 기분이 어때요? 어떤 재미있는 계획이 있나요?";
         nudgeHeaderContainer.updateUi(new NudgeUiState(null, false, nudgeContent));
 
+        nudgeHeaderContainer.observeDeleteSwitch(deleteSwitch -> {
+            if (deleteSwitch) {
+                // TODO: nudge 숨기기 API 호출
+            }
+        });
+
         // 하단 버튼 관리 객체 초기화
         bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
         bottomButtonContainer.viewingMoment();
