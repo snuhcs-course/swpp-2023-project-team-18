@@ -5,7 +5,7 @@ from rest_framework.request import Request
 
 from .models import Story
 from .search_serializers import HashtagCompleteSerializer
-from .utils import log
+from .utils.log import log
 
 
 class HashtagCompleteView(GenericAPIView):
