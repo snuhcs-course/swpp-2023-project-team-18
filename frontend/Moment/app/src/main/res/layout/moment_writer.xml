@@ -9,7 +9,7 @@
         android:id="@+id/momentEditTextWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/box_border"
+        android:background="@drawable/box_border_gray"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
