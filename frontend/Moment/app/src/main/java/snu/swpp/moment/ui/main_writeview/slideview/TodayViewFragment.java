@@ -317,11 +317,13 @@ public class TodayViewFragment extends BaseWritePageFragment {
         LocalDate date = getCurrentDateTime().toLocalDate();
         return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.");
     }
+
     private LocalDateTime getCurrentDateTime() {
         LocalDate date = TimeConverter.getToday();
         LocalDateTime current = date.atTime(3, 0, 0);
         return current;
     }
+
     private void scrollToBottom() {
         binding.todayMomentList.post(() -> binding.todayMomentList.smoothScrollToPosition(
             binding.todayMomentList.getCount() - 1));
