@@ -90,8 +90,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         if (viewModel == null) {
             viewModel = new ViewModelProvider(this,
                 new TodayViewModelFactory(authenticationRepository, momentRepository,
-                    storyRepository, getStoryUseCase, saveScoreUseCase))
-                .get(TodayViewModel.class);
+                    storyRepository, getStoryUseCase, saveScoreUseCase)).get(TodayViewModel.class);
         }
 
         binding = TodayItemBinding.inflate(inflater, container, false);
@@ -111,8 +110,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         listFooterContainer.setAddButtonOnClickListener(v -> {
             int numMoments = viewModel.getMomentState().getNumMoments();
             if (numMoments >= MOMENT_HOUR_LIMIT) {
-                Date createdAt = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT)
-                    .getCreatedAt();
+                Date createdAt = listViewItems.get(numMoments - MOMENT_HOUR_LIMIT).getCreatedAt();
                 Calendar createdCalendar = Calendar.getInstance();
                 createdCalendar.setTime(createdAt);
                 int createdHourValue = createdCalendar.get(
@@ -189,9 +187,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Log.d("TodayViewFragment",
-                    "handleOnBackPressed: called / isCompletionInProgress="
-                        + listFooterContainer.isCompletionInProgress());
+                Log.d("TodayViewFragment", "handleOnBackPressed: called / isCompletionInProgress="
+                    + listFooterContainer.isCompletionInProgress());
                 if (!listFooterContainer.isCompletionInProgress()) {
                     doOriginalAction();
                     return;
@@ -202,8 +199,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 builder.setMessage(R.string.completion_back_button_popup)
                     .setPositiveButton(R.string.popup_yes, (dialog, id) -> {
                         doOriginalAction();
-                    })
-                    .setNegativeButton(R.string.popup_no, (dialog, id) -> {
+                    }).setNegativeButton(R.string.popup_no, (dialog, id) -> {
                     });
                 builder.create().show();
             }
@@ -236,16 +232,14 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     scrollToBottom();
                 }
             } else if (error instanceof NoInternetException) {
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
+                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT).show();
             } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(getContext(), R.string.token_expired_error,
-                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                    .show();
                 Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                    .show();
+                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -264,17 +258,15 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 bottomButtonContainer.setActivated(false, true);
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
+                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT).show();
             } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error,
-                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                    .show();
                 Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                    .show();
+                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -314,14 +306,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     @Override
     protected String getDateText() {
-        LocalDate date = getCurrentDateTime().toLocalDate();
-        return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.");
-    }
 
-    private LocalDateTime getCurrentDateTime() {
-        LocalDate date = TimeConverter.getToday();
-        LocalDateTime current = date.atTime(3, 0, 0);
-        return current;
+        return TimeConverter.formatLocalDate(TimeConverter.getToday(), "yyyy. MM. dd.");
     }
 
     private void scrollToBottom() {
