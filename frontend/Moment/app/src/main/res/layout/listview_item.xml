@@ -4,16 +4,17 @@
     android:id="@+id/margin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="30dp"
     app:cardBackgroundColor="@color/white"
     app:cardElevation="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
         android:padding="16dp"
         android:background="@drawable/card_background"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/listitem_inputTime"
             style="@style/SMALL_GRAY"
@@ -22,6 +23,7 @@
             android:gravity="start"
             android:textAlignment="gravity"
             tools:text="03:00" />
+
         <TextView
             android:id="@+id/listitem_userInput"
             style="@style/NORMAL_BLACK"
@@ -31,6 +33,7 @@
             android:gravity="start"
             android:textAlignment="gravity"
             tools:text="모먼트 내용" />
+
         <ImageView
             android:id="@+id/dot_line"
             android:layout_width="match_parent"
@@ -38,6 +41,7 @@
             android:layout_marginTop="10dp"
             android:layerType="software"
             android:src="@drawable/dotted_line" />
+
         <TextView
             android:id="@+id/ai_text"
             style="@style/SMALL_GRAY"
@@ -47,6 +51,7 @@
             android:gravity="start"
             android:textAlignment="gravity"
             android:text="@string/ai_response_help_text" />
+
         <TextView
             android:id="@+id/listitem_serverResponse"
             style="@style/NORMAL_BLACK"
@@ -56,6 +61,7 @@
             android:gravity="start"
             android:textAlignment="gravity"
             tools:text="AI 답글 내용" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

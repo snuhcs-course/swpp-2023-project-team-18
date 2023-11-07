@@ -14,6 +14,7 @@ import snu.swpp.moment.utils.AnimationProvider;
 public class NudgeHeaderContainer {
 
     private final ConstraintLayout nudgeWrapper;
+    private final ConstraintLayout nudgeBox;
     private final TextView nudgeText;
     private final Button deleteButton;
 
@@ -23,6 +24,7 @@ public class NudgeHeaderContainer {
 
     public NudgeHeaderContainer(@NonNull View view) {
         nudgeWrapper = view.findViewById(R.id.nudgeWrapper);
+        nudgeBox = view.findViewById(R.id.nudgeBox);
         nudgeText = view.findViewById(R.id.nudgeText);
         deleteButton = view.findViewById(R.id.nudgeDeleteButton);
 
@@ -46,14 +48,16 @@ public class NudgeHeaderContainer {
     private void setVisibility(boolean visible) {
         // TODO: GONE 처리 후에도 리스트 위쪽에 공간이 남아 있는 문제 해결
         if (!visible) {
-            nudgeWrapper.startAnimation(animationProvider.longFadeOut);
-            nudgeWrapper.postDelayed(() -> {
+            nudgeBox.startAnimation(animationProvider.longFadeOut);
+            nudgeBox.postDelayed(() -> {
                 nudgeWrapper.setVisibility(View.GONE);
+                nudgeBox.setVisibility(View.GONE);
                 nudgeText.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.GONE);
             }, animationProvider.longFadeOut.getDuration());
         } else {
             nudgeWrapper.setVisibility(View.VISIBLE);
+            nudgeBox.setVisibility(View.VISIBLE);
             nudgeText.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.VISIBLE);
         }
