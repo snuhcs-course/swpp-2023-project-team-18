@@ -30,22 +30,13 @@
 
     <TextView
         android:id="@+id/nudgeText"
-        style="@style/NORMAL_BLACK_BOLD"
+        style="@style/NORMAL_BLACK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/nudgeHelpText"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="16dp"
         tools:text="넛지 내용" />
-
-    <TextView
-        android:id="@+id/nudgeHelpText"
-        style="@style/SMALL_GRAY"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="AI의 한 마디"
-        android:textAlignment="textStart"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

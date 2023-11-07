@@ -14,7 +14,6 @@ import snu.swpp.moment.utils.AnimationProvider;
 public class NudgeHeaderContainer {
 
     private final ConstraintLayout nudgeWrapper;
-    private final TextView nudgeHelpText;
     private final TextView nudgeText;
     private final Button deleteButton;
 
@@ -24,7 +23,6 @@ public class NudgeHeaderContainer {
 
     public NudgeHeaderContainer(@NonNull View view) {
         nudgeWrapper = view.findViewById(R.id.nudgeWrapper);
-        nudgeHelpText = view.findViewById(R.id.nudgeHelpText);
         nudgeText = view.findViewById(R.id.nudgeText);
         deleteButton = view.findViewById(R.id.nudgeDeleteButton);
 
@@ -51,13 +49,11 @@ public class NudgeHeaderContainer {
             nudgeWrapper.startAnimation(animationProvider.longFadeOut);
             nudgeWrapper.postDelayed(() -> {
                 nudgeWrapper.setVisibility(View.GONE);
-                nudgeHelpText.setVisibility(View.GONE);
                 nudgeText.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.GONE);
             }, animationProvider.longFadeOut.getDuration());
         } else {
             nudgeWrapper.setVisibility(View.VISIBLE);
-            nudgeHelpText.setVisibility(View.VISIBLE);
             nudgeText.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.VISIBLE);
         }
