@@ -74,10 +74,10 @@ public class DailyViewFragment extends BaseWritePageFragment {
             new StoryRepository(storyRemoteDataSource));
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
 
@@ -99,12 +99,12 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
         // ListView setup
         listViewItems = new ArrayList<>();
-        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         listViewAdapter.setAnimation(false);
 
         binding.dailyMomentList.setAdapter(listViewAdapter);
-        View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, null, false);
+        View footerView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.listview_footer, binding.dailyMomentList, false);
         binding.dailyMomentList.addFooterView(footerView);
 
         callApisToRefresh();
@@ -125,17 +125,17 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 }
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
             } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error,
+                Toast.makeText(requireContext(), R.string.token_expired_error,
                     Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
                 Log.d("DailyViewFragment", "Unknown error: " + error.getMessage());
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
                     .show();
             }
         });
@@ -160,16 +160,16 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 }
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
             } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error,
+                Toast.makeText(requireContext(), R.string.token_expired_error,
                     Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
                     .show();
             }
         });

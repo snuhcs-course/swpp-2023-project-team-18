@@ -32,7 +32,7 @@ public class LogoutViewFragment extends Fragment {
 
         final Button logoutButton = binding.logoutButton;
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
             System.out.println("#DEBUG: go home");
             logoutButton.setOnClickListener(v -> {
                 System.out.println("#DEBUG: logout button clicked");

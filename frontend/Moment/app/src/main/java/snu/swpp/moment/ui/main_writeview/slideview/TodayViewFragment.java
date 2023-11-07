@@ -75,10 +75,10 @@ public class TodayViewFragment extends BaseWritePageFragment {
             new StoryRepository(storyRemoteDataSource));
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
 
@@ -98,7 +98,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         listViewItems = new ArrayList<>();
 
-        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);
         View footerView = LayoutInflater.from(getContext())
             .inflate(R.layout.listview_footer, binding.todayMomentList, false);
@@ -132,7 +132,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         listFooterContainer.setSubmitButtonOnClickListener(v -> {
             // 소프트 키보드 숨기기
-            KeyboardUtils.hideSoftKeyboard(getContext());
+            KeyboardUtils.hideSoftKeyboard(requireContext());
 
             String text = listFooterContainer.getMomentInputText();
             if (!text.isEmpty()) {
@@ -170,7 +170,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         bottomButtonContainer.viewingMoment();
 
         // 하루 마무리 API 호출 시 동작 설정
-        MainActivity activity = (MainActivity) getActivity();
+        MainActivity activity = (MainActivity) requireActivity();
         viewModel.observeCompletionState(activity.completionStateObserver());
         viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
         viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
@@ -232,14 +232,15 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     scrollToBottom();
                 }
             } else if (error instanceof NoInternetException) {
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT).show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            } else if (error instanceof UnauthorizedAccessException) {
+                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                    .show();
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -258,15 +259,16 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 bottomButtonContainer.setActivated(false, true);
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                    .show();
             } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
                     .show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             }
         });
 
