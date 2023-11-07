@@ -21,7 +21,7 @@ import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
-import snu.swpp.moment.databinding.DailyItemBinding;
+import snu.swpp.moment.databinding.PageDailyBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
@@ -37,7 +37,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
     private int minusDays;
 
-    private DailyItemBinding binding;
+    private PageDailyBinding binding;
     private List<ListViewItem> listViewItems;
     private ListViewAdapter listViewAdapter;
 
@@ -94,7 +94,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 saveScoreUseCase)).get(
                 DailyViewModel.class));
 
-        binding = DailyItemBinding.inflate(inflater, container, false);
+        binding = PageDailyBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // ListView setup

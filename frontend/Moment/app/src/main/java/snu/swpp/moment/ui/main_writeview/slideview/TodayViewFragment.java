@@ -27,7 +27,7 @@ import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
-import snu.swpp.moment.databinding.TodayItemBinding;
+import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
@@ -42,7 +42,7 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewFragment extends BaseWritePageFragment {
 
-    private TodayItemBinding binding;
+    private PageTodayBinding binding;
     private List<ListViewItem> listViewItems;
     private ListViewAdapter listViewAdapter;
 
@@ -93,7 +93,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     storyRepository, getStoryUseCase, saveScoreUseCase)).get(TodayViewModel.class);
         }
 
-        binding = TodayItemBinding.inflate(inflater, container, false);
+        binding = PageTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         listViewItems = new ArrayList<>();
