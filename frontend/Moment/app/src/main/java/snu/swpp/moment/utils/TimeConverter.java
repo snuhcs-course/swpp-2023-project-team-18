@@ -73,6 +73,32 @@ public class TimeConverter {
 
         return new long[]{startTimestamp, endTimestamp};
     }
+    public static long[] getRecentMonthTimestamps(LocalDate date){
+        LocalDate startDate = date.minusMonths(1);
+        LocalDate endDate = date;
+
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(2, 59, 59));
+
+        long startTimestamp = convertLocalDateTimeToTimestamp(startDateTime);
+        long endTimestamp = convertLocalDateTimeToTimestamp(endDateTime);
+
+        return new long[]{startTimestamp, endTimestamp};
+    }
+    public static long[] getRecentWeekTimestamps(LocalDate date) {
+        LocalDate startDate = date.minusDays(6);
+        LocalDate endDate = date;
+
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(2, 59, 59));
+
+        long startTimestamp = convertLocalDateTimeToTimestamp(startDateTime);
+        long endTimestamp = convertLocalDateTimeToTimestamp(endDateTime);
+
+        return new long[]{startTimestamp, endTimestamp};
+    }
+
+
 
     public static LocalDate convertDateToLocalDate(Date date) {
         LocalDate result = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

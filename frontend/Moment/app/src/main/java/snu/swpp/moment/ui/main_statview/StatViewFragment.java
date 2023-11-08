@@ -25,7 +25,6 @@ public class StatViewFragment extends Fragment {
         View root = binding.getRoot();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
         final TextView textView = binding.statview;
-        statViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
