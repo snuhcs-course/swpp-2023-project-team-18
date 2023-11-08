@@ -304,6 +304,19 @@ class StoryGenerateView(GenericAPIView):
                 status=500,
             )
 
+        except:
+            log(
+                f"Unknown error",
+                tag="error",
+                username=user.username,
+                place="StoryGenerateView.get",
+            )
+
+            return Response(
+                data={"error": "Please try again."},
+                status=500,
+            )
+
         log(
             f"Successfully generated story with AI",
             username=user.username,

@@ -103,19 +103,25 @@ def get_ai_title_and_story_from_moments(
     gpt_agent.add_message(
         StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
     )
-    try:
-        title_and_story = json.loads(
-            gpt_agent.get_answer(timeout=30, max_trial=5)
-        )  # TODO: need more testing
-        title = title_and_story["title"]
-        story = title_and_story["content"]
-        return title, story
-    except GPTAgent.GPTError:
-        log("Error while calling GPT API", place="auto_completion_job")
-        return ("", "마무리하는 과정에서 문제가 발생했어요")
-    except ValueError:
-        log("Invalid format", place="auto_completion_job")
-        return ("", "마무리하는 과정에서 문제가 발생했어요")
-    except KeyError:
-        log("Invalid key", place="auto_completion_job")
-        return ("", "마무리하는 과정에서 문제가 발생했어요")
+    max_trial = 5
+
+    for _ in range(max_trial):
+        try:
+            title_and_story = json.loads(gpt_agent.get_answer(timeout=30, max_trial=1))
+            title = title_and_story["title"]
+            story = title_and_story["content"]
+            return title, story
+        except GPTAgent.GPTError:
+            log("Error while calling GPT API", place="auto_completion_job")
+            continue
+        except ValueError:
+            log("Invalid format", place="auto_completion_job")
+            continue
+        except KeyError:
+            log("Invalid key", place="auto_completion_job")
+            continue
+        except:
+            log("Unknown Error", place="auto_completion_job")
+            continue
+
+    return ("", "마무리하는 과정에서 문제가 발생했어요")
