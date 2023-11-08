@@ -1,12 +1,12 @@
-import datetime, json
+import datetime
 from typing import List, Tuple
 
-from .models import MomentPair, Story
 from user.models import User
 from .constants import Emotions
+from .models import MomentPair, Story
 from .utils.gpt import GPTAgent
-from .utils.prompt import StoryGenerateTemplate
 from .utils.log import log
+from .utils.prompt import StoryGenerateTemplate
 
 
 def auto_completion_job():
@@ -107,21 +107,17 @@ def get_ai_title_and_story_from_moments(
 
     for _ in range(max_trial):
         try:
-            title_and_story = json.loads(gpt_agent.get_answer(timeout=30, max_trial=1))
-            title = title_and_story["title"]
-            story = title_and_story["content"]
-            return title, story
-        except GPTAgent.GPTError:
-            log("Error while calling GPT API", place="auto_completion_job")
-            continue
-        except ValueError:
-            log("Invalid format", place="auto_completion_job")
-            continue
-        except KeyError:
-            log("Invalid key", place="auto_completion_job")
-            continue
-        except:
-            log("Unknown Error", place="auto_completion_job")
-            continue
-
-    return ("", "마무리하는 과정에서 문제가 발생했어요")
+            parsed_answer = gpt_agent.get_parsed_answer(
+                timeout=20,
+                max_trial=2,
+                required_keys=["title", "content"],
+            )
+            return parsed_answer["title"], parsed_answer["content"]
+        except GPTAgent.GPTError as e:
+            log(
+                f"GPTError while calling GPT API; Cause={e.cause}, Received\n{e.answer}",
+                tag="error",
+                place="auto_completion_job",
+            )
+    else:
+        return "", "마무리하는 과정에서 문제가 발생했어요"
