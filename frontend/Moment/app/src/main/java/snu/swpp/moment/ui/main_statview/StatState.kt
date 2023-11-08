@@ -58,8 +58,6 @@ class StatState(
                 emotionCounts = storiesToEmotions(stories),
                 error = null
             )
-
-
         }
 
         private fun storiesToScores(stories: List<StoryModel>, today: LocalDate): Map<Int, Int> {

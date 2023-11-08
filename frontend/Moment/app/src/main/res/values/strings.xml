@@ -79,4 +79,9 @@
     <string name="day_navigate_button">이날의 기록 보기</string>
     <string name="auto_completed_warning">직접 하루를 마무리하지 않았어요</string>
 
+    <!-- 돌아보기 탭 -->
+    <string name="stat_section_week">7일</string>
+    <string name="stat_section_month">30일</string>
+    <string name="stat_section_score">하루 점수</string>
+
 </resources>

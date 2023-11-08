@@ -39,7 +39,6 @@ class StatViewModel(
                         override fun onFailure(error: Exception) {
                             stat.value = StatState.withError(error)
                         }
-
                     })
             }
 
