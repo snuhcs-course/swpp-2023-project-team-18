@@ -9,7 +9,13 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from user.models import User
-from .constants import Emotions
+from .constants import (
+    Emotions,
+    MOMENT_REPLY_TIMEOUT,
+    MOMENT_REPLY_MAX_TRIAL,
+    STORY_GENERATION_TIMEOUT,
+    STORY_GENERATION_MAX_TRIAL,
+)
 from .models import MomentPair, Story, Hashtag
 from .serializers import (
     MomentPairQuerySerializer,
@@ -76,7 +82,10 @@ class MomentView(GenericAPIView):
         self.gpt_agent.add_message(prompt)
 
         try:
-            reply = self.gpt_agent.get_answer(timeout=15, max_trial=2)
+            reply = self.gpt_agent.get_answer(
+                timeout=MOMENT_REPLY_TIMEOUT,
+                max_trial=MOMENT_REPLY_MAX_TRIAL,
+            )
 
         except GPTAgent.GPTError:
             log(
@@ -254,8 +263,8 @@ class StoryGenerateView(GenericAPIView):
 
         try:
             parsed_answer = self.gpt_agent.get_parsed_answer(
-                timeout=20,
-                max_trial=2,
+                timeout=STORY_GENERATION_TIMEOUT,
+                max_trial=STORY_GENERATION_MAX_TRIAL,
                 required_keys=["title", "content"],
             )
         except GPTAgent.GPTError as e:

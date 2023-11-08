@@ -2,7 +2,7 @@ import datetime
 from typing import List, Tuple
 
 from user.models import User
-from .constants import Emotions
+from .constants import Emotions, AUTO_COMPLETE_TIMEOUT, AUTO_COMPLETE_MAX_TRIAL
 from .models import MomentPair, Story
 from .utils.gpt import GPTAgent
 from .utils.log import log
@@ -103,13 +103,12 @@ def get_ai_title_and_story_from_moments(
     gpt_agent.add_message(
         StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
     )
-    max_trial = 5
 
-    for _ in range(max_trial):
+    for _ in range(AUTO_COMPLETE_MAX_TRIAL):
         try:
             parsed_answer = gpt_agent.get_parsed_answer(
-                timeout=20,
-                max_trial=2,
+                timeout=AUTO_COMPLETE_TIMEOUT,
+                max_trial=1,
                 required_keys=["title", "content"],
             )
             return parsed_answer["title"], parsed_answer["content"]
