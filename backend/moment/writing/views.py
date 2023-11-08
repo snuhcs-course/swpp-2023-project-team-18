@@ -10,7 +10,6 @@ from rest_framework.response import Response
 
 from user.models import User
 from .constants import Emotions
-
 from .models import MomentPair, Story, Hashtag
 from .serializers import (
     MomentPairQuerySerializer,
@@ -254,10 +253,9 @@ class StoryGenerateView(GenericAPIView):
         # log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
-            parsed_answer = self.gpt_agent.get_answer(
+            parsed_answer = self.gpt_agent.get_parsed_answer(
                 timeout=20,
                 max_trial=2,
-                parse_as_json=True,
                 required_keys=["title", "content"],
             )
         except GPTAgent.GPTError as e:
@@ -272,6 +270,9 @@ class StoryGenerateView(GenericAPIView):
                 status=500,
             )
 
+        assert isinstance(
+            parsed_answer, dict
+        ), f"parsed_answer is not a dict: {parsed_answer}"
         log(
             f"Successfully generated story with AI",
             username=user.username,

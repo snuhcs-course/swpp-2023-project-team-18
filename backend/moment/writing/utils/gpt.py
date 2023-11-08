@@ -1,7 +1,7 @@
 import json
 import multiprocessing
 import time
-from typing import Callable, Optional, Dict, Any, List, Union
+from typing import Callable, Optional, Dict, Any, List
 
 import openai
 from openai.error import OpenAIError, RateLimitError
@@ -58,9 +58,7 @@ class GPTAgent:
         temperature: float = 1.0,
         rate_limit_wait: int = 10,
         max_trial: int = 3,
-        parse_as_json: bool = False,
-        required_keys: Optional[List[str]] = None,
-    ) -> Union[str, Dict[str, Any]]:
+    ) -> str:
         """
         Wrapper for GPT API call.
         Set `timeout=None` to disable timeout.
@@ -86,15 +84,34 @@ class GPTAgent:
                 log(f"Unexpected Error: {e}", tag="fail", place="GPTAgent.get_answer")
 
             if "answer" in container:
-                if parse_as_json:
-                    return GPTAgent.parse_as_json(container["answer"], required_keys)
-                else:
-                    return container["answer"]
+                return container["answer"]
 
         log(f"GPT API max trial reached", tag="error", place="GPTAgent.get_answer")
         raise GPTAgent.GPTError(
             "MAX_TRIAL", f"GPT call failed after {max_trial} trials"
         )
+
+    def get_parsed_answer(
+        self,
+        timeout: Optional[float],
+        temperature: float = 1.0,
+        rate_limit_wait: int = 10,
+        max_trial: int = 3,
+        required_keys: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Wrapper for GPT API call.
+        Set `timeout=None` to disable timeout.
+        """
+
+        answer = self.get_answer(
+            timeout=timeout,
+            temperature=temperature,
+            rate_limit_wait=rate_limit_wait,
+            max_trial=max_trial,
+        )
+        parsed_answer = self.parse_as_json(answer, required_keys=required_keys)
+        return parsed_answer
 
     @classmethod
     def parse_as_json(
