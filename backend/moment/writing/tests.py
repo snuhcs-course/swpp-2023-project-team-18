@@ -276,13 +276,11 @@ class AutoCompletionTest(TestCase):
 
     @freeze_time(lambda: intended_gmt + datetime.timedelta(days=1, seconds=1))
     @patch(
-        "writing.utils.gpt.GPTAgent.get_answer",
-        return_value=json.dumps(
-            {
-                "title": ai_sample_title,
-                "content": ai_sample_story,
-            }
-        ),
+        "writing.utils.gpt.GPTAgent.get_parsed_answer",
+        return_value={
+            "title": ai_sample_title,
+            "content": ai_sample_story,
+        },
     )
     @patch(
         "writing.utils.gpt.GPTAgent.add_message",
@@ -706,13 +704,11 @@ class StoryGenerateTest(TestCase):
         other_user_moment.save()
 
     @patch(
-        "writing.utils.gpt.GPTAgent.get_answer",
-        return_value=json.dumps(
-            {
-                "title": ai_sample_title,
-                "content": ai_sample_story,
-            }
-        ),
+        "writing.utils.gpt.GPTAgent.get_parsed_answer",
+        return_value={
+            "title": ai_sample_title,
+            "content": ai_sample_story,
+        },
     )
     @patch("writing.utils.gpt.GPTAgent.add_message")
     def test_story_generate_success(self, mock_add, mock_get):
