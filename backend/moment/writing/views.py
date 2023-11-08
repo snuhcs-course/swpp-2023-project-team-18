@@ -479,7 +479,6 @@ class HashtagView(GenericAPIView):
         hashtags = Hashtag.objects.filter((date_condition & user_condition))
 
         serializer = self.get_serializer(hashtags, many=True)
-        serializer.data
 
         content_list = []
         for ser_data in serializer.data:
