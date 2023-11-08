@@ -1,4 +1,4 @@
-import datetime
+import datetime, json
 from typing import List, Tuple
 
 from .models import MomentPair, Story
@@ -104,10 +104,12 @@ def get_ai_title_and_story_from_moments(
         StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
     )
     try:
-        title_and_story = gpt_agent.get_answer(
-            timeout=30, max_trial=5
+        title_and_story = json.loads(
+            gpt_agent.get_answer(timeout=30, max_trial=5)
         )  # TODO: need more testing
-        title, story = title_and_story.split(";")
+        print(title_and_story)
+        title = title_and_story["title"]
+        story = title_and_story["content"]
         return title, story
     except GPTAgent.GPTError:
         log("Error while calling GPT API", place="auto_completion_job")

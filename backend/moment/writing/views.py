@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import re
+import json
 from collections import Counter
 
 from rest_framework import permissions
@@ -257,9 +258,12 @@ class StoryGenerateView(GenericAPIView):
         # log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
-            title_and_story = self.gpt_agent.get_answer(timeout=20, max_trial=2)
+            title_and_story = json.loads(
+                self.gpt_agent.get_answer(timeout=20, max_trial=2)
+            )
 
-            title, story = title_and_story.split(";")
+            title = title_and_story["title"]
+            story = title_and_story["content"]
 
         except GPTAgent.GPTError:
             log(

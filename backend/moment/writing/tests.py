@@ -1,4 +1,4 @@
-import datetime
+import datetime, json
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -240,7 +240,15 @@ class AutoCompletionTest(TestCase):
             Story.objects.get(user=self.test_user).created_at.timestamp(),
         )
 
-    @patch("writing.utils.gpt.GPTAgent.get_answer", return_value="")
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value=json.dumps(
+            {
+                "title": "",
+                "content": "",
+            }
+        ),
+    )
     @freeze_time(lambda: intended_gmt + datetime.timedelta(days=1, seconds=1))
     def test_completion_without_moments(self, mock_get):
         previous_moment = MomentPair.objects.create(
@@ -268,7 +276,12 @@ class AutoCompletionTest(TestCase):
     @freeze_time(lambda: intended_gmt + datetime.timedelta(days=1, seconds=1))
     @patch(
         "writing.utils.gpt.GPTAgent.get_answer",
-        return_value=f"{ai_sample_title};{ai_sample_story}",
+        return_value=json.dumps(
+            {
+                "title": ai_sample_title,
+                "content": ai_sample_story,
+            }
+        ),
     )
     @patch(
         "writing.utils.gpt.GPTAgent.add_message",
@@ -693,7 +706,12 @@ class StoryGenerateTest(TestCase):
 
     @patch(
         "writing.utils.gpt.GPTAgent.get_answer",
-        return_value=f"{ai_sample_title};{ai_sample_story}",
+        return_value=json.dumps(
+            {
+                "title": ai_sample_title,
+                "content": ai_sample_story,
+            }
+        ),
     )
     @patch("writing.utils.gpt.GPTAgent.add_message")
     def test_story_generate_success(self, mock_add, mock_get):
