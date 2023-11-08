@@ -1,6 +1,7 @@
+import json
 import multiprocessing
 import time
-from typing import Callable, Optional
+from typing import Callable, Optional, Dict, Any, List, Union
 
 import openai
 from openai.error import OpenAIError, RateLimitError
@@ -57,7 +58,9 @@ class GPTAgent:
         temperature: float = 1.0,
         rate_limit_wait: int = 10,
         max_trial: int = 3,
-    ) -> str:
+        parse_as_json: bool = False,
+        required_keys: Optional[List[str]] = None,
+    ) -> Union[str, Dict[str, Any]]:
         """
         Wrapper for GPT API call.
         Set `timeout=None` to disable timeout.
@@ -83,10 +86,43 @@ class GPTAgent:
                 log(f"Unexpected Error: {e}", tag="fail", place="GPTAgent.get_answer")
 
             if "answer" in container:
-                return container["answer"]
+                if parse_as_json:
+                    return GPTAgent.parse_as_json(container["answer"], required_keys)
+                else:
+                    return container["answer"]
 
         log(f"GPT API max trial reached", tag="error", place="GPTAgent.get_answer")
-        raise GPTAgent.GPTError(f"GPT call failed after {max_trial} trials")
+        raise GPTAgent.GPTError(
+            "MAX_TRIAL", f"GPT call failed after {max_trial} trials"
+        )
+
+    @classmethod
+    def parse_as_json(
+        cls,
+        answer: str,
+        required_keys: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        try:
+            parsed = json.loads(answer)
+        except json.JSONDecodeError:
+            raise GPTAgent.GPTError(
+                "INVALID_FORMAT",
+                "GPT answer is not a valid JSON",
+                answer=answer,
+            )
+
+        if required_keys is None:
+            return parsed
+
+        for key in required_keys:
+            if key not in parsed:
+                raise GPTAgent.GPTError(
+                    "MISSING_KEY",
+                    f"Key {key} is missing",
+                    answer=answer,
+                )
+
+        return parsed
 
     @timeout
     def _call(self, container: dict, **kwargs):
@@ -100,4 +136,7 @@ class GPTAgent:
         container["answer"] = completion.choices[0].message.content
 
     class GPTError(Exception):
-        ...
+        def __init__(self, cause: str, *args, answer: Optional[str] = None):
+            self.cause = cause
+            self.answer = answer
+            super().__init__(*args)

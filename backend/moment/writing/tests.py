@@ -1,12 +1,15 @@
-import datetime, json
+import datetime
+import json
 from unittest.mock import patch
 
-from django.test import TestCase
 from django.core.cache import cache
-from rest_framework.test import APIRequestFactory, force_authenticate
+from django.test import TestCase
 from freezegun import freeze_time
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 from user.models import User
+from writing.constants import Emotions
+from writing.cron import auto_completion_job
 from writing.models import MomentPair, Story, Hashtag
 from writing.utils.gpt import GPTAgent
 from writing.utils.prompt import StoryGenerateTemplate, MomentReplyTemplate
@@ -19,8 +22,6 @@ from writing.views import (
     EmotionView,
     HashtagView,
 )
-from writing.cron import auto_completion_job
-from writing.constants import Emotions
 
 # Create your tests here.
 intended_day = datetime.datetime(
@@ -70,7 +71,7 @@ class SaveMomentTest(TestCase):
         mock_add.assert_called_with(MomentReplyTemplate.get_prompt(moment=self.content))
         cache.clear()
 
-    @patch("writing.utils.gpt.GPTAgent.get_answer", side_effect=GPTAgent.GPTError())
+    @patch("writing.utils.gpt.GPTAgent.get_answer", side_effect=GPTAgent.GPTError(""))
     def test_save_moment_api_fail(self, mock_get):
         cache.clear()
         factory = APIRequestFactory()
@@ -744,7 +745,7 @@ class StoryGenerateTest(TestCase):
 
         self.assertEqual(response.status_code, 500)
 
-    @patch("writing.utils.gpt.GPTAgent.get_answer", side_effect=GPTAgent.GPTError())
+    @patch("writing.utils.gpt.GPTAgent.get_answer", side_effect=GPTAgent.GPTError(""))
     def test_story_generate_api_fail(self, mock_get):
         factory = APIRequestFactory()
         user = User.objects.get(username="impri")

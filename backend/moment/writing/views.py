@@ -1,15 +1,16 @@
-from datetime import datetime, timedelta
 import re
-import json
 from collections import Counter
+from datetime import datetime, timedelta
 
+from django.db.models import Q
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
 from rest_framework.request import Request
-from django.db.models import Q
+from rest_framework.response import Response
 
 from user.models import User
+from .constants import Emotions
+
 from .models import MomentPair, Story, Hashtag
 from .serializers import (
     MomentPairQuerySerializer,
@@ -26,9 +27,6 @@ from .serializers import (
     HashtagSerializer,
     HashtagCreateSerializer,
     HashtagQuerySerializer,
-)
-from .constants import (
-    Emotions,
 )
 from .utils.gpt import GPTAgent
 from .utils.log import log
@@ -79,9 +77,7 @@ class MomentView(GenericAPIView):
         self.gpt_agent.add_message(prompt)
 
         try:
-            reply = self.gpt_agent.get_answer(
-                timeout=15, max_trial=2
-            )  # TODO: 테스트 해보고 시간 파라미터 조절하기
+            reply = self.gpt_agent.get_answer(timeout=15, max_trial=2)
 
         except GPTAgent.GPTError:
             log(
@@ -258,62 +254,21 @@ class StoryGenerateView(GenericAPIView):
         # log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
-            title_and_story = json.loads(
-                self.gpt_agent.get_answer(timeout=20, max_trial=2)
+            parsed_answer = self.gpt_agent.get_answer(
+                timeout=20,
+                max_trial=2,
+                parse_as_json=True,
+                required_keys=["title", "content"],
             )
-
-            title = title_and_story["title"]
-            story = title_and_story["content"]
-
-        except GPTAgent.GPTError:
+        except GPTAgent.GPTError as e:
             log(
-                f"Error while calling GPT API",
+                f"GPTError while calling GPT API; Cause={e.cause}, Received\n{e.answer}",
                 tag="error",
                 username=user.username,
                 place="StoryGenerateView.get",
             )
-
             return Response(
                 data={"error": "GPT API call failed."},
-                status=500,
-            )
-
-        except ValueError:
-            log(
-                f"Error of response format",
-                tag="error",
-                username=user.username,
-                place="StoryGenerateView.get",
-            )
-
-            return Response(
-                data={"error": "Please try again."},
-                status=500,
-            )
-
-        except KeyError:
-            log(
-                f"Wrong key",
-                tag="error",
-                username=user.username,
-                place="StoryGenerateView.get",
-            )
-
-            return Response(
-                data={"error": "Please try again."},
-                status=500,
-            )
-
-        except:
-            log(
-                f"Unknown error",
-                tag="error",
-                username=user.username,
-                place="StoryGenerateView.get",
-            )
-
-            return Response(
-                data={"error": "Please try again."},
                 status=500,
             )
 
@@ -322,9 +277,11 @@ class StoryGenerateView(GenericAPIView):
             username=user.username,
             place="StoryGenerateView.get",
         )
-
         return Response(
-            data={"title": title, "story": story},
+            data={
+                "title": parsed_answer["title"],
+                "story": parsed_answer["content"],
+            },
             status=201,
         )
 
