@@ -107,7 +107,6 @@ def get_ai_title_and_story_from_moments(
         title_and_story = json.loads(
             gpt_agent.get_answer(timeout=30, max_trial=5)
         )  # TODO: need more testing
-        print(title_and_story)
         title = title_and_story["title"]
         story = title_and_story["content"]
         return title, story
@@ -116,4 +115,7 @@ def get_ai_title_and_story_from_moments(
         return ("", "마무리하는 과정에서 문제가 발생했어요")
     except ValueError:
         log("Invalid format", place="auto_completion_job")
+        return ("", "마무리하는 과정에서 문제가 발생했어요")
+    except KeyError:
+        log("Invalid key", place="auto_completion_job")
         return ("", "마무리하는 과정에서 문제가 발생했어요")

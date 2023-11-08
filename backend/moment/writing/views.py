@@ -280,7 +280,20 @@ class StoryGenerateView(GenericAPIView):
 
         except ValueError:
             log(
-                f"Error of response format: [title];[story]",
+                f"Error of response format",
+                tag="error",
+                username=user.username,
+                place="StoryGenerateView.get",
+            )
+
+            return Response(
+                data={"error": "Please try again."},
+                status=500,
+            )
+
+        except KeyError:
+            log(
+                f"Wrong key",
                 tag="error",
                 username=user.username,
                 place="StoryGenerateView.get",
