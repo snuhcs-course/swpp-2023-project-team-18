@@ -1,14 +1,21 @@
-from datetime import datetime, timedelta
 import re
 from collections import Counter
+from datetime import datetime, timedelta
 
+from django.db.models import Q
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
 from rest_framework.request import Request
-from django.db.models import Q
+from rest_framework.response import Response
 
 from user.models import User
+from .constants import (
+    Emotions,
+    MOMENT_REPLY_TIMEOUT,
+    MOMENT_REPLY_MAX_TRIAL,
+    STORY_GENERATION_TIMEOUT,
+    STORY_GENERATION_MAX_TRIAL,
+)
 from .models import MomentPair, Story, Hashtag
 from .serializers import (
     MomentPairQuerySerializer,
@@ -25,9 +32,6 @@ from .serializers import (
     HashtagSerializer,
     HashtagCreateSerializer,
     HashtagQuerySerializer,
-)
-from .constants import (
-    Emotions,
 )
 from .utils.gpt import GPTAgent
 from .utils.log import print_log
@@ -79,8 +83,9 @@ class MomentView(GenericAPIView):
 
         try:
             reply = self.gpt_agent.get_answer(
-                timeout=15, max_trial=2
-            )  # TODO: 테스트 해보고 시간 파라미터 조절하기
+                timeout=MOMENT_REPLY_TIMEOUT,
+                max_trial=MOMENT_REPLY_MAX_TRIAL,
+            )
 
         except GPTAgent.GPTError:
             print_log(
@@ -253,44 +258,36 @@ class StoryGenerateView(GenericAPIView):
         self.gpt_agent.add_message(prompt)
 
         try:
-            title_and_story = self.gpt_agent.get_answer(timeout=20, max_trial=2)
-
-            title, story = title_and_story.split(";")
-
-        except GPTAgent.GPTError:
+            parsed_answer = self.gpt_agent.get_parsed_answer(
+                timeout=STORY_GENERATION_TIMEOUT,
+                max_trial=STORY_GENERATION_MAX_TRIAL,
+                required_keys=["title", "content"],
+            )
+        except GPTAgent.GPTError as e:
             print_log(
-                f"Error while calling GPT API",
+                f"GPTError while calling GPT API; Cause={e.cause}, Received\n{e.answer}",
                 tag="error",
                 username=user.username,
                 place="StoryGenerateView.get",
             )
-
             return Response(
                 data={"error": "GPT API call failed."},
                 status=500,
             )
 
-        except ValueError:
-            print_log(
-                f"Error of response format: [title];[story]",
-                tag="error",
-                username=user.username,
-                place="StoryGenerateView.get",
-            )
-
-            return Response(
-                data={"error": "Please try again."},
-                status=500,
-            )
-
+        assert isinstance(
+            parsed_answer, dict
+        ), f"parsed_answer is not a dict: {parsed_answer}"
         print_log(
             f"Successfully generated story with AI",
             username=user.username,
             place="StoryGenerateView.get",
         )
-
         return Response(
-            data={"title": title, "story": story},
+            data={
+                "title": parsed_answer["title"],
+                "story": parsed_answer["content"],
+            },
             status=201,
         )
 
