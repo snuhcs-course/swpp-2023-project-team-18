@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_statview
 
+import android.util.Log
 import snu.swpp.moment.data.model.StoryModel
 import snu.swpp.moment.utils.EmotionMap
 import snu.swpp.moment.utils.TimeConverter
@@ -90,6 +91,7 @@ class StatState(
             val hashtags: MutableMap<String, Int> = mutableMapOf()
             for (story in stories) {
                 for (hashtag in story.hashtags) {
+                    Log.d("hashtag2",hashtag.content)
                     hashtags.compute(hashtag.content) { _, existingValue ->
                         existingValue?.plus(
                             1

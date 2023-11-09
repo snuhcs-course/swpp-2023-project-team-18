@@ -1,10 +1,16 @@
 package snu.swpp.moment.ui.main_statview
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.LineChart
@@ -17,6 +23,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import net.alhazmy13.wordcloud.WordCloud
 import snu.swpp.moment.R
 import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
@@ -130,7 +137,48 @@ class StatViewFragment : Fragment() {
 
     }
     fun hashtagSetup(hashtags:Map<String,Int>){
-        
+        val wordCloudView = binding.statWordCloud
+
+        class MyJavaScriptInterface {
+            @JavascriptInterface
+            fun calculateContentDimensions(contentWidth: Int, contentHeight: Int) {
+                // Calculate the desired zoom level to fit the content
+                val zoomLevel = wordCloudView.width as Float / contentWidth
+                activity!!.runOnUiThread(Runnable { // Set the zoom level of the WebView to fit the content
+                    wordCloudView.setInitialScale((zoomLevel * 100).toInt())
+                })
+            }
+        }
+
+        val wordClouds:MutableList<WordCloud> = mutableListOf()
+        wordCloudView.setScale(30,10)
+        for(hashtag in hashtags){
+            wordClouds.add(WordCloud(hashtag.key,1))
+            Log.d("hashtag",hashtag.key)
+            Log.d("weight",hashtag.value.toString())
+        }
+            //  wordCloudView.setScale(30,10)
+     //   wordCloudView.setColors(intArrayOf(Color.BLUE))
+       wordClouds.add(WordCloud("",0))
+      //  wordClouds.add(WordCloud("기ㅏㄴㅇ렁니ㅏ러;ㄴㅇ러;ㄹㅎㅓ;ㅁ",2))
+
+        wordCloudView.setDataSet(wordClouds)
+        Log.d("data2",wordCloudView.data)
+        wordCloudView.notifyDataSetChanged()
+      /*  wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
+        wordCloudView.webViewClient = object: WebViewClient() {
+
+            override fun onPageFinished(view: WebView, url:String) {
+                // Call a JavaScript function to calculate the content dimensions
+                view.loadUrl("javascript:Android.calculateContentDimensions(document.body.scrollWidth, document.body.scrollHeight);");
+            }
+        }
+        wordCloudView.setOnTouchListener { v, event ->
+            e*/
+
+
+
+
     }
     fun emotionSetup(emotions:Map<String,Int>){
         val pieChart = binding.statPieChart
