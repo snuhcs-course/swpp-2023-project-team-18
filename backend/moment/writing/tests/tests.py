@@ -1,7 +1,6 @@
 import datetime
 from unittest.mock import patch
 
-from django.utils import timezone
 from django.test import TestCase
 from django.core.cache import cache
 from rest_framework.test import APIRequestFactory, force_authenticate
@@ -263,7 +262,7 @@ class AutoCompletionTest(TestCase):
         self.assertEqual(created_story.emotion, Emotions.INVALID)
         self.assertEqual(
             created_story.created_at.timestamp(),
-            (timezone.now() - datetime.timedelta(seconds=2)).timestamp(),
+            (datetime.datetime.now() - datetime.timedelta(seconds=2)).timestamp(),
         )
 
     @freeze_time(lambda: intended_gmt + datetime.timedelta(days=1, seconds=1))

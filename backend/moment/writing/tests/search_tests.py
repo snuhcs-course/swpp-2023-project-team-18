@@ -1,6 +1,5 @@
 import datetime
 
-from django.utils import timezone
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
 
@@ -20,7 +19,7 @@ class HashtagCompleteTest(TestCase):
         hashtag_2_1 = Hashtag.objects.create(content="우아아아")
 
         story1 = Story.objects.create(
-            created_at=timezone.now(),
+            created_at=datetime.datetime.now(),
             user=user1,
             content="yay",
             is_point_completed=True,
@@ -29,7 +28,7 @@ class HashtagCompleteTest(TestCase):
         story1.hashtags.add(hashtag_1_2)
         story1.hashtags.add(hashtag_1_3)
         story2 = Story.objects.create(
-            created_at=timezone.now(),
+            created_at=datetime.datetime.now(),
             user=user2,
             content="yay2",
             is_point_completed=True,
