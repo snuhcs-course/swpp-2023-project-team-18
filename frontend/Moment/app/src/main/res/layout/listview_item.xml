@@ -20,8 +20,7 @@
             style="@style/SMALL_GRAY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textAlignment="gravity"
+            android:textAlignment="textStart"
             tools:text="03:00" />
 
         <TextView
@@ -30,8 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:textAlignment="gravity"
+            android:textAlignment="textStart"
             tools:text="모먼트 내용" />
 
         <ImageView
@@ -48,8 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:textAlignment="gravity"
+            android:textAlignment="textStart"
             android:text="@string/ai_response_help_text" />
 
         <TextView
@@ -58,8 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:textAlignment="gravity"
+            android:textAlignment="textStart"
             tools:text="AI 답글 내용" />
 
     </LinearLayout>
