@@ -299,19 +299,21 @@ public class TodayViewFragment extends BaseWritePageFragment {
             @Override
             public void run() {
                 LocalDateTime now = LocalDateTime.now();
-                Log.d("TodayViewFragment", String.format("run: %s", now));
+                Log.d("TodayViewFragment", "refreshRunnable running at %s" + now);
+                Log.d("TodayViewFragment",
+                    "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
 
                 // 하루가 지났고 하루 마무리 진행 중이 아닐 때
                 if (isOutdated() && !listFooterContainer.isCompletionInProgress()) {
-                    Log.d("TodayViewFragment", "run: Reloading fragment");
+                    Log.d("TodayViewFragment", "refreshRunnable: Outdated, call APIs to refresh");
                     setToolbarTitle();
                     callApisToRefresh();
                     updateRefreshTime();
                 }
-                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+                registerRefreshRunnable(this);
             }
         };
-        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
+        registerRefreshRunnable(refreshRunnable);
         updateRefreshTime();
 
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, requireActivity());

@@ -178,19 +178,22 @@ public class DailyViewFragment extends BaseWritePageFragment {
         Runnable refreshRunnable = new Runnable() {
             @Override
             public void run() {
-                Log.d("DailyViewFragment", String.format("run: %s", LocalDateTime.now()));
+                Log.d("DailyViewFragment", "refreshRunnable running; currentDateTime: "
+                    + getCurrentDateTime());
+                Log.d("DailyViewFragment",
+                    "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
 
                 // 하루가 지났을 때
                 if (isOutdated()) {
-                    Log.d("DailyViewFragment", "run: Reloading fragment");
+                    Log.d("DailyViewFragment", "refreshRunnable: Outdated, call APIs to refresh");
                     setToolbarTitle();
                     callApisToRefresh();
                     updateRefreshTime();
                 }
-                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+                registerRefreshRunnable(this);
             }
         };
-        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
+        registerRefreshRunnable(refreshRunnable);
         updateRefreshTime();
 
         Log.d("DailyViewFragment", "onCreateView() ended");
@@ -212,8 +215,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
     private LocalDateTime getCurrentDateTime() {
         LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        LocalDateTime current = date.atTime(3, 0, 0);
-        return current;
+        return date.atTime(3, 0, 0);
     }
 
     @Override

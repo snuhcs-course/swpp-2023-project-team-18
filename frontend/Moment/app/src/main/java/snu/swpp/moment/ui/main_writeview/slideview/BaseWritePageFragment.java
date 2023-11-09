@@ -15,11 +15,14 @@ public abstract class BaseWritePageFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.d("BaseWritePageFragment", "onResume: Called");
+        Log.d("BaseWritePageFragment", "onResume: lastRefreshedTime: " + lastRefreshedTime);
         super.onResume();
         setToolbarTitle();
         if (isOutdated()) {
-            Log.d("BaseWritePageFragment", "Outdated, refreshing...");
+            Log.d("BaseWritePageFragment", "onResume: Outdated, call APIs to refresh");
             callApisToRefresh();
+            updateRefreshTime();
         }
     }
 
@@ -34,6 +37,13 @@ public abstract class BaseWritePageFragment extends Fragment {
 
     protected void updateRefreshTime() {
         lastRefreshedTime = LocalDateTime.now();
+    }
+
+    /**
+     * REFRESH_INTERVAL 후에 runnable을 실행함
+     */
+    protected void registerRefreshRunnable(Runnable runnable) {
+        refreshHandler.postDelayed(runnable, REFRESH_INTERVAL);
     }
 
     protected boolean isOutdated() {
