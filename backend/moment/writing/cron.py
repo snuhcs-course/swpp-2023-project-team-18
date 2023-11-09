@@ -5,7 +5,7 @@ from user.models import User
 from .constants import Emotions, AUTO_COMPLETE_TIMEOUT, AUTO_COMPLETE_MAX_TRIAL
 from .models import MomentPair, Story
 from .utils.gpt import GPTAgent
-from .utils.log import log
+from .utils.log import print_log
 from .utils.prompt import StoryGenerateTemplate
 
 
@@ -13,19 +13,19 @@ def auto_completion_job():
     users = User.objects.all()
     now = datetime.datetime.now()
     gpt_agent = GPTAgent()
-    log(message="starting auto completion job...", place="auto_completion_job")
+    print_log(message="starting auto completion job...", place="auto_completion_job")
     for user in users:
-        log(message=f"processing {user.username}", place="auto_completion_job")
+        print_log(message=f"processing {user.username}", place="auto_completion_job")
         last_days_moment_contents = get_last_days_moment_contents(user, now)
         last_days_story = get_last_days_story(user, now)
-        if last_days_story != None:
-            log(
+        if last_days_story is not None:
+            print_log(
                 message=f"{user.username} already finished the day",
                 place="auto_completion_job",
             )
             continue
         if len(last_days_moment_contents) == 0:
-            log(
+            print_log(
                 message=f"{user.username} hasn't written any moments",
                 place="auto_completion_job",
             )
@@ -47,7 +47,7 @@ def auto_completion_job():
             ai_title, ai_story = get_ai_title_and_story_from_moments(
                 last_days_moment_contents, gpt_agent
             )
-            log(
+            print_log(
                 message="generated story for user {user.username}",
                 place="auto_completion_job",
             )
@@ -113,7 +113,7 @@ def get_ai_title_and_story_from_moments(
             )
             return parsed_answer["title"], parsed_answer["content"]
         except GPTAgent.GPTError as e:
-            log(
+            print_log(
                 f"GPTError while calling GPT API; Cause={e.cause}, Received\n{e.answer}",
                 tag="error",
                 place="auto_completion_job",

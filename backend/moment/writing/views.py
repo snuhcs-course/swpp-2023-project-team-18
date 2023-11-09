@@ -34,7 +34,7 @@ from .serializers import (
     HashtagQuerySerializer,
 )
 from .utils.gpt import GPTAgent
-from .utils.log import log
+from .utils.log import print_log
 from .utils.prompt import MomentReplyTemplate, StoryGenerateTemplate
 
 
@@ -61,7 +61,7 @@ class MomentView(GenericAPIView):
         ).order_by("moment_created_at")
         serializer = self.get_serializer(moment_pairs, many=True)
 
-        log(
+        print_log(
             f"Successfully queried moments (length: {len(serializer.data)})",
             username=user.username,
             place="MomentView.get",
@@ -88,7 +88,7 @@ class MomentView(GenericAPIView):
             )
 
         except GPTAgent.GPTError:
-            log(
+            print_log(
                 f"Error while calling GPT API",
                 tag="error",
                 username=user.username,
@@ -119,7 +119,7 @@ class MomentView(GenericAPIView):
         )
         moment_pair.save()
 
-        log(
+        print_log(
             f"Successfully created moment",
             username=user.username,
             place="MomentView.post",
@@ -160,7 +160,7 @@ class StoryView(GenericAPIView):
 
         serializer = self.get_serializer(stories, many=True)
 
-        log(
+        print_log(
             f"Successfully queried stories (length: {len(serializer.data)})",
             username=user.username,
             place="StoryView.get",
@@ -187,7 +187,7 @@ class StoryView(GenericAPIView):
         story.content = content
         story.save()
 
-        log(
+        print_log(
             f"Successfully posted story",
             username=user.username,
             place="StoryView.post",
@@ -231,7 +231,7 @@ class StoryGenerateView(GenericAPIView):
         story_date = story.created_at
         curr_date = (story_date - timedelta(hours=3)).date()
 
-        log(
+        print_log(
             f"curr_date: {curr_date}",
             username=user.username,
             place="StoryGenerateView.get",
@@ -240,7 +240,7 @@ class StoryGenerateView(GenericAPIView):
         start_date = datetime(curr_date.year, curr_date.month, curr_date.day, 3)
         end_date = start_date + timedelta(hours=24)
 
-        log(
+        print_log(
             f"start and end date: {start_date}, {end_date}",
             username=user.username,
             place="StoryGenerateView.get",
@@ -253,13 +253,9 @@ class StoryGenerateView(GenericAPIView):
 
         moment_contents = [moment_pair.moment for moment_pair in moment_pairs]
 
-        # log(f"Moments: {moment_contents}", place="StoryGenerateView.get")
-
         self.gpt_agent.reset_messages()
         prompt = StoryGenerateTemplate.get_prompt(moments=";".join(moment_contents))
         self.gpt_agent.add_message(prompt)
-
-        # log(f"Prompt: {prompt}", place="StoryGenerateView.get")
 
         try:
             parsed_answer = self.gpt_agent.get_parsed_answer(
@@ -268,7 +264,7 @@ class StoryGenerateView(GenericAPIView):
                 required_keys=["title", "content"],
             )
         except GPTAgent.GPTError as e:
-            log(
+            print_log(
                 f"GPTError while calling GPT API; Cause={e.cause}, Received\n{e.answer}",
                 tag="error",
                 username=user.username,
@@ -282,7 +278,7 @@ class StoryGenerateView(GenericAPIView):
         assert isinstance(
             parsed_answer, dict
         ), f"parsed_answer is not a dict: {parsed_answer}"
-        log(
+        print_log(
             f"Successfully generated story with AI",
             username=user.username,
             place="StoryGenerateView.get",
@@ -310,14 +306,14 @@ class DayCompletionView(GenericAPIView):
 
         curr_time = int(datetime.now().timestamp())
 
-        log(
+        print_log(
             f"Current timestamp: {curr_time}",
             username=user.username,
             place="DayCompletionView.post",
         )
 
         if curr_time >= end:
-            log(
+            print_log(
                 f"Current time exceeded intended time",
                 tag="error",
                 username=user.username,
@@ -338,7 +334,7 @@ class DayCompletionView(GenericAPIView):
         )
         story.save()
 
-        log(
+        print_log(
             f"Successfully created empty story",
             username=user.username,
             place="DayCompletionView.post",
@@ -368,7 +364,7 @@ class EmotionView(GenericAPIView):
         ).order_by("created_at")
         serializer = self.get_serializer(stories, many=True)
 
-        log(
+        print_log(
             f"Successfully queried emotions (length: {len(serializer.data)})",
             username=user.username,
             place="EmotionView.get",
@@ -387,7 +383,7 @@ class EmotionView(GenericAPIView):
         emotion = body.validated_data["emotion"]
 
         if not emotion in Emotions:
-            log(
+            print_log(
                 f"Emotion string is invalid",
                 tag="error",
                 username=user.username,
@@ -406,7 +402,7 @@ class EmotionView(GenericAPIView):
         story.emotion = emotion
         story.save()
 
-        log(
+        print_log(
             f"Successfully posted emotion",
             username=user.username,
             place="EmotionView.post",
@@ -430,7 +426,7 @@ class ScoreView(GenericAPIView):
         story_id = body.validated_data["story_id"]
 
         if score < 1 or score > 5:
-            log(
+            print_log(
                 f"Invalid score",
                 tag="error",
                 username=user.username,
@@ -448,7 +444,7 @@ class ScoreView(GenericAPIView):
                 user=user,
             ).latest("created_at")
         except Story.DoesNotExist:
-            log(
+            print_log(
                 f"Cannot modify this score",
                 tag="error",
                 username=user.username,
@@ -464,7 +460,9 @@ class ScoreView(GenericAPIView):
         story.is_point_completed = True
         story.save()
 
-        log(f"Successfully saved score", username=user.username, place="ScoreView.post")
+        print_log(
+            f"Successfully saved score", username=user.username, place="ScoreView.post"
+        )
 
         return Response(
             data={"message": "Success!"},
@@ -494,7 +492,7 @@ class HashtagView(GenericAPIView):
             content_list.append(ser_data["content"])
 
         ans = Counter(content_list)
-        log(
+        print_log(
             f"Successfully queried hashtags (length: {len(serializer.data)})",
             username=user.username,
             place="HashtagView.get",
@@ -518,7 +516,7 @@ class HashtagView(GenericAPIView):
                 id=story_id,
             )
         except Story.DoesNotExist:
-            log(
+            print_log(
                 f"Provided story id does not exist",
                 tag="error",
                 username=user.username,
@@ -536,7 +534,7 @@ class HashtagView(GenericAPIView):
             story.hashtags.add(curr_hashtag)
         story.save()
 
-        log(
+        print_log(
             f"Successfully saved hashtags",
             username=user.username,
             place="HashtagView.post",
