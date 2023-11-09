@@ -7,11 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lightgray">#EFEFEF</color>
     <color name="gray">#C2C2C2</color>
     <color name="darkgray">#707070</color>
     <color name="red">#CD5252</color>
+    <color name="lightred">#D08787</color>
 
-    <color name="button_colored">#D08787</color>
     <color name="button_pressed">#707070</color>
     <color name="button_idle">#C2C2C2</color>
 </resources>

@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:background="@drawable/box_border"
+        android:background="@drawable/box_border_gray"
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/tag_hint"

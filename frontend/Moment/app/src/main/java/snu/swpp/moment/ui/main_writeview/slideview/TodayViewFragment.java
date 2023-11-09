@@ -27,11 +27,13 @@ import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
-import snu.swpp.moment.databinding.TodayItemBinding;
+import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
+import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
@@ -42,12 +44,13 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public class TodayViewFragment extends BaseWritePageFragment {
 
-    private TodayItemBinding binding;
+    private PageTodayBinding binding;
     private List<ListViewItem> listViewItems;
     private ListViewAdapter listViewAdapter;
 
     private BottomButtonContainer bottomButtonContainer;
     private ListFooterContainer listFooterContainer;
+    private NudgeHeaderContainer nudgeHeaderContainer;
 
     private TodayViewModel viewModel;
 
@@ -75,10 +78,10 @@ public class TodayViewFragment extends BaseWritePageFragment {
             new StoryRepository(storyRemoteDataSource));
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
 
@@ -93,14 +96,19 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     storyRepository, getStoryUseCase, saveScoreUseCase)).get(TodayViewModel.class);
         }
 
-        binding = TodayItemBinding.inflate(inflater, container, false);
+        binding = PageTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         listViewItems = new ArrayList<>();
 
-        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);
-        View footerView = LayoutInflater.from(getContext())
+
+        // list header & footer 등록
+        View headerView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.nudge_header, binding.todayMomentList, false);
+        binding.todayMomentList.addHeaderView(headerView);
+        View footerView = LayoutInflater.from(requireContext())
             .inflate(R.layout.listview_footer, binding.todayMomentList, false);
         binding.todayMomentList.addFooterView(footerView);
 
@@ -132,7 +140,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         listFooterContainer.setSubmitButtonOnClickListener(v -> {
             // 소프트 키보드 숨기기
-            KeyboardUtils.hideSoftKeyboard(getContext());
+            KeyboardUtils.hideSoftKeyboard(requireContext());
 
             String text = listFooterContainer.getMomentInputText();
             if (!text.isEmpty()) {
@@ -165,12 +173,24 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         });
 
+        // nudge header 관리 객체 초기화
+        nudgeHeaderContainer = new NudgeHeaderContainer(headerView);
+        // TODO: API로 받아온 UiState를 observe 해서 내용 update
+        final String nudgeContent = "요즘은 계속 우울한 나날을 보내고 계신 것 같아요. 오늘은 기분이 어때요? 어떤 재미있는 계획이 있나요?";
+        nudgeHeaderContainer.updateUi(new NudgeUiState(null, false, nudgeContent));
+
+        nudgeHeaderContainer.observeDeleteSwitch(deleteSwitch -> {
+            if (deleteSwitch) {
+                // TODO: nudge 숨기기 API 호출
+            }
+        });
+
         // 하단 버튼 관리 객체 초기화
         bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
         bottomButtonContainer.viewingMoment();
 
         // 하루 마무리 API 호출 시 동작 설정
-        MainActivity activity = (MainActivity) getActivity();
+        MainActivity activity = (MainActivity) requireActivity();
         viewModel.observeCompletionState(activity.completionStateObserver());
         viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
         viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
@@ -232,14 +252,15 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     scrollToBottom();
                 }
             } else if (error instanceof NoInternetException) {
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT).show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            } else if (error instanceof UnauthorizedAccessException) {
+                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                    .show();
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -258,15 +279,16 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 bottomButtonContainer.setActivated(false, true);
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                    .show();
             } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
                     .show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -277,22 +299,24 @@ public class TodayViewFragment extends BaseWritePageFragment {
             @Override
             public void run() {
                 LocalDateTime now = LocalDateTime.now();
-                Log.d("TodayViewFragment", String.format("run: %s", now));
+                Log.d("TodayViewFragment", "refreshRunnable running at %s" + now);
+                Log.d("TodayViewFragment",
+                    "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
 
                 // 하루가 지났고 하루 마무리 진행 중이 아닐 때
                 if (isOutdated() && !listFooterContainer.isCompletionInProgress()) {
-                    Log.d("TodayViewFragment", "run: Reloading fragment");
+                    Log.d("TodayViewFragment", "refreshRunnable: Outdated, call APIs to refresh");
                     setToolbarTitle();
                     callApisToRefresh();
                     updateRefreshTime();
                 }
-                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+                registerRefreshRunnable(this);
             }
         };
-        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
+        registerRefreshRunnable(refreshRunnable);
         updateRefreshTime();
 
-        KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, requireActivity());
 
         return root;
     }
@@ -306,11 +330,17 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     @Override
     protected String getDateText() {
-
-        return TimeConverter.formatLocalDate(TimeConverter.getToday(), "yyyy. MM. dd.");
+        LocalDate today = TimeConverter.getToday();
+        String formatted = TimeConverter.formatLocalDate(today, "yyyy. MM. dd.");
+        Log.d("TodayViewFragment", "getDateText: today=" + today + ", formatted=" + formatted);
+        return formatted;
     }
 
     private void scrollToBottom() {
+        if (binding == null) {
+            Log.d("TodayViewFragment", "scrollToBottom: binding is null");
+            return;
+        }
         binding.todayMomentList.post(() -> binding.todayMomentList.smoothScrollToPosition(
             binding.todayMomentList.getCount() - 1));
     }

@@ -21,7 +21,7 @@ import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
-import snu.swpp.moment.databinding.DailyItemBinding;
+import snu.swpp.moment.databinding.PageDailyBinding;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
@@ -37,7 +37,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
     private int minusDays;
 
-    private DailyItemBinding binding;
+    private PageDailyBinding binding;
     private List<ListViewItem> listViewItems;
     private ListViewAdapter listViewAdapter;
 
@@ -74,10 +74,10 @@ public class DailyViewFragment extends BaseWritePageFragment {
             new StoryRepository(storyRemoteDataSource));
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
 
@@ -94,17 +94,17 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 saveScoreUseCase)).get(
                 DailyViewModel.class));
 
-        binding = DailyItemBinding.inflate(inflater, container, false);
+        binding = PageDailyBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // ListView setup
         listViewItems = new ArrayList<>();
-        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         listViewAdapter.setAnimation(false);
 
         binding.dailyMomentList.setAdapter(listViewAdapter);
-        View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, null, false);
+        View footerView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.listview_footer, binding.dailyMomentList, false);
         binding.dailyMomentList.addFooterView(footerView);
 
         callApisToRefresh();
@@ -125,17 +125,17 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 }
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
             } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error,
+                Toast.makeText(requireContext(), R.string.token_expired_error,
                     Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
                 Log.d("DailyViewFragment", "Unknown error: " + error.getMessage());
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
                     .show();
             }
         });
@@ -160,16 +160,16 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 }
             } else if (error instanceof NoInternetException) {
                 // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
             } else if (error instanceof UnauthorizedAccessException) {
                 // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error,
+                Toast.makeText(requireContext(), R.string.token_expired_error,
                     Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
                     .show();
             }
         });
@@ -178,19 +178,22 @@ public class DailyViewFragment extends BaseWritePageFragment {
         Runnable refreshRunnable = new Runnable() {
             @Override
             public void run() {
-                Log.d("DailyViewFragment", String.format("run: %s", LocalDateTime.now()));
+                Log.d("DailyViewFragment", "refreshRunnable running; currentDateTime: "
+                    + getCurrentDateTime());
+                Log.d("DailyViewFragment",
+                    "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
 
                 // 하루가 지났을 때
                 if (isOutdated()) {
-                    Log.d("DailyViewFragment", "run: Reloading fragment");
+                    Log.d("DailyViewFragment", "refreshRunnable: Outdated, call APIs to refresh");
                     setToolbarTitle();
                     callApisToRefresh();
                     updateRefreshTime();
                 }
-                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+                registerRefreshRunnable(this);
             }
         };
-        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
+        registerRefreshRunnable(refreshRunnable);
         updateRefreshTime();
 
         Log.d("DailyViewFragment", "onCreateView() ended");
@@ -212,8 +215,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
     private LocalDateTime getCurrentDateTime() {
         LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        LocalDateTime current = date.atTime(3, 0, 0);
-        return current;
+        return date.atTime(3, 0, 0);
     }
 
     @Override
