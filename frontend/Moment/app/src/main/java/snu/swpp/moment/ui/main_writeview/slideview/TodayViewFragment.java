@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -327,8 +328,10 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     @Override
     protected String getDateText() {
-
-        return TimeConverter.formatLocalDate(TimeConverter.getToday(), "yyyy. MM. dd.");
+        LocalDate today = TimeConverter.getToday();
+        String formatted = TimeConverter.formatLocalDate(today, "yyyy. MM. dd.");
+        Log.d("TodayViewFragment", "getDateText: today=" + today + ", formatted=" + formatted);
+        return formatted;
     }
 
     private void scrollToBottom() {
