@@ -8,10 +8,10 @@ import snu.swpp.moment.MainActivity;
 
 public abstract class BaseWritePageFragment extends Fragment {
 
-    protected final Handler refreshHandler = new Handler();
     protected LocalDateTime lastRefreshedTime = LocalDateTime.now();
-    protected final long REFRESH_INTERVAL = 1000 * 60 * 10;   // 10 minutes
-    protected final int STARTING_HOUR = 3;
+    private final Handler refreshHandler = new Handler();
+    private final long REFRESH_INTERVAL = 1000 * 60 * 5;  // 5 minutes
+    private final int STARTING_HOUR = 3;
 
     @Override
     public void onResume() {
