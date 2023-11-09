@@ -3,8 +3,10 @@ package snu.swpp.moment.ui.main_writeview.slideview;
 import android.os.Handler;
 import android.util.Log;
 import androidx.fragment.app.Fragment;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import snu.swpp.moment.MainActivity;
+import snu.swpp.moment.utils.TimeConverter;
 
 public abstract class BaseWritePageFragment extends Fragment {
 
@@ -33,7 +35,15 @@ public abstract class BaseWritePageFragment extends Fragment {
 
     protected abstract void callApisToRefresh();
 
-    protected abstract String getDateText();
+    protected String getDateText() {
+        LocalDate date = getDate();
+        String dayOfWeek = date.getDayOfWeek().getDisplayName(
+            java.time.format.TextStyle.SHORT, java.util.Locale.KOREAN);
+        Log.d("BaseWritePageFragment", "getDateText: date: " + date + ", dayOfWeek: " + dayOfWeek);
+        return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.") + " " + dayOfWeek;
+    }
+
+    protected abstract LocalDate getDate();
 
     protected void updateRefreshTime() {
         lastRefreshedTime = LocalDateTime.now();

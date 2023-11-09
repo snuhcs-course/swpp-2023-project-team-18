@@ -329,11 +329,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
     }
 
     @Override
-    protected String getDateText() {
-        LocalDate today = TimeConverter.getToday();
-        String formatted = TimeConverter.formatLocalDate(today, "yyyy. MM. dd.");
-        Log.d("TodayViewFragment", "getDateText: today=" + today + ", formatted=" + formatted);
-        return formatted;
+    protected LocalDate getDate() {
+        return TimeConverter.getToday();
     }
 
     private void scrollToBottom() {

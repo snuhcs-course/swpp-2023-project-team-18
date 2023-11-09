@@ -208,14 +208,12 @@ public class DailyViewFragment extends BaseWritePageFragment {
     }
 
     @Override
-    protected String getDateText() {
-        LocalDate date = getCurrentDateTime().toLocalDate();
-        return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.");
+    protected LocalDate getDate() {
+        return TimeConverter.getToday().minusDays(minusDays);
     }
 
     private LocalDateTime getCurrentDateTime() {
-        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        return date.atTime(3, 0, 0);
+        return getDate().atTime(3, 0, 0);
     }
 
     @Override
