@@ -106,17 +106,19 @@ public class ListViewAdapter extends BaseAdapter {
     private void showWaitingAnimation(TextView textView, boolean activate) {
         if (activate) {
             // AI 답글 대기중 애니메이션 표시
-            textView.setText("· · ·\nAI가 일기를 읽고 있어요");    // 가운뎃점
+            textView.setText("· · ·\nAI가 일기를 읽고 있어요");
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             textView.setAlpha(0.5f);
             textView.clearAnimation();
             textView.startAnimation(animationProvider.fadeInOut);
+            Log.d("ListViewAdapter", "showWaitingAnimation() called: activate");
         } else {
             // AI 답글 대기중 애니메이션 제거
             textView.setText("");
             textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             textView.setAlpha(1.0f);
             textView.clearAnimation();
+            Log.d("ListViewAdapter", "showWaitingAnimation() called: deactivate");
         }
     }
 }
