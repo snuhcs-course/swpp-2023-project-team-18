@@ -87,7 +87,9 @@ class GPTAgent:
             if "answer" in container:
                 return container["answer"]
 
-        print_log(f"GPT API max trial reached", tag="error", place="GPTAgent.get_answer")
+        print_log(
+            f"GPT API max trial reached", tag="error", place="GPTAgent.get_answer"
+        )
         raise GPTAgent.GPTError(
             "MAX_TRIAL", f"GPT call failed after {max_trial} trials"
         )
