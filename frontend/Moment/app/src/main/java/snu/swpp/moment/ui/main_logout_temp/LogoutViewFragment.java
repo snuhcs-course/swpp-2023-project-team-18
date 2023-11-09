@@ -37,7 +37,7 @@ public class LogoutViewFragment extends Fragment {
             logoutButton.setOnClickListener(v -> {
                 System.out.println("#DEBUG: logout button clicked");
                 authenticationRepository.logout();
-                Intent logoutIntent = new Intent(getActivity(), EntryActivity.class);
+                Intent logoutIntent = new Intent(requireActivity(), EntryActivity.class);
                 startActivity(logoutIntent);
             });
         } catch (GeneralSecurityException e) {

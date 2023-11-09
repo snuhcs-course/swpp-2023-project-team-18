@@ -24,12 +24,8 @@ public abstract class BaseWritePageFragment extends Fragment {
     }
 
     public void setToolbarTitle() {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.setToolbarTitle(getDateText());
-        } else {
-            throw new RuntimeException("MainActivity is null");
-        }
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.setToolbarTitle(getDateText());
     }
 
     protected abstract void callApisToRefresh();

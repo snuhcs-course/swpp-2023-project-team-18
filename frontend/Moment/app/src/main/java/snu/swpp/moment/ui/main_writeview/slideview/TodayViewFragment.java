@@ -313,7 +313,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
         updateRefreshTime();
 
-        KeyboardUtils.hideKeyboardOnOutsideTouch(root, getActivity());
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, requireActivity());
 
         return root;
     }
