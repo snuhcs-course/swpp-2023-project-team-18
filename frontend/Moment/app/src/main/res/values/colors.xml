@@ -14,4 +14,12 @@
     <color name="button_colored">#D08787</color>
     <color name="button_pressed">#707070</color>
     <color name="button_idle">#C2C2C2</color>
+
+    <color name="stat_emotion_12">#FFEA00</color>
+    <color name="stat_emotion_34">#FFD1DC</color>
+    <color name="stat_emotion_56">#F5F5DC</color>
+    <color name="stat_emotion_78">#800080</color>
+    <color name="stat_emotion_910">#800000</color>
+
+
 </resources>

@@ -12,8 +12,12 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import snu.swpp.moment.R
 import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
 import snu.swpp.moment.data.source.StoryRemoteDataSource
@@ -29,7 +33,7 @@ class StatViewFragment : Fragment() {
     private val authenticationRepository: AuthenticationRepository =
         AuthenticationRepository.getInstance(context)
     private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
-
+    private lateinit var emotionColors:Map<String,Int>
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(
@@ -129,7 +133,31 @@ class StatViewFragment : Fragment() {
         
     }
     fun emotionSetup(emotions:Map<String,Int>){
+        val pieChart = binding.statPieChart
+        var pie : MutableList<PieEntry> = mutableListOf()
+        var colors:MutableList<Int> = mutableListOf()
+        for(emotion in emotions){
+            pie.add(PieEntry(emotion.value.toFloat(),emotion.key))
+            colors.add(getEmotionColor(emotion.key))
 
+        }
+        val pieDataset = PieDataSet(pie,"감정")
+        pieDataset.colors = colors
+        pieChart.data = PieData(pieDataset)
+        pieChart.invalidate()
+
+    }
+    fun getEmotionColor(emotion:String):Int{
+        if(emotion.equals("설렘")||emotion.equals("신남"))
+            return requireContext().getColor(R.color.stat_emotion_12)
+        else if(emotion.equals("기쁨")||emotion.equals("행복"))
+            return requireContext().getColor(R.color.stat_emotion_34)
+        else if(emotion.equals("평범")||emotion.equals("모름"))
+            return requireContext().getColor(R.color.stat_emotion_56)
+        else if(emotion.equals("슬픔")||emotion.equals("우울"))
+            return requireContext().getColor(R.color.stat_emotion_78)
+        else
+            return requireContext().getColor(R.color.stat_emotion_910)
     }
     override fun onDestroyView() {
         super.onDestroyView()
