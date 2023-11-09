@@ -46,8 +46,11 @@ class MomentPair(models.Model):
 
 class Nudge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    story = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
+    summarized_story = models.CharField(max_length=1000)
     content = models.CharField(max_length=1000)
-    is_completed = models.BooleanField(default=False)
+    should_be_displayed = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_created=False)
