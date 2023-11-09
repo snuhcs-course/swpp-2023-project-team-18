@@ -48,7 +48,7 @@ def auto_completion_job():
                 last_days_moment_contents, gpt_agent
             )
             print_log(
-                message="generated story for user {user.username}",
+                message=f"generated story for user {user.username}",
                 place="auto_completion_job",
             )
             story = Story.objects.create(
