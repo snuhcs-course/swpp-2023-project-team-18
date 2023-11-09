@@ -46,7 +46,6 @@ public class NudgeHeaderContainer {
     }
 
     private void setVisibility(boolean visible) {
-        // TODO: GONE 처리 후에도 리스트 위쪽에 공간이 남아 있는 문제 해결
         if (!visible) {
             nudgeBox.startAnimation(animationProvider.longFadeOut);
             nudgeBox.postDelayed(() -> {
