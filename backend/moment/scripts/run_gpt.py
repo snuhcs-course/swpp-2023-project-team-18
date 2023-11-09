@@ -9,7 +9,7 @@ import openai
 
 from writing.data.jsonl import load_jsonl, save_jsonl, fpprint
 from writing.utils.gpt import GPTAgent
-from writing.utils.prompt import MomentReplyTemplate, StoryGenerateTemplate
+from writing.utils.prompt import StoryGenerateTemplate
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 

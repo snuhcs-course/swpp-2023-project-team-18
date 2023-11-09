@@ -2,7 +2,7 @@ from typing import Optional
 from datetime import datetime
 
 
-def log(
+def print_log(
     message: str,
     tag: Optional[str] = None,
     username: Optional[str] = None,
