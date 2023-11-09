@@ -332,6 +332,10 @@ public class TodayViewFragment extends BaseWritePageFragment {
     }
 
     private void scrollToBottom() {
+        if (binding == null) {
+            Log.d("TodayViewFragment", "scrollToBottom: binding is null");
+            return;
+        }
         binding.todayMomentList.post(() -> binding.todayMomentList.smoothScrollToPosition(
             binding.todayMomentList.getCount() - 1));
     }
