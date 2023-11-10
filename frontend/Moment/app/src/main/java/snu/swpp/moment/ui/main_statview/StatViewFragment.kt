@@ -1,18 +1,30 @@
 package snu.swpp.moment.ui.main_statview
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
-import android.webkit.WebView
-import androidx.core.content.ContextCompat
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.semantics.SemanticsProperties.Text
+import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.LineChart
@@ -27,6 +39,8 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import eu.wewox.tagcloud.TagCloud
+import eu.wewox.tagcloud.rememberTagCloudState
 import net.alhazmy13.wordcloud.WordCloud
 import snu.swpp.moment.R
 import snu.swpp.moment.data.repository.AuthenticationRepository
@@ -64,6 +78,19 @@ class StatViewFragment : Fragment() {
         )
 
         binding = FragmentStatviewBinding.inflate(inflater, container, false)
+        binding.statWordCloud.apply{
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                WordCloudView(mapOf())
+
+            }
+        }
+        binding.statWordCloud.setOnTouchListener { v, event ->
+            Log.d("touch2","touch")
+            binding.con.requestDisallowInterceptTouchEvent(true)
+            return@setOnTouchListener false
+
+        }
         val root: View = binding.root
         lineChart = binding.statLineChart
 
@@ -107,8 +134,12 @@ class StatViewFragment : Fragment() {
             // Fragment가 활성 상태일 때만 UI 업데이트를 진행합니다.
             state?.let {
                 scoreSetup(it.scoresBydateOffset, viewModel.today.value ?: LocalDate.now())
-                hashtagSetup(it.hashtagCounts)
+            //    hashtagSetup(it.hashtagCounts)
                 emotionSetup(it.emotionCounts)
+                binding.statWordCloud.setContent { 
+                    WordCloudView(labels = it.hashtagCounts)
+                }
+
             }
         }
         viewModel.getStats(false)
@@ -133,7 +164,7 @@ class StatViewFragment : Fragment() {
 
         // 그리드 dash
         val dashPathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
-        val commonColor = Color.BLACK
+        val commonColor = android.graphics.Color.BLACK
         val commonLineWidth = 1.2f
 
         dataset.circleColors = listOf(requireContext().getColor(R.color.black))
@@ -194,7 +225,7 @@ class StatViewFragment : Fragment() {
             }
         })
 
-        lineChart.axisLeft.gridColor=Color.BLACK
+        lineChart.axisLeft.gridColor=android.graphics.Color.BLACK
         val limitLine = LimitLine(6f, "").apply {
             lineWidth = commonLineWidth
             lineColor = commonColor
@@ -217,7 +248,7 @@ class StatViewFragment : Fragment() {
 
 
     }
-    fun hashtagSetup(hashtags:Map<String,Int>){
+   /* fun hashtagSetup(hashtags:Map<String,Int>){
         val wordCloudView = binding.statWordCloud
 
         class MyJavaScriptInterface {
@@ -241,11 +272,13 @@ class StatViewFragment : Fragment() {
        wordClouds.add(WordCloud("",0))
 
         wordCloudView.setDataSet(wordClouds)
+        wordCloudView.setColors(intArrayOf(Color.BLUE, Color.GRAY, Color.GREEN, Color.CYAN))
+
         Log.d("data2",wordCloudView.data)
         wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
         wordCloudView.notifyDataSetChanged()
 
-        }
+        }*/
 
 
     fun emotionSetup(emotions:Map<String,Int>){
@@ -328,6 +361,35 @@ class StatViewFragment : Fragment() {
     }
     private fun formatDateString(date: LocalDate): String {
         return date.format(DateTimeFormatter.ofPattern("yy.MM.dd"))
+    }
+    @Composable
+    fun WordCloudView(labels:Map<String,Int>){
+
+
+
+        TagCloud(
+            state = rememberTagCloudState(),
+            modifier = Modifier.padding(64.dp)
+        ) {
+            items((labels.toList())) {
+                Surface(
+                    shape = RoundedCornerShape(2.dp),
+                    modifier = Modifier
+                        .tagCloudItemFade()
+                        .tagCloudItemScaleDown()
+                ) {
+                    Text(
+                        text = it.first,
+                    //    color = Color.BLUE,
+                        modifier = Modifier.padding(2.dp),
+                        color = androidx.compose.ui.graphics.Color.Blue
+
+
+
+                        )
+                }
+            }
+        }
     }
 
 }

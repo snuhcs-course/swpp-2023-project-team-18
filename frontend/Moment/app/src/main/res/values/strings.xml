@@ -86,5 +86,7 @@
     <string name="stat_section_month_score">한 달 통계</string>
     <string name="stat_duration">기간</string>
 
+    <string name="stat_section_score">하루 점수</string>
+  <string name="title_activity_min">MinActivity</string>
 
 </resources>

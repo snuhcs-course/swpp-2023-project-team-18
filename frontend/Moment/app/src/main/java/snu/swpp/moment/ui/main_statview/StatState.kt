@@ -87,7 +87,7 @@ class StatState(
             return emotions
         }
 
-        private fun storiesToHashtags(stories: List<StoryModel>): Map<String, Int> {
+         fun storiesToHashtags(stories: List<StoryModel>): Map<String, Int> {
             val hashtags: MutableMap<String, Int> = mutableMapOf()
             for (story in stories) {
                 for (hashtag in story.hashtags) {

@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_marginTop="?attr/actionBarSize"
+
+  xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
+  android:id = "@+id/con"
     tools:context=".ui.main_statview.StatViewFragment">
 
     <include
@@ -53,18 +58,18 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintWidth_percent="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stat_word_cloud"
-        app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintDimensionRatio="1:1"
+      app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stat_line_chart"
         />
 
-    <snu.swpp.moment.ui.main_statview.CustomWordCloudView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/stat_word_cloud"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintWidth_percent="1"
-        app:layout_constraintDimensionRatio="2:1"
-        app:layout_constraintTop_toBottomOf="@id/stat_line_chart"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/stat_pie_chart"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
@@ -72,3 +77,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

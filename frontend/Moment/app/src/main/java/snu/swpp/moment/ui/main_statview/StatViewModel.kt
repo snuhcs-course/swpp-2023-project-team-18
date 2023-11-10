@@ -1,5 +1,7 @@
 package snu.swpp.moment.ui.main_statview
 
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import snu.swpp.moment.data.callback.StoryGetCallBack
@@ -20,6 +22,8 @@ class StatViewModel(
 ) : ViewModel() {
     val today: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     val stat: MutableLiveData<StatState> = MutableLiveData()
+    private val emptyMap: Map<String, Int> = mapOf()
+    val hashtags = mutableStateOf(emptyMap)
     // 기간을 표시하기 위한 변수
     val startDate: MutableLiveData<LocalDate> = MutableLiveData()
     val endDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
@@ -52,6 +56,7 @@ class StatViewModel(
                     object : StoryGetCallBack {
                         override fun onSuccess(storyList: MutableList<StoryModel>) {
                             stat.value = StatState.fromStoryModels(storyList, todayDate)
+                            hashtags.value = StatState.storiesToHashtags(storyList)
                         }
 
                         override fun onFailure(error: Exception) {
