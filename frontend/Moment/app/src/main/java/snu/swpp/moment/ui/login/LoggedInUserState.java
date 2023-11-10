@@ -12,7 +12,7 @@ class LoggedInUserState {
         this.nickname = nickname;
     }
 
-    String getDisplayName() {
+    String getNickname() {
         return nickname;
     }
 }

@@ -74,7 +74,7 @@ public class RegisterViewModelTest extends TestCase {
         // Then
         LiveData<RegisterResultState> registerResultState = registerViewModel.getRegisterResult();
 
-        assertEquals(registerResultState.getValue().getSuccess().getDisplayName(), "test_nickname");
+        assertEquals(registerResultState.getValue().getSuccess().getNickname(), "test_nickname");
     }
 
     @Test

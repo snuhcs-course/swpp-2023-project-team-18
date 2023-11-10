@@ -77,7 +77,7 @@ public class LoginViewModelTest extends TestCase {
         // Then
         LiveData<LoginResultState> loginResultState = loginViewModel.getLoginResult();
 
-        assertEquals(loginResultState.getValue().getSuccess().getDisplayName(), "test_nickname");
+        assertEquals(loginResultState.getValue().getSuccess().getNickname(), "test_nickname");
     }
 
     @Test
