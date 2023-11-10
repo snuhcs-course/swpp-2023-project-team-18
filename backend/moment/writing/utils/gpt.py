@@ -10,6 +10,7 @@ from writing.constants import OPENAI_API_KEY
 from writing.utils.log import print_log
 
 openai.api_key = OPENAI_API_KEY
+multiprocessing.set_start_method("fork")
 
 
 def timeout(func: Callable):
@@ -113,6 +114,7 @@ class GPTAgent:
             rate_limit_wait=rate_limit_wait,
             max_trial=max_trial,
         )
+        answer = answer.replace("\n", "\\n")
         parsed_answer = self.parse_as_json(answer, required_keys=required_keys)
         return parsed_answer
 
