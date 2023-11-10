@@ -298,7 +298,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         Runnable refreshRunnable = new Runnable() {
             @Override
             public void run() {
-                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime now = getCurrentDateTime();
                 Log.d("TodayViewFragment", "refreshRunnable running at %s" + now);
                 Log.d("TodayViewFragment",
                     "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
@@ -323,14 +323,20 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     @Override
     protected void callApisToRefresh() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = getCurrentDateTime();
+        Log.d("TodayViewFragment", "callApisToRefresh: called with timestamp " + now);
         viewModel.getMoment(now);
         viewModel.getStory(now);
     }
 
     @Override
-    protected LocalDate getDate() {
+    protected LocalDate getCurrentDate() {
         return TimeConverter.getToday();
+    }
+
+    @Override
+    protected LocalDateTime getCurrentDateTime() {
+        return LocalDateTime.now();
     }
 
     private void scrollToBottom() {

@@ -203,17 +203,19 @@ public class DailyViewFragment extends BaseWritePageFragment {
     @Override
     protected void callApisToRefresh() {
         LocalDateTime currentDateTime = getCurrentDateTime();
+        Log.d("DailyViewFragment", "callApisToRefresh: called with timestamp " + currentDateTime);
         viewModel.getMoment(currentDateTime);
         viewModel.getStory(currentDateTime);
     }
 
     @Override
-    protected LocalDate getDate() {
+    protected LocalDate getCurrentDate() {
         return TimeConverter.getToday().minusDays(minusDays);
     }
 
-    private LocalDateTime getCurrentDateTime() {
-        return getDate().atTime(3, 0, 0);
+    @Override
+    protected LocalDateTime getCurrentDateTime() {
+        return getCurrentDate().atTime(3, 0, 0);
     }
 
     @Override

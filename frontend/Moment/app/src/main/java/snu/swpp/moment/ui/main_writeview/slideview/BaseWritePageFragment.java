@@ -36,14 +36,22 @@ public abstract class BaseWritePageFragment extends Fragment {
     protected abstract void callApisToRefresh();
 
     protected String getDateText() {
-        LocalDate date = getDate();
+        LocalDate date = getCurrentDate();
         String dayOfWeek = date.getDayOfWeek().getDisplayName(
             java.time.format.TextStyle.SHORT, java.util.Locale.KOREAN);
         Log.d("BaseWritePageFragment", "getDateText: date: " + date + ", dayOfWeek: " + dayOfWeek);
         return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.") + " " + dayOfWeek;
     }
 
-    protected abstract LocalDate getDate();
+    /**
+     * 3시 기준으로 보정된 LocalDate
+     */
+    protected abstract LocalDate getCurrentDate();
+
+    /**
+     * API 호출 시 사용할 LocalDateTime
+     */
+    protected abstract LocalDateTime getCurrentDateTime();
 
     protected void updateRefreshTime() {
         lastRefreshedTime = LocalDateTime.now();
