@@ -9,25 +9,29 @@ import openai
 
 from writing.data.jsonl import load_jsonl, save_jsonl, fpprint
 from writing.utils.gpt import GPTAgent
-from writing.utils.prompt import StoryGenerateTemplate
+from writing.utils.prompt import (
+    StoryGenerateTemplate,
+    NudgeGenerateOneTemplate,
+    NudgeGenerateTwoTemplate,
+)
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # FIXME: Change this part to run the intended experiment
 # ----------------------------
-template = StoryGenerateTemplate
-var_names = ["moments"]
+template = NudgeGenerateOneTemplate
+var_names = ["diary"]
 
-DATA_PATH = "writing/data/story_test.jsonl"
-TEST_NAME = "story1"
-OUTPUT_JSONL_PATH = f"results/{TEST_NAME}.jsonl"
-OUTPUT_TXT_PATH = f"results/{TEST_NAME}.txt"
+DATA_PATH = "writing/data/nudge_test.jsonl"
+TEST_NAME = "nudge3"
+OUTPUT_JSONL_PATH = f"results/results_nudge/{TEST_NAME}.jsonl"
+OUTPUT_TXT_PATH = f"results/results_nudge/{TEST_NAME}.txt"
 # ----------------------------
 
 agent = GPTAgent()
 results = []
 
-DUPLICATES = 1
+DUPLICATES = 3
 
 
 def run():
