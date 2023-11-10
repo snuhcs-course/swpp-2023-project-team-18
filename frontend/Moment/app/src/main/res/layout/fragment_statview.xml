@@ -45,18 +45,18 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintWidth_percent="1"
-        app:layout_constraintDimensionRatio="1.5:1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stat_line_chart"
+        app:layout_constraintTop_toBottomOf="@id/stat_word_cloud"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <net.alhazmy13.wordcloud.WordCloudView
+    <snu.swpp.moment.ui.main_statview.CustomWordCloudView
         android:id="@+id/stat_word_cloud"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintWidth_percent="1"
         app:layout_constraintDimensionRatio="2:1"
-        app:layout_constraintTop_toBottomOf="@id/stat_pie_chart"
+        app:layout_constraintTop_toBottomOf="@id/stat_line_chart"
         app:layout_constraintEnd_toEndOf="parent"
         />
 

@@ -177,9 +177,9 @@ class StatViewFragment : Fragment() {
             @JavascriptInterface
             fun calculateContentDimensions(contentWidth: Int, contentHeight: Int) {
                 // Calculate the desired zoom level to fit the content
-                val zoomLevel = wordCloudView.width as Float / contentWidth
+                val zoomLevel = (wordCloudView.width.toFloat()) / contentWidth
                 activity!!.runOnUiThread(Runnable { // Set the zoom level of the WebView to fit the content
-                    wordCloudView.setInitialScale((zoomLevel * 100).toInt())
+                    wordCloudView.setInitialScale((zoomLevel * 50).toInt())
                 })
             }
         }
@@ -195,8 +195,8 @@ class StatViewFragment : Fragment() {
 
         wordCloudView.setDataSet(wordClouds)
         Log.d("data2",wordCloudView.data)
+        wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
         wordCloudView.notifyDataSetChanged()
-       wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
 
         }
 
