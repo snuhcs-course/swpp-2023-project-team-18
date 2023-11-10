@@ -7,37 +7,13 @@
     android:layout_marginTop="?attr/actionBarSize"
     tools:context=".ui.main_statview.StatViewFragment">
 
-    <Button
-        android:id="@+id/stat_weekButton"
-        android:layout_width="@dimen/stat_view_button_width"
-        android:layout_height="@dimen/stat_view_button_height"
-        android:layout_marginStart="16dp"
-        android:enabled="true"
-        android:fontFamily="@font/maruburi_bold"
-        android:text="@string/stat_section_week"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/stat_monthButton"
-        android:layout_width="@dimen/stat_view_button_width"
-        android:layout_height="@dimen/stat_view_button_height"
-        android:layout_marginStart="12dp"
-        android:fontFamily="@font/maruburi_bold"
-        android:text="@string/stat_section_month"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@id/stat_weekButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/stat_date"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/statUtilContainer"
+        layout="@layout/stat_button_date"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="2023. 11. 1. ~ 2023. 11. 8."
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        tools:visibility="visible" />
+
 
     <TextView
         android:id="@+id/stat_day_score_text"
@@ -46,7 +22,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stat_monthButton"
+        app:layout_constraintTop_toBottomOf="@+id/statUtilContainer"
         android:text="@string/stat_section_score"
         android:fontFamily="@font/maruburi_bold"
         android:textSize="14sp"
@@ -59,6 +35,9 @@
         android:layout_marginRight="10dp"
         app:layout_constraintDimensionRatio="2:1"
         app:layout_constraintTop_toBottomOf="@+id/stat_day_score_text"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         />
 
     <com.github.mikephil.charting.charts.PieChart

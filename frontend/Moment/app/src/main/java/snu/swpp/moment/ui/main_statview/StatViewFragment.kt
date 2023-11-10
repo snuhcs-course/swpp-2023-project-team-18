@@ -29,6 +29,7 @@ import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
 import snu.swpp.moment.data.source.StoryRemoteDataSource
 import snu.swpp.moment.databinding.FragmentStatviewBinding
+import snu.swpp.moment.databinding.StatButtonDateBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -54,17 +55,36 @@ class StatViewFragment : Fragment() {
     ): View? {
         val statViewModel = ViewModelProvider(this).get(
             StatViewModel::class.java
+
         )
+
         binding = FragmentStatviewBinding.inflate(inflater, container, false)
         val root: View = binding.root
         lineChart = binding.statLineChart
 
 
-        binding.statWeekButton.setOnClickListener {
+        // Include된 버튼, 기간을 포함하는 레이아웃에 대한 바인딩 객체 생성
+        val buttonDateBinding = StatButtonDateBinding.bind(root.findViewById(R.id.statUtilContainer))
+
+        //버튼의 상태
+        viewModel.selectedButtonType.observe(viewLifecycleOwner) { buttonType ->
+            when (buttonType) {
+                StatViewModel.ButtonType.WEEK -> {
+                    buttonDateBinding.statWeekButton.isActivated = true
+                    buttonDateBinding.statMonthButton.isActivated = false
+                }
+                StatViewModel.ButtonType.MONTH -> {
+                    buttonDateBinding.statWeekButton.isActivated = false
+                    buttonDateBinding.statMonthButton.isActivated = true
+                }
+            }
+        }
+
+        buttonDateBinding.statWeekButton.setOnClickListener {
             statViewModel.getStats(false)
         }
 
-        binding.statMonthButton.setOnClickListener {
+        buttonDateBinding.statMonthButton.setOnClickListener {
             statViewModel.getStats(true)
         }
 
@@ -80,6 +100,9 @@ class StatViewFragment : Fragment() {
             }
         }
         viewModel.getStats(false)
+
+
+
         return root
     }
     fun scoreSetup(scores:Map<Int,Int>,today: LocalDate){

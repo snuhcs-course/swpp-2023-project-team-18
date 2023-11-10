@@ -20,6 +20,11 @@ class StatViewModel(
 ) : ViewModel() {
     val today: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     val stat: MutableLiveData<StatState> = MutableLiveData()
+
+    // 버튼 타입을 나타내는 livedata
+    val selectedButtonType:MutableLiveData<ButtonType> = MutableLiveData(ButtonType.WEEK)
+
+
     fun getStats(isMonth: Boolean) {
         val todayDate = TimeConverter.getToday()
         today.value = todayDate
@@ -48,7 +53,14 @@ class StatViewModel(
             }
 
         })
+
+
+        // 버튼의 상태 업데이트,
+        selectedButtonType.value = if (isMonth) ButtonType.MONTH else ButtonType.WEEK
+
     }
 
-
+    enum class ButtonType {
+        WEEK, MONTH
+    }
 }
