@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
+import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -190,29 +191,16 @@ class StatViewFragment : Fragment() {
             Log.d("hashtag",hashtag.key)
             Log.d("weight",hashtag.value.toString())
         }
-            //  wordCloudView.setScale(30,10)
-     //   wordCloudView.setColors(intArrayOf(Color.BLUE))
        wordClouds.add(WordCloud("",0))
-      //  wordClouds.add(WordCloud("기ㅏㄴㅇ렁니ㅏ러;ㄴㅇ러;ㄹㅎㅓ;ㅁ",2))
 
         wordCloudView.setDataSet(wordClouds)
         Log.d("data2",wordCloudView.data)
         wordCloudView.notifyDataSetChanged()
-      /*  wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
-        wordCloudView.webViewClient = object: WebViewClient() {
+       wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
 
-            override fun onPageFinished(view: WebView, url:String) {
-                // Call a JavaScript function to calculate the content dimensions
-                view.loadUrl("javascript:Android.calculateContentDimensions(document.body.scrollWidth, document.body.scrollHeight);");
-            }
         }
-        wordCloudView.setOnTouchListener { v, event ->
-            e*/
 
 
-
-
-    }
     fun emotionSetup(emotions:Map<String,Int>){
         val pieChart = binding.statPieChart
         var pie : MutableList<PieEntry> = mutableListOf()
