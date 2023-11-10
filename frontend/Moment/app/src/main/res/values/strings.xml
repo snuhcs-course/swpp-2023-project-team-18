@@ -82,6 +82,9 @@
     <!-- 돌아보기 탭 -->
     <string name="stat_section_week">7일</string>
     <string name="stat_section_month">30일</string>
-    <string name="stat_section_score">하루 점수</string>
+    <string name="stat_section_week_score"> 한 주 통계</string>
+    <string name="stat_section_month_score">한 달 통계</string>
+    <string name="stat_duration">기간</string>
+
 
 </resources>

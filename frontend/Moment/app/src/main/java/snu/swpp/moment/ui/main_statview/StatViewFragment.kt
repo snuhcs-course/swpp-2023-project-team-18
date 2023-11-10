@@ -1,6 +1,8 @@
 package snu.swpp.moment.ui.main_statview
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -31,6 +34,7 @@ import snu.swpp.moment.data.repository.StoryRepository
 import snu.swpp.moment.data.source.StoryRemoteDataSource
 import snu.swpp.moment.databinding.FragmentStatviewBinding
 import snu.swpp.moment.databinding.StatButtonDateBinding
+import snu.swpp.moment.databinding.StatDurationBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -65,14 +69,14 @@ class StatViewFragment : Fragment() {
 
         // Include된 버튼, 기간을 포함하는 레이아웃에 대한 바인딩 객체 생성
         val buttonDateBinding = StatButtonDateBinding.bind(root.findViewById(R.id.statUtilContainer))
-
+        val durationBinding = StatDurationBinding.bind(root.findViewById(R.id.stat_duration_container))
         // 기간 설정을 위한 코드
         viewModel.startDate.observe(viewLifecycleOwner) { date ->
-            buttonDateBinding.statDateDurationStart.text = formatDateString(date)
+            durationBinding.statDateDurationStart.text = formatDateString(date)
         }
 
         viewModel.endDate.observe(viewLifecycleOwner) { date ->
-            buttonDateBinding.statDateDurationEnd.text = formatDateString(date)
+            durationBinding.statDateDurationEnd.text = formatDateString(date)
         }
 
         //버튼의 상태 (button press 관리)
@@ -81,10 +85,12 @@ class StatViewFragment : Fragment() {
                 StatViewModel.ButtonType.WEEK -> {
                     buttonDateBinding.statWeekButton.isActivated = true
                     buttonDateBinding.statMonthButton.isActivated = false
+                    binding.statDayScoreText.text = getString(R.string.stat_section_week_score)
                 }
                 StatViewModel.ButtonType.MONTH -> {
                     buttonDateBinding.statWeekButton.isActivated = false
                     buttonDateBinding.statMonthButton.isActivated = true
+                    binding.statDayScoreText.text = getString(R.string.stat_section_month_score)
                 }
             }
         }
@@ -124,6 +130,12 @@ class StatViewFragment : Fragment() {
         }
         val dataset = LineDataSet(entries,null)
         val assetManager = requireContext().assets
+
+        // 그리드 dash
+        val dashPathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
+        val commonColor = Color.BLACK
+        val commonLineWidth = 1.2f
+
         dataset.circleColors = listOf(requireContext().getColor(R.color.black))
         dataset.color = requireContext().getColor(R.color.black)
         dataset.setDrawCircleHole(false)
@@ -133,29 +145,64 @@ class StatViewFragment : Fragment() {
         lineChart.legend.isEnabled = false
         lineChart.isScaleYEnabled = false
 
+        lineChart.axisLeft.axisLineWidth = commonLineWidth // Example value, adjust as necessary
+        lineChart.axisLeft.axisLineColor = commonColor
+
+        lineChart.axisRight.axisLineWidth = commonLineWidth // Assuming you want to make the right axis line bold as well
+        lineChart.axisRight.axisLineColor = commonColor
+
+        lineChart.xAxis.axisLineWidth = commonLineWidth
+        lineChart.xAxis.axisLineColor = commonColor
+
+        //grid
+        lineChart.xAxis.enableGridDashedLine(10f, 10f, 0f) // Example values for line length, space length, and phase
+        lineChart.axisLeft.enableGridDashedLine(10f, 10f, 0f)
+        lineChart.axisRight.enableGridDashedLine(10f, 10f, 0f) // Example values for line length, space length, and phase
+
+        //lineChart.axisRight.isEnabled = false
         lineChart.xAxis.valueFormatter = DateAxisValueFormat(today)
         lineChart.xAxis.isGranularityEnabled = true
         lineChart.xAxis.granularity = 1.0F
         lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         lineChart.axisLeft.axisMinimum = 0.0F
-        lineChart.axisLeft.axisMaximum = 5.0F
+        lineChart.axisLeft.axisMaximum = 6.0F
         lineChart.axisRight.axisMinimum = 0.0F
-        lineChart.axisRight.axisMaximum = 5.0F
-        lineChart.axisLeft.setLabelCount(6,true);
+        lineChart.axisRight.axisMaximum = 6.0F
+        lineChart.axisLeft.setLabelCount(7,true);
         lineChart.axisLeft.typeface = ResourcesCompat.getFont(requireContext(),R.font.maruburi_light)
-        lineChart.axisRight.setLabelCount(6,true);
-        lineChart.axisRight.isEnabled = false
+        lineChart.axisRight.setLabelCount(7,true);
+
         dataset.setDrawHorizontalHighlightIndicator(false);
         dataset.setDrawVerticalHighlightIndicator(false);
         lineChart.xAxis.setLabelCount(entries.size,false)
         lineChart.xAxis.typeface = ResourcesCompat.getFont(requireContext(),R.font.maruburi_light)
 
 
+        // 라인차트의 테두리를 그리기 위해 더미값을 넣고 해당 값은 출력안함
         lineChart.axisLeft.valueFormatter = (object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
+                if (value == 0f || value == 6f) {
+                    return ""
+                }
                 return value.toInt().toString()
             }
         })
+
+        lineChart.axisRight.valueFormatter = (object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return ""
+            }
+        })
+
+        lineChart.axisLeft.gridColor=Color.BLACK
+        val limitLine = LimitLine(6f, "").apply {
+            lineWidth = commonLineWidth
+            lineColor = commonColor
+            enableDashedLine(0f, 0f, 0f) // 실선으로 설정 (대시 길이를 0으로)
+        }
+
+// Y축에 LimitLine을 추가
+        lineChart.axisLeft.addLimitLine(limitLine)
 
 
         lineChart.data = LineData(dataset)
