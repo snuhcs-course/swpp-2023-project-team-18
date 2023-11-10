@@ -29,6 +29,14 @@ public class TimeConverter {
         return date;
     }
 
+    public static LocalDate updateDateFromThree(LocalDateTime dateTime) {
+        return updateDateFromThree(dateTime.toLocalDate(), dateTime.getHour());
+    }
+
+    public static boolean hasDayPassed(LocalDateTime base, LocalDateTime cur) {
+        return updateDateFromThree(base).isBefore(updateDateFromThree(cur));
+    }
+
     public static LocalDate getToday() {
         LocalDate today = LocalDate.now();
         int hour = LocalTime.now().getHour();

@@ -142,4 +142,26 @@ public class TimeConverterTest {
         System.out.println("convertedLocalDate: " + convertedLocalDate.toString());
         assertTrue(answer.isEqual(convertedLocalDate));
     }
+
+    @Test
+    public void hasDayPassed() {
+        LocalDateTime base, cur;
+
+        base = LocalDateTime.of(2023, 11, 3, 8, 0, 0);
+        cur = LocalDateTime.of(2023, 11, 3, 21, 0, 0);
+        assertFalse(TimeConverter.hasDayPassed(base, cur));
+
+        cur = LocalDateTime.of(2023, 11, 4, 2, 0, 0);
+        assertFalse(TimeConverter.hasDayPassed(base, cur));
+
+        cur = LocalDateTime.of(2023, 11, 4, 3, 0, 0);
+        assertTrue(TimeConverter.hasDayPassed(base, cur));
+
+        base = LocalDateTime.of(2023, 11, 3, 1, 0, 0);
+        cur = LocalDateTime.of(2023, 11, 3, 2, 0, 0);
+        assertFalse(TimeConverter.hasDayPassed(base, cur));
+
+        cur = LocalDateTime.of(2023, 11, 3, 3, 0, 0);
+        assertTrue(TimeConverter.hasDayPassed(base, cur));
+    }
 }
