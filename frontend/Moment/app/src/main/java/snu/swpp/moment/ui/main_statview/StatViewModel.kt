@@ -20,6 +20,9 @@ class StatViewModel(
 ) : ViewModel() {
     val today: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     val stat: MutableLiveData<StatState> = MutableLiveData()
+    // 기간을 표시하기 위한 변수
+    val startDate: MutableLiveData<LocalDate> = MutableLiveData()
+    val endDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
 
     // 버튼 타입을 나타내는 livedata
     val selectedButtonType:MutableLiveData<ButtonType> = MutableLiveData(ButtonType.WEEK)
@@ -32,6 +35,16 @@ class StatViewModel(
             if (isMonth) TimeConverter.getRecentMonthTimestamps(todayDate) else TimeConverter.getRecentWeekTimestamps(
                 todayDate
             )
+
+        // 기간 표시를 위한 로직
+        val periodStartDate = if (isMonth) {
+            todayDate.minusDays(30)
+        } else {
+            todayDate.minusDays(7)
+        }
+        startDate.value = periodStartDate
+        endDate.value = todayDate
+
         authenticationRepository.isTokenValid(object : TokenCallBack {
             override fun onSuccess() {
                 val accessToken = authenticationRepository.token.accessToken;
@@ -53,7 +66,6 @@ class StatViewModel(
             }
 
         })
-
 
         // 버튼의 상태 업데이트,
         selectedButtonType.value = if (isMonth) ButtonType.MONTH else ButtonType.WEEK

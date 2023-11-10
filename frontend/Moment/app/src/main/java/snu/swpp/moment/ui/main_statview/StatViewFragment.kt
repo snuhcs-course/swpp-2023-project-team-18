@@ -62,11 +62,19 @@ class StatViewFragment : Fragment() {
         val root: View = binding.root
         lineChart = binding.statLineChart
 
-
         // Include된 버튼, 기간을 포함하는 레이아웃에 대한 바인딩 객체 생성
         val buttonDateBinding = StatButtonDateBinding.bind(root.findViewById(R.id.statUtilContainer))
 
-        //버튼의 상태
+        // 기간 설정을 위한 코드
+        viewModel.startDate.observe(viewLifecycleOwner) { date ->
+            buttonDateBinding.statDateDurationStart.text = formatDateString(date)
+        }
+
+        viewModel.endDate.observe(viewLifecycleOwner) { date ->
+            buttonDateBinding.statDateDurationEnd.text = formatDateString(date)
+        }
+
+        //버튼의 상태 (button press 관리)
         viewModel.selectedButtonType.observe(viewLifecycleOwner) { buttonType ->
             when (buttonType) {
                 StatViewModel.ButtonType.WEEK -> {
@@ -88,19 +96,15 @@ class StatViewFragment : Fragment() {
             statViewModel.getStats(true)
         }
 
-        viewModel.stat.observeForever{
-            val state = viewModel.stat.value
-            val today = viewModel.today.value
+        viewModel.stat.observe(viewLifecycleOwner) { state ->
+            // Fragment가 활성 상태일 때만 UI 업데이트를 진행합니다.
             state?.let {
-                today?.let {
-                    scoreSetup(state.scoresBydateOffset, today)
-                    hashtagSetup(state.hashtagCounts)
-                    emotionSetup(state.emotionCounts)
-                }
+                scoreSetup(it.scoresBydateOffset, viewModel.today.value ?: LocalDate.now())
+                hashtagSetup(it.hashtagCounts)
+                emotionSetup(it.emotionCounts)
             }
         }
         viewModel.getStats(false)
-
 
 
         return root
@@ -287,4 +291,8 @@ class StatViewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
     }
+    private fun formatDateString(date: LocalDate): String {
+        return date.format(DateTimeFormatter.ofPattern("yy.MM.dd"))
+    }
+
 }
