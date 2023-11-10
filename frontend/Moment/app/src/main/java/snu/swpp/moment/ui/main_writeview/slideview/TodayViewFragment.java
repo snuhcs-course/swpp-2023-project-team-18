@@ -301,7 +301,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
             @Override
             public void run() {
                 LocalDateTime now = getCurrentDateTime();
-                Log.d("TodayViewFragment", "refreshRunnable running at %s" + now);
+                Log.d("TodayViewFragment", "refreshRunnable running at " + now);
                 Log.d("TodayViewFragment",
                     "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
 

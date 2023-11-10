@@ -27,7 +27,7 @@ public abstract class BaseWritePageFragment extends Fragment {
         }
     }
 
-    public void setToolbarTitle() {
+    protected void setToolbarTitle() {
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.setToolbarTitle(getDateText());
     }
