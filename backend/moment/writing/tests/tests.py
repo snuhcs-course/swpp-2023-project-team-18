@@ -8,7 +8,11 @@ from freezegun import freeze_time
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from user.models import User
-from writing.constants import Emotions
+from writing.constants import (
+    Emotions,
+    GPT_AUTOCOMPLETION_ERROR_CONTENT,
+    GPT_AUTOCOMPLETION_ERROR_TITLE,
+)
 from writing.cron import auto_completion_job
 from writing.models import MomentPair, Story, Hashtag
 from writing.utils.gpt import GPTAgent
@@ -276,11 +280,13 @@ class AutoCompletionTest(TestCase):
 
     @freeze_time(lambda: intended_gmt + datetime.timedelta(days=1, seconds=1))
     @patch(
-        "writing.utils.gpt.GPTAgent.get_parsed_answer",
-        return_value={
-            "title": ai_sample_title,
-            "content": ai_sample_story,
-        },
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value=json.dumps(
+            {
+                "title": ai_sample_title,
+                "content": ai_sample_story,
+            }
+        ),
     )
     @patch(
         "writing.utils.gpt.GPTAgent.add_message",
@@ -315,6 +321,52 @@ class AutoCompletionTest(TestCase):
         self.assertEqual(created_story.emotion, Emotions.NORMAL1)
         self.assertEqual(created_story.title, ai_sample_title)
         self.assertEqual(created_story.content, ai_sample_story)
+        mock_add.assert_any_call(
+            StoryGenerateTemplate.get_prompt(moments=f"{content1};{content2}")
+        )
+
+    @freeze_time(lambda: intended_gmt + datetime.timedelta(days=1, seconds=1))
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value=json.dumps(
+            {
+                "title": ai_sample_title,
+            }
+        ),
+    )
+    @patch(
+        "writing.utils.gpt.GPTAgent.add_message",
+    )
+    def test_completion_with_moments_format_failure(self, mock_add, mock_get):
+        content1 = "moment1"
+        content2 = "moment2"
+        moment1 = MomentPair.objects.create(
+            user=self.test_user,
+            moment_created_at=intended_gmt,
+            reply_created_at=intended_gmt,
+            moment=content1,
+        )
+        moment2 = MomentPair.objects.create(
+            user=self.test_user,
+            moment_created_at=intended_gmt + datetime.timedelta(hours=21),
+            reply_created_at=intended_gmt + datetime.timedelta(hours=21),
+            moment=content2,
+        )
+        other_moment = MomentPair.objects.create(
+            user=self.other_user,
+            moment_created_at=intended_gmt,
+            reply_created_at=intended_gmt,
+            moment=content1,
+        )
+        moment1.save()
+        moment2.save()
+        other_moment.save()
+
+        auto_completion_job()
+        created_story = Story.objects.get(user=self.test_user)
+        self.assertEqual(created_story.emotion, Emotions.NORMAL1)
+        self.assertEqual(created_story.title, GPT_AUTOCOMPLETION_ERROR_TITLE)
+        self.assertEqual(created_story.content, GPT_AUTOCOMPLETION_ERROR_CONTENT)
         mock_add.assert_any_call(
             StoryGenerateTemplate.get_prompt(moments=f"{content1};{content2}")
         )
@@ -704,11 +756,13 @@ class StoryGenerateTest(TestCase):
         other_user_moment.save()
 
     @patch(
-        "writing.utils.gpt.GPTAgent.get_parsed_answer",
-        return_value={
-            "title": ai_sample_title,
-            "content": ai_sample_story,
-        },
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value=json.dumps(
+            {
+                "title": ai_sample_title,
+                "content": ai_sample_story,
+            }
+        ),
     )
     @patch("writing.utils.gpt.GPTAgent.add_message")
     def test_story_generate_success(self, mock_add, mock_get):
