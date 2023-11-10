@@ -16,4 +16,7 @@
     <dimen name="editTextPadding">15dp</dimen>
 
     <dimen name="emotionVerticalPadding">5dp</dimen>
+
+    <dimen name="stat_view_button_width">80dp</dimen>
+    <dimen name="stat_view_button_height">30dp</dimen>
 </resources>

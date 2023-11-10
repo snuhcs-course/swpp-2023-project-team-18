@@ -80,9 +80,6 @@ class StatViewFragment : Fragment() {
             }
         }
         viewModel.getStats(false)
-
-
-
         return root
     }
     fun scoreSetup(scores:Map<Int,Int>,today: LocalDate){
