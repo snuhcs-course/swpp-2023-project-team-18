@@ -13,7 +13,6 @@ public abstract class BaseWritePageFragment extends Fragment {
     protected LocalDateTime lastRefreshedTime = LocalDateTime.now();
     private final Handler refreshHandler = new Handler();
     private final long REFRESH_INTERVAL = 1000 * 60 * 5;  // 5 minutes
-    private final int STARTING_HOUR = 3;
 
     @Override
     public void onResume() {
@@ -65,10 +64,6 @@ public abstract class BaseWritePageFragment extends Fragment {
     }
 
     protected boolean isOutdated() {
-        LocalDateTime now = LocalDateTime.now();
-        if (lastRefreshedTime.getDayOfMonth() == now.getDayOfMonth()) {
-            return false;
-        }
-        return now.getHour() >= STARTING_HOUR;
+        return TimeConverter.hasDayPassed(lastRefreshedTime, getCurrentDateTime());
     }
 }
