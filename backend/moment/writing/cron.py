@@ -2,7 +2,13 @@ import datetime
 from typing import List, Tuple
 
 from user.models import User
-from .constants import Emotions, AUTO_COMPLETE_TIMEOUT, AUTO_COMPLETE_MAX_TRIAL
+from .constants import (
+    Emotions,
+    AUTO_COMPLETE_TIMEOUT,
+    AUTO_COMPLETE_MAX_TRIAL,
+    GPT_AUTOCOMPLETION_ERROR_TITLE,
+    GPT_AUTOCOMPLETION_ERROR_CONTENT,
+)
 from .models import MomentPair, Story
 from .utils.gpt import GPTAgent
 from .utils.log import print_log
@@ -48,7 +54,7 @@ def auto_completion_job():
                 last_days_moment_contents, gpt_agent
             )
             print_log(
-                message="generated story for user {user.username}",
+                message=f"generated story for user {user.username}",
                 place="auto_completion_job",
             )
             story = Story.objects.create(
@@ -119,4 +125,4 @@ def get_ai_title_and_story_from_moments(
                 place="auto_completion_job",
             )
     else:
-        return "", "마무리하는 과정에서 문제가 발생했어요"
+        return GPT_AUTOCOMPLETION_ERROR_TITLE, GPT_AUTOCOMPLETION_ERROR_CONTENT
