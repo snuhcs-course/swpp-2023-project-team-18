@@ -107,7 +107,9 @@ public class DailyViewFragment extends BaseWritePageFragment {
             .inflate(R.layout.listview_footer, binding.dailyMomentList, false);
         binding.dailyMomentList.addFooterView(footerView);
 
+        Log.d("DailyViewFragment", "onCreateView: initial API call to refresh");
         callApisToRefresh();
+        updateRefreshTime();
 
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();

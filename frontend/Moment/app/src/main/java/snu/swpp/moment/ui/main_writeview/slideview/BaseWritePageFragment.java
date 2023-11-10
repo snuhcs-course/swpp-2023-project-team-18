@@ -10,7 +10,7 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public abstract class BaseWritePageFragment extends Fragment {
 
-    protected LocalDateTime lastRefreshedTime = LocalDateTime.now();
+    protected LocalDateTime lastRefreshedTime = getCurrentDateTime();
     private final Handler refreshHandler = new Handler();
     private final long REFRESH_INTERVAL = 1000 * 60 * 5;  // 5 minutes
 
@@ -53,7 +53,7 @@ public abstract class BaseWritePageFragment extends Fragment {
     protected abstract LocalDateTime getCurrentDateTime();
 
     protected void updateRefreshTime() {
-        lastRefreshedTime = LocalDateTime.now();
+        lastRefreshedTime = getCurrentDateTime();
     }
 
     /**

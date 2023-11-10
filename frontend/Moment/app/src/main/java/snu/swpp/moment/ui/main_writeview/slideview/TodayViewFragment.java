@@ -292,7 +292,9 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         });
 
+        Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
         callApisToRefresh();
+        updateRefreshTime();
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
