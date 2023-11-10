@@ -314,7 +314,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         };
         registerRefreshRunnable(refreshRunnable);
-        updateRefreshTime();
 
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, requireActivity());
 

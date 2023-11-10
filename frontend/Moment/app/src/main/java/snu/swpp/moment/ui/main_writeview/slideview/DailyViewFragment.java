@@ -194,7 +194,6 @@ public class DailyViewFragment extends BaseWritePageFragment {
             }
         };
         registerRefreshRunnable(refreshRunnable);
-        updateRefreshTime();
 
         Log.d("DailyViewFragment", "onCreateView() ended");
         return root;
