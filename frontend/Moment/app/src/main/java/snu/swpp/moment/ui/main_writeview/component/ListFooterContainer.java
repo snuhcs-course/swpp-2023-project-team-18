@@ -127,7 +127,7 @@ public class ListFooterContainer {
         storyContainer.setUiCompleteStory();
 
         emotionGridContainer.selectEmotion(storyUiState.getEmotion());
-        emotionGridContainer.freeze();
+        freezeEmotionSelector();
         emotionWrapper.setVisibility(View.VISIBLE);
 
         tagBoxContainer.setTags(storyUiState.getTags());
@@ -201,7 +201,7 @@ public class ListFooterContainer {
     }
 
     public void freezeEmotionSelector() {
-        emotionGridContainer.freeze();
+        emotionGridContainer.freeze(true);
     }
 
     public void freezeTagEditText() {
