@@ -121,17 +121,17 @@ public class ListFooterContainer {
 
         setHelpTextAfterCompleted(isToday);
 
+        freezeStoryEditText();
         storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
         storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
-        freezeStoryEditText();
         storyContainer.setUiCompleteStory();
 
-        emotionGridContainer.selectEmotion(storyUiState.getEmotion());
         freezeEmotionSelector();
+        emotionGridContainer.selectEmotion(storyUiState.getEmotion());
         emotionWrapper.setVisibility(View.VISIBLE);
 
+        freezeTagEditText();
         tagBoxContainer.setTags(storyUiState.getTags());
-        tagBoxContainer.freeze();
         tagBoxContainer.setUiVisible();
 
         scoreContainer.setScore(storyUiState.getScore());
@@ -205,7 +205,7 @@ public class ListFooterContainer {
     }
 
     public void freezeTagEditText() {
-        tagBoxContainer.freeze();
+        tagBoxContainer.freeze(true);
     }
 
     public void setUiWritingMoment() {
