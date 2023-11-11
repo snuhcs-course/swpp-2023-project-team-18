@@ -22,6 +22,15 @@ def save_jsonl(path: str, data: list[dict[str, Any]]):
             f.write(json.dumps(line, ensure_ascii=False) + "\n")
 
 
+def create_or_append_jsonl(path: str, data: list[dict[str, Any]]):
+    """
+    Save a list of dictionaries into a JSONL file.
+    """
+    with open(path, "a+") as f:
+        for line in data:
+            f.write(json.dumps(line, ensure_ascii=False) + "\n")
+
+
 def fpprint(
     path: str,
     obj: Any,

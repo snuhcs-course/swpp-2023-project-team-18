@@ -23,7 +23,7 @@ template = NudgeGenerateOneTemplate
 var_names = ["diary"]
 
 DATA_PATH = "writing/data/nudge_test.jsonl"
-TEST_NAME = "nudge3"
+TEST_NAME = "nudge_ST_2"
 OUTPUT_JSONL_PATH = f"results/results_nudge/{TEST_NAME}.jsonl"
 OUTPUT_TXT_PATH = f"results/results_nudge/{TEST_NAME}.txt"
 # ----------------------------
@@ -31,7 +31,7 @@ OUTPUT_TXT_PATH = f"results/results_nudge/{TEST_NAME}.txt"
 agent = GPTAgent()
 results = []
 
-DUPLICATES = 3
+DUPLICATES = 1
 
 
 def run():

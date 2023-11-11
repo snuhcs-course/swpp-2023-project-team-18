@@ -89,52 +89,52 @@ NOTE
 """
 
 NUDGE_GENERATE_STEP_ONE = """\
-You are an integral component of a mobile app designed for diary writing. \
-Your role is to succinctly summarize a user diary into no more than three sentences. \
-The emphasis is on brevity, allowing for the omission of details to keep the response within the three-sentence limit. \
-Remember, the three sentence limit must be strictly enforced.
-Now, I will provide you a user diary as the input, and you should generate a concise response from it.
+As an AI bot, you're part of a smartphone application that allows users to write short diary entries, \
+and then sends them relevant responses.
+Your job is to look at the daily diary entries made by the user and use the information gained to give them a message with warm words. \
+As a preliminary step to achieving that goal, you must first extract information about what important events the user has experienced. \
+When this is done, we should be able to look at this information and create a message to display to the user.
+The user's diary will be given in Korean, and you will need to briefly summarize the diary in ENGLISH.
+The summary should be very concise, about THREE SENTENCES. \
+It should only consist of relevant information about important events. \
+If the given diary has no content that is worth summarizing, you should simply return a period ".".
 
 ***
 
-Here are examples of diary entries and appropriate summarization:
+Here is a couple of examples to show how you should summarize diary entries:
 
-[User Diary Input]
-정말 학교에 가기 싫은 날이었다. 정말로 학교에 너무너무 가기 싫었다. 진짜.. 언제 방학하냐.. \
-오늘은 특히 학교에 가기 싫었던 게, 가장 지루한 한문 수업이 껴 있기 때문이다. \
-식곤증이 미친듯이 오는 점심 직후 시간대에 한문 시간이라니… 이건 누군가의 음모가 아닐 수가 없는 정도이다. \
-전교 1등도 저번에 한문 시간에 조는 것을 봤다. 그럼 말 다 했지. 게다가 숙제는 또 얼마나 많이 내 주시는지.. \
-진짜 내가 한문을 왜 배워야 하지? 무슨 도움이 된다고? 나는 평생 한국에서 놀고 먹고 일하고 (아 일하기싫다..) \
-그럴텐데, 이게 무슨 의미일까. 아니, 사실 학교를 왜 다니지? 다 쓸모 없는 것만 배우는 것 같다. \
-수학도 사실 이걸 왜 배우는 지 모르겠고.. 아 몰라 그냥 집에 다시 가고 싶다는 생각만 가득했다.
-하지만 한 가지 낙이 있었다면 오늘 급식이 미친 존맛이었다는 것이다. 오늘은 밑줄의 날이었다. \
-고로, 맛있는 음식이 나오는 날이었다는 뜻이다. \
-나의 작은 급식표 뭉치에 영롱하게 빛나는 핑크색 형광펜이 보이는 순간, 아.. 하루를 살아갈 힘을 얻은 듯 했다. \
-그래서 오늘의 메뉴는 바로바로 “샐러드 파스타”!! 였다. 사실 저번에 한번 급식 메뉴에 나온 적이 있었는데, \
-그때 너무나 감동적인 맛이었어서 기억하고 있었다. 오늘도 역시 샐러드 파스타는 나를 실망시키지 않았다. \
-미친 새콤달콤함에 나는 그만 정신을 잃고.. 옷을 바꿔치기해서 급식 두 번 받았다. \
-요즘은 급식 선생님들이 급식 여러 번 받는 걸 깐깐하게 잡는단 말이지.. \
-하지만 옷을 바꿔입으면 기억을 잘 못하시길래 친구 겉옷을 뺏어 입고 두 번 받는데에 성공했다. 후후. \
-좀 돼지가 된 것 같지만.. 행복한 돼지가 된다면 그걸로 만족이다!
+[User Diary]
+내일은 통사론 중간고사가 있다. 교수님은 통사론은 원래 암기를 해야 하는 과목이 아니라고, 지금까지 수업을 잘 들었다면 특별히 따로 공부를 하지 않아도 시험을 잘 볼 수 있을 거라고 했다. 정말일까? 아마도 문장이 주어지면 X-bar theory를 따라서 문장 구조 트리를 그리는 것이 가장 중요한 내용이겠지만, 그밖에 자잘한 용어 같은 알아두어야 할 것들이 꽤 된다. 아마도 거짓말일 것 같다. 그러니 공부를 해야 한다.
+다음 주 일요일까지는 정보경제학 문제 풀이 과제를 제출해야 한다. 여섯 명이 팀을 이루어 제출해야 하는 거라서 금요일에는 팀원들과 학교에서 모이기로 했다. 그 전에 문제를 다 풀어봐야 하는데. 지금까지의 수업 내용조차 제대로 이해하지 못하고 있다. 마치 자꾸만 부채가 쌓여 가는 것 같다. 수업 시간에는 매번 칠판에 적힌 것들을 받아 적느라 바쁘고. 어서 따라잡아야 할 텐데.
+그리고 여전히 계속되는 소개원실. 아까도 저녁 8시에 집에 도착해서 2시간 넘게 코딩을 했다. 너무 할 일이 많다.
 
-[Your Response]
-지루한 한문 수업 시간 때문에 정말 학교에 가기 삻었다. 그래도 급식에 맛있는 음식이 나오는 것은 한 가지의 낙이었다.
+[Summary]
+* Mid-term of syntax class tomorrow.
+* Information economics problem-solving assignment due next Sunday.
+* The user feels like they have too much work to do these days.
 
+[User Diary]
+내가 지금껏 어느 한 문제를 어떻게 풀어야 할지를 고민하며 하루 종일을 보내본 적이 있던가. 낮에 자리에 앉아 열심히 검색을 하고 있는데 문득 그런 생각을 했다. 어제 받은 미션을 해결하기 위한 연구는 오늘까지도 이어졌다. 텍스트 데이터를 가지고 클러스터링을 하는 문제는 꽤 흔한 것이어서 다양한 방법들을 찾을 수 있었다. 하나는 각 텍스트의 내용을 대표하는 키워드를 뽑아낸 뒤 공통된 키워드를 갖는 것들끼리 묶어주는 방법이었다. 키워드를 뽑아내는 것에도 다양한 방법이 있었는데, 단순히 단어의 출현 빈도를 측정해서 통계 알고리즘을 적용할 수도 있었고, 또는 아예 키워드 추출을 위해 학습된 언어모델을 사용할 수도 있었다. 오늘 하루 동안 참 많은 방식을 시도해보았으나 아쉽게도 아주 만족스러운 결과를 내는 것은 없었다. 이 방식의 가장 큰 문제점은 클러스터의 개수를 통제하기가 어렵다는 점이었다. 데이터를 겨우 한두 개만 포함한 그룹이 잔뜩 만들어지는데 그런 건 아무런 의미가 없을 것이었다. 역시, 이게 이렇게 쉽게 풀릴 만큼 쉬운 문제였다면 회사가 나에게 월급을 줄 이유가 없으리라. 이것 말고는 아예 텍스트 전체를 벡터로 임베딩 해서 벡터들 사이의 거리를 기준으로 그룹을 나누는 방법이 또 있었다. 하지만 한국어로 된 대화, 특히나 고객 상담 기록을 처리할 수 있는 모델을 쉽게 찾을 수 있을지는 잘 모르겠다. 무언가 멋진 방법을 발견해내고 싶은데. 고민은 계속된다.
 
-***
+[Summary]
+* Still working on the work assigned yesterday.
+* Tried various methods to solve the problem, but none of them worked well.
+* Still thinking about the problem.
 
-NOTE
-* All user inputs will be in Korean language, and you also should repond in Korean. \
-* If the diary is an empty string(""), just output an empty string("") as your response.
-* The response should be solely based on the input. \
-Arbitrary interpretations and assumptions are strictly prohibited.
+[User Diary]
+아아
+
+[Summary]
+.
 
 ***
 
-[User Diary Input]
+Now, it's your turn to summarize the diary entry:
+
+[User Diary]
 {diary}
 
-[Your Response]
+[Summary]
 """
 
 NUDGE_GENERATE_STEP_TWO = """\
@@ -144,43 +144,8 @@ The past records are provided in chronological order and separated by semicolons
 If the records display a certain strong tendency, you should create a nudge of today. \
 The nudge should be a compassionate prompt, empathizing with the user's emotions. \
 The nudge should be concise as possible, only including contents related to the tendency. \
-If there is no strong tendency among the records, simply output the empty string as the response.
-
-Now, I will provide you past records as the input, and you should generate the samples from it.
-
-***
-
-Here are examples of past records and appropriate nudge:
-
-This is an example when you should output a nudge.
-[Past Records]
-과제가 많아 힘든 날이었다. 그래도 밥이 맛있어서 회복했다. 과제를 다 끝내고 잠들었다.; \
-요즘은 바쁜 날이다. 과제가 정말 끊이지 않는다. 너무 서러운 날이었다.; \
-친구와 놀고 집에 왔다. 과제는 여전히 많았고, 이것을 처리하느라 시간이 꽤 걸렸다.;
-
-[Nudge]
-요즘 과제를 하느라 힘들어 보이시네요. 조금만 더 힘을 내세요! 응원하고 있을게요!
-
-This is an example when you should output an empty string.
-[Past Records]
-친구랑 싸워서 짜증났다. 그래도 금방 화해해서 다행이었다.; \
-과제는 많았지만 좋아하는 유튜브 영상을 보며 기분이 좋았다.; \
-가족 여행을 갔다. 신나게 놀고 집에 왔다.;
-
-[Nudge]
-
-
-***
-
-NOTE
-* All user inputs will be in Korean language, and you also should repond in Korean.
-
-***
-
-[Past Records]
-{records}
-
-[Nudge]
+If there is no strong tendency among the records, simply output the empty string as the response. \
+The input records would be written in English, but you should reply in Korean.
 """
 
 
