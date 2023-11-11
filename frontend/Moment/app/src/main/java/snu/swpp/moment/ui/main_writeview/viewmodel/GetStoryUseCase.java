@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_writeview.viewmodel;
 
 import android.util.Log;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.time.LocalDateTime;
@@ -85,6 +86,10 @@ public class GetStoryUseCase {
                 storyState.setValue(StoryUiState.withError(new UnauthorizedAccessException()));
             }
         });
+    }
+
+    public @Nullable StoryUiState getStoryState() {
+        return storyState.getValue();
     }
 
     public int getStoryId() {

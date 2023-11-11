@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_writeview.viewmodel;
 
 import android.util.Log;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -243,6 +244,10 @@ public class TodayViewModel extends ViewModel {
             return;
         }
         saveScoreUseCase.saveScore(storyId, score);
+    }
+
+    public @Nullable StoryUiState getSavedStoryState() {
+        return getStoryUseCase.getStoryState();
     }
 
     public void observeMomentState(Observer<MomentUiState> observer) {

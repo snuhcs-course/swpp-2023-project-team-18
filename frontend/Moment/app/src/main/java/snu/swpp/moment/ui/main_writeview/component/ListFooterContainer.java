@@ -124,7 +124,6 @@ public class ListFooterContainer {
 
             if (isToday) {
                 setUiReadyToAddMoment(false);
-                setBottomButtonState(false);
             } else {
                 momentWriterContainer.setInvisible();
                 state = ListFooterState.INVISIBLE;

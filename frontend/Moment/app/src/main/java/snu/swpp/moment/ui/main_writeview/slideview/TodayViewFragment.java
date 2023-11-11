@@ -240,18 +240,25 @@ public class TodayViewFragment extends BaseWritePageFragment {
             listViewAdapter.setAnimation(false);
 
             if (momentUiState.getNumMoments() > 0) {
-                bottomButtonContainer.setActivated(true);
+                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
+                    + momentUiState.getNumMoments());
+
+                StoryUiState savedStoryState = viewModel.getSavedStoryState();
+                if (savedStoryState != null) {
+                    bottomButtonContainer.setActivated(savedStoryState.hasNoData());
+                } else {
+                    bottomButtonContainer.setActivated(true);
+                }
+
                 for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                     listViewItems.add(new ListViewItem(momentPair));
                 }
                 listViewAdapter.notifyDataSetChanged();
                 scrollToBottom();
-                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
-                    + momentUiState.getNumMoments());
             } else {
+                Log.d("TodayViewFragment", "Got moment GET response: no moments");
                 bottomButtonContainer.setActivated(false);
                 listViewAdapter.notifyDataSetChanged();
-                Log.d("TodayViewFragment", "Got moment GET response: no moments");
             }
         });
 
@@ -266,7 +273,10 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
 
             listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
-            if (!savedStoryState.hasNoData()) {
+            if (savedStoryState.hasNoData()) {
+                Log.d("TodayViewFragment", "Got story GET response: story has no data");
+                bottomButtonContainer.setActivated(!listViewItems.isEmpty(), false);
+            } else {
                 Log.d("TodayViewFragment",
                     "Got story GET response: story has valid data");
                 bottomButtonContainer.setActivated(false, true);
