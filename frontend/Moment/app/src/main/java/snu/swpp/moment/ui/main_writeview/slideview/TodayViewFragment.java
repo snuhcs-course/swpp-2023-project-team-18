@@ -99,8 +99,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding = PageTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // ListView setup
         listViewItems = new ArrayList<>();
-
         listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);
 
@@ -160,13 +160,11 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 scrollToBottom();
             }
         });
-
         listFooterContainer.observeAiStoryCallSwitch(isSet -> {
             if (isSet) {
                 viewModel.getAiStory();
             }
         });
-
         listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
             if (saveScoreSwitch) {
                 viewModel.saveScore(listFooterContainer.getScore());
@@ -236,20 +234,19 @@ public class TodayViewFragment extends BaseWritePageFragment {
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
             if (error == null) {
-                // 모먼트가 하나도 없으면 하단 버튼 비활성화
-                int numMoments = momentUiState.getNumMoments();
-                bottomButtonContainer.setActivated(numMoments != 0);
+                listViewItems.clear();
+                listViewAdapter.setAnimation(false);
 
-                if (numMoments > 0) {
-                    listViewItems.clear();
-                    listViewAdapter.setAnimation(false);
-
+                if (momentUiState.getNumMoments() > 0) {
+                    bottomButtonContainer.setActivated(true);
                     for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
-
                     listViewAdapter.notifyDataSetChanged();
                     scrollToBottom();
+                } else {
+                    bottomButtonContainer.setActivated(false);
+                    listViewAdapter.notifyDataSetChanged();
                 }
             } else if (error instanceof NoInternetException) {
                 Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
@@ -262,27 +259,18 @@ public class TodayViewFragment extends BaseWritePageFragment {
             } else {
                 Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
             }
-
         });
 
         // story GET API 호출 후 동작
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
-            if (savedStoryState.isEmpty()) {
-                return;
-            }
-
-            // story가 이미 있으면 마무리된 하루로 판정해 받아온 데이터 보여줌
             Exception error = savedStoryState.getError();
             if (error == null) {
-                // SUCCESS
                 listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
                 bottomButtonContainer.setActivated(false, true);
             } else if (error instanceof NoInternetException) {
-                // NO INTERNET
                 Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
             } else if (error instanceof UnauthorizedAccessException) {
-                // ACCESS TOKEN EXPIRED
                 Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
                     .show();
                 Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);

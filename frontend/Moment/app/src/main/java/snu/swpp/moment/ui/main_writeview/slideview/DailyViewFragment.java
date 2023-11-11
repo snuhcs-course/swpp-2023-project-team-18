@@ -107,30 +107,32 @@ public class DailyViewFragment extends BaseWritePageFragment {
             .inflate(R.layout.listview_footer, binding.dailyMomentList, false);
         binding.dailyMomentList.addFooterView(footerView);
 
-        Log.d("DailyViewFragment", "onCreateView: initial API call to refresh");
-        callApisToRefresh();
-        updateRefreshTime();
+        // list footer 관리 객체 초기화
+        listFooterContainer = new ListFooterContainer(footerView);
+        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
+            if (saveScoreSwitch) {
+                viewModel.saveScore(listFooterContainer.getScore());
+            }
+        });
 
+        // moment GET API 호출 후 동작
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
             if (error == null) {
-                // SUCCESS
-                int numMoments = momentUiState.getNumMoments();
-                if (numMoments > 0) {
-                    listViewItems.clear();
+                listViewItems.clear();
+                if (momentUiState.getNumMoments() > 0) {
+                    binding.noMomentText.setVisibility(View.GONE);
                     for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
                         listViewItems.add(new ListViewItem(momentPair));
                     }
-                    listViewAdapter.notifyDataSetChanged();
                 } else {
                     binding.noMomentText.setVisibility(View.VISIBLE);
                 }
+                listViewAdapter.notifyDataSetChanged();
             } else if (error instanceof NoInternetException) {
-                // NO INTERNET
                 Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
             } else if (error instanceof UnauthorizedAccessException) {
-                // ACCESS TOKEN EXPIRED
                 Toast.makeText(requireContext(), R.string.token_expired_error,
                     Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
@@ -142,30 +144,19 @@ public class DailyViewFragment extends BaseWritePageFragment {
             }
         });
 
-        // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView);
-
-        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
-            if (saveScoreSwitch) {
-                viewModel.saveScore(listFooterContainer.getScore());
-            }
-        });
-
+        // story GET API 호출 후 동작
         viewModel.observeStoryState((StoryUiState storyUiState) -> {
             Exception error = storyUiState.getError();
             if (error == null) {
-                // SUCCESS
                 listFooterContainer.updateUiWithRemoteData(storyUiState, false);
                 if (!storyUiState.isEmpty()) {
                     binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
                         binding.dailyMomentList.getCount() - 1));
                 }
             } else if (error instanceof NoInternetException) {
-                // NO INTERNET
                 Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();
             } else if (error instanceof UnauthorizedAccessException) {
-                // ACCESS TOKEN EXPIRED
                 Toast.makeText(requireContext(), R.string.token_expired_error,
                     Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
@@ -175,6 +166,10 @@ public class DailyViewFragment extends BaseWritePageFragment {
                     .show();
             }
         });
+
+        Log.d("DailyViewFragment", "onCreateView: initial API call to refresh");
+        callApisToRefresh();
+        updateRefreshTime();
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
