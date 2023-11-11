@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:text="@string/stat_duration"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:fontFamily="@font/maruburi_light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

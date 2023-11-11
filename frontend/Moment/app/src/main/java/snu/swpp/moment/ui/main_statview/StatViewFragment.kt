@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
@@ -138,6 +139,27 @@ class StatViewFragment : Fragment() {
             statViewModel.getStats(true)
         }
 
+        // 점수 평균값
+        viewModel.highestScore.observe(viewLifecycleOwner) { highest ->
+            val highestScoreTextView: TextView = root.findViewById(R.id.highest_score_text_view)
+            highestScoreTextView.text = getString(R.string.highest_score_text, highest)
+        }
+
+        // Observe the lowest score LiveData and update the UI
+        viewModel.lowestScore.observe(viewLifecycleOwner) { lowest ->
+            val lowestScoreTextView: TextView = root.findViewById(R.id.lowest_score_text_view)
+            lowestScoreTextView.text = getString(R.string.lowest_score_text, lowest)
+        }
+
+        // Observe the average score LiveData and update the UI
+        viewModel.averageScore.observe(viewLifecycleOwner) { average ->
+            val averageScoreTextView: TextView = root.findViewById(R.id.average_score_text_view)
+            // Assuming you want to display the average score to one decimal place
+            averageScoreTextView.text = getString(R.string.average_score_text, String.format("%.1f", average))
+        }
+
+
+
         viewModel.stat.observe(viewLifecycleOwner) { state ->
             // Fragment가 활성 상태일 때만 UI 업데이트를 진행합니다.
             state?.let {
@@ -187,8 +209,9 @@ class StatViewFragment : Fragment() {
         val commonColor = android.graphics.Color.BLACK
         val commonLineWidth = 1.2f
 
-        dataset.circleColors = listOf(requireContext().getColor(R.color.black))
+        dataset.circleColors = listOf(requireContext().getColor(R.color.red))
         dataset.color = requireContext().getColor(R.color.black)
+        dataset.setCircleRadius(3.5f)
         dataset.setDrawCircleHole(false)
         dataset.setDrawValues(false)
 
@@ -222,7 +245,7 @@ class StatViewFragment : Fragment() {
         //lineChart.axisRight.isEnabled = false
         lineChart.xAxis.valueFormatter = DateAxisValueFormat(today)
         lineChart.xAxis.isGranularityEnabled = true
-        lineChart.xAxis.granularity = 1.0F
+        lineChart.xAxis.granularity = 1F
         lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         lineChart.axisLeft.axisMinimum = 0.0F
         lineChart.axisLeft.axisMaximum = 6.0F
@@ -266,11 +289,19 @@ class StatViewFragment : Fragment() {
         lineChart.axisLeft.addLimitLine(limitLine)
 
 
+
+
         lineChart.data = LineData(dataset)
 
         lineChart.fitScreen()
         lineChart
         lineChart.setVisibleXRange(5.0F, 5.0F)
+
+
+
+        // 아래 두줄은 linechart가 항상 오른쪽으로 스크롤 되어있도록
+        lineChart.animateX(1000)
+        lineChart.moveViewToX(dataset.xMax)
 
         lineChart.invalidate()
         dataset.notifyDataSetChanged()
@@ -317,19 +348,32 @@ class StatViewFragment : Fragment() {
         val emotions = sampleEmotions()
         for (emotion in emotions) {
             pie.add(PieEntry(emotion.value.toFloat(), emotion.key))
-            colors.add(getEmotionColor(emotion.key))
+            colors.add(getEmotionColor_grayScale(emotion.key))
 
         }
+
+        // 추가한것, 테스트중
+        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
+
+
         val pieDataset = PieDataSet(pie, "")
         pieDataset.colors = colors
-        pieChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
+
+        // 추가한것, 테스트중
+        pieChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+        //pieChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
         pieChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         pieChart.legend.setDrawInside(false);
         pieChart.legend.textSize = 12f
-        pieChart.legend.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
+        pieChart.legend.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
         pieChart.legend.form = Legend.LegendForm.CIRCLE
         pieChart.description.isEnabled = false
+
+        // 아래 두 줄도 추가한 것. legned랑 파이차트 사이 멀지 않게
+        pieChart.legend.xEntrySpace = 0f // Adjust the space between the legend entries and the pie chart
+        pieChart.legend.yEntrySpace = 0f // Adjust vertical space if necessary
+
         pieChart.setDrawEntryLabels(false)
         pieDataset.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -357,12 +401,26 @@ class StatViewFragment : Fragment() {
         m["모름"] = 1
         m["짜증"] = 1
         m["화남"] = 1
-        //    m["슬픔"]=1
-        //   m["우울"]=1
         return m
 
     }
 
+
+
+    fun getEmotionColor_grayScale(emotion: String): Int {
+        if (emotion.equals("설렘") || emotion.equals("신남"))
+            return requireContext().getColor(R.color.stat_emotion_1)
+        else if (emotion.equals("기쁨") || emotion.equals("행복"))
+            return requireContext().getColor(R.color.stat_emotion_3)
+        else if (emotion.equals("평범") || emotion.equals("모름"))
+            return requireContext().getColor(R.color.stat_emotion_5)
+        else if (emotion.equals("슬픔") || emotion.equals("우울"))
+            return requireContext().getColor(R.color.stat_emotion_7)
+        else
+            return requireContext().getColor(R.color.stat_emotion_9)
+
+
+    }
     fun getEmotionColor(emotion: String): Int {
         if (emotion.equals("설렘"))
             return requireContext().getColor(R.color.stat_emotion_1)
@@ -384,8 +442,6 @@ class StatViewFragment : Fragment() {
             return requireContext().getColor(R.color.stat_emotion_9)
         else
             return requireContext().getColor(R.color.stat_emotion_10)
-
-
     }
 
     override fun onDestroyView() {

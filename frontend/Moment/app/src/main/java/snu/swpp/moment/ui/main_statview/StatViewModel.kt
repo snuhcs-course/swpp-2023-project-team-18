@@ -25,6 +25,13 @@ class StatViewModel(
     // 버튼 타입을 나타내는 livedata
     val selectedButtonType:MutableLiveData<ButtonType> = MutableLiveData(ButtonType.WEEK)
 
+    // 통계 평균값을 7일 30일
+    val selectedPeriod: MutableLiveData<ButtonType> = MutableLiveData(ButtonType.WEEK)
+
+    // 점수에 대한 통계 값들을 띄워주는 용도
+    val highestScore: MutableLiveData<Int> = MutableLiveData()
+    val lowestScore: MutableLiveData<Int> = MutableLiveData()
+    val averageScore: MutableLiveData<Double> = MutableLiveData()
 
     fun getStats(isMonth: Boolean) {
         val todayDate = TimeConverter.getToday()
@@ -43,6 +50,9 @@ class StatViewModel(
         startDate.value = periodStartDate
         endDate.value = todayDate
 
+        selectedPeriod.value = if (isMonth) ButtonType.MONTH else ButtonType.WEEK
+
+
         authenticationRepository.isTokenValid(object : TokenCallBack {
             override fun onSuccess() {
                 val accessToken = authenticationRepository.token.accessToken;
@@ -50,6 +60,27 @@ class StatViewModel(
                     object : StoryGetCallBack {
                         override fun onSuccess(storyList: MutableList<StoryModel>) {
                             stat.value = StatState.fromStoryModels(storyList.filter{it.emotionInt != EmotionMap.INVALID_EMOTION}, todayDate)
+
+
+                            // score stat
+                            val validScores = storyList.mapNotNull { story ->
+                                if (story.score != 10) story.score else null
+                            }
+                            if (validScores.isNotEmpty()) {
+                                val sumOfValidScores = validScores.sum()
+                                val countOfValidScores = validScores.count()
+
+                                highestScore.postValue(validScores.maxOrNull() ?: 0)
+                                lowestScore.postValue(validScores.minOrNull() ?: 0)
+                                averageScore.postValue(sumOfValidScores.toDouble() / countOfValidScores)
+                            } else {
+                                // Set statistics to a default or error value if there are no valid scores
+                                highestScore.postValue(0)
+                                lowestScore.postValue(0)
+                                averageScore.postValue(0.0)
+                            }
+
+
                         }
 
                         override fun onFailure(error: Exception) {
@@ -73,4 +104,5 @@ class StatViewModel(
     enum class ButtonType {
         WEEK, MONTH
     }
+
 }
