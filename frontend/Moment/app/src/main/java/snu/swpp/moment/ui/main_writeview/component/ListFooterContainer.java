@@ -132,7 +132,7 @@ public class ListFooterContainer {
             return;
         }
 
-        setHelpTextAfterCompleted(isToday);
+        momentWriterContainer.setInvisible();
 
         freezeStoryEditText();
         storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
@@ -151,6 +151,7 @@ public class ListFooterContainer {
         scoreContainer.setUiVisible();
         scoreContainer.showAutoCompleteWarnText(!storyUiState.isPointCompleted());
 
+        setHelpTextAfterCompleted(isToday);
         state = ListFooterState.SCORE_SELECTING;
     }
 
