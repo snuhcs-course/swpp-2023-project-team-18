@@ -153,19 +153,25 @@ public class StoryContainer {
         return storyContentEditText.getText().toString();
     }
 
-    public void freeze() {
-        storyTitleEditText.setEnabled(false);
-        storyTitleEditText.setHint("");
-        storyContentEditText.setEnabled(false);
-        storyContentEditText.setHint("");
-    }
-
     public void setLimitObserver(Observer<Boolean> observer) {
         isLimitExceeded.observeForever(observer);
     }
 
     public void observeAiButtonSwitch(Observer<Boolean> observer) {
         aiButtonSwitch.observeForever(observer);
+    }
+
+    public void resetUi() {
+        storyWrapper.setVisibility(View.GONE);
+
+        setStoryText("", "");
+        freeze(false);
+
+        storyContentLengthText.setVisibility(View.VISIBLE);
+        setStoryContentLengthText(0);
+
+        storyAiButton.setVisibility(View.VISIBLE);
+        aiButtonHelpText.setVisibility(View.VISIBLE);
     }
 
     public void setUiWritingStory(Date completeTime) {
@@ -187,8 +193,16 @@ public class StoryContainer {
         storyAiButton.setVisibility(View.GONE);
     }
 
-    public void setCompleteTimeText(Date completeTime) {
-        completeTimeText.setText(TimeConverter.formatDate(completeTime, "HH:mm"));
+    public void freeze(boolean freeze) {
+        storyTitleEditText.setEnabled(!freeze);
+        storyContentEditText.setEnabled(!freeze);
+        if (freeze) {
+            storyTitleEditText.setHint("");
+            storyContentEditText.setHint("");
+        } else {
+            storyTitleEditText.setHint(R.string.story_title_hint);
+            storyContentEditText.setHint(R.string.story_content_hint);
+        }
     }
 
     public void setStoryText(String title, String content) {
@@ -199,6 +213,10 @@ public class StoryContainer {
     public void setAiButtonVisibility(int visibility) {
         storyAiButton.setVisibility(visibility);
         aiButtonHelpText.setVisibility(visibility);
+    }
+
+    private void setCompleteTimeText(Date completeTime) {
+        completeTimeText.setText(TimeConverter.formatDate(completeTime, "HH:mm"));
     }
 
     private void checkLimitExceeded() {

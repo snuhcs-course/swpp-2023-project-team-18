@@ -123,7 +123,7 @@ public class ListFooterContainer {
 
         storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
         storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
-        storyContainer.freeze();
+        freezeStoryEditText();
         storyContainer.setUiCompleteStory();
 
         emotionGridContainer.selectEmotion(storyUiState.getEmotion());
@@ -197,7 +197,7 @@ public class ListFooterContainer {
     }
 
     public void freezeStoryEditText() {
-        storyContainer.freeze();
+        storyContainer.freeze(true);
     }
 
     public void freezeEmotionSelector() {
