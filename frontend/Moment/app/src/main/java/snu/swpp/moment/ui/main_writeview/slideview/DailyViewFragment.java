@@ -22,8 +22,6 @@ import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageDailyBinding;
-import snu.swpp.moment.exception.NoInternetException;
-import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
@@ -118,52 +116,35 @@ public class DailyViewFragment extends BaseWritePageFragment {
         // moment GET API 호출 후 동작
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
-            if (error == null) {
-                listViewItems.clear();
-                if (momentUiState.getNumMoments() > 0) {
-                    binding.noMomentText.setVisibility(View.GONE);
-                    for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-                        listViewItems.add(new ListViewItem(momentPair));
-                    }
-                } else {
-                    binding.noMomentText.setVisibility(View.VISIBLE);
-                }
-                listViewAdapter.notifyDataSetChanged();
-            } else if (error instanceof NoInternetException) {
-                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(requireContext(), R.string.token_expired_error,
-                    Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-                startActivity(intent);
-            } else {
-                Log.d("DailyViewFragment", "Unknown error: " + error.getMessage());
-                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                    .show();
+            if (error != null) {
+                handleApiError(error);
+                return;
             }
+
+            listViewItems.clear();
+            if (momentUiState.getNumMoments() > 0) {
+                binding.noMomentText.setVisibility(View.GONE);
+                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                    listViewItems.add(new ListViewItem(momentPair));
+                }
+            } else {
+                binding.noMomentText.setVisibility(View.VISIBLE);
+            }
+            listViewAdapter.notifyDataSetChanged();
         });
 
         // story GET API 호출 후 동작
         viewModel.observeStoryState((StoryUiState storyUiState) -> {
             Exception error = storyUiState.getError();
-            if (error == null) {
-                listFooterContainer.updateUiWithRemoteData(storyUiState, false);
-                if (!storyUiState.isEmpty()) {
-                    binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
-                        binding.dailyMomentList.getCount() - 1));
-                }
-            } else if (error instanceof NoInternetException) {
-                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(requireContext(), R.string.token_expired_error,
-                    Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                    .show();
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
+
+            listFooterContainer.updateUiWithRemoteData(storyUiState, false);
+            if (!storyUiState.isEmpty()) {
+                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
+                    binding.dailyMomentList.getCount() - 1));
             }
         });
 

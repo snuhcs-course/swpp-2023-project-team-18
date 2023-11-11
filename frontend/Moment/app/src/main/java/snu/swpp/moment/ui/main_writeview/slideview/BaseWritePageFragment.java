@@ -1,11 +1,17 @@
 package snu.swpp.moment.ui.main_writeview.slideview;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
+import snu.swpp.moment.R;
+import snu.swpp.moment.exception.NoInternetException;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.utils.TimeConverter;
 
 public abstract class BaseWritePageFragment extends Fragment {
@@ -65,5 +71,19 @@ public abstract class BaseWritePageFragment extends Fragment {
 
     protected boolean isOutdated() {
         return TimeConverter.hasDayPassed(lastRefreshedTime, getCurrentDateTime());
+    }
+
+    protected void handleApiError(Exception error) {
+        if (error instanceof NoInternetException) {
+            Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                .show();
+        } else if (error instanceof UnauthorizedAccessException) {
+            Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                .show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }

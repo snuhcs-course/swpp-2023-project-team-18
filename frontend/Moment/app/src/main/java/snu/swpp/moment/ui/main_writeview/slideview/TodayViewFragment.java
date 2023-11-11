@@ -28,8 +28,6 @@ import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageTodayBinding;
-import snu.swpp.moment.exception.NoInternetException;
-import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
@@ -233,35 +231,27 @@ public class TodayViewFragment extends BaseWritePageFragment {
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
             Log.d("TodayViewFragment", "Got moment GET response: error=" + error);
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
 
-            if (error == null) {
-                listViewItems.clear();
-                listViewAdapter.setAnimation(false);
+            listViewItems.clear();
+            listViewAdapter.setAnimation(false);
 
-                if (momentUiState.getNumMoments() > 0) {
-                    bottomButtonContainer.setActivated(true);
-                    for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-                        listViewItems.add(new ListViewItem(momentPair));
-                    }
-                    listViewAdapter.notifyDataSetChanged();
-                    scrollToBottom();
-                    Log.d("TodayViewFragment", "Got moment GET response: numMoments="
-                        + momentUiState.getNumMoments());
-                } else {
-                    bottomButtonContainer.setActivated(false);
-                    listViewAdapter.notifyDataSetChanged();
-                    Log.d("TodayViewFragment", "Got moment GET response: no moments");
+            if (momentUiState.getNumMoments() > 0) {
+                bottomButtonContainer.setActivated(true);
+                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                    listViewItems.add(new ListViewItem(momentPair));
                 }
-            } else if (error instanceof NoInternetException) {
-                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
-                    .show();
-                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-                startActivity(intent);
+                listViewAdapter.notifyDataSetChanged();
+                scrollToBottom();
+                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
+                    + momentUiState.getNumMoments());
             } else {
-                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                bottomButtonContainer.setActivated(false);
+                listViewAdapter.notifyDataSetChanged();
+                Log.d("TodayViewFragment", "Got moment GET response: no moments");
             }
         });
 
@@ -270,24 +260,16 @@ public class TodayViewFragment extends BaseWritePageFragment {
             Exception error = savedStoryState.getError();
             Log.d("TodayViewFragment", "Got story GET response: error=" + error + ", isEmpty="
                 + savedStoryState.isEmpty());
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
 
-            if (error == null) {
-                listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
-                if (!savedStoryState.hasNoData()) {
-                    Log.d("TodayViewFragment",
-                        "Got story GET response: story has valid data");
-                    bottomButtonContainer.setActivated(false, true);
-                }
-            } else if (error instanceof NoInternetException) {
-                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
-                    .show();
-                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+            listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
+            if (!savedStoryState.hasNoData()) {
+                Log.d("TodayViewFragment",
+                    "Got story GET response: story has valid data");
+                bottomButtonContainer.setActivated(false, true);
             }
         });
 
