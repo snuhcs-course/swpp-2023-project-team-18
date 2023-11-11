@@ -52,7 +52,7 @@ class StatState(
             emotionCounts = mapOf()
         )
 
-        fun fromStoryModels(stories: MutableList<StoryModel>, today: LocalDate): StatState {
+        fun fromStoryModels(stories: List<StoryModel>, today: LocalDate): StatState {
             return StatState(
                 scoresBydateOffset = storiesToScores(stories, today),
                 hashtagCounts = storiesToHashtags(stories),
