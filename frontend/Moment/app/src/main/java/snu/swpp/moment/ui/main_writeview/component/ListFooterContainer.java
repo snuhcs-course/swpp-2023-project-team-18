@@ -106,16 +106,23 @@ public class ListFooterContainer {
     }
 
     public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState, boolean isToday) {
-        momentWriterContainer.setInvisible();
 
-        if (storyUiState.isEmpty()) {
-            // 아직 스토리가 만들어지지 않았을 경우
-            state = ListFooterState.INVISIBLE;
-            return;
-        }
-        if (storyUiState.isEmotionInvalid()) {
-            // 모먼트 없이 자동으로 마무리되어서 감정이 invalid인 경우
-            state = ListFooterState.INVISIBLE;
+        if (storyUiState.isEmpty() || storyUiState.isEmotionInvalid()) {
+            // 보여줄 데이터가 없는 경우
+            storyContainer.resetUi();
+            tagBoxContainer.resetUi();
+            scoreContainer.resetUi();
+
+            emotionGridContainer.resetUi();
+            emotionHelpText.setText(R.string.emotion_help_text);
+            emotionWrapper.setVisibility(View.GONE);
+
+            if (isToday) {
+                setUiReadyToAddMoment();
+            } else {
+                momentWriterContainer.setInvisible();
+                state = ListFooterState.INVISIBLE;
+            }
             return;
         }
 
