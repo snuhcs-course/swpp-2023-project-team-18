@@ -51,7 +51,8 @@ public class EmotionGridContainer {
             final int _i = i;
             textButton.setOnClickListener(v -> {
                 int previousSelectedEmotion = selectedEmotion.getValue();
-                if (previousSelectedEmotion > -1) {
+                if (0 <= previousSelectedEmotion
+                    && previousSelectedEmotion < textButtonList.size()) {
                     TextView previousButton = textButtonList.get(previousSelectedEmotion);
                     previousButton.setTypeface(maruburiLight);
                     previousButton.setTextColor(colorBlack);
@@ -81,13 +82,13 @@ public class EmotionGridContainer {
         textButton.performClick();
     }
 
-    public void setSelectedEmotionObserver(Observer<Integer> observer) {
+    public void observeSelectedEmotion(Observer<Integer> observer) {
         selectedEmotion.observeForever(observer);
     }
 
     public void resetUi() {
         freeze(false);
-        selectedEmotion.setValue(-1);
+        selectedEmotion.setValue(EmotionMap.INVALID_EMOTION);
         for (TextView textButton : textButtonList) {
             textButton.setTypeface(maruburiLight);
             textButton.setTextColor(colorBlack);

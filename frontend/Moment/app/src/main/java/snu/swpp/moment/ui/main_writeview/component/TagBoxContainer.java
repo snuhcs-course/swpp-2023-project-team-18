@@ -106,7 +106,7 @@ public class TagBoxContainer {
         }
     }
 
-    public void setLimitObserver(Observer<Boolean> observer) {
+    public void observeLimit(Observer<Boolean> observer) {
         isLimitExceeded.observeForever(observer);
     }
 

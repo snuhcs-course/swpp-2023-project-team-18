@@ -113,7 +113,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding.todayMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView);
+        listFooterContainer = new ListFooterContainer(footerView, true);
 
         listFooterContainer.setAddButtonOnClickListener(v -> {
             int numMoments = viewModel.getMomentState().getNumMoments();
@@ -185,7 +185,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         // 하단 버튼 관리 객체 초기화
         bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
-        bottomButtonContainer.viewingMoment();
 
         // 하루 마무리 API 호출 시 동작 설정
         MainActivity activity = (MainActivity) requireActivity();
@@ -233,6 +232,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
         // moment GET API 호출 후 동작
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
+            Log.d("TodayViewFragment", "Got moment GET response: error=" + error);
+
             if (error == null) {
                 listViewItems.clear();
                 listViewAdapter.setAnimation(false);
@@ -244,9 +245,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     }
                     listViewAdapter.notifyDataSetChanged();
                     scrollToBottom();
+                    Log.d("TodayViewFragment", "Got moment GET response: numMoments="
+                        + momentUiState.getNumMoments());
                 } else {
                     bottomButtonContainer.setActivated(false);
                     listViewAdapter.notifyDataSetChanged();
+                    Log.d("TodayViewFragment", "Got moment GET response: no moments");
                 }
             } else if (error instanceof NoInternetException) {
                 Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
@@ -264,9 +268,16 @@ public class TodayViewFragment extends BaseWritePageFragment {
         // story GET API 호출 후 동작
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
             Exception error = savedStoryState.getError();
+            Log.d("TodayViewFragment", "Got story GET response: error=" + error + ", isEmpty="
+                + savedStoryState.isEmpty());
+
             if (error == null) {
                 listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
-                bottomButtonContainer.setActivated(false, true);
+                if (!savedStoryState.hasNoData()) {
+                    Log.d("TodayViewFragment",
+                        "Got story GET response: story has valid data");
+                    bottomButtonContainer.setActivated(false, true);
+                }
             } else if (error instanceof NoInternetException) {
                 Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                     .show();

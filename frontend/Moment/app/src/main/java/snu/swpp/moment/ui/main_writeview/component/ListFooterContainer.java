@@ -17,6 +17,7 @@ import snu.swpp.moment.utils.AnimationProvider;
 public class ListFooterContainer {
 
     private final View view;
+    private final boolean isToday;  // for debugging
 
     // 모먼트 작성
     private final MomentWriterContainer momentWriterContainer;
@@ -59,8 +60,9 @@ public class ListFooterContainer {
     private ListFooterState state = ListFooterState.INVISIBLE;
 
 
-    public ListFooterContainer(@NonNull View view) {
+    public ListFooterContainer(@NonNull View view, boolean isToday) {
         this.view = view;
+        this.isToday = isToday;
 
         // 모먼트 작성
         momentWriterContainer = new MomentWriterContainer(view.findViewById(R.id.moment_writer));
@@ -81,12 +83,14 @@ public class ListFooterContainer {
         animationProvider = new AnimationProvider(view);
 
         // 스토리 자수 제한 감지
-        storyContainer.setLimitObserver((Boolean isLimitExceeded) -> {
+        storyContainer.observeLimit((Boolean isLimitExceeded) -> {
+            log("observeLimit: " + isLimitExceeded);
             setBottomButtonState(!isLimitExceeded);
         });
 
         // AI에게 부탁하기 버튼 감지
         storyContainer.observeAiButtonSwitch(isSet -> {
+            log("observeAiButtonSwitch: " + isSet);
             if (isSet) {
                 showLoadingText(true, R.string.ai_story_loading);
                 setAiStoryCallSwitch();
@@ -95,19 +99,20 @@ public class ListFooterContainer {
         });
 
         // 감정 선택 감지
-        emotionGridContainer.setSelectedEmotionObserver((Integer emotion) -> {
+        emotionGridContainer.observeSelectedEmotion((Integer emotion) -> {
+            log("observeSelectedEmotion: " + emotion);
             setBottomButtonState(emotion > -1);
         });
 
         // 태그 개수 제한 감지
-        tagBoxContainer.setLimitObserver((Boolean isLimitExceeded) -> {
+        tagBoxContainer.observeLimit((Boolean isLimitExceeded) -> {
+            log("observeLimit: " + isLimitExceeded);
             setBottomButtonState(!isLimitExceeded);
         });
     }
 
     public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState, boolean isToday) {
-
-        if (storyUiState.isEmpty() || storyUiState.isEmotionInvalid()) {
+        if (storyUiState.hasNoData()) {
             // 보여줄 데이터가 없는 경우
             storyContainer.resetUi();
             tagBoxContainer.resetUi();
@@ -118,7 +123,8 @@ public class ListFooterContainer {
             emotionWrapper.setVisibility(View.GONE);
 
             if (isToday) {
-                setUiReadyToAddMoment();
+                setUiReadyToAddMoment(false);
+                setBottomButtonState(false);
             } else {
                 momentWriterContainer.setInvisible();
                 state = ListFooterState.INVISIBLE;
@@ -173,7 +179,7 @@ public class ListFooterContainer {
     }
 
     public boolean isCompletionInProgress() {
-        Log.d("ListFooterContainer", "isCompletionInProgress: " + state.name());
+        log("isCompletionInProgress: " + state.name());
         return (state == ListFooterState.STORY_WRITING ||
             state == ListFooterState.EMOTION_SELECTING ||
             state == ListFooterState.TAG_WRITING);
@@ -217,6 +223,7 @@ public class ListFooterContainer {
 
     public void setUiWritingMoment() {
         // add 누르고 입력창 뜨는 동작
+        log("[STATE] setUiWritingMoment");
         momentWriterContainer.setUiWritingMoment();
 
         setBottomButtonState(false);
@@ -226,23 +233,28 @@ public class ListFooterContainer {
 
     public void setUiWaitingAiReply() {
         // submit 누른 후 AI 답글 대기 중일 때
+        log("[STATE] setUiWaitingAiReply");
         momentWriterContainer.setUiWaitingAiReply();
 
         setBottomButtonState(false);
         state = ListFooterState.MOMENT_WAITING_AI_REPLY;
     }
 
-    public void setUiReadyToAddMoment() {
+    public void setUiReadyToAddMoment(boolean activateBottomButton) {
         // submit 버튼 눌렀을 때 입력창 사라지고 add 버튼 표시되는 동작
+        log("[STATE] setUiReadyToAddMoment - " + activateBottomButton);
         momentWriterContainer.setUiReadyToAddMoment();
 
-        setBottomButtonState(true);
+        if (activateBottomButton) {
+            setBottomButtonState(true);
+        }
         setScrollToBottomSwitch();
         state = ListFooterState.MOMENT_READY_TO_ADD;
     }
 
     public void setUiAddLimitExceeded() {
         // 모먼트 한 시간 2개 제한 초과했을 때
+        log("[STATE] setUiAddLimitExceeded");
         momentWriterContainer.setUiAddLimitExceeded();
 
         setBottomButtonState(true);
@@ -252,6 +264,7 @@ public class ListFooterContainer {
 
     public void setUiWritingStory() {
         // 스토리 작성 칸 나올 때
+        log("[STATE] setUiWritingStory");
         momentWriterContainer.setInvisible();
 
         storyContainer.setUiWritingStory();
@@ -262,6 +275,7 @@ public class ListFooterContainer {
     }
 
     public void setUiSelectingEmotion() {
+        log("[STATE] setUiSelectingEmotion");
         storyContainer.setUiCompleteStory();
 
         emotionWrapper.setVisibility(View.VISIBLE);
@@ -273,12 +287,14 @@ public class ListFooterContainer {
     }
 
     public void setUiWritingTags() {
+        log("[STATE] setUiWritingTags");
         tagBoxContainer.setUiVisible();
         setScrollToBottomSwitch();
         state = ListFooterState.TAG_WRITING;
     }
 
     public void setUiSelectingScore() {
+        log("[STATE] setUiSelectingScore");
         scoreContainer.setUiVisible();
         setScrollToBottomSwitch();
         state = ListFooterState.SCORE_SELECTING;
@@ -300,6 +316,7 @@ public class ListFooterContainer {
     }
 
     public void showLoadingText(boolean on, @StringRes int textResId) {
+        log("showLoadingText: " + on);
         if (on) {
             loadingText.setText(textResId);
             loadingText.clearAnimation();
@@ -337,5 +354,10 @@ public class ListFooterContainer {
         emotionHelpText.setText(day + "의 감정");
         tagBoxContainer.setHelpText(day + "의 태그");
         scoreContainer.setHelpText(day + "의 점수");
+    }
+
+    private void log(String msg) {
+        String tag = "ListFooterContainer-" + (isToday ? "Today" : "Daily");
+        Log.d(tag, msg);
     }
 }
