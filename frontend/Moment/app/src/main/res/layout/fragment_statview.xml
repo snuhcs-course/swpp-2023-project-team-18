@@ -62,7 +62,14 @@
       app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stat_line_chart"
         />
-
+    <FrameLayout
+      android:id="@+id/frame"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintWidth_percent="1"
+      app:layout_constraintDimensionRatio="1:1"
+      app:layout_constraintTop_toBottomOf="@id/stat_pie_chart"
+      app:layout_constraintEnd_toEndOf="parent">
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/stat_word_cloud"
         android:layout_width="0dp"
@@ -72,7 +79,7 @@
         app:layout_constraintTop_toBottomOf="@id/stat_pie_chart"
         app:layout_constraintEnd_toEndOf="parent"
         />
-
+    </FrameLayout>
 
 
 

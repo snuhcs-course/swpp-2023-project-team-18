@@ -10,7 +10,9 @@ import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
+import android.widget.FrameLayout
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +21,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.ComposeView
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.semantics.SemanticsProperties.Text
@@ -56,11 +60,11 @@ import java.time.format.DateTimeFormatter
 class StatViewFragment : Fragment() {
     private lateinit var binding: FragmentStatviewBinding
     private lateinit var viewModel: StatViewModel
-    private lateinit var lineChart:LineChart
+    private lateinit var lineChart: LineChart
     private val authenticationRepository: AuthenticationRepository =
         AuthenticationRepository.getInstance(context)
     private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
-    private lateinit var emotionColors:Map<String,Int>
+    private lateinit var emotionColors: Map<String, Int>
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(
@@ -68,6 +72,7 @@ class StatViewFragment : Fragment() {
             StatViewModelFactory(authenticationRepository, storyRepository)
         )[StatViewModel::class.java]
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?, savedInstanceState: Bundle?
@@ -78,7 +83,7 @@ class StatViewFragment : Fragment() {
         )
 
         binding = FragmentStatviewBinding.inflate(inflater, container, false)
-        binding.statWordCloud.apply{
+        binding.statWordCloud.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WordCloudView(mapOf())
@@ -86,7 +91,7 @@ class StatViewFragment : Fragment() {
             }
         }
         binding.statWordCloud.setOnTouchListener { v, event ->
-            Log.d("touch2","touch")
+            Log.d("touch2", "touch")
             binding.con.requestDisallowInterceptTouchEvent(true)
             return@setOnTouchListener false
 
@@ -95,8 +100,10 @@ class StatViewFragment : Fragment() {
         lineChart = binding.statLineChart
 
         // Include된 버튼, 기간을 포함하는 레이아웃에 대한 바인딩 객체 생성
-        val buttonDateBinding = StatButtonDateBinding.bind(root.findViewById(R.id.statUtilContainer))
-        val durationBinding = StatDurationBinding.bind(root.findViewById(R.id.stat_duration_container))
+        val buttonDateBinding =
+            StatButtonDateBinding.bind(root.findViewById(R.id.statUtilContainer))
+        val durationBinding =
+            StatDurationBinding.bind(root.findViewById(R.id.stat_duration_container))
         // 기간 설정을 위한 코드
         viewModel.startDate.observe(viewLifecycleOwner) { date ->
             durationBinding.statDateDurationStart.text = formatDateString(date)
@@ -114,6 +121,7 @@ class StatViewFragment : Fragment() {
                     buttonDateBinding.statMonthButton.isActivated = false
                     binding.statDayScoreText.text = getString(R.string.stat_section_week_score)
                 }
+
                 StatViewModel.ButtonType.MONTH -> {
                     buttonDateBinding.statWeekButton.isActivated = false
                     buttonDateBinding.statMonthButton.isActivated = true
@@ -134,11 +142,21 @@ class StatViewFragment : Fragment() {
             // Fragment가 활성 상태일 때만 UI 업데이트를 진행합니다.
             state?.let {
                 scoreSetup(it.scoresBydateOffset, viewModel.today.value ?: LocalDate.now())
-            //    hashtagSetup(it.hashtagCounts)
+                //    hashtagSetup(it.hashtagCounts)
                 emotionSetup(it.emotionCounts)
-                binding.statWordCloud.setContent { 
+                //tagcloud가 값이 업데이트가 잘 안됨 따라서 완전히 새로운 view를 넣어야 함
+                binding.frame.removeAllViews()
+                val newCloud = ComposeView(requireContext())
+                newCloud.layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
+
+                binding.frame.addView(newCloud)
+                newCloud.setContent {
                     WordCloudView(labels = it.hashtagCounts)
                 }
+
 
             }
         }
@@ -147,19 +165,21 @@ class StatViewFragment : Fragment() {
 
         return root
     }
-    fun scoreSetup(scores:Map<Int,Int>,today: LocalDate){
-        class DateAxisValueFormat(today:LocalDate) : IndexAxisValueFormatter() {
+
+    fun scoreSetup(scores: Map<Int, Int>, today: LocalDate) {
+        class DateAxisValueFormat(today: LocalDate) : IndexAxisValueFormatter() {
 
             override fun getFormattedValue(value: Float): String {
                 val formatter = DateTimeFormatter.ofPattern("MM/dd")
                 return formatter.format(today.plusDays(Math.round(value).toLong()))
             }
         }
-        val entries:MutableList<Entry> = mutableListOf()
+
+        val entries: MutableList<Entry> = mutableListOf()
         scores.forEach { day, score ->
             entries.add(Entry((-day).toFloat(), score.toFloat()))
         }
-        val dataset = LineDataSet(entries,null)
+        val dataset = LineDataSet(entries, null)
         val assetManager = requireContext().assets
 
         // 그리드 dash
@@ -179,16 +199,25 @@ class StatViewFragment : Fragment() {
         lineChart.axisLeft.axisLineWidth = commonLineWidth // Example value, adjust as necessary
         lineChart.axisLeft.axisLineColor = commonColor
 
-        lineChart.axisRight.axisLineWidth = commonLineWidth // Assuming you want to make the right axis line bold as well
+        lineChart.axisRight.axisLineWidth =
+            commonLineWidth // Assuming you want to make the right axis line bold as well
         lineChart.axisRight.axisLineColor = commonColor
 
         lineChart.xAxis.axisLineWidth = commonLineWidth
         lineChart.xAxis.axisLineColor = commonColor
 
         //grid
-        lineChart.xAxis.enableGridDashedLine(10f, 10f, 0f) // Example values for line length, space length, and phase
+        lineChart.xAxis.enableGridDashedLine(
+            10f,
+            10f,
+            0f
+        ) // Example values for line length, space length, and phase
         lineChart.axisLeft.enableGridDashedLine(10f, 10f, 0f)
-        lineChart.axisRight.enableGridDashedLine(10f, 10f, 0f) // Example values for line length, space length, and phase
+        lineChart.axisRight.enableGridDashedLine(
+            10f,
+            10f,
+            0f
+        ) // Example values for line length, space length, and phase
 
         //lineChart.axisRight.isEnabled = false
         lineChart.xAxis.valueFormatter = DateAxisValueFormat(today)
@@ -199,14 +228,15 @@ class StatViewFragment : Fragment() {
         lineChart.axisLeft.axisMaximum = 6.0F
         lineChart.axisRight.axisMinimum = 0.0F
         lineChart.axisRight.axisMaximum = 6.0F
-        lineChart.axisLeft.setLabelCount(7,true);
-        lineChart.axisLeft.typeface = ResourcesCompat.getFont(requireContext(),R.font.maruburi_light)
-        lineChart.axisRight.setLabelCount(7,true);
+        lineChart.axisLeft.setLabelCount(7, true);
+        lineChart.axisLeft.typeface =
+            ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
+        lineChart.axisRight.setLabelCount(7, true);
 
         dataset.setDrawHorizontalHighlightIndicator(false);
         dataset.setDrawVerticalHighlightIndicator(false);
-        lineChart.xAxis.setLabelCount(entries.size,false)
-        lineChart.xAxis.typeface = ResourcesCompat.getFont(requireContext(),R.font.maruburi_light)
+        lineChart.xAxis.setLabelCount(entries.size, false)
+        lineChart.xAxis.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
 
 
         // 라인차트의 테두리를 그리기 위해 더미값을 넣고 해당 값은 출력안함
@@ -225,7 +255,7 @@ class StatViewFragment : Fragment() {
             }
         })
 
-        lineChart.axisLeft.gridColor=android.graphics.Color.BLACK
+        lineChart.axisLeft.gridColor = android.graphics.Color.BLACK
         val limitLine = LimitLine(6f, "").apply {
             lineWidth = commonLineWidth
             lineColor = commonColor
@@ -240,76 +270,75 @@ class StatViewFragment : Fragment() {
 
         lineChart.fitScreen()
         lineChart
-        lineChart.setVisibleXRange(5.0F,5.0F)
+        lineChart.setVisibleXRange(5.0F, 5.0F)
 
         lineChart.invalidate()
         dataset.notifyDataSetChanged()
 
 
-
     }
-   /* fun hashtagSetup(hashtags:Map<String,Int>){
-        val wordCloudView = binding.statWordCloud
+    /* fun hashtagSetup(hashtags:Map<String,Int>){
+         val wordCloudView = binding.statWordCloud
 
-        class MyJavaScriptInterface {
-            @JavascriptInterface
-            fun calculateContentDimensions(contentWidth: Int, contentHeight: Int) {
-                // Calculate the desired zoom level to fit the content
-                val zoomLevel = (wordCloudView.width.toFloat()) / contentWidth
-                activity!!.runOnUiThread(Runnable { // Set the zoom level of the WebView to fit the content
-                    wordCloudView.setInitialScale((zoomLevel * 50).toInt())
-                })
-            }
-        }
+         class MyJavaScriptInterface {
+             @JavascriptInterface
+             fun calculateContentDimensions(contentWidth: Int, contentHeight: Int) {
+                 // Calculate the desired zoom level to fit the content
+                 val zoomLevel = (wordCloudView.width.toFloat()) / contentWidth
+                 activity!!.runOnUiThread(Runnable { // Set the zoom level of the WebView to fit the content
+                     wordCloudView.setInitialScale((zoomLevel * 50).toInt())
+                 })
+             }
+         }
 
-        val wordClouds:MutableList<WordCloud> = mutableListOf()
-        wordCloudView.setScale(30,10)
-        for(hashtag in hashtags){
-            wordClouds.add(WordCloud(hashtag.key,1))
-            Log.d("hashtag",hashtag.key)
-            Log.d("weight",hashtag.value.toString())
-        }
-       wordClouds.add(WordCloud("",0))
+         val wordClouds:MutableList<WordCloud> = mutableListOf()
+         wordCloudView.setScale(30,10)
+         for(hashtag in hashtags){
+             wordClouds.add(WordCloud(hashtag.key,1))
+             Log.d("hashtag",hashtag.key)
+             Log.d("weight",hashtag.value.toString())
+         }
+        wordClouds.add(WordCloud("",0))
 
-        wordCloudView.setDataSet(wordClouds)
-        wordCloudView.setColors(intArrayOf(Color.BLUE, Color.GRAY, Color.GREEN, Color.CYAN))
+         wordCloudView.setDataSet(wordClouds)
+         wordCloudView.setColors(intArrayOf(Color.BLUE, Color.GRAY, Color.GREEN, Color.CYAN))
 
-        Log.d("data2",wordCloudView.data)
-        wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
-        wordCloudView.notifyDataSetChanged()
+         Log.d("data2",wordCloudView.data)
+         wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
+         wordCloudView.notifyDataSetChanged()
 
-        }*/
+         }*/
 
 
-    fun emotionSetup(emotions:Map<String,Int>){
+    fun emotionSetup(emotions: Map<String, Int>) {
         val pieChart = binding.statPieChart
-        var pie : MutableList<PieEntry> = mutableListOf()
-        var colors:MutableList<Int> = mutableListOf()
+        var pie: MutableList<PieEntry> = mutableListOf()
+        var colors: MutableList<Int> = mutableListOf()
         val emotions = sampleEmotions()
-        for(emotion in emotions){
-            pie.add(PieEntry(emotion.value.toFloat(),emotion.key))
+        for (emotion in emotions) {
+            pie.add(PieEntry(emotion.value.toFloat(), emotion.key))
             colors.add(getEmotionColor(emotion.key))
 
         }
-        val pieDataset = PieDataSet(pie,"")
+        val pieDataset = PieDataSet(pie, "")
         pieDataset.colors = colors
         pieChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
         pieChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         pieChart.legend.setDrawInside(false);
         pieChart.legend.textSize = 12f
-        pieChart.legend.typeface = ResourcesCompat.getFont(requireContext(),R.font.maruburi_light)
+        pieChart.legend.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
         pieChart.legend.form = Legend.LegendForm.CIRCLE
         pieChart.description.isEnabled = false
         pieChart.setDrawEntryLabels(false)
-        pieDataset.valueFormatter = object: ValueFormatter() {
+        pieDataset.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return "${value / emotions.size * 100} %"
             }
         }
         pieDataset.valueTextColor = requireContext().getColor(R.color.white)
         pieDataset.valueTextSize = 12f
-        pieDataset.valueTypeface = ResourcesCompat.getFont(requireContext(),R.font.maruburi_bold)
+        pieDataset.valueTypeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
 
 
 
@@ -317,59 +346,71 @@ class StatViewFragment : Fragment() {
         pieChart.invalidate()
 
     }
-    fun sampleEmotions():Map<String,Int>{//FIXME: test 후 지우기
-        val m:MutableMap<String,Int> = mutableMapOf()
-        m["기쁨"]=1
-        m["설렘"]=2
-        m["행복"]=1
-        m["신남"]=1
-        m["평범"]=1
-        m["모름"]=1
-        m["짜증"]=1
-        m["화남"]=1
-    //    m["슬픔"]=1
-     //   m["우울"]=1
+
+    fun sampleEmotions(): Map<String, Int> {//FIXME: test 후 지우기
+        val m: MutableMap<String, Int> = mutableMapOf()
+        m["기쁨"] = 1
+        m["설렘"] = 2
+        m["행복"] = 1
+        m["신남"] = 1
+        m["평범"] = 1
+        m["모름"] = 1
+        m["짜증"] = 1
+        m["화남"] = 1
+        //    m["슬픔"]=1
+        //   m["우울"]=1
         return m
 
     }
-    fun getEmotionColor(emotion:String):Int{
-        if(emotion.equals("설렘"))
+
+    fun getEmotionColor(emotion: String): Int {
+        if (emotion.equals("설렘"))
             return requireContext().getColor(R.color.stat_emotion_1)
-        else if(emotion.equals("신남"))
+        else if (emotion.equals("신남"))
             return requireContext().getColor(R.color.stat_emotion_2)
-        else if(emotion.equals("기쁨"))
+        else if (emotion.equals("기쁨"))
             return requireContext().getColor(R.color.stat_emotion_3)
-        else if(emotion.equals("행복"))
+        else if (emotion.equals("행복"))
             return requireContext().getColor(R.color.stat_emotion_4)
-        else if(emotion.equals("평범"))
+        else if (emotion.equals("평범"))
             return requireContext().getColor(R.color.stat_emotion_5)
-        else if(emotion.equals("모름"))
+        else if (emotion.equals("모름"))
             return requireContext().getColor(R.color.stat_emotion_6)
-        else if(emotion.equals("슬픔"))
+        else if (emotion.equals("슬픔"))
             return requireContext().getColor(R.color.stat_emotion_7)
-        else if(emotion.equals("우울"))
+        else if (emotion.equals("우울"))
             return requireContext().getColor(R.color.stat_emotion_8)
-        else if(emotion.equals("화남"))
+        else if (emotion.equals("화남"))
             return requireContext().getColor(R.color.stat_emotion_9)
         else
             return requireContext().getColor(R.color.stat_emotion_10)
 
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
     }
+
     private fun formatDateString(date: LocalDate): String {
         return date.format(DateTimeFormatter.ofPattern("yy.MM.dd"))
     }
-    @Composable
-    fun WordCloudView(labels:Map<String,Int>){
 
+    @Composable
+    fun WordCloudView(labels: Map<String, Int>) {
 
 
         TagCloud(
             state = rememberTagCloudState(),
-            modifier = Modifier.padding(64.dp)
+            modifier = Modifier
+                .padding(64.dp)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onPress = {
+                            binding.root.requestDisallowInterceptTouchEvent(true)
+                        }
+                    )
+                }
         ) {
             items((labels.toList())) {
                 Surface(
@@ -380,13 +421,12 @@ class StatViewFragment : Fragment() {
                 ) {
                     Text(
                         text = it.first,
-                    //    color = Color.BLUE,
+                        //    color = Color.BLUE,
                         modifier = Modifier.padding(2.dp),
                         color = androidx.compose.ui.graphics.Color.Blue
 
 
-
-                        )
+                    )
                 }
             }
         }
