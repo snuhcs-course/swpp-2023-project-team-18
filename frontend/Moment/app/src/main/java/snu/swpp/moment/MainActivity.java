@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView toolbarTitle;
 
-    private MutableLiveData<LocalDate> writeDestinationDate = new MutableLiveData<>();
+    private final MutableLiveData<LocalDate> writeDestinationDate = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

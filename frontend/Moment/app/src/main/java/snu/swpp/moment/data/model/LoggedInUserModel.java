@@ -9,11 +9,11 @@ import snu.swpp.moment.api.response.RegisterResponse;
  */
 public class LoggedInUserModel {
 
-    private String username;
-    private String nickName;
-    private String createAt;
-    private String AccessToken;
-    private String RefreshToken;
+    private final String username;
+    private final String nickName;
+    private final String createAt;
+    private final String AccessToken;
+    private final String RefreshToken;
 
     public LoggedInUserModel(RegisterResponse.User user, RegisterResponse.Token token) {
         this.username = user.getUsername();

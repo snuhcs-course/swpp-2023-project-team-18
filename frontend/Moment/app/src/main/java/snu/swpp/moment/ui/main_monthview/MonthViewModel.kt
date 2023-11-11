@@ -54,10 +54,10 @@ class MonthViewModel(
 
     fun getStory(month: YearMonth) {
         //  api 부르고 MonthStoryState 업데이트
-        val startEndTimes = TimeConverter.getOneMonthTimestamps(month);
+        val startEndTimes = TimeConverter.getOneMonthTimestamps(month)
         authenticationRepository.isTokenValid(object : TokenCallBack {
             override fun onSuccess() {
-                val accessToken = authenticationRepository.token.accessToken;
+                val accessToken = authenticationRepository.token.accessToken
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
                     object : StoryGetCallBack {
                         override fun onSuccess(storyList: MutableList<StoryModel>) {
@@ -65,7 +65,7 @@ class MonthViewModel(
                                 storyList.map { CalendarDayState.fromStoryModel(it) }
                             val datInfoStateList = fillEmptyStory(calendarDayStateList, month)
                             monthChangedSwitch = true
-                            calendarMonthState.value = CalendarMonthState(null, datInfoStateList);
+                            calendarMonthState.value = CalendarMonthState(null, datInfoStateList)
                         }
 
                         override fun onFailure(error: Exception) {
