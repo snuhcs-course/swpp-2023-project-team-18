@@ -23,7 +23,7 @@ template = NudgeGenerateOneTemplate
 var_names = ["diary"]
 
 DATA_PATH = "writing/data/nudge_test.jsonl"
-TEST_NAME = "nudge_ST_2"
+TEST_NAME = "nudge_final_prompt"
 OUTPUT_JSONL_PATH = f"results/results_nudge/{TEST_NAME}.jsonl"
 OUTPUT_TXT_PATH = f"results/results_nudge/{TEST_NAME}.txt"
 # ----------------------------

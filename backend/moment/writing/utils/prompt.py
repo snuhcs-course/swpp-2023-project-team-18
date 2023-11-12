@@ -95,9 +95,9 @@ Your job is to look at the daily diary entries made by the user and use the info
 As a preliminary step to achieving that goal, you must first extract information about what important events the user has experienced. \
 When this is done, we should be able to look at this information and create a message to display to the user.
 The user's diary will be given in Korean, and you will need to briefly summarize the diary in ENGLISH.
-The summary should be very concise, about THREE SENTENCES. \
+The summary should be very concise, NO MORE THAN THREE SENTENCES. \
 It should only consist of relevant information about important events. \
-If the given diary has no content that is worth summarizing, you should simply return a period ".".
+If the given diary has no content that is worth summarizing, you should simply return a bullet point "*".
 
 ***
 
@@ -111,21 +111,29 @@ Here is a couple of examples to show how you should summarize diary entries:
 [Summary]
 * Mid-term of syntax class tomorrow.
 * Information economics problem-solving assignment due next Sunday.
-* The user feels like they have too much work to do these days.
+* Have too much work to do these days.
 
 [User Diary]
-내가 지금껏 어느 한 문제를 어떻게 풀어야 할지를 고민하며 하루 종일을 보내본 적이 있던가. 낮에 자리에 앉아 열심히 검색을 하고 있는데 문득 그런 생각을 했다. 어제 받은 미션을 해결하기 위한 연구는 오늘까지도 이어졌다. 텍스트 데이터를 가지고 클러스터링을 하는 문제는 꽤 흔한 것이어서 다양한 방법들을 찾을 수 있었다. 하나는 각 텍스트의 내용을 대표하는 키워드를 뽑아낸 뒤 공통된 키워드를 갖는 것들끼리 묶어주는 방법이었다. 키워드를 뽑아내는 것에도 다양한 방법이 있었는데, 단순히 단어의 출현 빈도를 측정해서 통계 알고리즘을 적용할 수도 있었고, 또는 아예 키워드 추출을 위해 학습된 언어모델을 사용할 수도 있었다. 오늘 하루 동안 참 많은 방식을 시도해보았으나 아쉽게도 아주 만족스러운 결과를 내는 것은 없었다. 이 방식의 가장 큰 문제점은 클러스터의 개수를 통제하기가 어렵다는 점이었다. 데이터를 겨우 한두 개만 포함한 그룹이 잔뜩 만들어지는데 그런 건 아무런 의미가 없을 것이었다. 역시, 이게 이렇게 쉽게 풀릴 만큼 쉬운 문제였다면 회사가 나에게 월급을 줄 이유가 없으리라. 이것 말고는 아예 텍스트 전체를 벡터로 임베딩 해서 벡터들 사이의 거리를 기준으로 그룹을 나누는 방법이 또 있었다. 하지만 한국어로 된 대화, 특히나 고객 상담 기록을 처리할 수 있는 모델을 쉽게 찾을 수 있을지는 잘 모르겠다. 무언가 멋진 방법을 발견해내고 싶은데. 고민은 계속된다.
+오늘은 주제를 조금 더 구체화하는 시간을 가졌다. InstructPix2Pix라고 최근에 나온 논문이 있는데, 이 논문이 이미 자연어만으로 모든 image editing task를 가능하게 하고 있었다.. 이미 이런 논문이 있다는 사실에 조금 절망했지만, 모델을 돌려보며 개선의 여지가 없을지 면밀하게 살펴보았다. 다행히 성능이 엄청나게 완벽하지는 않았고, object-level task를 처리하는 것을 어려워하는 것으로 보였다. 즉 스타일 전체를 바꾸는 style-transfer task는 매우 잘 수행하는데, object-level task에서는 바꾸지 말아야 하는 부분을 자꾸 바꾸는 것으로 보였다. 이 논문의 저자들이 training data를 공개해 뒀길래 들여다보니.. 애초에 input과 output을 하나의 pipeline으로 만드는 게 아니라서 이러한 object-level task는 잘 수행하지 못하는 게 당연해 보였다. 데이터를 좀 더 추가하는 방식으로 해결해 볼 수 있을 것 같은데.. 한번 해봐야겠다! Instructpix2pix 저자들이 paper의 코드를 매우 잘 활용할 수 있도록 공개해 놔서 그걸 토대로 발전시켜 나가면 될 것 같다.
+그런데 코드 진짜 깔끔하고 이용하기 쉽게 짜뒀다. 약간 간지난다는 생각이 들었고, 나도 나중에 연구 다 하고 내 paper의 코드를 사람들이 사용하기 쉽게 깃헙에 올려놔야겠다는 생각을 했다. Machine Learning Society가 이렇게 빨리 발전할 수 있었던 이유에 코드가 거의 다 공개되어 있다는 점이 한 몫을 한 것 같고, 나도 이 분야의 발전에 기여할 수 있도록 코드를 잘 정리하여 올려놔야겠다. Open-source의 학문을 연구할 수 있게 되어 기쁘다.
 
 [Summary]
-* Still working on the work assigned yesterday.
-* Tried various methods to solve the problem, but none of them worked well.
-* Still thinking about the problem.
+* Still working on the research topic.
+* Consulted existing papers and codes to refine the research topic.
+* Found some points to improve.
+
+[User Diary]
+오늘은 시험 공부를 했다. 시험 공부가 지속되다 보니 힘들었다. 또 몸이 좋지 않아 기침이 계속 나왔다. 그래도 약을 먹으니 상태가 호전되었다.
+
+[Summary]
+* Studied for the exam.
+* Was sick and kept coughing.
 
 [User Diary]
 아아
 
 [Summary]
-.
+*
 
 ***
 
