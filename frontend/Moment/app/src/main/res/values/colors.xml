@@ -26,17 +26,17 @@
     <color name="stat_emotion_9">#333333</color>
     <color name="stat_emotion_10">#191919</color> -->
 
-    <color name="stat_emotion_1">#CD5252</color>
-    <color name="stat_emotion_2">#CD5252</color>
+    <color name="stat_emotion_1">#E6E6E6</color>
+    <color name="stat_emotion_2">#E6E6E6</color>
     <color name="stat_emotion_3">#CCCCCC</color>
     <color name="stat_emotion_4">#CCCCCC</color>
     <color name="stat_emotion_5">#B3B3B3</color>
     <color name="stat_emotion_6">#B3B3B3</color>
-    <color name="stat_emotion_7">#666666</color>
-    <color name="stat_emotion_8">#666666</color>
-    <color name="stat_emotion_9">#191919</color>
-    <color name="stat_emotion_10">#191919</color>
+    <color name="stat_emotion_7">#999999</color>
+    <color name="stat_emotion_8">#999999</color>
+    <color name="stat_emotion_9">#7F7F7F</color>
+    <color name="stat_emotion_10">#7F7F7F</color>
 
-
+    <color name="cccccc">#CCCCCC</color>
 
 </resources>

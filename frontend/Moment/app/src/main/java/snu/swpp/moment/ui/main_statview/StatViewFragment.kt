@@ -3,8 +3,10 @@ package snu.swpp.moment.ui.main_statview
 import android.content.Context
 import android.graphics.DashPathEffect
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
@@ -17,6 +19,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -26,7 +29,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.SemanticsProperties.Text
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
@@ -46,7 +54,6 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import eu.wewox.tagcloud.TagCloud
 import eu.wewox.tagcloud.rememberTagCloudState
-import net.alhazmy13.wordcloud.WordCloud
 import snu.swpp.moment.R
 import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
@@ -65,7 +72,7 @@ class StatViewFragment : Fragment() {
     private val authenticationRepository: AuthenticationRepository =
         AuthenticationRepository.getInstance(context)
     private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
-    private lateinit var emotionColors: Map<String, Int>
+    //private lateinit var emotionColors: Map<String, Int>
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(
@@ -120,13 +127,13 @@ class StatViewFragment : Fragment() {
                 StatViewModel.ButtonType.WEEK -> {
                     buttonDateBinding.statWeekButton.isActivated = true
                     buttonDateBinding.statMonthButton.isActivated = false
-                    binding.statDayScoreText.text = getString(R.string.stat_section_week_score)
+                    //binding.statDayScoreText.text = getString(R.string.stat_section_week_score)
                 }
 
                 StatViewModel.ButtonType.MONTH -> {
                     buttonDateBinding.statWeekButton.isActivated = false
                     buttonDateBinding.statMonthButton.isActivated = true
-                    binding.statDayScoreText.text = getString(R.string.stat_section_month_score)
+                    //binding.statDayScoreText.text = getString(R.string.stat_section_month_score)
                 }
             }
         }
@@ -139,11 +146,20 @@ class StatViewFragment : Fragment() {
             statViewModel.getStats(true)
         }
 
-        // 점수 평균값
+// 점수 평균값
+        // Observe the average score LiveData and update the UI
+        viewModel.averageScore.observe(viewLifecycleOwner) { average ->
+            val averageScoreTextView: TextView = root.findViewById(R.id.average_score_text_view)
+            // Assuming you want to display the average score to one decimal place
+            averageScoreTextView.text = getString(R.string.average_score_text, String.format("%.1f", average))
+        }
+/*
+
         viewModel.highestScore.observe(viewLifecycleOwner) { highest ->
             val highestScoreTextView: TextView = root.findViewById(R.id.highest_score_text_view)
             highestScoreTextView.text = getString(R.string.highest_score_text, highest)
         }
+
 
         // Observe the lowest score LiveData and update the UI
         viewModel.lowestScore.observe(viewLifecycleOwner) { lowest ->
@@ -151,14 +167,7 @@ class StatViewFragment : Fragment() {
             lowestScoreTextView.text = getString(R.string.lowest_score_text, lowest)
         }
 
-        // Observe the average score LiveData and update the UI
-        viewModel.averageScore.observe(viewLifecycleOwner) { average ->
-            val averageScoreTextView: TextView = root.findViewById(R.id.average_score_text_view)
-            // Assuming you want to display the average score to one decimal place
-            averageScoreTextView.text = getString(R.string.average_score_text, String.format("%.1f", average))
-        }
-
-
+        */
 
         viewModel.stat.observe(viewLifecycleOwner) { state ->
             // Fragment가 활성 상태일 때만 UI 업데이트를 진행합니다.
@@ -189,23 +198,27 @@ class StatViewFragment : Fragment() {
     }
 
     fun scoreSetup(scores: Map<Int, Int>, today: LocalDate) {
+
         class DateAxisValueFormat(today: LocalDate) : IndexAxisValueFormatter() {
 
             override fun getFormattedValue(value: Float): String {
                 val formatter = DateTimeFormatter.ofPattern("MM/dd")
+                //return formatter.format(today.plusDays(Math.round(value).toLong()))
                 return formatter.format(today.plusDays(Math.round(value).toLong()))
             }
         }
 
         val entries: MutableList<Entry> = mutableListOf()
+        Log.d("stat_test : numentries", entries.size.toString())
         scores.forEach { day, score ->
             entries.add(Entry((-day).toFloat(), score.toFloat()))
+            Log.d("stat_test", day.toString())
         }
         val dataset = LineDataSet(entries, null)
-        val assetManager = requireContext().assets
+        //val assetManager = requireContext().assets
 
         // 그리드 dash
-        val dashPathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
+        //val dashPathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
         val commonColor = android.graphics.Color.BLACK
         val commonLineWidth = 1.2f
 
@@ -247,6 +260,7 @@ class StatViewFragment : Fragment() {
         lineChart.xAxis.isGranularityEnabled = true
         lineChart.xAxis.granularity = 1F
         lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+
         lineChart.axisLeft.axisMinimum = 0.0F
         lineChart.axisLeft.axisMaximum = 6.0F
         lineChart.axisRight.axisMinimum = 0.0F
@@ -259,8 +273,8 @@ class StatViewFragment : Fragment() {
         dataset.setDrawHorizontalHighlightIndicator(false);
         dataset.setDrawVerticalHighlightIndicator(false);
         lineChart.xAxis.setLabelCount(entries.size, false)
+        Log.d("stat_view", entries.size.toString())
         lineChart.xAxis.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
-
 
         // 라인차트의 테두리를 그리기 위해 더미값을 넣고 해당 값은 출력안함
         lineChart.axisLeft.valueFormatter = (object : ValueFormatter() {
@@ -287,16 +301,19 @@ class StatViewFragment : Fragment() {
 
 // Y축에 LimitLine을 추가
         lineChart.axisLeft.addLimitLine(limitLine)
-
-
-
-
         lineChart.data = LineData(dataset)
 
         lineChart.fitScreen()
         lineChart
-        lineChart.setVisibleXRange(5.0F, 5.0F)
 
+        // 7일, 30일 다른 간격 수를 보여줌
+        if (scores.size <= 7) {
+            lineChart.setVisibleXRange(5.0F, 5.0F) // 최대 5일치 데이터를 표시
+        } else if (scores.size <= 30) {
+            lineChart.setVisibleXRange(7.0F, 7.0F) // 최대 7일치 데이터를 표시
+        }
+        // 차트가 항상 최신 데이터를 표시하도록 설정합니다.
+        lineChart.moveViewToX(dataset.xMax)
 
 
         // 아래 두줄은 linechart가 항상 오른쪽으로 스크롤 되어있도록
@@ -342,84 +359,113 @@ class StatViewFragment : Fragment() {
 
 
     fun emotionSetup(emotions: Map<String, Int>) {
-        val pieChart = binding.statPieChart
-        var pie: MutableList<PieEntry> = mutableListOf()
-        var colors: MutableList<Int> = mutableListOf()
-        val emotions = sampleEmotions()
-        for (emotion in emotions) {
-            pie.add(PieEntry(emotion.value.toFloat(), emotion.key))
-            colors.add(getEmotionColor_grayScale(emotion.key))
+        val emotions = sampleEmotions()  // testset
+        val categoryIcons = mapOf(
+            "emotion_sunny" to R.drawable.small_icon_sunny,
+            "emotion_sun_cloud" to R.drawable.small_icon_sun_cloud,
+            "emotion_cloud" to R.drawable.small_icon_cloud,
+            "emotion_rain" to R.drawable.small_icon_rain,
+            "emotion_lightning" to R.drawable.small_icon_lightning
+        )
 
+        // Map the emotions to categories
+        val emotionToCategory = mapOf(
+            "설렘" to "emotion_sunny",
+            "신남" to "emotion_sunny",
+            "기쁨" to "emotion_sun_cloud",
+            "행복" to "emotion_sun_cloud",
+            "평범" to "emotion_cloud",
+            "모름" to "emotion_cloud",
+            "슬픔" to "emotion_rain",
+            "우울" to "emotion_rain",
+            "화남" to "emotion_lightning",
+            "짜증" to "emotion_lightning"
+        )
+
+        // Create a map for aggregated emotion values
+
+        val aggregatedEmotions = mutableMapOf<String, Int>()
+        for ((emotion, value) in emotions) {
+            val category = emotionToCategory[emotion] ?: continue
+            aggregatedEmotions.merge(category, value, Int::plus)
         }
 
-        // 추가한것, 테스트중
-        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
-
-
-        val pieDataset = PieDataSet(pie, "")
-        pieDataset.colors = colors
-
-        // 추가한것, 테스트중
-        pieChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        //pieChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
-        pieChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
-        pieChart.legend.setDrawInside(false);
-        pieChart.legend.textSize = 12f
-        pieChart.legend.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
-        pieChart.legend.form = Legend.LegendForm.CIRCLE
-        pieChart.description.isEnabled = false
-
-        // 아래 두 줄도 추가한 것. legned랑 파이차트 사이 멀지 않게
-        pieChart.legend.xEntrySpace = 0f // Adjust the space between the legend entries and the pie chart
-        pieChart.legend.yEntrySpace = 0f // Adjust vertical space if necessary
-
-        pieChart.setDrawEntryLabels(false)
-        pieDataset.valueFormatter = object : ValueFormatter() {
-            override fun getFormattedValue(value: Float): String {
-                return "${value / emotions.size * 100} %"
+        val pieEntries: MutableList<PieEntry> = mutableListOf()
+        val colors: MutableList<Int> = mutableListOf()
+        for ((category, sumValue) in aggregatedEmotions) {
+            if (sumValue > 0) { // Check if the value is greater than 0
+                val pieEntry = PieEntry(sumValue.toFloat(), category)
+                categoryIcons[category]?.let { iconId ->
+                    val drawable = ResourcesCompat.getDrawable(requireContext().resources, iconId, null)
+                    drawable?.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+                    pieEntry.icon = drawable
+                }
+                pieEntries.add(pieEntry)
+                colors.add(getEmotionColor_grayScale(category)) // Use the first emotion in the category for color
             }
         }
-        pieDataset.valueTextColor = requireContext().getColor(R.color.white)
-        pieDataset.valueTextSize = 12f
-        pieDataset.valueTypeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
+        val pieChart = binding.statPieChart
+        val pieDataSet = PieDataSet(pieEntries, "").apply {
+            // Define the colors for the pie chart entries, if required
+            // val colors: MutableList<Int> = mutableListOf(/* ... */)
+            // this.colors = colors
+            this.colors = colors
+            setDrawIcons(true)
+            valueTextColor = requireContext().getColor(R.color.white)
+            valueTextSize = 0f
+            valueTypeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
+            setSliceSpace(1f) // space between slices
+        }
 
-
-
-        pieChart.data = PieData(pieDataset)
-        pieChart.invalidate()
+        // Configure the pie chart
+        with(pieChart) {
+            data = PieData(pieDataSet)
+            legend.isEnabled = false // Disable the legend
+            legend.apply {
+                verticalAlignment = Legend.LegendVerticalAlignment.TOP
+                horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+                orientation = Legend.LegendOrientation.VERTICAL
+                setDrawInside(false)
+                textSize = 12f
+                typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
+                form = Legend.LegendForm.CIRCLE
+            }
+            description.isEnabled = false
+            setDrawEntryLabels(false)
+            invalidate() // refresh the chart with new data
+        }
 
     }
 
     fun sampleEmotions(): Map<String, Int> {//FIXME: test 후 지우기
         val m: MutableMap<String, Int> = mutableMapOf()
-        m["기쁨"] = 1
-        m["설렘"] = 2
-        m["행복"] = 1
-        m["신남"] = 1
-        m["평범"] = 1
-        m["모름"] = 1
-        m["짜증"] = 1
-        m["화남"] = 1
+        m["기쁨"] = 4
+        m["설렘"] = 8
+        m["행복"] = 3
+        m["신남"] = 2
+        m["평범"] = 5
+        m["모름"] = 2
+        m["짜증"] = 3
+        m["화남"] = 3
+        m["슬픔"] = 4
+        m["우울"] = 2
         return m
 
     }
 
 
 
-    fun getEmotionColor_grayScale(emotion: String): Int {
-        if (emotion.equals("설렘") || emotion.equals("신남"))
+    fun getEmotionColor_grayScale(category: String): Int {
+        if (category == "emotion_sunny")
             return requireContext().getColor(R.color.stat_emotion_1)
-        else if (emotion.equals("기쁨") || emotion.equals("행복"))
+        else if (category == "emotion_sun_cloud")
             return requireContext().getColor(R.color.stat_emotion_3)
-        else if (emotion.equals("평범") || emotion.equals("모름"))
+        else if (category == "emotion_cloud")
             return requireContext().getColor(R.color.stat_emotion_5)
-        else if (emotion.equals("슬픔") || emotion.equals("우울"))
+        else if (category == "emotion_rain")
             return requireContext().getColor(R.color.stat_emotion_7)
         else
             return requireContext().getColor(R.color.stat_emotion_9)
-
-
     }
     fun getEmotionColor(emotion: String): Int {
         if (emotion.equals("설렘"))
@@ -454,8 +500,6 @@ class StatViewFragment : Fragment() {
 
     @Composable
     fun WordCloudView(labels: Map<String, Int>) {
-
-
         TagCloud(
             state = rememberTagCloudState(),
             modifier = Modifier
@@ -470,17 +514,18 @@ class StatViewFragment : Fragment() {
         ) {
             items((labels.toList())) {
                 Surface(
-                    shape = RoundedCornerShape(2.dp),
+                    shape = RoundedCornerShape(7.dp),
+                    color = colorResource(id = R.color.darkgray),
                     modifier = Modifier
                         .tagCloudItemFade()
                         .tagCloudItemScaleDown()
                 ) {
                     Text(
-                        text = it.first,
+                        text = "#"+it.first,
                         //    color = Color.BLUE,
-                        modifier = Modifier.padding(2.dp),
-                        color = androidx.compose.ui.graphics.Color.Blue
-
+                        modifier = Modifier.padding(2.dp).padding(start = 5.dp, end = 5.dp),
+                        fontFamily = FontFamily(Font(R.font.maruburi_bold)),
+                        color = androidx.compose.ui.graphics.Color.White
 
                     )
                 }
