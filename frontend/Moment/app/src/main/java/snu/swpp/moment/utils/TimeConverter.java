@@ -86,7 +86,7 @@ public class TimeConverter {
         return new long[]{startTimestamp, endTimestamp};
     }
     public static long[] getRecentWeekTimestamps(LocalDate date) {
-        LocalDate startDate = date.minusDays(6);
+        LocalDate startDate = date.minusDays(7);
         LocalDate endDate = date;
 
         LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
