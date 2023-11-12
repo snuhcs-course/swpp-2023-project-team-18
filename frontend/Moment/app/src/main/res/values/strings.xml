@@ -86,9 +86,9 @@
     <string name="stat_section_month_score">한 달 돌아보기</string>
     <string name="stat_duration">기간</string>
 
-    <string name="highest_score_text">최고 점수: %1$d</string>
-    <string name="lowest_score_text">최저 점수: %1$d</string>
-    <string name="average_score_text">평균 점수: %1$s</string>
+    <string name="stat_seven_avg">7일 평균</string>
+    <string name="stat_thirty_avg">30일 평균</string>
+    <string name="average_score_text">%1$s</string>
 
 
 

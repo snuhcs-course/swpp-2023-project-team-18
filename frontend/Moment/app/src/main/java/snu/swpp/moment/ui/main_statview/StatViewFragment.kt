@@ -128,13 +128,13 @@ class StatViewFragment : Fragment() {
                 StatViewModel.ButtonType.WEEK -> {
                     buttonDateBinding.statWeekButton.isActivated = true
                     buttonDateBinding.statMonthButton.isActivated = false
-                    //binding.statDayScoreText.text = getString(R.string.stat_section_week_score)
+                    binding.averageScoreText.text = getString(R.string.stat_seven_avg)
                 }
 
                 StatViewModel.ButtonType.MONTH -> {
                     buttonDateBinding.statWeekButton.isActivated = false
                     buttonDateBinding.statMonthButton.isActivated = true
-                    //binding.statDayScoreText.text = getString(R.string.stat_section_month_score)
+                    binding.averageScoreText.text = getString(R.string.stat_thirty_avg)
                 }
             }
         }
@@ -147,28 +147,13 @@ class StatViewFragment : Fragment() {
             statViewModel.getStats(true)
         }
 
-// 점수 평균값
+        // 점수 평균값
         // Observe the average score LiveData and update the UI
         viewModel.averageScore.observe(viewLifecycleOwner) { average ->
             val averageScoreTextView: TextView = root.findViewById(R.id.average_score_text_view)
             // Assuming you want to display the average score to one decimal place
             averageScoreTextView.text = getString(R.string.average_score_text, String.format("%.1f", average))
         }
-/*
-
-        viewModel.highestScore.observe(viewLifecycleOwner) { highest ->
-            val highestScoreTextView: TextView = root.findViewById(R.id.highest_score_text_view)
-            highestScoreTextView.text = getString(R.string.highest_score_text, highest)
-        }
-
-
-        // Observe the lowest score LiveData and update the UI
-        viewModel.lowestScore.observe(viewLifecycleOwner) { lowest ->
-            val lowestScoreTextView: TextView = root.findViewById(R.id.lowest_score_text_view)
-            lowestScoreTextView.text = getString(R.string.lowest_score_text, lowest)
-        }
-
-        */
 
         viewModel.stat.observe(viewLifecycleOwner) { state ->
             // Fragment가 활성 상태일 때만 UI 업데이트를 진행합니다.
@@ -188,23 +173,17 @@ class StatViewFragment : Fragment() {
                 newCloud.setContent {
                     WordCloudView(labels = it.hashtagCounts)
                 }
-
-
             }
         }
         viewModel.getStats(false)
-
 
         return root
     }
 
     fun scoreSetup(scores: Map<Int, Int>, today: LocalDate) {
-
         class DateAxisValueFormat(today: LocalDate) : IndexAxisValueFormatter() {
-
             override fun getFormattedValue(value: Float): String {
                 val formatter = DateTimeFormatter.ofPattern("MM/dd")
-                //return formatter.format(today.plusDays(Math.round(value).toLong()))
                 return formatter.format(today.plusDays(Math.round(value).toLong()))
             }
         }
@@ -216,10 +195,8 @@ class StatViewFragment : Fragment() {
             Log.d("stat_test", day.toString())
         }
         val dataset = LineDataSet(entries, null)
-        //val assetManager = requireContext().assets
 
         // 그리드 dash
-        //val dashPathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
         val commonColor = android.graphics.Color.BLACK
         val commonLineWidth = 1.2f
 
@@ -300,7 +277,7 @@ class StatViewFragment : Fragment() {
             enableDashedLine(0f, 0f, 0f) // 실선으로 설정 (대시 길이를 0으로)
         }
 
-// Y축에 LimitLine을 추가
+        // Y축에 LimitLine을 추가
         lineChart.axisLeft.addLimitLine(limitLine)
         lineChart.data = LineData(dataset)
 
@@ -309,13 +286,12 @@ class StatViewFragment : Fragment() {
 
         // 7일, 30일 다른 간격 수를 보여줌
         if (scores.size <= 7) {
-            lineChart.setVisibleXRange(5.0F, 5.0F) // 최대 5일치 데이터를 표시
+            lineChart.setVisibleXRange(6.0F, 6.0F) // 최대 5일치 데이터를 표시
         } else if (scores.size <= 30) {
             lineChart.setVisibleXRange(7.0F, 7.0F) // 최대 7일치 데이터를 표시
         }
         // 차트가 항상 최신 데이터를 표시하도록 설정합니다.
         lineChart.moveViewToX(dataset.xMax)
-
 
         // 아래 두줄은 linechart가 항상 오른쪽으로 스크롤 되어있도록
         lineChart.animateX(1000)
@@ -323,44 +299,10 @@ class StatViewFragment : Fragment() {
 
         lineChart.invalidate()
         dataset.notifyDataSetChanged()
-
-
     }
-    /* fun hashtagSetup(hashtags:Map<String,Int>){
-         val wordCloudView = binding.statWordCloud
-
-         class MyJavaScriptInterface {
-             @JavascriptInterface
-             fun calculateContentDimensions(contentWidth: Int, contentHeight: Int) {
-                 // Calculate the desired zoom level to fit the content
-                 val zoomLevel = (wordCloudView.width.toFloat()) / contentWidth
-                 activity!!.runOnUiThread(Runnable { // Set the zoom level of the WebView to fit the content
-                     wordCloudView.setInitialScale((zoomLevel * 50).toInt())
-                 })
-             }
-         }
-
-         val wordClouds:MutableList<WordCloud> = mutableListOf()
-         wordCloudView.setScale(30,10)
-         for(hashtag in hashtags){
-             wordClouds.add(WordCloud(hashtag.key,1))
-             Log.d("hashtag",hashtag.key)
-             Log.d("weight",hashtag.value.toString())
-         }
-        wordClouds.add(WordCloud("",0))
-
-         wordCloudView.setDataSet(wordClouds)
-         wordCloudView.setColors(intArrayOf(Color.BLUE, Color.GRAY, Color.GREEN, Color.CYAN))
-
-         Log.d("data2",wordCloudView.data)
-         wordCloudView.addJavascriptInterface( MyJavaScriptInterface(),"Android");
-         wordCloudView.notifyDataSetChanged()
-
-         }*/
-
 
     fun emotionSetup(emotions: Map<String, Int>) {
-        val emotions = sampleEmotions()  // testset
+        //val emotions = sampleEmotions()  // testset
         val categoryIcons = mapOf(
             "emotion_sunny" to R.drawable.small_icon_sunny,
             "emotion_sun_cloud" to R.drawable.small_icon_sun_cloud,
@@ -407,9 +349,6 @@ class StatViewFragment : Fragment() {
         }
         val pieChart = binding.statPieChart
         val pieDataSet = PieDataSet(pieEntries, "").apply {
-            // Define the colors for the pie chart entries, if required
-            // val colors: MutableList<Int> = mutableListOf(/* ... */)
-            // this.colors = colors
             this.colors = colors
             setDrawIcons(true)
             valueTextColor = requireContext().getColor(R.color.white)
@@ -469,28 +408,6 @@ class StatViewFragment : Fragment() {
             return requireContext().getColor(R.color.stat_emotion_7)
         else
             return requireContext().getColor(R.color.stat_emotion_9)
-    }
-    fun getEmotionColor(emotion: String): Int {
-        if (emotion.equals("설렘"))
-            return requireContext().getColor(R.color.stat_emotion_1)
-        else if (emotion.equals("신남"))
-            return requireContext().getColor(R.color.stat_emotion_2)
-        else if (emotion.equals("기쁨"))
-            return requireContext().getColor(R.color.stat_emotion_3)
-        else if (emotion.equals("행복"))
-            return requireContext().getColor(R.color.stat_emotion_4)
-        else if (emotion.equals("평범"))
-            return requireContext().getColor(R.color.stat_emotion_5)
-        else if (emotion.equals("모름"))
-            return requireContext().getColor(R.color.stat_emotion_6)
-        else if (emotion.equals("슬픔"))
-            return requireContext().getColor(R.color.stat_emotion_7)
-        else if (emotion.equals("우울"))
-            return requireContext().getColor(R.color.stat_emotion_8)
-        else if (emotion.equals("화남"))
-            return requireContext().getColor(R.color.stat_emotion_9)
-        else
-            return requireContext().getColor(R.color.stat_emotion_10)
     }
 
     override fun onDestroyView() {
