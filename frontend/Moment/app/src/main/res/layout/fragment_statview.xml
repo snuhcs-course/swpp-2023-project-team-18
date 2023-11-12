@@ -135,6 +135,7 @@
             android:id="@+id/stat_pie_chart"
             android:layout_width="0dp"
             android:layout_height="0dp"
+
             app:layout_constraintWidth_percent="1"
             app:layout_constraintDimensionRatio="1.8:1"
             app:layout_constraintStart_toStartOf="parent"

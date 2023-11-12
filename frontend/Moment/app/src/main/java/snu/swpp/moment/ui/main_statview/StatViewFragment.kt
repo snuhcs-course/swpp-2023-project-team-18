@@ -52,6 +52,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.renderer.PieChartRenderer
 import eu.wewox.tagcloud.TagCloud
 import eu.wewox.tagcloud.rememberTagCloudState
 import snu.swpp.moment.R
@@ -419,6 +420,7 @@ class StatViewFragment : Fragment() {
 
         // Configure the pie chart
         with(pieChart) {
+            pieChart.renderer = CustomPieChartRenderer(pieChart,pieChart.animator,pieChart.viewPortHandler)
             data = PieData(pieDataSet)
             legend.isEnabled = false // Disable the legend
             legend.apply {
@@ -429,6 +431,7 @@ class StatViewFragment : Fragment() {
                 textSize = 12f
                 typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
                 form = Legend.LegendForm.CIRCLE
+
             }
             description.isEnabled = false
             setDrawEntryLabels(false)
