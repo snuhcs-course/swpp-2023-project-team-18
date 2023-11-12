@@ -1,43 +1,29 @@
 package snu.swpp.moment.ui.main_statview
 
 import android.content.Context
-import android.graphics.DashPathEffect
-import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.semantics.SemanticsProperties.Text
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.LineChart
@@ -52,7 +38,6 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.renderer.PieChartRenderer
 import eu.wewox.tagcloud.TagCloud
 import eu.wewox.tagcloud.rememberTagCloudState
 import snu.swpp.moment.R
@@ -410,9 +395,6 @@ class StatViewFragment : Fragment() {
             return requireContext().getColor(R.color.stat_emotion_9)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 
     private fun formatDateString(date: LocalDate): String {
         return date.format(DateTimeFormatter.ofPattern("yy.MM.dd"))
