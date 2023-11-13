@@ -3,7 +3,6 @@ package snu.swpp.moment;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -43,9 +42,10 @@ public class RegisterActivityTest {
 
     @Test
     public void whenUsernameEmpty_RegistrationIsDisabled() {
-        onView(withId(R.id.register_nickname)).perform(typeText("moment"));
-        onView(withId(R.id.register_password)).perform(typeText("000000"));
-        onView(withId(R.id.register_password_check)).perform(typeText("000000"));
+        onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
+        onView(withId(R.id.register_password)).perform(click(), replaceText("000000"));
+        onView(withId(R.id.register_password_check)).perform(
+            click(), replaceText("000000"));
 
         onView(withId(R.id.register))
             .check(matches(not(isEnabled())));
@@ -53,10 +53,11 @@ public class RegisterActivityTest {
 
     @Test
     public void whenPasswordInvalid_RegistrationIsDisabled() {
-        onView(withId(R.id.register_username)).perform(typeText("moment"));
-        onView(withId(R.id.register_nickname)).perform(typeText("moment"));
-        onView(withId(R.id.register_password)).perform(typeText("0"));
-        onView(withId(R.id.register_password_check)).perform(typeText("0"));
+        onView(withId(R.id.register_username)).perform(click(), replaceText("moment"));
+        onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
+        onView(withId(R.id.register_password)).perform(click(), replaceText("0"));
+        onView(withId(R.id.register_password_check)).perform(
+            click(), replaceText("0"));
 
         onView(withId(R.id.register))
             .check(matches(not(isEnabled())));
@@ -64,10 +65,11 @@ public class RegisterActivityTest {
 
     @Test
     public void whenPasswordAndPasswordCheckNotEqual_RegistrationIsDisabled() {
-        onView(withId(R.id.register_username)).perform(typeText("moment1"));
-        onView(withId(R.id.register_nickname)).perform(typeText("moment"));
-        onView(withId(R.id.register_password)).perform(typeText("000000"));
-        onView(withId(R.id.register_password_check)).perform(typeText("000001"));
+        onView(withId(R.id.register_username)).perform(click(), replaceText("moment"));
+        onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
+        onView(withId(R.id.register_password)).perform(click(), replaceText("000000"));
+        onView(withId(R.id.register_password_check)).perform(
+            click(), replaceText("000001"));
 
         onView(withId(R.id.register))
             .check(matches(not(isEnabled())));
@@ -77,8 +79,9 @@ public class RegisterActivityTest {
     public void whenAllFieldsValid_RegistrationIsEnabled() {
         onView(withId(R.id.register_username)).perform(click(), replaceText("moment"));
         onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_password)).perform(click(), replaceText("123456"));
-        onView(withId(R.id.register_password_check)).perform(click(), replaceText("123456"));
+        onView(withId(R.id.register_password)).perform(click(), replaceText("000000"));
+        onView(withId(R.id.register_password_check)).perform(
+            click(), replaceText("000000"));
 
         onView(withId(R.id.register))
             .check(matches(isEnabled()));
