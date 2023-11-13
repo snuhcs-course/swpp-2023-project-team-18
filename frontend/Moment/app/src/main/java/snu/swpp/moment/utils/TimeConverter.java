@@ -80,7 +80,7 @@ public class TimeConverter {
         return new long[]{startTimestamp, endTimestamp};
     }
     public static long[] getRecentMonthTimestamps(LocalDate date){
-        LocalDate startDate = date.minusMonths(1);
+        LocalDate startDate = date.minusDays(30);
         LocalDate endDate = date.plusDays(1);
 
         LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
@@ -93,7 +93,8 @@ public class TimeConverter {
     }
     public static long[] getRecentWeekTimestamps(LocalDate date) {
         LocalDate startDate = date.minusDays(7);
-        LocalDate endDate = date;
+        LocalDate endDate = date.plusDays(1);
+        System.out.println(startDate.toString());
 
         LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
         LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(2, 59, 59));

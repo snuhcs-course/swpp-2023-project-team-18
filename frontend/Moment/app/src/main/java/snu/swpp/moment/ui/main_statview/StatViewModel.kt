@@ -33,8 +33,8 @@ class StatViewModel(
     val lowestScore: MutableLiveData<Int> = MutableLiveData()
     val averageScore: MutableLiveData<Double> = MutableLiveData()
 
-    fun getStats(isMonth: Boolean) {
-        val todayDate = TimeConverter.getToday()
+    fun getStats(todayDate:LocalDate,isMonth: Boolean) {
+      //  val todayDate = TimeConverter.getToday()
         today.value = todayDate
         val startEndTimes =
             if (isMonth) TimeConverter.getRecentMonthTimestamps(todayDate) else TimeConverter.getRecentWeekTimestamps(
@@ -64,7 +64,8 @@ class StatViewModel(
 
                             // score stat
                             val validScores = storyList.mapNotNull { story ->
-                                if (story.score != 10) story.score else null
+                                if (story.emotionInt != EmotionMap.INVALID_EMOTION) story.score else null
+
                             }
                             if (validScores.isNotEmpty()) {
                                 val sumOfValidScores = validScores.sum()

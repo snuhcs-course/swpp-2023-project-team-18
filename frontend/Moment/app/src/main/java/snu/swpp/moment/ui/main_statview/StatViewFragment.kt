@@ -47,6 +47,8 @@ import snu.swpp.moment.data.source.StoryRemoteDataSource
 import snu.swpp.moment.databinding.FragmentStatviewBinding
 import snu.swpp.moment.databinding.StatButtonDateBinding
 import snu.swpp.moment.databinding.StatDurationBinding
+import snu.swpp.moment.utils.TimeConverter
+import java.sql.Time
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -125,11 +127,11 @@ class StatViewFragment : Fragment() {
         }
 
         buttonDateBinding.statWeekButton.setOnClickListener {
-            statViewModel.getStats(false)
+            statViewModel.getStats(TimeConverter.getToday(),false)
         }
 
         buttonDateBinding.statMonthButton.setOnClickListener {
-            statViewModel.getStats(true)
+            statViewModel.getStats(TimeConverter.getToday(),true)
         }
 
         // 점수 평균값
@@ -160,7 +162,7 @@ class StatViewFragment : Fragment() {
                 }
             }
         }
-        viewModel.getStats(false)
+        viewModel.getStats(TimeConverter.getToday(),false)
 
         return root
     }
