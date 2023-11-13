@@ -120,6 +120,36 @@ public class TimeConverterTest {
         assertEquals(answer1, timestamps[0]);
         assertEquals(answer2, timestamps[1]);
     }
+    @Test
+    public void getRecentWeekTimeStamps(){
+        LocalDate date = LocalDate.of(2023,11,3);
+        long[] timestamps = TimeConverter.getRecentWeekTimestamps(date);
+
+        long secondDiff = 3600 * hourDiff;
+        long answer1 = 1698375600L - secondDiff; // 현지 시각 2023년 10월 27일 오전 3:00:00
+        long answer2 = 1699066799L - secondDiff; // 현지 시각 2023년 11월 4일 오전 2:59:59
+        assertEquals(answer2, timestamps[1]);
+
+        assertEquals(answer1, timestamps[0]);
+
+
+
+    }
+    @Test
+    public void getRecentMonthTimeStamps(){
+        LocalDate date = LocalDate.of(2023,11,3);
+        long[] timestamps = TimeConverter.getRecentMonthTimestamps(date);
+
+        long secondDiff = 3600 * hourDiff;
+        long answer1 = 1696388400L - secondDiff; // 현지 시각 2023년 10월 4일 오전 3:00:00
+        long answer2 = 1699066799L - secondDiff; // 현지 시각 2023년 11월 4일 오전 2:59:59
+
+        assertEquals(answer1, timestamps[0]);
+        assertEquals(answer2, timestamps[1]);
+
+
+
+    }
 
     @Test
     public void convertDateToLocalDate() {
