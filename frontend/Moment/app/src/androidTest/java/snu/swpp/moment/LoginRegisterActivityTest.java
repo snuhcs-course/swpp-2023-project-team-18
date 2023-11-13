@@ -1,9 +1,10 @@
 package snu.swpp.moment;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -18,19 +19,27 @@ import org.junit.runner.RunWith;
 public class LoginRegisterActivityTest {
 
     @Rule
-    public ActivityScenarioRule<LoginRegisterActivity> activityScenarioRule = new ActivityScenarioRule<>(LoginRegisterActivity.class);
+    public ActivityScenarioRule<LoginRegisterActivity> activityScenarioRule
+        = new ActivityScenarioRule<>(LoginRegisterActivity.class);
 
     @Test
-    public void whenLoginButtonClicked_LoginActivityIsLaunched() {
-        // 버튼을 찾아서 클릭 수행
-        onView(withId(R.id.main_login)).perform(click());
-        onView(withId(R.id.image_above_edittext)).check(matches(isDisplayed()));
+    public void whenLoginRegisterActivityLaunched_TextLogoIsDisplayed() {
+        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void whenRegisterButtonClicked_LoginActivityIsLaunched() {
-        // 버튼을 찾아서 클릭 수행
-        onView(withId(R.id.main_register)).perform(click());
-        onView(withId(R.id.image_above_edittext)).check(matches(isDisplayed()));
+    public void whenLoginRegisterActivityLaunched_LoginButtonIsDisplayed() {
+        onView(withId(R.id.main_login))
+            .check(matches(isDisplayed()))
+            .check(matches(isClickable()))
+            .check(matches(withText(R.string.start_login)));
+    }
+
+    @Test
+    public void whenLoginRegisterActivityLaunched_RegisterButtonIsDisplayed() {
+        onView(withId(R.id.main_register))
+            .check(matches(isDisplayed()))
+            .check(matches(isClickable()))
+            .check(matches(withText(R.string.start_register)));
     }
 }

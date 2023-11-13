@@ -18,7 +18,7 @@ import snu.swpp.moment.ui.login.LoginActivity;
 public class LoginActivityTest {
     @Rule
     public ActivityScenarioRule<LoginActivity> activityScenarioRule
-        = new ActivityScenarioRule<LoginActivity>(LoginActivity.class);
+        = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
     public void whenLoginActivityLaunched_TextLogoIsDisplayed() {
