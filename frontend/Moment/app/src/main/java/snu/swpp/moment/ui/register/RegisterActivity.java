@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -42,23 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText nicknameEditText = binding.registerNickname;
         final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
-
-        registerViewModel.getRegisterFormState().observe(this, registerFormState -> {
-            if (registerFormState == null) {
-                return;
-            }
-            registerButton.setEnabled(registerFormState.isDataValid());
-            if (registerFormState.getUsernameError() != null) {
-                usernameEditText.setError(getString(registerFormState.getUsernameError()));
-            }
-            if (registerFormState.getPasswordError() != null) {
-                passwordEditText.setError(getString(registerFormState.getPasswordError()));
-            }
-            if (registerFormState.getPasswordDiffError() != null) {
-                passwordCheckEditText.setError(
-                    getString(registerFormState.getPasswordDiffError()));
-            }
-        });
 
         registerViewModel.getRegisterFormState().observe(this, registerFormState -> {
             if (registerFormState == null) {
