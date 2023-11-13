@@ -42,5 +42,7 @@ class StoryUiState(
         )
     }
 
+    fun hasNoData() = isEmpty || isEmotionInvalid()
+
     fun isEmotionInvalid() = emotion == EmotionMap.INVALID_EMOTION
 }

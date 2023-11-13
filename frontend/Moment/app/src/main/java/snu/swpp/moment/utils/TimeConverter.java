@@ -22,17 +22,23 @@ public class TimeConverter {
         return localDateTime.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
     }
 
-    public static LocalDate updateDateFromThree(LocalDate date, int hour) {
+    public static LocalDate adjustToServiceDate(LocalDate date, int hour) {
         if (hour < 3) {
             date = date.minusDays(1);
         }
         return date;
     }
 
+    public static LocalDate adjustToServiceDate(LocalDateTime dateTime) {
+        return adjustToServiceDate(dateTime.toLocalDate(), dateTime.getHour());
+    }
+
+    public static boolean hasDayPassed(LocalDateTime base, LocalDateTime cur) {
+        return adjustToServiceDate(base).isBefore(adjustToServiceDate(cur));
+    }
+
     public static LocalDate getToday() {
-        LocalDate today = LocalDate.now();
-        int hour = LocalTime.now().getHour();
-        return updateDateFromThree(today, hour);
+        return adjustToServiceDate(LocalDateTime.now());
     }
 
     public static String formatLocalDate(LocalDate date, String formatString) {

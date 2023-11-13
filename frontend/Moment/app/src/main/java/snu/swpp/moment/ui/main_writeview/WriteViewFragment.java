@@ -39,10 +39,10 @@ public class WriteViewFragment extends Fragment {
         Log.d("WriteViewFragment", "onCreateView");
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
 
@@ -116,7 +116,7 @@ public class WriteViewFragment extends Fragment {
         LocalDate today = TimeConverter.getToday();
         LocalDate createdAt = LocalDate.parse(dateInString.substring(0, 10));
         int hour = Integer.parseInt(dateInString.substring(11, 13));
-        createdAt = TimeConverter.updateDateFromThree(createdAt, hour);
+        createdAt = TimeConverter.adjustToServiceDate(createdAt, hour);
 
         return (int) ChronoUnit.DAYS.between(createdAt, today) + 1;
     }

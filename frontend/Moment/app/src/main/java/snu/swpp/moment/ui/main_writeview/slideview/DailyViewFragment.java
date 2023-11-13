@@ -21,9 +21,7 @@ import snu.swpp.moment.data.repository.MomentRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
-import snu.swpp.moment.databinding.DailyItemBinding;
-import snu.swpp.moment.exception.NoInternetException;
-import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.databinding.PageDailyBinding;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
@@ -37,7 +35,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
     private int minusDays;
 
-    private DailyItemBinding binding;
+    private PageDailyBinding binding;
     private List<ListViewItem> listViewItems;
     private ListViewAdapter listViewAdapter;
 
@@ -74,10 +72,10 @@ public class DailyViewFragment extends BaseWritePageFragment {
             new StoryRepository(storyRemoteDataSource));
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
 
@@ -94,104 +92,86 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 saveScoreUseCase)).get(
                 DailyViewModel.class));
 
-        binding = DailyItemBinding.inflate(inflater, container, false);
+        binding = PageDailyBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // ListView setup
         listViewItems = new ArrayList<>();
-        listViewAdapter = new ListViewAdapter(getContext(), listViewItems);
+        listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         listViewAdapter.setAnimation(false);
 
         binding.dailyMomentList.setAdapter(listViewAdapter);
-        View footerView = LayoutInflater.from(getContext())
-            .inflate(R.layout.listview_footer, null, false);
+        View footerView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.listview_footer, binding.dailyMomentList, false);
         binding.dailyMomentList.addFooterView(footerView);
 
-        callApisToRefresh();
-
-        viewModel.observeMomentState((MomentUiState momentUiState) -> {
-            Exception error = momentUiState.getError();
-            if (error == null) {
-                // SUCCESS
-                int numMoments = momentUiState.getNumMoments();
-                if (numMoments > 0) {
-                    listViewItems.clear();
-                    for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-                        listViewItems.add(new ListViewItem(momentPair));
-                    }
-                    listViewAdapter.notifyDataSetChanged();
-                } else {
-                    binding.noMomentText.setVisibility(View.VISIBLE);
-                }
-            } else if (error instanceof NoInternetException) {
-                // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error,
-                    Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
-                startActivity(intent);
-            } else {
-                Log.d("DailyViewFragment", "Unknown error: " + error.getMessage());
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                    .show();
-            }
-        });
-
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView);
-
+        listFooterContainer = new ListFooterContainer(footerView, false);
         listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
             if (saveScoreSwitch) {
                 viewModel.saveScore(listFooterContainer.getScore());
             }
         });
 
+        // moment GET API 호출 후 동작
+        viewModel.observeMomentState((MomentUiState momentUiState) -> {
+            Exception error = momentUiState.getError();
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
+
+            listViewItems.clear();
+            if (momentUiState.getNumMoments() > 0) {
+                binding.noMomentText.setVisibility(View.GONE);
+                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                    listViewItems.add(new ListViewItem(momentPair));
+                }
+            } else {
+                binding.noMomentText.setVisibility(View.VISIBLE);
+            }
+            listViewAdapter.notifyDataSetChanged();
+        });
+
+        // story GET API 호출 후 동작
         viewModel.observeStoryState((StoryUiState storyUiState) -> {
             Exception error = storyUiState.getError();
-            if (error == null) {
-                // SUCCESS
-                listFooterContainer.updateUiWithRemoteData(storyUiState, false);
-                if (!storyUiState.isEmpty()) {
-                    binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
-                        binding.dailyMomentList.getCount() - 1));
-                }
-            } else if (error instanceof NoInternetException) {
-                // NO INTERNET
-                Toast.makeText(getContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                // ACCESS TOKEN EXPIRED
-                Toast.makeText(getContext(), R.string.token_expired_error,
-                    Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT)
-                    .show();
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
+
+            listFooterContainer.updateUiWithRemoteData(storyUiState, false);
+            if (!storyUiState.isEmpty()) {
+                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
+                    binding.dailyMomentList.getCount() - 1));
             }
         });
+
+        Log.d("DailyViewFragment", "onCreateView: initial API call to refresh");
+        callApisToRefresh();
+        updateRefreshTime();
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
             @Override
             public void run() {
-                Log.d("DailyViewFragment", String.format("run: %s", LocalDateTime.now()));
+                Log.d("DailyViewFragment", "refreshRunnable running; currentDateTime: "
+                    + getCurrentDateTime());
+                Log.d("DailyViewFragment",
+                    "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
 
                 // 하루가 지났을 때
                 if (isOutdated()) {
-                    Log.d("DailyViewFragment", "run: Reloading fragment");
+                    Log.d("DailyViewFragment", "refreshRunnable: Outdated, call APIs to refresh");
                     setToolbarTitle();
                     callApisToRefresh();
                     updateRefreshTime();
                 }
-                refreshHandler.postDelayed(this, REFRESH_INTERVAL);
+                registerRefreshRunnable(this);
             }
         };
-        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL);
-        updateRefreshTime();
+        registerRefreshRunnable(refreshRunnable);
 
         Log.d("DailyViewFragment", "onCreateView() ended");
         return root;
@@ -200,20 +180,19 @@ public class DailyViewFragment extends BaseWritePageFragment {
     @Override
     protected void callApisToRefresh() {
         LocalDateTime currentDateTime = getCurrentDateTime();
+        Log.d("DailyViewFragment", "callApisToRefresh: called with timestamp " + currentDateTime);
         viewModel.getMoment(currentDateTime);
         viewModel.getStory(currentDateTime);
     }
 
     @Override
-    protected String getDateText() {
-        LocalDate date = getCurrentDateTime().toLocalDate();
-        return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.");
+    protected LocalDate getCurrentDate() {
+        return TimeConverter.getToday().minusDays(minusDays);
     }
 
-    private LocalDateTime getCurrentDateTime() {
-        LocalDate date = TimeConverter.getToday().minusDays(minusDays);
-        LocalDateTime current = date.atTime(3, 0, 0);
-        return current;
+    @Override
+    protected LocalDateTime getCurrentDateTime() {
+        return getCurrentDate().atTime(3, 0, 0);
     }
 
     @Override

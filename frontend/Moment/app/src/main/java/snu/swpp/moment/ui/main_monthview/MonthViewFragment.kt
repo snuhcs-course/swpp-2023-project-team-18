@@ -168,7 +168,7 @@ class MonthViewFragment : Fragment() {
 
         binding.daySummaryContainer.dayNavigateButton.isActivated = true
         binding.daySummaryContainer.dayNavigateButton.setOnClickListener {
-            Log.d("MonthViewFragment", "navigate button clicked");
+            Log.d("MonthViewFragment", "navigate button clicked")
             (requireActivity() as MainActivity).navigateToWriteViewPage(viewModel.getSelectedDate())
         }
 

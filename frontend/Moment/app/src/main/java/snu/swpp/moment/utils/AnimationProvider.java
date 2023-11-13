@@ -11,6 +11,7 @@ public class AnimationProvider {
     public final Animation fadeIn;
     public final Animation delayedFadeIn;
     public final Animation fadeOut;
+    public final Animation longFadeOut;
     public final Animation fadeInOut;
 
     public AnimationProvider(View view) {
@@ -18,6 +19,8 @@ public class AnimationProvider {
         delayedFadeIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
         delayedFadeIn.setStartOffset(500);
         fadeOut = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out);
+        longFadeOut = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_out);
+        longFadeOut.setDuration(500);
         fadeInOut = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in_out);
     }
 
@@ -26,6 +29,8 @@ public class AnimationProvider {
         delayedFadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
         delayedFadeIn.setStartOffset(500);
         fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+        longFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+        longFadeOut.setDuration(500);
         fadeInOut = AnimationUtils.loadAnimation(context, R.anim.fade_in_out);
     }
 }

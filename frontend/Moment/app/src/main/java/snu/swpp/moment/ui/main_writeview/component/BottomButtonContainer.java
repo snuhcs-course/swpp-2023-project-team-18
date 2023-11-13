@@ -28,27 +28,27 @@ public class BottomButtonContainer {
         this.listFooterContainer = listFooterContainer;
 
         this.listFooterContainer.observeBottomButtonState((Boolean state) -> {
-            setActivated(state);
             Log.d("BottomButtonContainer", "observeBottomButtonState: " + state);
+            setActivated(state, false);
         });
+
+        viewingMoment();
     }
 
     public void setActivated(boolean activated, boolean completed) {
-        setActivated(activated);
-        if (completed) {
-            button.setText(R.string.completed_day);
-        }
         Log.d("BottomButtonContainer", "setActivated: " + activated + ", " + completed);
+        setActivated(activated);
+        button.setText(completed ? R.string.completed_day : R.string.day_complete_string);
     }
 
     public void setActivated(boolean activated) {
+        Log.d("BottomButtonContainer", "setActivated: " + activated);
         button.setActivated(activated);
         button.setEnabled(activated);
-        Log.d("BottomButtonContainer", "setActivated: " + activated);
     }
 
     /* 모먼트 작성 중: 하루 마무리하기 버튼 */
-    public void viewingMoment() {
+    private void viewingMoment() {
         button.setText(R.string.day_complete_string);
 
         button.setOnClickListener(v -> {
@@ -70,7 +70,7 @@ public class BottomButtonContainer {
     }
 
     /* 스토리 작성 중: 다음 단계로 이동 버튼 */
-    public void writingStory() {
+    private void writingStory() {
         listFooterContainer.setUiWritingStory();
 
         button.setText(R.string.next_stage_button);
@@ -83,7 +83,7 @@ public class BottomButtonContainer {
     }
 
     /* 감정 선택 중: 다음 단계로 이동 버튼 */
-    public void selectingEmotion() {
+    private void selectingEmotion() {
         listFooterContainer.setUiSelectingEmotion();
         listFooterContainer.freezeStoryEditText();
 
@@ -95,7 +95,7 @@ public class BottomButtonContainer {
         });
     }
 
-    public void writingTags() {
+    private void writingTags() {
         listFooterContainer.setUiWritingTags();
         listFooterContainer.freezeEmotionSelector();
 
@@ -107,7 +107,7 @@ public class BottomButtonContainer {
         });
     }
 
-    public void completionDone() {
+    private void completionDone() {
         listFooterContainer.setUiSelectingScore();
         listFooterContainer.freezeTagEditText();
 
@@ -117,12 +117,13 @@ public class BottomButtonContainer {
     public Observer<Boolean> waitingAiReplySwitchObserver() {
         // ListViewAdapter가 가지고 있는 LiveData에 등록해서 사용
         return (Boolean isWaitingAiReply) -> {
+            Log.d("BottomButtonContainer", "waitingAiReplySwitchObserver: " + isWaitingAiReply);
             if (isWaitingAiReply) {
                 setActivated(false);
                 listFooterContainer.setUiWaitingAiReply();
             } else {
                 setActivated(true);
-                listFooterContainer.setUiReadyToAddMoment();
+                listFooterContainer.setUiReadyToAddMoment(true);
             }
         };
     }
