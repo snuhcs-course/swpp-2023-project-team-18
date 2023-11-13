@@ -19,6 +19,7 @@ import snu.swpp.moment.ui.register.RegisterActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class RegisterActivityTest {
+
     @Rule
     public ActivityScenarioRule<RegisterActivity> activityScenarioRule
         = new ActivityScenarioRule<>(RegisterActivity.class);
@@ -56,8 +57,7 @@ public class RegisterActivityTest {
         onView(withId(R.id.register_username)).perform(click(), replaceText("moment"));
         onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
         onView(withId(R.id.register_password)).perform(click(), replaceText("0"));
-        onView(withId(R.id.register_password_check)).perform(
-            click(), replaceText("0"));
+        onView(withId(R.id.register_password_check)).perform(click(), replaceText("0"));
 
         onView(withId(R.id.register))
             .check(matches(not(isEnabled())));

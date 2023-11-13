@@ -16,6 +16,7 @@ import snu.swpp.moment.ui.login.LoginActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
+
     @Rule
     public ActivityScenarioRule<LoginActivity> activityScenarioRule
         = new ActivityScenarioRule<>(LoginActivity.class);
