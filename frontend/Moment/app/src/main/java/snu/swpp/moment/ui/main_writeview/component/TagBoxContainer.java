@@ -86,16 +86,27 @@ public class TagBoxContainer {
         tagWrapper.startAnimation(animationProvider.fadeIn);
     }
 
+    public void resetUi() {
+        freeze(false);
+        tagEditText.setText("");
+        tagHelpText.setText(R.string.tag_help_text);
+        tagWrapper.setVisibility(View.GONE);
+    }
+
     public void setHelpText(String text) {
         tagHelpText.setText(text);
     }
 
-    public void freeze() {
-        tagEditText.setEnabled(false);
-        tagEditText.setHint("");
+    public void freeze(boolean freeze) {
+        tagEditText.setEnabled(!freeze);
+        if (freeze) {
+            tagEditText.setHint("");
+        } else {
+            tagEditText.setHint(R.string.tag_hint);
+        }
     }
 
-    public void setLimitObserver(Observer<Boolean> observer) {
+    public void observeLimit(Observer<Boolean> observer) {
         isLimitExceeded.observeForever(observer);
     }
 

@@ -116,7 +116,7 @@ public class WriteViewFragment extends Fragment {
         LocalDate today = TimeConverter.getToday();
         LocalDate createdAt = LocalDate.parse(dateInString.substring(0, 10));
         int hour = Integer.parseInt(dateInString.substring(11, 13));
-        createdAt = TimeConverter.updateDateFromThree(createdAt, hour);
+        createdAt = TimeConverter.adjustToServiceDate(createdAt, hour);
 
         return (int) ChronoUnit.DAYS.between(createdAt, today) + 1;
     }

@@ -28,8 +28,6 @@ import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageTodayBinding;
-import snu.swpp.moment.exception.NoInternetException;
-import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
@@ -99,8 +97,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding = PageTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // ListView setup
         listViewItems = new ArrayList<>();
-
         listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         binding.todayMomentList.setAdapter(listViewAdapter);
 
@@ -113,7 +111,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding.todayMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView);
+        listFooterContainer = new ListFooterContainer(footerView, true);
 
         listFooterContainer.setAddButtonOnClickListener(v -> {
             int numMoments = viewModel.getMomentState().getNumMoments();
@@ -160,13 +158,11 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 scrollToBottom();
             }
         });
-
         listFooterContainer.observeAiStoryCallSwitch(isSet -> {
             if (isSet) {
                 viewModel.getAiStory();
             }
         });
-
         listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
             if (saveScoreSwitch) {
                 viewModel.saveScore(listFooterContainer.getScore());
@@ -187,7 +183,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         // 하단 버튼 관리 객체 초기화
         bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
-        bottomButtonContainer.viewingMoment();
 
         // 하루 마무리 API 호출 시 동작 설정
         MainActivity activity = (MainActivity) requireActivity();
@@ -235,71 +230,69 @@ public class TodayViewFragment extends BaseWritePageFragment {
         // moment GET API 호출 후 동작
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
-            if (error == null) {
-                // 모먼트가 하나도 없으면 하단 버튼 비활성화
-                int numMoments = momentUiState.getNumMoments();
-                bottomButtonContainer.setActivated(numMoments != 0);
-
-                if (numMoments > 0) {
-                    listViewItems.clear();
-                    listViewAdapter.setAnimation(false);
-
-                    for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-                        listViewItems.add(new ListViewItem(momentPair));
-                    }
-
-                    listViewAdapter.notifyDataSetChanged();
-                    scrollToBottom();
-                }
-            } else if (error instanceof NoInternetException) {
-                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
-                    .show();
-                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+            Log.d("TodayViewFragment", "Got moment GET response: error=" + error);
+            if (error != null) {
+                handleApiError(error);
+                return;
             }
 
+            listViewItems.clear();
+            listViewAdapter.setAnimation(false);
+
+            if (momentUiState.getNumMoments() > 0) {
+                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
+                    + momentUiState.getNumMoments());
+
+                StoryUiState savedStoryState = viewModel.getSavedStoryState();
+                if (savedStoryState != null) {
+                    bottomButtonContainer.setActivated(savedStoryState.hasNoData());
+                } else {
+                    bottomButtonContainer.setActivated(true);
+                }
+
+                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                    listViewItems.add(new ListViewItem(momentPair));
+                }
+                listViewAdapter.notifyDataSetChanged();
+                scrollToBottom();
+            } else {
+                Log.d("TodayViewFragment", "Got moment GET response: no moments");
+                bottomButtonContainer.setActivated(false);
+                listViewAdapter.notifyDataSetChanged();
+            }
         });
 
         // story GET API 호출 후 동작
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
-            if (savedStoryState.isEmpty()) {
+            Exception error = savedStoryState.getError();
+            Log.d("TodayViewFragment", "Got story GET response: error=" + error + ", isEmpty="
+                + savedStoryState.isEmpty());
+            if (error != null) {
+                handleApiError(error);
                 return;
             }
 
-            // story가 이미 있으면 마무리된 하루로 판정해 받아온 데이터 보여줌
-            Exception error = savedStoryState.getError();
-            if (error == null) {
-                // SUCCESS
-                listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
-                bottomButtonContainer.setActivated(false, true);
-            } else if (error instanceof NoInternetException) {
-                // NO INTERNET
-                Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
-                    .show();
-            } else if (error instanceof UnauthorizedAccessException) {
-                // ACCESS TOKEN EXPIRED
-                Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
-                    .show();
-                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-                startActivity(intent);
+            listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
+            if (savedStoryState.hasNoData()) {
+                Log.d("TodayViewFragment", "Got story GET response: story has no data");
+                bottomButtonContainer.setActivated(!listViewItems.isEmpty(), false);
             } else {
-                Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                Log.d("TodayViewFragment",
+                    "Got story GET response: story has valid data");
+                bottomButtonContainer.setActivated(false, true);
             }
         });
 
+        Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
         callApisToRefresh();
+        updateRefreshTime();
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
             @Override
             public void run() {
-                LocalDateTime now = LocalDateTime.now();
-                Log.d("TodayViewFragment", "refreshRunnable running at %s" + now);
+                LocalDateTime now = getCurrentDateTime();
+                Log.d("TodayViewFragment", "refreshRunnable running at " + now);
                 Log.d("TodayViewFragment",
                     "refreshRunnable: current lastRefreshedTime: " + lastRefreshedTime);
 
@@ -314,7 +307,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         };
         registerRefreshRunnable(refreshRunnable);
-        updateRefreshTime();
 
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, requireActivity());
 
@@ -323,17 +315,20 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     @Override
     protected void callApisToRefresh() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = getCurrentDateTime();
+        Log.d("TodayViewFragment", "callApisToRefresh: called with timestamp " + now);
         viewModel.getMoment(now);
         viewModel.getStory(now);
     }
 
     @Override
-    protected String getDateText() {
-        LocalDate today = TimeConverter.getToday();
-        String formatted = TimeConverter.formatLocalDate(today, "yyyy. MM. dd.");
-        Log.d("TodayViewFragment", "getDateText: today=" + today + ", formatted=" + formatted);
-        return formatted;
+    protected LocalDate getCurrentDate() {
+        return TimeConverter.getToday();
+    }
+
+    @Override
+    protected LocalDateTime getCurrentDateTime() {
+        return LocalDateTime.now();
     }
 
     private void scrollToBottom() {

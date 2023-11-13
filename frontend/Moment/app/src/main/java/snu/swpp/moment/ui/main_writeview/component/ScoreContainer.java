@@ -62,9 +62,21 @@ public class ScoreContainer {
         scoreSeekBar.setProgress(score);
     }
 
+    public void resetUi() {
+        freeze(false);
+        scoreWrapper.setVisibility(View.GONE);
+        setScore(DEFAULT_SCORE);
+        scoreHelpText.setText(R.string.score_help_text);
+        showAutoCompleteWarnText(false);
+    }
+
     public void setUiVisible() {
         scoreWrapper.setVisibility(View.VISIBLE);
         scoreWrapper.startAnimation(animationProvider.fadeIn);
+    }
+
+    public void freeze(boolean freeze) {
+        // TODO: 점수 수정 못하도록 freeze
     }
 
     public void setHelpText(String text) {
@@ -79,7 +91,7 @@ public class ScoreContainer {
         }
     }
 
-    public void setSaveScoreSwitch() {
+    private void setSaveScoreSwitch() {
         saveScoreSwitch.setValue(true);
         saveScoreSwitch.setValue(false);
     }

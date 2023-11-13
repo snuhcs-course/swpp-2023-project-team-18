@@ -19,6 +19,11 @@ public class EmotionGridContainer {
     private final List<TextView> textButtonList;
     private final MutableLiveData<Integer> selectedEmotion = new MutableLiveData<>(-1);
 
+    private final Typeface maruburiLight;
+    private final Typeface maruburiBold;
+    private final int colorBlack;
+    private final int colorRed;
+
 
     public EmotionGridContainer(View view) {
         textButtonList = Arrays.asList(
@@ -34,27 +39,28 @@ public class EmotionGridContainer {
             view.findViewById(R.id.angry2Button)
         );
 
-        Typeface maruburiLight = ResourcesCompat.getFont(view.getContext(),
+        maruburiLight = ResourcesCompat.getFont(view.getContext(),
             R.font.maruburi_regular);
-        Typeface maruburiBold = ResourcesCompat.getFont(view.getContext(),
+        maruburiBold = ResourcesCompat.getFont(view.getContext(),
             R.font.maruburi_bold);
+        colorBlack = ContextCompat.getColor(view.getContext(), R.color.black);
+        colorRed = ContextCompat.getColor(view.getContext(), R.color.red);
 
         for (int i = 0; i < textButtonList.size(); i++) {
             TextView textButton = textButtonList.get(i);
             final int _i = i;
             textButton.setOnClickListener(v -> {
                 int previousSelectedEmotion = selectedEmotion.getValue();
-                if (previousSelectedEmotion > -1) {
+                if (0 <= previousSelectedEmotion
+                    && previousSelectedEmotion < textButtonList.size()) {
                     TextView previousButton = textButtonList.get(previousSelectedEmotion);
                     previousButton.setTypeface(maruburiLight);
-                    previousButton.setTextColor(ContextCompat.getColor(view.getContext(),
-                        R.color.black));
+                    previousButton.setTextColor(colorBlack);
                 }
 
                 selectedEmotion.setValue(_i);
                 textButton.setTypeface(maruburiBold);
-                textButton.setTextColor(ContextCompat.getColor(view.getContext(),
-                    R.color.red));
+                textButton.setTextColor(colorRed);
 
                 Log.d("EmotionGridContainer",
                     String.format("emotion: %d -> %d", previousSelectedEmotion,
@@ -76,14 +82,23 @@ public class EmotionGridContainer {
         textButton.performClick();
     }
 
-    public void setSelectedEmotionObserver(Observer<Integer> observer) {
+    public void observeSelectedEmotion(Observer<Integer> observer) {
         selectedEmotion.observeForever(observer);
     }
 
-    public void freeze() {
+    public void resetUi() {
+        freeze(false);
+        selectedEmotion.setValue(EmotionMap.INVALID_EMOTION);
+        for (TextView textButton : textButtonList) {
+            textButton.setTypeface(maruburiLight);
+            textButton.setTextColor(colorBlack);
+        }
+    }
+
+    public void freeze(boolean freeze) {
         for (int i = 0; i < textButtonList.size(); i++) {
             TextView textButton = textButtonList.get(i);
-            textButton.setClickable(false);
+            textButton.setClickable(!freeze);
         }
     }
 }

@@ -1,17 +1,24 @@
 package snu.swpp.moment.ui.main_writeview.slideview;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
+import snu.swpp.moment.R;
+import snu.swpp.moment.exception.NoInternetException;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.utils.TimeConverter;
 
 public abstract class BaseWritePageFragment extends Fragment {
 
-    protected LocalDateTime lastRefreshedTime = LocalDateTime.now();
+    protected LocalDateTime lastRefreshedTime = getCurrentDateTime();
     private final Handler refreshHandler = new Handler();
     private final long REFRESH_INTERVAL = 1000 * 60 * 5;  // 5 minutes
-    private final int STARTING_HOUR = 3;
 
     @Override
     public void onResume() {
@@ -26,17 +33,33 @@ public abstract class BaseWritePageFragment extends Fragment {
         }
     }
 
-    public void setToolbarTitle() {
+    protected void setToolbarTitle() {
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.setToolbarTitle(getDateText());
     }
 
     protected abstract void callApisToRefresh();
 
-    protected abstract String getDateText();
+    protected String getDateText() {
+        LocalDate date = getCurrentDate();
+        String dayOfWeek = date.getDayOfWeek().getDisplayName(
+            java.time.format.TextStyle.SHORT, java.util.Locale.KOREAN);
+        Log.d("BaseWritePageFragment", "getDateText: date: " + date + ", dayOfWeek: " + dayOfWeek);
+        return TimeConverter.formatLocalDate(date, "yyyy. MM. dd.") + " " + dayOfWeek;
+    }
+
+    /**
+     * 3시 기준으로 보정된 LocalDate
+     */
+    protected abstract LocalDate getCurrentDate();
+
+    /**
+     * API 호출 시 사용할 LocalDateTime
+     */
+    protected abstract LocalDateTime getCurrentDateTime();
 
     protected void updateRefreshTime() {
-        lastRefreshedTime = LocalDateTime.now();
+        lastRefreshedTime = getCurrentDateTime();
     }
 
     /**
@@ -47,10 +70,20 @@ public abstract class BaseWritePageFragment extends Fragment {
     }
 
     protected boolean isOutdated() {
-        LocalDateTime now = LocalDateTime.now();
-        if (lastRefreshedTime.getDayOfMonth() == now.getDayOfMonth()) {
-            return false;
+        return TimeConverter.hasDayPassed(lastRefreshedTime, getCurrentDateTime());
+    }
+
+    protected void handleApiError(Exception error) {
+        if (error instanceof NoInternetException) {
+            Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
+                .show();
+        } else if (error instanceof UnauthorizedAccessException) {
+            Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
+                .show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
         }
-        return now.getHour() >= STARTING_HOUR;
     }
 }

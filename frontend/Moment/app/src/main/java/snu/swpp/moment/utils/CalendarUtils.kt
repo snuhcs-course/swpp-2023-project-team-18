@@ -57,22 +57,22 @@ fun isFinalWeekOfMonth(day: CalendarDay): Boolean {
 fun fillEmptyStory(storyList: List<CalendarDayState>, month: YearMonth)
         : List<CalendarDayState> {
     val result = mutableListOf<CalendarDayState>()
-    var date = LocalDate.of(month.year, month.month, 1);
-    var index = 0;
+    var date = LocalDate.of(month.year, month.month, 1)
+    var index = 0
     for (i in 0..30) {
         if (index < storyList.size) {
             val story = storyList[index]
             val createdAt = story.date
             if (createdAt.isAfter(date)) {
-                result.add(CalendarDayState.empty());
+                result.add(CalendarDayState.empty())
             } else {
                 result.add(story)
-                index++;
+                index++
             }
         } else {
-            result.add(CalendarDayState.empty());
+            result.add(CalendarDayState.empty())
         }
         date = date.plusDays(1)
     }
-    return result;
+    return result
 }

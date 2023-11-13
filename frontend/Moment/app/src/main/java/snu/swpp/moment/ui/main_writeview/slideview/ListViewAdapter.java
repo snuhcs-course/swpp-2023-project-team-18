@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.slideview;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import snu.swpp.moment.utils.AnimationProvider;
 
 public class ListViewAdapter extends BaseAdapter {
 
-    private List<ListViewItem> items;
+    private final List<ListViewItem> items;
     private final Context context;
 
     private int size;
@@ -108,7 +109,7 @@ public class ListViewAdapter extends BaseAdapter {
             // AI 답글 대기중 애니메이션 표시
             textView.setText("· · ·\nAI가 일기를 읽고 있어요");
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            textView.setAlpha(0.5f);
+            textView.setGravity(Gravity.CENTER);
             textView.clearAnimation();
             textView.startAnimation(animationProvider.fadeInOut);
             Log.d("ListViewAdapter", "showWaitingAnimation() called: activate");
@@ -116,7 +117,7 @@ public class ListViewAdapter extends BaseAdapter {
             // AI 답글 대기중 애니메이션 제거
             textView.setText("");
             textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-            textView.setAlpha(1.0f);
+            textView.setGravity(Gravity.START);
             textView.clearAnimation();
             Log.d("ListViewAdapter", "showWaitingAnimation() called: deactivate");
         }

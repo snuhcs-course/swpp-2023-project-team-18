@@ -2,14 +2,11 @@ package snu.swpp.moment.utils;
 
 import static org.junit.Assert.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,19 +45,19 @@ public class TimeConverterTest {
     }
 
     @Test
-    public void updateDateFromThree_before3() {
+    public void adjustToServiceDate_before3() {
         LocalDate date = LocalDate.of(2023, 11, 3);
         int hour = 2;
-        LocalDate convertedDate = TimeConverter.updateDateFromThree(date, hour);
+        LocalDate convertedDate = TimeConverter.adjustToServiceDate(date, hour);
         LocalDate answer = LocalDate.of(2023, 11, 2);
         assertTrue(convertedDate.isEqual(answer));
     }
 
     @Test
-    public void updateDateFromThree_after3() {
+    public void adjustToServiceDate_after3() {
         LocalDate date = LocalDate.of(2023, 11, 3);
         int hour = 12;
-        LocalDate convertedDate = TimeConverter.updateDateFromThree(date, hour);
+        LocalDate convertedDate = TimeConverter.adjustToServiceDate(date, hour);
         LocalDate answer = LocalDate.of(2023, 11, 3);
         assertTrue(convertedDate.isEqual(answer));
     }
@@ -141,5 +138,27 @@ public class TimeConverterTest {
         convertedLocalDate = TimeConverter.convertDateToLocalDate(date);
         System.out.println("convertedLocalDate: " + convertedLocalDate.toString());
         assertTrue(answer.isEqual(convertedLocalDate));
+    }
+
+    @Test
+    public void hasDayPassed() {
+        LocalDateTime base, cur;
+
+        base = LocalDateTime.of(2023, 11, 3, 8, 0, 0);
+        cur = LocalDateTime.of(2023, 11, 3, 21, 0, 0);
+        assertFalse(TimeConverter.hasDayPassed(base, cur));
+
+        cur = LocalDateTime.of(2023, 11, 4, 2, 0, 0);
+        assertFalse(TimeConverter.hasDayPassed(base, cur));
+
+        cur = LocalDateTime.of(2023, 11, 4, 3, 0, 0);
+        assertTrue(TimeConverter.hasDayPassed(base, cur));
+
+        base = LocalDateTime.of(2023, 11, 3, 1, 0, 0);
+        cur = LocalDateTime.of(2023, 11, 3, 2, 0, 0);
+        assertFalse(TimeConverter.hasDayPassed(base, cur));
+
+        cur = LocalDateTime.of(2023, 11, 3, 3, 0, 0);
+        assertTrue(TimeConverter.hasDayPassed(base, cur));
     }
 }

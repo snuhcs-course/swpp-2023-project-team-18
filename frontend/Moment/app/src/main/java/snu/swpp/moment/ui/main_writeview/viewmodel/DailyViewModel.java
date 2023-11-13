@@ -19,9 +19,10 @@ import snu.swpp.moment.utils.TimeConverter;
 
 public class DailyViewModel extends ViewModel {
 
+    private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
+
     private final GetStoryUseCase getStoryUseCase;
     private final SaveScoreUseCase saveScoreUseCase;
-    private final MutableLiveData<MomentUiState> momentState = new MutableLiveData<>();
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
 
