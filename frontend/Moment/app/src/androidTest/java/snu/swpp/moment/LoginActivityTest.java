@@ -21,6 +21,11 @@ public class LoginActivityTest {
         = new ActivityScenarioRule<LoginActivity>(LoginActivity.class);
 
     @Test
+    public void whenLoginActivityLaunched_TextLogoIsDisplayed() {
+        onView(withId(R.id.image_above_edittext)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void whenLoginActivityLaunched_UsernameFieldIsDisplayed() {
         onView(withId(R.id.username))
             .check(matches(isDisplayed()))
