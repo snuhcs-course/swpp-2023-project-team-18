@@ -8,3 +8,4 @@ tzdata==2023.3
 openai==0.28.1
 freezegun==1.2.2
 django-crontab==0.7.1
+jamo==0.4.1
