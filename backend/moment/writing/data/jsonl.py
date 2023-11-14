@@ -9,7 +9,11 @@ def load_jsonl(path: str) -> list[dict[str, Any]]:
     Load a JSONL file into a list of dictionaries.
     """
     with open(path, "r") as f:
-        data = [json.loads(line) for line in f.readlines()]
+        data = [
+            json.loads(line)
+            for line in f.readlines()
+            if line.strip() != "" and not line.startswith("//")
+        ]
     return data
 
 
