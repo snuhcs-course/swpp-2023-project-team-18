@@ -79,4 +79,21 @@
     <string name="day_navigate_button">이날의 기록 보기</string>
     <string name="auto_completed_warning">직접 하루를 마무리하지 않았어요</string>
 
+    <!-- 돌아보기 탭 -->
+    <string name="stat_section_week">7일</string>
+    <string name="stat_section_month">30일</string>
+    <string name="stat_section_week_score">일주일 돌아보기</string>
+    <string name="stat_section_month_score">한 달 돌아보기</string>
+    <string name="stat_duration">기간</string>
+
+    <string name="stat_seven_avg">7일 평균</string>
+    <string name="stat_thirty_avg">30일 평균</string>
+    <string name="average_score_text">%1$s</string>
+
+
+
+
+    <string name="stat_section_score">하루 점수</string>
+    <string name="title_activity_min">MinActivity</string>
+
 </resources>

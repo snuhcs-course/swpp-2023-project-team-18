@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Objects;
 
+import snu.swpp.moment.R;
+
 public class EmotionMap {
 
     public static final int INVALID_EMOTION = 10;
@@ -38,6 +40,7 @@ public class EmotionMap {
         }
     };
 
+
     public static int getEmotionInt(String emotion) {
         Integer emotionInt = emotionEnumMap.getOrDefault(emotion, INVALID_EMOTION);
         return Objects.requireNonNullElse(emotionInt, INVALID_EMOTION);
@@ -48,4 +51,5 @@ public class EmotionMap {
         String emotionStr = reverseMap.getOrDefault(code, "invalid");
         return Objects.requireNonNullElse(emotionStr, "invalid");
     }
+
 }

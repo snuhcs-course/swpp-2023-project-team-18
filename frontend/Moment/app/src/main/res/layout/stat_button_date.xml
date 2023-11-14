@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stat_button_date_container"
+    tools:layout_height="40dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <Button
+        android:id="@+id/stat_weekButton"
+        android:layout_width="@dimen/stat_view_button_width"
+        android:layout_height="@dimen/stat_view_button_height"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/maruburi_bold"
+        android:text="@string/stat_section_week"
+        android:textSize="13sp"
+        android:background="@drawable/button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/stat_monthButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"/>
+
+    <Button
+        android:id="@+id/stat_monthButton"
+        android:layout_width="@dimen/stat_view_button_width"
+        android:layout_height="@dimen/stat_view_button_height"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/maruburi_bold"
+        android:text="@string/stat_section_month"
+        android:textSize="13sp"
+        android:background="@drawable/button"
+        app:layout_constraintStart_toEndOf="@id/stat_weekButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,4 +16,12 @@
     <dimen name="editTextPadding">15dp</dimen>
 
     <dimen name="emotionVerticalPadding">5dp</dimen>
+
+    <dimen name="stat_view_button_width">60dp</dimen>
+    <dimen name="stat_view_button_height">25dp</dimen>
+
+    <!-- stat piechart legend -->
+    <dimen name="legendMarginTop">10dp</dimen>
+    <dimen name="legendMarginRight">10dp</dimen>
+    <dimen name="legendMarginBetweenPictureAndText">5dp</dimen>
 </resources>
