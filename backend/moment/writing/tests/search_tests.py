@@ -13,9 +13,11 @@ class HashtagCompleteTest(TestCase):
     def setUp(self):
         user1 = User.objects.create(username="test1")
         user2 = User.objects.create(username="test2")
+
         hashtag_1_1 = Hashtag.objects.create(content="우왕")
         hashtag_1_2 = Hashtag.objects.create(content="우와아아")
         hashtag_1_3 = Hashtag.objects.create(content="우아아")
+
         hashtag_2_1 = Hashtag.objects.create(content="우아아아")
 
         story1 = Story.objects.create(
@@ -40,6 +42,19 @@ class HashtagCompleteTest(TestCase):
         user = User.objects.get(username="test1")
         view = HashtagCompleteView.as_view()
         params = {"tag_query": "아아"}
+
+        request = factory.get("writing/hashtags/complete/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(len(response.data["hashtags"]), 2)
+        self.assertEqual(response.data["hashtags"][0], "우아아")
+        self.assertEqual(response.data["hashtags"][1], "우와아아")
+
+    def test_hashtag_completion_korean_spread(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="test1")
+        view = HashtagCompleteView.as_view()
+        params = {"tag_query": "아ㅇ"}
 
         request = factory.get("writing/hashtags/complete/", params)
         force_authenticate(request, user=user)

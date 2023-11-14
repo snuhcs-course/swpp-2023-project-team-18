@@ -6,6 +6,7 @@ from rest_framework.request import Request
 from .models import Story
 from .search_serializers import HashtagCompleteSerializer
 from .utils.log import print_log
+from .utils.search import spread_korean
 
 
 class HashtagCompleteView(GenericAPIView):
@@ -16,13 +17,13 @@ class HashtagCompleteView(GenericAPIView):
         params = HashtagCompleteSerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
 
-        tag_query = params.validated_data["tag_query"]
+        tag_query = spread_korean(params.validated_data["tag_query"])
 
         stories = Story.objects.filter(user_id=request.user.id)
         tag_set = set()
         for story in stories:
             for tag in story.hashtags.all():
-                if tag_query not in tag.content:
+                if tag_query not in spread_korean(tag.content):
                     continue
                 tag_set.add(tag.content)
 
