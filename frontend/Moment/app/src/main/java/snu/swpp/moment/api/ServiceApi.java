@@ -18,12 +18,15 @@ import snu.swpp.moment.api.request.TokenRefreshRequest;
 import snu.swpp.moment.api.request.TokenVerifyRequest;
 import snu.swpp.moment.api.response.AIStoryGetResponse;
 import snu.swpp.moment.api.response.EmotionSaveResponse;
+import snu.swpp.moment.api.response.SearchHashTagGetCompleteResponse;
 import snu.swpp.moment.api.response.HashtagSaveResponse;
 import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.response.ScoreSaveResponse;
+import snu.swpp.moment.api.response.SearchEntriesGetResponse;
+import snu.swpp.moment.api.response.SearchHashtagsResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.api.response.StoryGetResponse;
 import snu.swpp.moment.api.response.StorySaveResponse;
@@ -79,4 +82,15 @@ public interface ServiceApi {
     @POST("api/writing/hashtags/")
     Call<HashtagSaveResponse> saveHashtags(@Header("Authorization") String bearerToken,
         @Body HashtagSaveRequest data);
+
+    @GET("/api/writing/hashtags/complete/")
+    Call<SearchHashTagGetCompleteResponse> getCompleteHashTags(@Header("Authorization") String bearerToken,
+                                                               @Query("tag_query") String str);
+    @GET("/api/writing/search/contents/")
+    Call<SearchEntriesGetResponse> getContentSearchList(@Header("Authorization") String bearerToken,
+                                                        @Query("query") String query);
+    @GET("/api/writing/search/hashtags/")
+    Call<SearchHashtagsResponse> getHashtagSearchList(@Header("Authorization") String bearerToken,
+                                                      @Query("query") String query);
+
 }
