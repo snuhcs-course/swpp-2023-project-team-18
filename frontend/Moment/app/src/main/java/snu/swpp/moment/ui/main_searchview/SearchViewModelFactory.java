@@ -19,7 +19,7 @@ public class SearchViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
         if (modelClass.isAssignableFrom(SearchViewModel.class)) {
-            return (T) new SearchViewModel(searchRepository);
+            return (T) new SearchViewModel(authenticationRepository,searchRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel Class");
     }

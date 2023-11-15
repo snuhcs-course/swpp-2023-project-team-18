@@ -5,7 +5,7 @@ import snu.swpp.moment.data.callback.SearchEntriesGetCallBack;
 import snu.swpp.moment.data.callback.SearchHashTagGetCallBack;
 import snu.swpp.moment.data.callback.SearchHashTagCompleteCallBack;
 import snu.swpp.moment.data.source.SearchRemoteDataSource;
-import snu.swpp.moment.api.response.SearchEntriesGetResponse;
+import snu.swpp.moment.api.response.SearchContentsResponse;
 import snu.swpp.moment.api.response.SearchHashtagsResponse;
 
 public class SearchRepository {
@@ -33,7 +33,7 @@ public class SearchRepository {
     public void getContentSearchList(String access_token, String query, SearchEntriesGetCallBack callback) {
         searchRemoteDataSource.getContentSearchList(access_token, query, new SearchEntriesGetCallBack() {
             @Override
-            public void onSuccess(SearchEntriesGetResponse response) {
+            public void onSuccess(SearchContentsResponse response) {
                 callback.onSuccess(response);
             }
 

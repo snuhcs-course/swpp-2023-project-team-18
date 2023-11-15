@@ -1,8 +1,8 @@
 package snu.swpp.moment.data.callback;
 
-import snu.swpp.moment.api.response.SearchEntriesGetResponse;
+import snu.swpp.moment.api.response.SearchContentsResponse;
 
 public interface SearchEntriesGetCallBack {
-    void onSuccess(SearchEntriesGetResponse response);
+    void onSuccess(SearchContentsResponse response);
     void onFailure(Throwable t);
 }

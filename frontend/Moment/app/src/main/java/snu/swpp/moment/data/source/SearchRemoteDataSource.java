@@ -7,7 +7,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import snu.swpp.moment.api.RetrofitClient;
 import snu.swpp.moment.api.ServiceApi;
-import snu.swpp.moment.api.response.SearchEntriesGetResponse;
+import snu.swpp.moment.api.response.SearchContentsResponse;
 import snu.swpp.moment.api.response.SearchHashtagsResponse;
 import snu.swpp.moment.api.response.SearchHashTagGetCompleteResponse;
 import snu.swpp.moment.data.callback.SearchEntriesGetCallBack;
@@ -53,12 +53,12 @@ public class SearchRemoteDataSource {
     public void getContentSearchList(String access_token, String query, SearchEntriesGetCallBack callback) {
         String bearer = "Bearer " + access_token;
 
-        service.getContentSearchList(bearer, query).enqueue(new Callback<SearchEntriesGetResponse>() {
+        service.getContentSearchList(bearer, query).enqueue(new Callback<SearchContentsResponse>() {
             @Override
-            public void onResponse(Call<SearchEntriesGetResponse> call, Response<SearchEntriesGetResponse> response) {
+            public void onResponse(Call<SearchContentsResponse> call, Response<SearchContentsResponse> response) {
                 Log.d("APICall", "getContentSearchList: " + response.code());
                 if (response.isSuccessful()) {
-                    SearchEntriesGetResponse result = response.body();
+                    SearchContentsResponse result = response.body();
                     callback.onSuccess(result);
                 } else if (response.code() == 401) {
                     callback.onFailure(new UnauthorizedAccessException());
@@ -68,7 +68,7 @@ public class SearchRemoteDataSource {
             }
 
             @Override
-            public void onFailure(Call<SearchEntriesGetResponse> call, Throwable t) {
+            public void onFailure(Call<SearchContentsResponse> call, Throwable t) {
                 Log.d("APICall", "getContentSearchList: onFailure");
                 callback.onFailure(new NoInternetException());
             }

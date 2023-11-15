@@ -1,29 +1,34 @@
 package snu.swpp.moment.ui.main_searchview;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import snu.swpp.moment.api.response.SearchContentsResponse;
+import snu.swpp.moment.api.response.SearchHashtagsResponse;
 
 public class SearchState {
-    private final List<String> searchResults; // 검색 결과를 저장하는 리스트
-    private final Exception error; // 오류 발생 시 저장하는 필드
+     List<SearchEntryState> searchEntries;
+     Throwable error;
 
-    public SearchState(List<String> searchResults, Exception error) {
-        this.searchResults = searchResults;
+    public SearchState(List<SearchEntryState> searchEntries, Throwable error) {
+        this.searchEntries = searchEntries;
         this.error = error;
     }
 
-    public List<String> getSearchResults() {
-        return searchResults;
+    public static SearchState withError(Throwable e){
+         return new SearchState(null,e);
+     }
+     public static SearchState fromSearchContentsResponse(SearchContentsResponse response){
+        return new SearchState(response.getSearchentries().stream().map(
+            entry -> SearchEntryState.fromContentSearchEntry(entry)
+         )            .collect(Collectors.toList()),null);
+
+     }
+    public static SearchState fromSearchHashtagsResponse(SearchHashtagsResponse response){
+        return new SearchState(response.getSearchentries().stream().map(
+            entry -> SearchEntryState.fromHashtagSearchEntry(entry)
+        )            .collect(Collectors.toList()),null);
+
     }
 
-    public Exception getError() {
-        return error;
-    }
 
-    public static SearchState success(List<String> searchResults) {
-        return new SearchState(searchResults, null);
-    }
-
-    public static SearchState failure(Exception error) {
-        return new SearchState(null, error);
-    }
 }

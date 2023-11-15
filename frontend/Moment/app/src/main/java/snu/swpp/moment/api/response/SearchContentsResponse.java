@@ -2,7 +2,7 @@ package snu.swpp.moment.api.response;
 
 import java.util.List;
 
-public class SearchEntriesGetResponse {
+public class SearchContentsResponse {
     private List<SearchEntry> searchEntries;
 
     public List<SearchEntry> getSearchentries() {
@@ -11,10 +11,10 @@ public class SearchEntriesGetResponse {
 
     public static class SearchEntry {
         private String title;
-        private String created_at;
+        private Long created_at;
         private String emotion;
         private String content;
-        private String moment;
+        private int id;
         private int field;
 
         // Getters and setters for these fields
@@ -22,7 +22,7 @@ public class SearchEntriesGetResponse {
             return title;
         }
 
-        public String getCreated_at() {
+        public Long getCreated_at() {
             return created_at;
         }
 
@@ -34,8 +34,8 @@ public class SearchEntriesGetResponse {
             return content;
         }
 
-        public String getMoment() {
-            return moment;
+        public int getId() {
+            return id;
         }
 
         public int getField() {

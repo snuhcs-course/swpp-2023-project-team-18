@@ -25,7 +25,7 @@ import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.response.ScoreSaveResponse;
-import snu.swpp.moment.api.response.SearchEntriesGetResponse;
+import snu.swpp.moment.api.response.SearchContentsResponse;
 import snu.swpp.moment.api.response.SearchHashtagsResponse;
 import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.api.response.StoryGetResponse;
@@ -87,7 +87,7 @@ public interface ServiceApi {
     Call<SearchHashTagGetCompleteResponse> getCompleteHashTags(@Header("Authorization") String bearerToken,
                                                                @Query("tag_query") String str);
     @GET("/api/writing/search/contents/")
-    Call<SearchEntriesGetResponse> getContentSearchList(@Header("Authorization") String bearerToken,
+    Call<SearchContentsResponse> getContentSearchList(@Header("Authorization") String bearerToken,
                                                         @Query("query") String query);
     @GET("/api/writing/search/hashtags/")
     Call<SearchHashtagsResponse> getHashtagSearchList(@Header("Authorization") String bearerToken,
