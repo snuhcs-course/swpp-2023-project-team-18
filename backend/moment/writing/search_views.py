@@ -64,6 +64,11 @@ class HashtagSearchView(GenericAPIView):
             .filter(hashtags__content__exact=query)
             .order_by("-created_at")
         )
+        print_log(
+            f"Successfully searched by hashtag (length: {len(stories)})",
+            username=request.user.username,
+            place="HashtagSearchView.get",
+        )
 
         return Response(
             data={"searchentries": HashtagSearchSerializer(stories, many=True).data},
@@ -132,8 +137,8 @@ class ContentSearchView(GenericAPIView):
                     ).data
                 )
             print_log(
-                f"Successfully queried tags for auto completion (length: {len(results)})",
+                f"Successfully searched by contents (length: {len(results)})",
                 username=request.user.username,
-                place="HashtagCompleteView.get",
+                place="ContentSearchView.get",
             )
         return Response({"searchentries": results}, status=200)

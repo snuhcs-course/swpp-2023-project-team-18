@@ -123,11 +123,12 @@ class HashtagSearchTest(TestCase):
         factory = APIRequestFactory()
         user = User.objects.get(username="test1")
         view = HashtagSearchView.as_view()
-        params = {"tag_query": "와우"}
+        params = {"query": "와우"}
 
         request = factory.get("writing/hashtags/search/", params)
         force_authenticate(request, user=user)
         response = view(request)
+        print(response.data)
         entries = response.data["searchentries"]
         self.assertEqual(len(entries), 2)
         self.assertEqual(entries[0]["content"], "yay2")
@@ -137,7 +138,7 @@ class HashtagSearchTest(TestCase):
         factory = APIRequestFactory()
         user = User.objects.get(username="test1")
         view = HashtagSearchView.as_view()
-        params = {"tag_query": "우왕"}
+        params = {"query": "우왕"}
 
         request = factory.get("writing/search/hashtags/", params)
         force_authenticate(request, user=user)
@@ -150,7 +151,7 @@ class HashtagSearchTest(TestCase):
         factory = APIRequestFactory()
         user = User.objects.get(username="test1")
         view = HashtagSearchView.as_view()
-        params = {"tag_query": "우"}
+        params = {"query": "우"}
 
         request = factory.get("writing/search/hashtags/", params)
         force_authenticate(request, user=user)
@@ -249,6 +250,5 @@ class ContentSearchTest(TestCase):
         self.assertEqual(entries[1]["content"], "what")
         self.assertEqual(entries[1]["field"], SearchFields.TITLE)
         self.assertEqual(entries[1]["title"], "검색제목")
-        self.assertEqual(entries[1]["content"], "what")
         self.assertEqual(entries[2]["content"], "검색내용")
         self.assertEqual(entries[2]["field"], SearchFields.STORY)
