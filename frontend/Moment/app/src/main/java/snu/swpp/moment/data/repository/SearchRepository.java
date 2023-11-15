@@ -1,5 +1,6 @@
 package snu.swpp.moment.data.repository;
 
+import java.util.List;
 import snu.swpp.moment.data.callback.SearchEntriesGetCallBack;
 import snu.swpp.moment.data.callback.SearchHashTagGetCallBack;
 import snu.swpp.moment.data.callback.SearchHashTagCompleteCallBack;
