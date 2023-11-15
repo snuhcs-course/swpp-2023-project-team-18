@@ -35,6 +35,12 @@ class Emotions(str, BaseEnum):
     INVALID = "invalid"
 
 
+class SearchFields(int, BaseEnum):
+    TITLE = 0
+    MOMENT = 1
+    STORY = 2
+
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 AUTO_COMPLETE_MAX_TRIAL = 5

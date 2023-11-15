@@ -10,7 +10,7 @@ from .views import (
     HashtagView,
 )
 
-from .search_views import HashtagCompleteView
+from .search_views import HashtagCompleteView, HashtagSearchView, ContentSearchView
 
 urlpatterns = [
     path("moments/", MomentView.as_view()),
@@ -21,4 +21,6 @@ urlpatterns = [
     path("score/", ScoreView.as_view()),
     path("hashtags/", HashtagView.as_view()),
     path("hashtags/complete/", HashtagCompleteView.as_view()),
+    path("search/hashtags/", HashtagSearchView.as_view()),
+    path("search/contents/", ContentSearchView.as_view()),
 ]
