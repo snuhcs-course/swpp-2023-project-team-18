@@ -1,2 +1,2 @@
-FT_TRAIN_FILE_PTH = "writing/data/fine_tune_train.jsonl"
-FT_TEST_FILE_PTH = "writing/data/fine_tune_test.jsonl"
+FT_TRAIN_FILE_PTH = "writing/data/fine_tune_train_111515.jsonl"
+FT_TEST_FILE_PTH = "writing/data/fine_tune_test_111515.jsonl"

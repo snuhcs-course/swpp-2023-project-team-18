@@ -56,37 +56,37 @@ def preprocess():
     save_jsonl(PROCESSED_DATA_PATH.format("test"), test)
 
 
-# def make_dataset():
-#     """
-#     파일에 저장되어 있는 스토리 요약과, global variable로 정의된 nudge를 조합해
-#     jsonl 형식의 데이터셋 파일 생성.
-#     """
-#     with open(SUMMARY_PATH, "r") as f:
-#         summaries: list[list[str]] = json.loads(f.read())
-#     assert len(summaries) == 4
-#     assert all(len(s) == 5 for s in summaries)
-#     assert len(NUDGES) == 4
-#     assert all(len(nudges) == 10 for nudges in NUDGES)
-#
-#     combi = list(combinations(range(5), 2))
-#     print(combi)
-#     result: list[dict] = []
-#
-#     for theme in range(4):
-#         s = summaries[theme]
-#
-#         for combi_idx in range(10):
-#             i, j = combi[combi_idx]
-#             data = {
-#                 "diaries": [s[i], s[j]],
-#                 "nudge": NUDGES[theme][combi_idx],
-#             }
-#             result.append(data)
-#
-#     save_jsonl(DATA_PATH, result)
-#     print("data saved in", DATA_PATH)
-#     print("length:", len(result))
-#
+def make_dataset():
+    """
+    파일에 저장되어 있는 스토리 요약과, global variable로 정의된 nudge를 조합해
+    jsonl 형식의 데이터셋 파일 생성.
+    """
+    with open(SUMMARY_PATH, "r") as f:
+        summaries: list[list[str]] = json.loads(f.read())
+    assert len(summaries) == 4
+    assert all(len(s) == 5 for s in summaries)
+    assert len(NUDGES) == 4
+    assert all(len(nudges) == 10 for nudges in NUDGES)
+
+    combi = list(combinations(range(5), 2))
+    print(combi)
+    result: list[dict] = []
+
+    for theme in range(4):
+        s = summaries[theme]
+
+        for combi_idx in range(10):
+            i, j = combi[combi_idx]
+            data = {
+                "diaries": [s[i], s[j]],
+                "nudge": NUDGES[theme][combi_idx],
+            }
+            result.append(data)
+
+    save_jsonl(DATA_PATH, result)
+    print("data saved in", DATA_PATH)
+    print("length:", len(result))
+
 #
 # def collect_summaries():
 #     """

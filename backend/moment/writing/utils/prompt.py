@@ -146,14 +146,7 @@ Now, it's your turn to summarize the diary entry:
 """
 
 NUDGE_GENERATE_STEP_TWO = """\
-You are an integral component of a mobile app designed for diary writing. \
-Your responsibility is to create a nudge based on past records. \
-The past records are provided in chronological order and separated by semicolons. \
-If the records display a certain strong tendency, you should create a nudge of today. \
-The nudge should be a compassionate prompt, empathizing with the user's emotions. \
-The nudge should be concise as possible, only including contents related to the tendency. \
-If there is no strong tendency among the records, simply output the empty string as the response. \
-The input records would be written in English, but you should reply in Korean.
+The input would be given in English, but you must reply in Korean. \
 """
 
 

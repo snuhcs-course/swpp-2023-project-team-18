@@ -14,7 +14,7 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 client = OpenAI()
 
 MODEL_ID = ""  # FIXME Enter model id here ex) ft:gpt-3.5-turbo:personal::<something>
-TEST_NAME = "nudge_FT_1"
+TEST_NAME = "nudge_FT_4"
 OUTPUT_JSONL_PATH = f"results/results_nudge_FT/{TEST_NAME}.jsonl"
 OUTPUT_TXT_PATH = f"results/results_nudge_FT/{TEST_NAME}.txt"
 
