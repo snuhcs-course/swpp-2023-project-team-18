@@ -1,7 +1,6 @@
 package snu.swpp.moment.ui.main_searchview;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -22,7 +21,7 @@ public class SearchViewModel extends ViewModel {
     private  AuthenticationRepository authenticationRepository;
     private  SearchRepository searchRepository;
     MutableLiveData<SearchType> searchType = new MutableLiveData<>(SearchType.HASHTAG);
-    MutableLiveData<HashtagCompletionState> hashtagCompletion = new MutableLiveData<>();
+    MutableLiveData<HashtagCompletionState> hashtagCompletionState = new MutableLiveData<>();
     MutableLiveData<SearchState> searchState = new MutableLiveData<>();
 
 
@@ -35,6 +34,7 @@ public class SearchViewModel extends ViewModel {
         searchType.setValue(type);
     }
     public void completeHashtag(String query){
+        Log.d("searchViewModel", "send API");
         authenticationRepository.isTokenValid(new TokenCallBack() {
             @Override
             public void onSuccess() {
@@ -43,12 +43,12 @@ public class SearchViewModel extends ViewModel {
                     new SearchHashTagCompleteCallBack() {
                         @Override
                         public void onSuccess(List<String> hashTagList) {
-                            hashtagCompletion.setValue(new HashtagCompletionState(hashTagList,null));
+                            hashtagCompletionState.setValue(new HashtagCompletionState(hashTagList,null));
                         }
 
                         @Override
                         public void onFailure(Exception error) {
-                            hashtagCompletion.setValue(HashtagCompletionState.withError(error));
+                            hashtagCompletionState.setValue(HashtagCompletionState.withError(error));
 
                         }
                     });
@@ -58,7 +58,7 @@ public class SearchViewModel extends ViewModel {
 
             @Override
             public void onFailure() {
-                hashtagCompletion.setValue(HashtagCompletionState.withError(new UnauthorizedAccessException()));
+                hashtagCompletionState.setValue(HashtagCompletionState.withError(new UnauthorizedAccessException()));
 
             }
         });
@@ -91,7 +91,6 @@ public class SearchViewModel extends ViewModel {
 
                                     if(response.getSearchentries()!=null) {
                                         searchState.setValue(SearchState.fromSearchContentsResponse(response));
-                                      //  Log.d("SearchViewModel", "Content search size " + response.getSearchentries().size());
                                     }
                                     else{
                                     //    Log.d("SearchViewModel", "Content search null ");

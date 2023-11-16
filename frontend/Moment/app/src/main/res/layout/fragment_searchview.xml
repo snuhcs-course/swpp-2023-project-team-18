@@ -59,18 +59,36 @@
         app:layout_constraintBottom_toBottomOf="@+id/search_content_edittext"
         android:visibility="invisible"
         />
+
     <ListView
       android:id="@+id/search_content_result"
       android:layout_width="match_parent"
       android:layout_height="0dp"
+        android:visibility="gone"
       app:layout_constraintTop_toBottomOf="@+id/search_content_edittext"
       app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hashtag_complete_list"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/search_hashtag_edittext"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="visible"
+        />
+
+
     <ListView
       android:id="@+id/search_hashtag_result"
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      app:layout_constraintTop_toBottomOf="@+id/search_hashtag_edittext"
-      app:layout_constraintBottom_toBottomOf="parent"/>
+      app:layout_constraintTop_toBottomOf="@+id/hashtag_complete_list"
+      app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

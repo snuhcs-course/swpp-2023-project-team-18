@@ -26,7 +26,6 @@ public class SearchAdapter extends BaseAdapter {
     private final Context context;
 
     private int size;
-    private boolean isShowingAnimation = true;
 
 
     public SearchAdapter(Context context, List<SearchEntryState> items) {
