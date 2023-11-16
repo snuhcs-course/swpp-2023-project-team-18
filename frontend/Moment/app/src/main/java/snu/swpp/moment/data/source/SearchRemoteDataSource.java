@@ -58,6 +58,8 @@ public class SearchRemoteDataSource {
             public void onResponse(Call<SearchContentsResponse> call, Response<SearchContentsResponse> response) {
                 Log.d("APICall", "getContentSearchList: " + response.code());
                 if (response.isSuccessful()) {
+                    Log.d("APIContent","content: "+response.body().getSearchentries());
+
                     SearchContentsResponse result = response.body();
                     callback.onSuccess(result);
                 } else if (response.code() == 401) {

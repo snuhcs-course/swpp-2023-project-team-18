@@ -10,12 +10,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.SearchRepository;
@@ -90,6 +97,15 @@ public class SearchViewFragment extends Fragment {
             }
             searchViewModel.search(query);
         });
+        SearchAdapter adapter = new SearchAdapter(getContext(), new ArrayList<>());
+        binding.searchContentResult.setAdapter(adapter);
+        searchViewModel.searchState.observe(getViewLifecycleOwner(), new Observer<SearchState>() {
+            @Override
+            public void onChanged(SearchState searchState) {
+                adapter.setData(searchState.searchEntries);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         // 초기 상태 설정
         updateSearchUI();
@@ -104,12 +120,16 @@ public class SearchViewFragment extends Fragment {
             binding.searchHashtagEdittext.setVisibility(View.VISIBLE);
             binding.searchContentQueryButton.setVisibility(View.GONE);
             binding.searchContentEdittext.setVisibility(View.GONE);
+            binding.searchContentResult.setVisibility(View.GONE);
+            binding.searchHashtagResult.setVisibility(View.VISIBLE);
         } else {
             hashtagButton.setActivated(false);
             contentButton.setActivated(true);
             binding.searchHashtagEdittext.setVisibility(View.GONE);
             binding.searchContentEdittext.setVisibility(View.VISIBLE);
             binding.searchContentQueryButton.setVisibility(View.VISIBLE);
+            binding.searchContentResult.setVisibility(View.VISIBLE);
+            binding.searchHashtagResult.setVisibility(View.GONE);
         }
     }
 
