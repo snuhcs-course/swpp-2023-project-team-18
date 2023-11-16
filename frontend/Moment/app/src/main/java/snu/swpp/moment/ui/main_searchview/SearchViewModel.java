@@ -88,8 +88,14 @@ public class SearchViewModel extends ViewModel {
                                 @Override
                                 public void onSuccess(SearchContentsResponse response) {
                                     Log.d("SearchViewModel", "Content search successful: " + response.toString());
-                                    if(response.getSearchentries()!=null)
+                                    if(response.getSearchentries()!=null) {
                                         searchState.setValue(SearchState.fromSearchContentsResponse(response));
+                                        Log.d("SearchViewModel", "Content search size " + response.getSearchentries().size());
+                                    }
+                                    else{
+                                        Log.d("SearchViewModel", "Content search null ");
+                                    }
+
                                 }
 
                                 @Override
