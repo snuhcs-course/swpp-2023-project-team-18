@@ -183,6 +183,10 @@ public class SearchViewFragment extends Fragment {
                     searchRunnable = () -> searchViewModel.completeHashtag(currentText);
                     searchHandler.postDelayed(searchRunnable, 300); // 300ms 후에 실행
                 }
+                if(currentText.isEmpty()){
+                    hashTagCompletionAdapter.setItems(new ArrayList<>());
+                    hashtagSearchAdapter.setData(new ArrayList<>());
+                }
 
             }
         });
