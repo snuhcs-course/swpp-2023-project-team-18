@@ -6,7 +6,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
@@ -24,9 +23,7 @@ public class ListFooterContainer {
     // 스토리 작성
     private final StoryContainer storyContainer;
     // 감정 선택
-    private final ConstraintLayout emotionWrapper;
     private final EmotionGridContainer emotionGridContainer;
-    private final TextView emotionHelpText;
     // 태그 입력
     private final TagBoxContainer tagBoxContainer;
     // 점수 선택
@@ -69,9 +66,7 @@ public class ListFooterContainer {
         // 스토리 작성
         storyContainer = new StoryContainer(view.findViewById(R.id.story_wrapper));
         // 감정 선택
-        emotionWrapper = view.findViewById(R.id.emotion_wrapper);
         emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
-        emotionHelpText = view.findViewById(R.id.emotion_help_text);
         // 태그 입력
         tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_wrapper));
         // 점수 선택
@@ -115,12 +110,9 @@ public class ListFooterContainer {
         if (storyUiState.hasNoData()) {
             // 보여줄 데이터가 없는 경우
             storyContainer.resetUi();
+            emotionGridContainer.resetUi();
             tagBoxContainer.resetUi();
             scoreContainer.resetUi();
-
-            emotionGridContainer.resetUi();
-            emotionHelpText.setText(R.string.emotion_help_text);
-            emotionWrapper.setVisibility(View.GONE);
 
             if (isToday) {
                 setUiReadyToAddMoment(false);
@@ -140,7 +132,7 @@ public class ListFooterContainer {
 
         freezeEmotionSelector();
         emotionGridContainer.selectEmotion(storyUiState.getEmotion());
-        emotionWrapper.setVisibility(View.VISIBLE);
+        emotionGridContainer.setUiVisible();
 
         freezeTagEditText();
         tagBoxContainer.setTags(storyUiState.getTags());
@@ -277,9 +269,7 @@ public class ListFooterContainer {
     public void setUiSelectingEmotion() {
         log("[STATE] setUiSelectingEmotion");
         storyContainer.setUiCompleteStory();
-
-        emotionWrapper.setVisibility(View.VISIBLE);
-        emotionWrapper.startAnimation(animationProvider.fadeIn);
+        emotionGridContainer.setUiSelectingEmotion();
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
@@ -351,7 +341,7 @@ public class ListFooterContainer {
 
     private void setHelpTextAfterCompleted(boolean isToday) {
         String day = isToday ? "오늘" : "이날";
-        emotionHelpText.setText(day + "의 감정");
+        emotionGridContainer.setHelpText(day + "의 감정");
         tagBoxContainer.setHelpText(day + "의 태그");
         scoreContainer.setHelpText(day + "의 점수");
     }
