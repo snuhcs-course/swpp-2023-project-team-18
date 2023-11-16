@@ -111,7 +111,7 @@ public class WriteViewFragment extends Fragment {
     private int calculateNumPages() {
         String dateInString = authenticationRepository.getCreatedAt();
         if (dateInString.isBlank()) {
-            return -1;
+            return 1;
         }
         LocalDate today = TimeConverter.getToday();
         LocalDate createdAt = LocalDate.parse(dateInString.substring(0, 10));
