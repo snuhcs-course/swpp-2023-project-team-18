@@ -29,6 +29,7 @@ import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.SearchRepository;
 import snu.swpp.moment.data.source.SearchRemoteDataSource;
 import snu.swpp.moment.databinding.FragmentSearchviewBinding;
+import snu.swpp.moment.ui.main_searchview.SearchViewModel.SearchType;
 import snu.swpp.moment.ui.main_statview.SearchViewModelFactory;
 
 public class SearchViewFragment extends Fragment {
@@ -107,14 +108,23 @@ public class SearchViewFragment extends Fragment {
             searchViewModel.search(query);
         });
         SearchAdapter adapter = new SearchAdapter(getContext(), new ArrayList<>());
+        SearchAdapter hashtagSearchAdapter = new SearchAdapter(getContext(),new ArrayList<>());
         binding.searchContentResult.setAdapter(adapter);
+        binding.searchHashtagResult.setAdapter(hashtagSearchAdapter);
 
 
         searchViewModel.searchState.observe(getViewLifecycleOwner(), new Observer<SearchState>() {
             @Override
             public void onChanged(SearchState searchState) {
-                adapter.setData(searchState.searchEntries);
-                adapter.notifyDataSetChanged();
+                if (searchViewModel.searchType.getValue() == SearchType.CONTENT) {
+
+                    adapter.setData(searchState.searchEntries);
+                    adapter.notifyDataSetChanged();
+                }
+                else{
+                    hashtagSearchAdapter.setData(searchState.searchEntries);
+                    hashtagSearchAdapter.notifyDataSetChanged();
+                }
             }
         });
 
@@ -173,6 +183,7 @@ public class SearchViewFragment extends Fragment {
                     searchRunnable = () -> searchViewModel.completeHashtag(currentText);
                     searchHandler.postDelayed(searchRunnable, 300); // 300ms 후에 실행
                 }
+
             }
         });
 
