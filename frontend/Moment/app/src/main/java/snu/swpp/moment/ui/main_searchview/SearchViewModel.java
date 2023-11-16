@@ -73,6 +73,8 @@ public class SearchViewModel extends ViewModel {
                             new SearchHashTagGetCallBack() {
                                 @Override
                                 public void onSuccess(SearchHashtagsResponse response) {
+                                    Log.d("SearchViewModel", "Hashtag search successful: " + response.getSearchentries());
+
                                     searchState.setValue(SearchState.fromSearchHashtagsResponse(response));
                                 }
 

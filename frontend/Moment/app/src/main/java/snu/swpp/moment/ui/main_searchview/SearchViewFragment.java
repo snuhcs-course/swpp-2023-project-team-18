@@ -24,6 +24,7 @@ import java.security.GeneralSecurityException;
 
 import java.util.ArrayList;
 
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.SearchRepository;
@@ -86,11 +87,14 @@ public class SearchViewFragment extends Fragment {
         // Set up listeners for the buttons
         hashtagButton.setOnClickListener(v -> {
             currentSearchMode = SearchMode.HASHTAG;
+            searchViewModel.setSearchType(SearchType.HASHTAG);
             updateSearchUI();
         });
 
         contentButton.setOnClickListener(v -> {
             currentSearchMode = SearchMode.CONTENT;
+            searchViewModel.setSearchType(SearchType.CONTENT);
+
             updateSearchUI();
         });
 
@@ -107,8 +111,8 @@ public class SearchViewFragment extends Fragment {
             }
             searchViewModel.search(query);
         });
-        SearchAdapter adapter = new SearchAdapter(getContext(), new ArrayList<>());
-        SearchAdapter hashtagSearchAdapter = new SearchAdapter(getContext(),new ArrayList<>());
+        SearchAdapter adapter = new SearchAdapter((MainActivity) getActivity(), new ArrayList<>());
+        SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),new ArrayList<>());
         binding.searchContentResult.setAdapter(adapter);
         binding.searchHashtagResult.setAdapter(hashtagSearchAdapter);
 

@@ -54,6 +54,7 @@ public class HashTagCompletionAdapter extends RecyclerView.Adapter<HashTagComple
         holder.button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("holder",holder.button.getText().toString());
                 searchViewModel.search(holder.button.getText().toString());
             }
         });

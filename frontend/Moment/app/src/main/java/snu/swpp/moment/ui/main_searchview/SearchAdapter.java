@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.List;
 import java.util.Objects;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.slideview.ListViewItem;
 import snu.swpp.moment.utils.AnimationProvider;
@@ -23,12 +25,12 @@ import snu.swpp.moment.utils.AnimationProvider;
 public class SearchAdapter extends BaseAdapter {
 
     private  List<SearchEntryState> items;
-    private final Context context;
+    private final MainActivity context;
 
     private int size;
 
 
-    public SearchAdapter(Context context, List<SearchEntryState> items) {
+    public SearchAdapter(MainActivity context, List<SearchEntryState> items) {
         this.items = items;
         this.context = context;
         this.size = items.size();
@@ -70,6 +72,12 @@ public class SearchAdapter extends BaseAdapter {
         dateView.setText(item.createdAt.toString());
         emotionView.setImageDrawable(context.getDrawable(R.drawable.icon_sun_cloud));
 
+        convertView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.navigateToWriteViewPage(item.createdAt);
+            }
+        });
         Log.d("SearchAdapter",
             String.format("getView() called: position %d, size %d", position,
                 size));
