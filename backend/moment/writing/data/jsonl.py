@@ -1,10 +1,10 @@
-from typing import Any
+from typing import Any, Dict, List
 import json
 
 from pprint import pformat
 
 
-def load_jsonl(path: str) -> list[dict[str, Any]]:
+def load_jsonl(path: str) -> List[Dict[str, Any]]:
     """
     Load a JSONL file into a list of dictionaries.
     """
@@ -17,7 +17,7 @@ def load_jsonl(path: str) -> list[dict[str, Any]]:
     return data
 
 
-def save_jsonl(path: str, data: list[dict[str, Any]]):
+def save_jsonl(path: str, data: List[Dict[str, Any]]):
     """
     Save a list of dictionaries into a JSONL file.
     """
@@ -26,7 +26,7 @@ def save_jsonl(path: str, data: list[dict[str, Any]]):
             f.write(json.dumps(line, ensure_ascii=False) + "\n")
 
 
-def create_or_append_jsonl(path: str, data: list[dict[str, Any]]):
+def create_or_append_jsonl(path: str, data: List[Dict[str, Any]]):
     """
     Save a list of dictionaries into a JSONL file.
     """
