@@ -1,8 +1,10 @@
 package snu.swpp.moment.api.response;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class SearchContentsResponse {
+    @SerializedName("searchentries")
     private List<SearchEntry> searchEntries;
 
     public List<SearchEntry> getSearchentries() {
