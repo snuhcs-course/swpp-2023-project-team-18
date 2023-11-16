@@ -4,23 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
     tools:context=".ui.main_searchview.SearchViewFragment">
 
 
-    <EditText
-        android:id="@+id/searchEditText"
+    <include
+        android:id="@+id/search_button_container"
+        layout="@layout/search_button_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:hint="검색어 입력"/>
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
+
+
+    <EditText
+        android:id="@+id/search_hashtag_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/maruburi_light"
+        android:hint="해시태그 검색"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_button_container"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <EditText
+        android:id="@+id/search_content_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_button_container"
+        android:hint="내용 검색"
+        android:fontFamily="@font/maruburi_light"
+        android:textSize="14dp"
+        tools:visibility="invisible"
+        />
+
+    <ImageButton
+        android:id="@+id/search_content_query_button"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:background="@color/white"
+        android:src="@drawable/searchbuttonx4"
+        app:layout_constraintStart_toEndOf="@+id/search_content_edittext"
+        app:layout_constraintTop_toTopOf="@+id/search_content_edittext"
+        app:layout_constraintBottom_toBottomOf="@+id/search_content_edittext"
+        android:visibility="invisible"
         />
 
 

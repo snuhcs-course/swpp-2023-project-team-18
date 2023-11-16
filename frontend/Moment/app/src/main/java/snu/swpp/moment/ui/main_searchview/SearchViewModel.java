@@ -1,5 +1,8 @@
 package snu.swpp.moment.ui.main_searchview;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -84,7 +87,9 @@ public class SearchViewModel extends ViewModel {
                             new SearchEntriesGetCallBack() {
                                 @Override
                                 public void onSuccess(SearchContentsResponse response) {
-                                    searchState.setValue(SearchState.fromSearchContentsResponse(response));
+                                    Log.d("SearchViewModel", "Content search successful: " + response.toString());
+                                    if(response.getSearchentries()!=null)
+                                        searchState.setValue(SearchState.fromSearchContentsResponse(response));
                                 }
 
                                 @Override
@@ -109,6 +114,8 @@ public class SearchViewModel extends ViewModel {
     public enum  SearchType {
         HASHTAG,CONTENT
     }
+
+
 
 
 
