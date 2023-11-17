@@ -1,6 +1,7 @@
 package snu.swpp.moment.data.repository;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import java.io.IOException;
@@ -58,8 +59,7 @@ public class AuthenticationRepository {
             @Override
             public void onSuccess() {
                 callBack.onSuccess();
-                if (!idlingResource.isIdleNow())
-                    idlingResource.decrement();
+                decrementIdlingResource();
             }
 
             @Override
@@ -72,24 +72,21 @@ public class AuthenticationRepository {
                             public void onSuccess(String access) {
                                 localDataSource.saveToken(access);
                                 callBack.onSuccess();
-                                if (!idlingResource.isIdleNow())
-                                    idlingResource.decrement();
+                                decrementIdlingResource();
                             }
 
                             @Override
                             public void onFailure() {
                                 callBack.onFailure();
-                                if (!idlingResource.isIdleNow())
-                                    idlingResource.decrement();
+                                decrementIdlingResource();
                             }
                         });
                     }
 
                     @Override
                     public void onFailure() {
-                        if (!idlingResource.isIdleNow())
-                            idlingResource.decrement();
                         callBack.onFailure();
+                        decrementIdlingResource();
                     }
                 });
             }
@@ -109,20 +106,21 @@ public class AuthenticationRepository {
     }
 
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
+        idlingResource.increment();
         remoteDataSource.login(username, password, new AuthenticationCallBack() {
             @Override
             public void onSuccess(LoggedInUserModel loggedInUser) {
+                Log.d("AuthenticationRepository", "login success");
                 setLoggedInUser(loggedInUser);
                 loginCallBack.onSuccess(loggedInUser);
-                if (!idlingResource.isIdleNow())
-                    idlingResource.decrement();
+                decrementIdlingResource();
             }
 
             @Override
             public void onFailure(String errorMessage) {
+                Log.d("AuthenticationRepository", "login failure");
                 loginCallBack.onFailure(errorMessage);
-                if (!idlingResource.isIdleNow())
-                    idlingResource.decrement();
+                decrementIdlingResource();
             }
         });
     }
@@ -154,5 +152,11 @@ public class AuthenticationRepository {
 
     public IdlingResource getIdlingResource() {
         return idlingResource;
+    }
+
+    public void decrementIdlingResource() {
+        if (!idlingResource.isIdleNow()) {
+            idlingResource.decrement();
+        }
     }
 }
