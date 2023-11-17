@@ -12,9 +12,13 @@ import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.TimeConverter;
 
 public abstract class BaseWritePageFragment extends Fragment {
+
+    protected final ApiResponseManager apiResponseManager = new ApiResponseManager();
 
     protected LocalDateTime lastRefreshedTime = getCurrentDateTime();
     private final Handler refreshHandler = new Handler();
@@ -86,4 +90,41 @@ public abstract class BaseWritePageFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
         }
     }
+
+    protected static class ApiResponseManager {
+
+        MomentUiState momentUiState = null;
+        StoryUiState storyUiState = null;
+        ApiResponseProcessor processor = null;
+
+        void saveResponse(MomentUiState momentUiState) {
+            this.momentUiState = momentUiState;
+        }
+
+        void saveResponse(StoryUiState storyUiState) {
+            this.storyUiState = storyUiState;
+        }
+
+        void reset() {
+            momentUiState = null;
+            storyUiState = null;
+        }
+
+        void registerProcessor(ApiResponseProcessor processor) {
+            this.processor = processor;
+        }
+
+        void process() {
+            if (momentUiState == null || storyUiState == null) {
+                return;
+            }
+            processor.processApiResponse(momentUiState, storyUiState);
+        }
+    }
+
+    interface ApiResponseProcessor {
+
+        void processApiResponse(MomentUiState momentUiState, StoryUiState storyUiState);
+    }
 }
+

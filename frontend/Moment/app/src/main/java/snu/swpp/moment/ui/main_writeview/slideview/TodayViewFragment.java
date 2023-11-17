@@ -223,6 +223,35 @@ public class TodayViewFragment extends BaseWritePageFragment {
         requireActivity().getOnBackPressedDispatcher()
             .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
+        // api 호출 완료 후 동작
+        apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
+            // moment state
+            listViewItems.clear();
+            listViewAdapter.setAnimation(false);
+
+            boolean hasMoment = momentUiState.getNumMoments() > 0;
+            if (hasMoment) {
+                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
+                    + momentUiState.getNumMoments());
+            }
+            for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                listViewItems.add(new ListViewItem(momentPair));
+            }
+            listViewAdapter.notifyDataSetChanged();
+
+            // story state
+            listFooterContainer.updateWithServerData(storyUiState, true);
+            if (storyUiState.hasNoData()) {
+                Log.d("TodayViewFragment", "Got story GET response: story has no data");
+                bottomButtonContainer.setState(WritePageState.MOMENT_READY_TO_ADD);
+                bottomButtonContainer.setActivated(hasMoment);
+            } else {
+                Log.d("TodayViewFragment",
+                    "Got story GET response: story has valid data");
+                bottomButtonContainer.setState(WritePageState.COMPLETE);
+            }
+        }));
+
         // moment GET API 호출 후 동작
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
@@ -231,33 +260,35 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 handleApiError(error);
                 return;
             }
+            apiResponseManager.saveResponse(momentUiState);
+            apiResponseManager.process();
 
-            listViewItems.clear();
-            listViewAdapter.setAnimation(false);
-
-            if (momentUiState.getNumMoments() > 0) {
-                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
-                    + momentUiState.getNumMoments());
-
-                StoryUiState savedStoryState = viewModel.getSavedStoryState();
-                Log.d("TodayViewFragment",
-                    "savedStoryState == null ?: " + (savedStoryState == null));
-                if (savedStoryState != null) {
-                    bottomButtonContainer.setActivated(savedStoryState.hasNoData());
-                } else {
-                    bottomButtonContainer.setActivated(true);
-                }
-
-                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-                    listViewItems.add(new ListViewItem(momentPair));
-                }
-                listViewAdapter.notifyDataSetChanged();
-                scrollToBottom();
-            } else {
-                Log.d("TodayViewFragment", "Got moment GET response: no moments");
-                bottomButtonContainer.setActivated(false);
-                listViewAdapter.notifyDataSetChanged();
-            }
+//            listViewItems.clear();
+//            listViewAdapter.setAnimation(false);
+//
+//            if (momentUiState.getNumMoments() > 0) {
+//                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
+//                    + momentUiState.getNumMoments());
+//
+//                StoryUiState savedStoryState = viewModel.getSavedStoryState();
+//                Log.d("TodayViewFragment",
+//                    "savedStoryState == null ?: " + (savedStoryState == null));
+//                if (savedStoryState != null) {
+//                    bottomButtonContainer.setActivated(savedStoryState.hasNoData());
+//                } else {
+//                    bottomButtonContainer.setActivated(true);
+//                }
+//
+//                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+//                    listViewItems.add(new ListViewItem(momentPair));
+//                }
+//                listViewAdapter.notifyDataSetChanged();
+//                scrollToBottom();
+//            } else {
+//                Log.d("TodayViewFragment", "Got moment GET response: no moments");
+//                bottomButtonContainer.setActivated(false);
+//                listViewAdapter.notifyDataSetChanged();
+//            }
         });
 
         // story GET API 호출 후 동작
@@ -270,16 +301,19 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 return;
             }
 
-            listFooterContainer.updateWithServerData(savedStoryState, true);
-            if (savedStoryState.hasNoData()) {
-                Log.d("TodayViewFragment", "Got story GET response: story has no data");
-                bottomButtonContainer.setActivated(!listViewItems.isEmpty());
-            } else {
-                Log.d("TodayViewFragment",
-                    "Got story GET response: story has valid data");
-                // TODO: 여기서 bottom button의 state를 complete으로 주면 될 듯 (버튼 없애고 텍스트 띄우는 거)
-                bottomButtonContainer.setActivated(false);
-            }
+            apiResponseManager.saveResponse(savedStoryState);
+            apiResponseManager.process();
+
+//            listFooterContainer.updateWithServerData(savedStoryState, true);
+//            if (savedStoryState.hasNoData()) {
+//                Log.d("TodayViewFragment", "Got story GET response: story has no data");
+//                bottomButtonContainer.setActivated(!listViewItems.isEmpty());
+//            } else {
+//                Log.d("TodayViewFragment",
+//                    "Got story GET response: story has valid data");
+//                // TODO: 여기서 bottom button의 state를 complete으로 주면 될 듯 (버튼 없애고 텍스트 띄우는 거)
+//                bottomButtonContainer.setActivated(false);
+//            }
         });
 
         Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
@@ -316,6 +350,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
     protected void callApisToRefresh() {
         LocalDateTime now = getCurrentDateTime();
         Log.d("TodayViewFragment", "callApisToRefresh: called with timestamp " + now);
+        apiResponseManager.reset();
         viewModel.getMoment(now);
         viewModel.getStory(now);
     }
