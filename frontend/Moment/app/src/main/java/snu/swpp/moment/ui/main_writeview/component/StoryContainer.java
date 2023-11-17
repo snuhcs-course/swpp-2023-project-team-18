@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.component;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import java.util.Date;
@@ -18,7 +20,17 @@ import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
 import snu.swpp.moment.utils.TimeConverter;
 
+
+enum StoryContainerState {
+    INVISIBLE,
+    WRITING,
+    COMPLETE,
+}
+
+
 public class StoryContainer {
+
+    private StoryContainerState state;
 
     private final ConstraintLayout storyWrapper;
     private final EditText storyTitleEditText;
@@ -145,6 +157,69 @@ public class StoryContainer {
         });
     }
 
+    public void setState(StoryContainerState state) {
+        Log.d("StoryContainer", "setState: " + state);
+        this.state = state;
+
+        updateStoryWrapper();
+        updateStoryEditText();
+        updateAiButton();
+    }
+
+    private void updateStoryWrapper() {
+        switch (state) {
+            case INVISIBLE:
+                storyWrapper.setVisibility(View.GONE);
+                break;
+            case WRITING:
+                storyWrapper.setVisibility(View.VISIBLE);
+                storyWrapper.startAnimation(animationProvider.fadeIn);
+                break;
+            case COMPLETE:
+                storyWrapper.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private void updateStoryEditText() {
+        switch (state) {
+            case INVISIBLE:
+                setStoryText("", "");
+                storyTitleEditText.setEnabled(false);
+                storyContentEditText.setEnabled(false);
+                storyContentLengthText.setVisibility(View.VISIBLE);
+                setStoryContentLengthText(0);
+                break;
+            case WRITING:
+                storyTitleEditText.setEnabled(true);
+                storyContentEditText.setEnabled(true);
+                storyContentLengthText.setVisibility(View.VISIBLE);
+                break;
+            case COMPLETE:
+                storyTitleEditText.setEnabled(false);
+                storyContentEditText.setEnabled(false);
+                storyContentLengthText.setVisibility(View.GONE);
+                setStoryContentLengthText(0);
+                break;
+        }
+    }
+
+    private void updateAiButton() {
+        switch (state) {
+            case INVISIBLE:
+            case WRITING:
+                setAiButtonVisibility(View.VISIBLE);
+                break;
+            case COMPLETE:
+                setAiButtonVisibility(View.GONE);
+                break;
+        }
+    }
+
+    public void setCompletedDate(Date date) {
+        completeTimeText.setText(TimeConverter.formatDate(date, "HH:mm"));
+    }
+
     public String getStoryTitle() {
         return storyTitleEditText.getText().toString();
     }
@@ -161,38 +236,44 @@ public class StoryContainer {
         aiButtonSwitch.observeForever(observer);
     }
 
-    public void resetUi() {
-        storyWrapper.setVisibility(View.GONE);
-
-        setStoryText("", "");
-        freeze(false);
-
-        storyContentLengthText.setVisibility(View.VISIBLE);
-        setStoryContentLengthText(0);
-
-        storyAiButton.setVisibility(View.VISIBLE);
-        aiButtonHelpText.setVisibility(View.VISIBLE);
+    public void removeObservers(LifecycleOwner lifecycleOwner) {
+        isLimitExceeded.removeObservers(lifecycleOwner);
+        aiButtonSwitch.removeObservers(lifecycleOwner);
     }
 
-    public void setUiWritingStory(Date completeTime) {
-        // 과거 스토리: 서버에서 받아온 createdAt 표시
-        storyWrapper.setVisibility(View.VISIBLE);
-        setCompleteTimeText(completeTime);
-        storyWrapper.startAnimation(animationProvider.fadeIn);
-    }
+//    public void resetUi() {
+//        storyWrapper.setVisibility(View.GONE);
+//
+//        setStoryText("", "");
+//        freeze(false);
+//
+//        storyContentLengthText.setVisibility(View.VISIBLE);
+//        setStoryContentLengthText(0);
+//
+//        storyAiButton.setVisibility(View.VISIBLE);
+//        aiButtonHelpText.setVisibility(View.VISIBLE);
+//    }
 
-    public void setUiWritingStory() {
-        // 오늘 스토리: 현재 시간 표시
-        Date completeTime = new Date();
-        setUiWritingStory(completeTime);
-    }
+//    public void setUiWritingStory(Date completeTime) {
+//        // 과거 스토리: 서버에서 받아온 createdAt 표시
+//        storyWrapper.setVisibility(View.VISIBLE);
+//        setCompleteTimeText(completeTime);
+//        storyWrapper.startAnimation(animationProvider.fadeIn);
+//    }
 
-    public void setUiCompleteStory() {
-        storyContentLengthText.setVisibility(View.GONE);
-        aiButtonHelpText.setVisibility(View.GONE);
-        storyAiButton.setVisibility(View.GONE);
-    }
+//    public void setUiWritingStory() {
+//        // 오늘 스토리: 현재 시간 표시
+//        Date completeTime = new Date();
+//        setUiWritingStory(completeTime);
+//    }
 
+//    public void setUiCompleteStory() {
+//        storyContentLengthText.setVisibility(View.GONE);
+//        aiButtonHelpText.setVisibility(View.GONE);
+//        storyAiButton.setVisibility(View.GONE);
+//    }
+
+    // FIXME: will be deleted
     public void freeze(boolean freeze) {
         storyTitleEditText.setEnabled(!freeze);
         storyContentEditText.setEnabled(!freeze);
@@ -215,9 +296,9 @@ public class StoryContainer {
         aiButtonHelpText.setVisibility(visibility);
     }
 
-    private void setCompleteTimeText(Date completeTime) {
-        completeTimeText.setText(TimeConverter.formatDate(completeTime, "HH:mm"));
-    }
+//    private void setCompleteTimeText(Date completeTime) {
+//        completeTimeText.setText(TimeConverter.formatDate(completeTime, "HH:mm"));
+//    }
 
     private void checkLimitExceeded() {
         isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);

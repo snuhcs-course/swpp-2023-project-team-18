@@ -109,7 +109,8 @@ public class ListFooterContainer {
     public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState, boolean isToday) {
         if (storyUiState.hasNoData()) {
             // 보여줄 데이터가 없는 경우
-            storyContainer.resetUi();
+            storyContainer.setState(StoryContainerState.INVISIBLE);
+//            storyContainer.resetUi();
             emotionGridContainer.resetUi();
             tagBoxContainer.resetUi();
             scoreContainer.resetUi();
@@ -127,10 +128,13 @@ public class ListFooterContainer {
         momentWriterContainer.setState(MomentWriterContainerState.INVISIBLE);
 //        momentWriterContainer.setInvisible();
 
-        freezeStoryEditText();
-        storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
+        storyContainer.setState(StoryContainerState.COMPLETE);
         storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
-        storyContainer.setUiCompleteStory();
+        storyContainer.setCompletedDate(storyUiState.getCreatedAt());
+//        freezeStoryEditText();
+//        storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
+//        storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
+//        storyContainer.setUiCompleteStory();
 
         freezeEmotionSelector();
         emotionGridContainer.selectEmotion(storyUiState.getEmotion());
@@ -266,7 +270,8 @@ public class ListFooterContainer {
         momentWriterContainer.setState(MomentWriterContainerState.INVISIBLE);
 //        momentWriterContainer.setInvisible();
 
-        storyContainer.setUiWritingStory();
+        storyContainer.setState(StoryContainerState.WRITING);
+//        storyContainer.setUiWritingStory();
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
@@ -275,7 +280,8 @@ public class ListFooterContainer {
 
     public void setUiSelectingEmotion() {
         log("[STATE] setUiSelectingEmotion");
-        storyContainer.setUiCompleteStory();
+        storyContainer.setState(StoryContainerState.COMPLETE);
+//        storyContainer.setUiCompleteStory();
         emotionGridContainer.setUiSelectingEmotion();
 
         setBottomButtonState(false);
