@@ -289,6 +289,8 @@ public class ListFooterContainerNew {
                 return;
             }
             storyContainer.setStoryText(aiStoryState.getTitle(), aiStoryState.getContent());
+            Toast.makeText(view.getContext(), R.string.ai_story_done, Toast.LENGTH_SHORT)
+                .show();
         };
     }
 
