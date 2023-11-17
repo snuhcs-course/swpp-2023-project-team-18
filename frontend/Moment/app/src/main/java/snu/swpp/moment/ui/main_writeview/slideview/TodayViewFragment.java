@@ -273,11 +273,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
             listFooterContainer.updateWithServerData(savedStoryState, true);
             if (savedStoryState.hasNoData()) {
                 Log.d("TodayViewFragment", "Got story GET response: story has no data");
-                bottomButtonContainer.setActivated(!listViewItems.isEmpty(), false);
+                bottomButtonContainer.setActivated(!listViewItems.isEmpty());
             } else {
                 Log.d("TodayViewFragment",
                     "Got story GET response: story has valid data");
-                bottomButtonContainer.setActivated(false, true);
+                // TODO: 여기서 bottom button의 state를 complete으로 주면 될 듯 (버튼 없애고 텍스트 띄우는 거)
+                bottomButtonContainer.setActivated(false);
             }
         });
 

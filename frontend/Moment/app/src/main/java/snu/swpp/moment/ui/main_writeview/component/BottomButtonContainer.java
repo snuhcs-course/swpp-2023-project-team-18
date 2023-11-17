@@ -31,7 +31,7 @@ public class BottomButtonContainer {
 
         this.listFooterContainer.observeBottomButtonState((Boolean state) -> {
             Log.d("BottomButtonContainer", "observeBottomButtonState: " + state);
-            setActivated(state, false);
+            setActivated(state);
         });
 
         setState(WritePageState.INVISIBLE);
@@ -108,11 +108,11 @@ public class BottomButtonContainer {
         }
     }
 
-    public void setActivated(boolean activated, boolean completed) {
-        Log.d("BottomButtonContainer", "setActivated: " + activated + ", " + completed);
-        setActivated(activated);
-        button.setText(completed ? R.string.completed_day : R.string.day_complete_string);
-    }
+//    public void setActivated(boolean activated, boolean completed) {
+//        Log.d("BottomButtonContainer", "setActivated: " + activated + ", " + completed);
+//        setActivated(activated);
+//        button.setText(completed ? R.string.completed_day : R.string.day_complete_string);
+//    }
 
     public void setActivated(boolean activated) {
         Log.d("BottomButtonContainer", "setActivated: " + activated);
