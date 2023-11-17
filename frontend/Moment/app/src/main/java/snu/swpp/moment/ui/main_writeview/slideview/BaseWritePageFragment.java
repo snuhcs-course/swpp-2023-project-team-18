@@ -79,8 +79,11 @@ public abstract class BaseWritePageFragment extends Fragment {
 
     protected void handleApiError(Exception error) {
         if (error instanceof NoInternetException) {
+            Log.d("BaseWritePageFragment", "Refreshing in handleApiError");
             Toast.makeText(requireContext(), R.string.internet_error, Toast.LENGTH_SHORT)
                 .show();
+            callApisToRefresh();
+            updateRefreshTime();
         } else if (error instanceof UnauthorizedAccessException) {
             Toast.makeText(requireContext(), R.string.token_expired_error, Toast.LENGTH_SHORT)
                 .show();
