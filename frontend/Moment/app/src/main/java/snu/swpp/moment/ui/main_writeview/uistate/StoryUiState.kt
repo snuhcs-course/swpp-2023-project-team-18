@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview.uistate
 
+import android.util.Log
 import snu.swpp.moment.utils.EmotionMap
 import java.util.Date
 
@@ -42,7 +43,8 @@ class StoryUiState(
         )
     }
 
-    fun hasNoData() = isEmpty || isEmotionInvalid()
-
-    fun isEmotionInvalid() = emotion == EmotionMap.INVALID_EMOTION
+    fun hasNoData(): Boolean {
+        Log.d("StoryUiState", "title: $title, isEmpty: $isEmpty, emotion: $emotion");
+        return isEmpty || (emotion == EmotionMap.INVALID_EMOTION)
+    }
 }
