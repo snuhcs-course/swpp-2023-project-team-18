@@ -10,7 +10,7 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import org.hamcrest.Matcher;
 
-public class CustomViewAction {
+public class CustomViewActions {
     public static ViewAction forceClick() {
         return new ViewAction() {
             @Override
