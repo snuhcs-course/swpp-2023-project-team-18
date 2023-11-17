@@ -220,6 +220,9 @@ public class ListFooterContainerNew {
     }
 
     private void updateCompletedText() {
+        if (!isToday) {
+            return;
+        }
         switch (state) {
             case COMPLETE:
                 completedText.setVisibility(View.VISIBLE);
