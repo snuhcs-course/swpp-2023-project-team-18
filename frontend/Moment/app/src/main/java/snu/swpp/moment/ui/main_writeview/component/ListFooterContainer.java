@@ -117,13 +117,15 @@ public class ListFooterContainer {
             if (isToday) {
                 setUiReadyToAddMoment(false);
             } else {
-                momentWriterContainer.setInvisible();
+                momentWriterContainer.setState(MomentWriterContainerState.INVISIBLE);
+//                momentWriterContainer.setInvisible();
                 state = ListFooterState.INVISIBLE;
             }
             return;
         }
 
-        momentWriterContainer.setInvisible();
+        momentWriterContainer.setState(MomentWriterContainerState.INVISIBLE);
+//        momentWriterContainer.setInvisible();
 
         freezeStoryEditText();
         storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
@@ -216,7 +218,8 @@ public class ListFooterContainer {
     public void setUiWritingMoment() {
         // add 누르고 입력창 뜨는 동작
         log("[STATE] setUiWritingMoment");
-        momentWriterContainer.setUiWritingMoment();
+        momentWriterContainer.setState(MomentWriterContainerState.WRITING);
+//        momentWriterContainer.setUiWritingMoment();
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
@@ -226,7 +229,8 @@ public class ListFooterContainer {
     public void setUiWaitingAiReply() {
         // submit 누른 후 AI 답글 대기 중일 때
         log("[STATE] setUiWaitingAiReply");
-        momentWriterContainer.setUiWaitingAiReply();
+        momentWriterContainer.setState(MomentWriterContainerState.WAITING_AI_REPLY);
+//        momentWriterContainer.setUiWaitingAiReply();
 
         setBottomButtonState(false);
         state = ListFooterState.MOMENT_WAITING_AI_REPLY;
@@ -235,7 +239,8 @@ public class ListFooterContainer {
     public void setUiReadyToAddMoment(boolean activateBottomButton) {
         // submit 버튼 눌렀을 때 입력창 사라지고 add 버튼 표시되는 동작
         log("[STATE] setUiReadyToAddMoment - " + activateBottomButton);
-        momentWriterContainer.setUiReadyToAddMoment();
+        momentWriterContainer.setState(MomentWriterContainerState.READY_TO_ADD);
+//        momentWriterContainer.setUiReadyToAddMoment();
 
         if (activateBottomButton) {
             setBottomButtonState(true);
@@ -247,7 +252,8 @@ public class ListFooterContainer {
     public void setUiAddLimitExceeded() {
         // 모먼트 한 시간 2개 제한 초과했을 때
         log("[STATE] setUiAddLimitExceeded");
-        momentWriterContainer.setUiAddLimitExceeded();
+        momentWriterContainer.setState(MomentWriterContainerState.ADD_LIMIT_EXCEEDED);
+//        momentWriterContainer.setUiAddLimitExceeded();
 
         setBottomButtonState(true);
         setScrollToBottomSwitch();
@@ -257,7 +263,8 @@ public class ListFooterContainer {
     public void setUiWritingStory() {
         // 스토리 작성 칸 나올 때
         log("[STATE] setUiWritingStory");
-        momentWriterContainer.setInvisible();
+        momentWriterContainer.setState(MomentWriterContainerState.INVISIBLE);
+//        momentWriterContainer.setInvisible();
 
         storyContainer.setUiWritingStory();
 
