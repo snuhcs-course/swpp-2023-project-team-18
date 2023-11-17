@@ -140,6 +140,10 @@ public class ListFooterContainer {
         updateTagBoxContainer();
         updateScoreContainer();
         updateCompletedText();
+
+        if (state != WritePageState.FOOTER_INVISIBLE) {
+            setScrollToBottomSwitch();
+        }
     }
 
     private void updateMomentContainer() {
