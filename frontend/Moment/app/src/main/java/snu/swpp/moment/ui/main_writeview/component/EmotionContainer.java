@@ -73,7 +73,7 @@ public class EmotionContainer {
     }
 
     public void setState(EmotionContainerState state) {
-        Log.d("EmotionGridContainer", String.format("state: %s -> %s", this.state, state));
+        Log.d("EmotionContainer", String.format("state: %s -> %s", this.state, state));
         this.state = state;
 
         updateEmotionWrapper();
@@ -119,7 +119,7 @@ public class EmotionContainer {
 
     public void selectEmotion(int emotion) {
         int previous = selectedEmotion.getValue();
-        Log.d("EmotionGridContainer", String.format("emotion: %d -> %d", previous, emotion));
+        Log.d("EmotionContainer", String.format("emotion: %d -> %d", previous, emotion));
 
         if (0 <= previous && previous < textButtonList.size()) {
             // 기존 감정 선택 해제

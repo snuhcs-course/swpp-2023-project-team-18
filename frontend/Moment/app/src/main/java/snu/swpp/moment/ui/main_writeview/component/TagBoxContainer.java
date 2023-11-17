@@ -59,6 +59,7 @@ public class TagBoxContainer {
 
             @Override
             public void afterTextChanged(Editable s) {
+                Log.d("TagBoxContainer", "afterTextChanged: " + s.toString());
                 List<String> currentTags = parseTags(s.toString());
                 if (currentTags.size() > MAX_TAGS) {
                     // 개수 제한 초과

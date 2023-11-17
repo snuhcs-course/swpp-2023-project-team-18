@@ -181,6 +181,8 @@ public class BottomButtonContainer {
 
     public Observer<CompletionState> completionStateObserver() {
         return (CompletionState completionState) -> {
+            Log.d("BottomButtonContainer",
+                "completionStateObserver: " + completionState.getError());
             listFooterContainer.showLoadingText(false);
             if (completionState.getError() == null) {
                 setState(WritePageState.STORY);
@@ -194,6 +196,8 @@ public class BottomButtonContainer {
 
     public Observer<CompletionStoreResultState> storyResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
+            Log.d("BottomButtonContainer",
+                "completionStoreResultState: " + completionStoreResultState.getError());
             listFooterContainer.showLoadingText(false);
             if (completionStoreResultState.getError() == null) {
                 setState(WritePageState.EMOTION);
@@ -207,6 +211,8 @@ public class BottomButtonContainer {
 
     public Observer<CompletionStoreResultState> emotionResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
+            Log.d("emotionResultObserver",
+                "completionStoreResultState: " + completionStoreResultState.getError());
             listFooterContainer.showLoadingText(false);
             if (completionStoreResultState.getError() == null) {
                 setState(WritePageState.TAG);
@@ -220,6 +226,8 @@ public class BottomButtonContainer {
 
     public Observer<CompletionStoreResultState> tagsResultObserver() {
         return (CompletionStoreResultState completionStoreResultState) -> {
+            Log.d("tagsResultObserver",
+                "completionStoreResultState: " + completionStoreResultState.getError());
             listFooterContainer.showLoadingText(false);
             if (completionStoreResultState.getError() == null) {
                 setState(WritePageState.SCORE);

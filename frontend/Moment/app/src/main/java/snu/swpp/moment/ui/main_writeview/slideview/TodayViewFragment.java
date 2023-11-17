@@ -240,6 +240,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     + momentUiState.getNumMoments());
 
                 StoryUiState savedStoryState = viewModel.getSavedStoryState();
+                Log.d("TodayViewFragment",
+                    "savedStoryState == null ?: " + (savedStoryState == null));
                 if (savedStoryState != null) {
                     bottomButtonContainer.setActivated(savedStoryState.hasNoData());
                 } else {

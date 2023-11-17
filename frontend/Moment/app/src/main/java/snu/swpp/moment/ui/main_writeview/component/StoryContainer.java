@@ -76,6 +76,9 @@ public class StoryContainer {
 
             @Override
             public void afterTextChanged(Editable s) {
+                Log.d("StoryContainer",
+                    "title - afterTextChanged: " + s.length() + " isTitleLimitExceeded: "
+                        + isTitleLimitExceeded);
                 if (s.length() > STORY_TITLE_MAX_LENGTH) {
                     // 글자수 제한 초과
                     storyTitleEditText.setText(s.subSequence(0, STORY_TITLE_MAX_LENGTH));
@@ -108,6 +111,9 @@ public class StoryContainer {
 
             @Override
             public void afterTextChanged(Editable s) {
+                Log.d("StoryContainer",
+                    "content - afterTextChanged: " + s.length() + " isContentLimitExceeded: "
+                        + isContentLimitExceeded);
                 setStoryContentLengthText(s.length());
 
                 if (s.length() > STORY_CONTENT_MAX_LENGTH) {

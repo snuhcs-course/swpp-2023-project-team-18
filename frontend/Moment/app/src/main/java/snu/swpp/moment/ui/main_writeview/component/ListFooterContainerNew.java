@@ -72,7 +72,7 @@ public class ListFooterContainerNew {
 
         // 스토리 자수 제한 감지
         storyContainer.observeLimit(lifecycleOwner, isLimitExceeded -> {
-            log("observeLimit: " + isLimitExceeded);
+            log("story observeLimit: " + isLimitExceeded);
             setBottomButtonState(!isLimitExceeded);
         });
 
@@ -274,6 +274,7 @@ public class ListFooterContainerNew {
 
     public Observer<AiStoryState> aiStoryObserver() {
         return (AiStoryState aiStoryState) -> {
+            log("aiStoryObserver: " + aiStoryState);
             showLoadingText(false);
             setBottomButtonState(true);
 
@@ -307,6 +308,7 @@ public class ListFooterContainerNew {
     }
 
     private void setBottomButtonState(boolean activated) {
+        log("setBottomButtonState: " + activated);
         bottomButtonState.setValue(activated);
     }
 
