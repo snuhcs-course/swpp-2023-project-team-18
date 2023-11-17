@@ -23,7 +23,7 @@ import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageDailyBinding;
-import snu.swpp.moment.ui.main_writeview.component.ListFooterContainerNew;
+import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModel;
@@ -49,7 +49,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
     private SaveScoreUseCase saveScoreUseCase;
     private AuthenticationRepository authenticationRepository;
 
-    private ListFooterContainerNew listFooterContainer;
+    private ListFooterContainer listFooterContainer;
 
     public static DailyViewFragment initialize(int minusDays) {
         Log.d("DailyViewFragment", "Initializing DailyViewFragment with minusDays: " + minusDays);
@@ -107,7 +107,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
         binding.dailyMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainerNew(footerView, getViewLifecycleOwner(),
+        listFooterContainer = new ListFooterContainer(footerView, getViewLifecycleOwner(),
             false);
 
         // moment & story GET API response를 모두 받았을 때

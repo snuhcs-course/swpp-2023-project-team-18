@@ -19,10 +19,10 @@ public class BottomButtonContainer {
     private final Button button;
     private final View view;
     private final TodayViewModel viewModel;
-    private final ListFooterContainerNew listFooterContainer;
+    private final ListFooterContainer listFooterContainer;
 
     public BottomButtonContainer(@NonNull View view, TodayViewModel viewModel,
-        ListFooterContainerNew listFooterContainer) {
+        ListFooterContainer listFooterContainer) {
         button = view.findViewById(R.id.bottomButton);
 
         this.view = view;

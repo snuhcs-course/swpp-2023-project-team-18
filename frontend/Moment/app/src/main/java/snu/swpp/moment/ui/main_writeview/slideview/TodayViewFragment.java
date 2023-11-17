@@ -29,7 +29,7 @@ import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
-import snu.swpp.moment.ui.main_writeview.component.ListFooterContainerNew;
+import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
 import snu.swpp.moment.ui.main_writeview.component.WritePageState;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
@@ -48,7 +48,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
     private ListViewAdapter listViewAdapter;
 
     private BottomButtonContainer bottomButtonContainer;
-    private ListFooterContainerNew listFooterContainer;
+    private ListFooterContainer listFooterContainer;
     private NudgeHeaderContainer nudgeHeaderContainer;
 
     private TodayViewModel viewModel;
@@ -112,7 +112,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding.todayMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainerNew(footerView, getViewLifecycleOwner(), true);
+        listFooterContainer = new ListFooterContainer(footerView, getViewLifecycleOwner(), true);
 
         listFooterContainer.setAddButtonOnClickListener(v -> {
             int numMoments = viewModel.getMomentState().getNumMoments();

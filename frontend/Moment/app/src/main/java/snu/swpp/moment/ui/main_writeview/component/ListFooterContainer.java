@@ -16,7 +16,7 @@ import snu.swpp.moment.utils.AnimationProvider;
 import snu.swpp.moment.utils.EmotionMap;
 
 
-public class ListFooterContainerNew {
+public class ListFooterContainer {
 
     private final View view;
     private final LifecycleOwner lifecycleOwner;
@@ -51,7 +51,7 @@ public class ListFooterContainerNew {
     // AI 요약 API call을 위한 스위치
     private final MutableLiveData<Boolean> aiStoryCallSwitch = new MutableLiveData<>(false);
 
-    public ListFooterContainerNew(@NonNull View view, @NonNull LifecycleOwner lifecycleOwner,
+    public ListFooterContainer(@NonNull View view, @NonNull LifecycleOwner lifecycleOwner,
         boolean isToday) {
         this.view = view;
         this.lifecycleOwner = lifecycleOwner;
