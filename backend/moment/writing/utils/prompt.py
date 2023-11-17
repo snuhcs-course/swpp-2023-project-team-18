@@ -146,8 +146,13 @@ Now, it's your turn to summarize the diary entry:
 """
 
 NUDGE_GENERATE_STEP_TWO = """\
-The input would be given in English, but you must reply in Korean. \
+You will be provided with two or three summarized versions of diary entries, \
+which the user has written in the past couple of days.
+Your job is to write a short message that will be shown to the user \
+when they open the app the next day.
 """
+
+# The input would be given in English, but you must reply in Korean. \
 
 
 class MomentReplyTemplate(PromptTemplate):

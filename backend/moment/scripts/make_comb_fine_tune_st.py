@@ -12,16 +12,18 @@ from scripts.constants import FT_TRAIN_FILE_PTH, FT_TEST_FILE_PTH
 # All the combinations in the row index range [BASE_NUM, END_NUM) according to the SIZE will be returned.
 # Fill in the NUDGES as intended. Remember, the order of the combinations would be lexicographical.
 # ----------------------------------------------
-NUDGE_FILE_PTHS = ["writing/data/nudge_data.jsonl", "writing/data/nudge_data_2.jsonl"] 
+NUDGE_FILE_PTHS = ["writing/data/nudge_1115.jsonl", "writing/data/nudge_1115_2.jsonl"]
 # ----------------------------------------------
 
+random.seed(42)
 TEST_SPLIT = 0.2
 
 if __name__ == "__main__":
-
     for nudge_file in NUDGE_FILE_PTHS:
         nudge_dataset = load_jsonl(nudge_file)
-        test_idxs = random.sample(range(len(nudge_dataset)), int(TEST_SPLIT * len(nudge_dataset)))
+        test_idxs = random.sample(
+            range(len(nudge_dataset)), int(TEST_SPLIT * len(nudge_dataset))
+        )
 
         ft_train_dataset = []
         ft_test_dataset = []
@@ -29,8 +31,13 @@ if __name__ == "__main__":
         system_string = NUDGE_GENERATE_STEP_TWO
 
         for idx, row in enumerate(nudge_dataset):
+            if row["nudge"] == "":
+                continue
             user_string = ""
             for curr_diary in row["diaries"]:
+                # curr_diary = curr_diary.replace("*", "")
+                # curr_diary = curr_diary.replace("\n", "")
+                # curr_diary = curr_diary.strip()
                 user_string += curr_diary + ";"
 
             result_dict = {

@@ -13,8 +13,8 @@ from scripts.constants import FT_TEST_FILE_PTH
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 client = OpenAI()
 
-MODEL_ID = ""  # FIXME Enter model id here ex) ft:gpt-3.5-turbo:personal::<something>
-TEST_NAME = "nudge_FT_4"
+MODEL_ID = "ft:gpt-3.5-turbo-1106:snu-swpp-2023f::8LOQNuZs"  # FIXME Enter model id here ex) ft:gpt-3.5-turbo:personal::<something>
+TEST_NAME = "nudge_FT_7"
 OUTPUT_JSONL_PATH = f"results/results_nudge_FT/{TEST_NAME}.jsonl"
 OUTPUT_TXT_PATH = f"results/results_nudge_FT/{TEST_NAME}.txt"
 
@@ -36,6 +36,7 @@ if __name__ == "__main__":
                 {"role": "system", "content": NUDGE_GENERATE_STEP_TWO},
                 {"role": "user", "content": testsets[i]["messages"][1]["content"]},
             ],
+            temperature=0.5,
         )
         print(response.choices[0].message.content)
 
