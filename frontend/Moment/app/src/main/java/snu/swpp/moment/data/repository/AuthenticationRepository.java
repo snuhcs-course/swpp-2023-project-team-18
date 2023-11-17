@@ -154,7 +154,7 @@ public class AuthenticationRepository {
         return idlingResource;
     }
 
-    public void decrementIdlingResource() {
+    private void decrementIdlingResource() {
         if (!idlingResource.isIdleNow()) {
             idlingResource.decrement();
         }
