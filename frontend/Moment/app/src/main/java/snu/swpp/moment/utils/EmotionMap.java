@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Objects;
 
-import snu.swpp.moment.R;
-
 public class EmotionMap {
 
     public static final int INVALID_EMOTION = 10;

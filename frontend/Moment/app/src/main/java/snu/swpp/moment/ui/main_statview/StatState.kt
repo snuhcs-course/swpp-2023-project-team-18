@@ -87,11 +87,11 @@ class StatState(
             return emotions
         }
 
-         fun storiesToHashtags(stories: List<StoryModel>): Map<String, Int> {
+        fun storiesToHashtags(stories: List<StoryModel>): Map<String, Int> {
             val hashtags: MutableMap<String, Int> = mutableMapOf()
             for (story in stories) {
                 for (hashtag in story.hashtags) {
-                    Log.d("hashtag2",hashtag.content)
+                    Log.d("hashtag2", hashtag.content)
                     hashtags.compute(hashtag.content) { _, existingValue ->
                         existingValue?.plus(
                             1
