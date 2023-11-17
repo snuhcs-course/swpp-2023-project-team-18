@@ -111,9 +111,10 @@ public class ListFooterContainer {
             // 보여줄 데이터가 없는 경우
             storyContainer.setState(StoryContainerState.INVISIBLE);
             emotionContainer.setState(EmotionContainerState.INVISIBLE);
+            tagBoxContainer.setState(TagBoxContainerState.INVISIBLE);
 //            storyContainer.resetUi();
 //            emotionContainer.resetUi();
-            tagBoxContainer.resetUi();
+//            tagBoxContainer.resetUi();
             scoreContainer.resetUi();
 
             if (isToday) {
@@ -143,9 +144,11 @@ public class ListFooterContainer {
 //        emotionContainer.selectEmotion(storyUiState.getEmotion());
 //        emotionContainer.setUiVisible();
 
-        freezeTagEditText();
+        tagBoxContainer.setState(TagBoxContainerState.COMPLETE);
         tagBoxContainer.setTags(storyUiState.getTags());
-        tagBoxContainer.setUiVisible();
+//        freezeTagEditText();
+//        tagBoxContainer.setTags(storyUiState.getTags());
+//        tagBoxContainer.setUiVisible();
 
         scoreContainer.setScore(storyUiState.getScore());
         scoreContainer.setUiVisible();
@@ -295,7 +298,8 @@ public class ListFooterContainer {
 
     public void setUiWritingTags() {
         log("[STATE] setUiWritingTags");
-        tagBoxContainer.setUiVisible();
+        tagBoxContainer.setState(TagBoxContainerState.WRITING);
+//        tagBoxContainer.setUiVisible();
         setScrollToBottomSwitch();
         state = ListFooterState.TAG_WRITING;
     }
