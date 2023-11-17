@@ -40,7 +40,7 @@ public class EmotionContainer {
 
 
     public EmotionContainer(View view) {
-        emotionWrapper = view.findViewById(R.id.emotion_wrapper);
+        emotionWrapper = (ConstraintLayout) view;
         emotionHelpText = view.findViewById(R.id.emotion_help_text);
         textButtonList = Arrays.asList(
             view.findViewById(R.id.excited1Button),

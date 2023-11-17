@@ -107,7 +107,7 @@ public class ListViewAdapter extends BaseAdapter {
     private void showWaitingAnimation(TextView textView, boolean activate) {
         if (activate) {
             // AI 답글 대기중 애니메이션 표시
-            textView.setText("· · ·\nAI가 일기를 읽고 있어요");
+            textView.setText(R.string.ai_reply_loading);
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             textView.setGravity(Gravity.CENTER);
             textView.clearAnimation();

@@ -14,7 +14,7 @@ import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
 
 
-enum MomentWriterContainerState {
+enum MomentContainerState {
     INVISIBLE,
     READY_TO_ADD,
     WRITING,
@@ -23,9 +23,9 @@ enum MomentWriterContainerState {
 }
 
 
-public class MomentWriterContainer {
+public class MomentContainer {
 
-    private MomentWriterContainerState state;
+    private MomentContainerState state;
 
     private final ConstraintLayout momentEditTextWrapper;
     private final EditText momentEditText;
@@ -41,7 +41,7 @@ public class MomentWriterContainer {
 
     private final int MOMENT_MAX_LENGTH = 100;
 
-    public MomentWriterContainer(View view) {
+    public MomentContainer(View view) {
         momentEditTextWrapper = view.findViewById(R.id.momentEditTextWrapper);
         momentEditText = view.findViewById(R.id.momentEditText);
         momentLengthText = view.findViewById(R.id.momentLengthText);
@@ -95,7 +95,7 @@ public class MomentWriterContainer {
         });
     }
 
-    public void setState(MomentWriterContainerState state) {
+    public void setState(MomentContainerState state) {
         Log.d("MomentWriterContainer", "setState: " + state);
         this.state = state;
 

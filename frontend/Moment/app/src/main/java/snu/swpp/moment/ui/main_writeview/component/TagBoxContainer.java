@@ -159,8 +159,8 @@ public class TagBoxContainer {
         }
     }
 
-    public void observeLimit(Observer<Boolean> observer) {
-        isLimitExceeded.observeForever(observer);
+    public void observeLimit(LifecycleOwner lifecycleOwner, Observer<Boolean> observer) {
+        isLimitExceeded.observe(lifecycleOwner, observer);
     }
 
     public void removeObservers(LifecycleOwner lifecycleOwner) {

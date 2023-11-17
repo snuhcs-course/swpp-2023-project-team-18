@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageDailyBinding;
-import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.component.ListFooterContainerNew;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModel;
@@ -48,7 +49,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
     private SaveScoreUseCase saveScoreUseCase;
     private AuthenticationRepository authenticationRepository;
 
-    private ListFooterContainer listFooterContainer;
+    private ListFooterContainerNew listFooterContainer;
 
     public static DailyViewFragment initialize(int minusDays) {
         Log.d("DailyViewFragment", "Initializing DailyViewFragment with minusDays: " + minusDays);
@@ -59,7 +60,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
 
         momentRemoteDataSource = Objects.requireNonNullElse(momentRemoteDataSource,
@@ -106,12 +107,8 @@ public class DailyViewFragment extends BaseWritePageFragment {
         binding.dailyMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView, false);
-        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
-            if (saveScoreSwitch) {
-                viewModel.saveScore(listFooterContainer.getScore());
-            }
-        });
+        listFooterContainer = new ListFooterContainerNew(footerView, getViewLifecycleOwner(),
+            false);
 
         // moment GET API 호출 후 동작
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
@@ -141,7 +138,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 return;
             }
 
-            listFooterContainer.updateUiWithRemoteData(storyUiState, false);
+            listFooterContainer.updateWithServerData(storyUiState, false);
             if (!storyUiState.isEmpty()) {
                 binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
                     binding.dailyMomentList.getCount() - 1));

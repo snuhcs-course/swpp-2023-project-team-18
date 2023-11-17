@@ -14,13 +14,15 @@ import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 
 public class BottomButtonContainer {
 
+    private WritePageState state;
+
     private final Button button;
     private final View view;
     private final TodayViewModel viewModel;
-    private final ListFooterContainer listFooterContainer;
+    private final ListFooterContainerNew listFooterContainer;
 
     public BottomButtonContainer(@NonNull View view, TodayViewModel viewModel,
-        ListFooterContainer listFooterContainer) {
+        ListFooterContainerNew listFooterContainer) {
         button = view.findViewById(R.id.bottomButton);
 
         this.view = view;
@@ -32,7 +34,78 @@ public class BottomButtonContainer {
             setActivated(state, false);
         });
 
-        viewingMoment();
+        setState(WritePageState.INVISIBLE);
+    }
+
+    public void setState(WritePageState state) {
+        Log.d("BottomButtonContainer", String.format("setState: %s -> %s", this.state, state));
+        this.state = state;
+
+        listFooterContainer.setState(state);
+        updateButton();
+    }
+
+    private void updateButton() {
+        switch (state) {
+            case INVISIBLE:
+                button.setText(R.string.day_complete_string);
+                button.setOnClickListener(v -> {
+                    // Popup dialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),
+                        R.style.DialogTheme);
+                    builder.setMessage(R.string.day_complete_popup);
+
+                    builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
+                        // 네 -> 하루 마무리 시작
+                        listFooterContainer.showLoadingText(true);
+                        // 마무리 상태 기록 API 호출
+                        viewModel.notifyCompletion();
+                    });
+                    builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
+                    });
+                    builder.create().show();
+                });
+                break;
+            case STORY:
+                button.setText(R.string.day_complete_story);
+                button.setOnClickListener(v -> {
+                    listFooterContainer.showLoadingText(true);
+                    // 스토리 저장 API 호출
+                    String[] story = listFooterContainer.getStoryInput();
+                    viewModel.saveStory(story[0], story[1]);
+                });
+                break;
+            case EMOTION:
+                button.setText(R.string.day_complete_emotion);
+                button.setOnClickListener(v -> {
+                    listFooterContainer.showLoadingText(true);
+                    // 감정 저장 API 호출
+                    viewModel.saveEmotion(listFooterContainer.getEmotionInput());
+                });
+                break;
+            case TAG:
+                button.setText(R.string.day_completion_tag);
+                button.setOnClickListener(v -> {
+                    listFooterContainer.showLoadingText(true);
+                    // 태그 저장 API 호출
+                    viewModel.saveHashtags(listFooterContainer.getTagInput());
+                });
+                break;
+            case SCORE:
+                button.setText(R.string.day_completion_score);
+                button.setOnClickListener(v -> {
+                    listFooterContainer.showLoadingText(true);
+                    // 점수 저장 API 호출
+                    viewModel.saveScore(listFooterContainer.getScoreInput());
+                });
+                break;
+            case COMPLETE:
+                button.setVisibility(View.GONE);
+                button.setText(R.string.day_complete_string);
+                button.setOnClickListener(v -> {
+                });
+                break;
+        }
     }
 
     public void setActivated(boolean activated, boolean completed) {
@@ -47,72 +120,50 @@ public class BottomButtonContainer {
         button.setEnabled(activated);
     }
 
-    /* 모먼트 작성 중: 하루 마무리하기 버튼 */
-    private void viewingMoment() {
-        button.setText(R.string.day_complete_string);
-
-        button.setOnClickListener(v -> {
-            // Popup dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),
-                R.style.DialogTheme);
-            builder.setMessage(R.string.day_complete_popup);
-
-            builder.setPositiveButton(R.string.popup_yes, (dialog, id) -> {
-                // 네 -> 하루 마무리 시작
-                listFooterContainer.showLoadingText(true);
-                // 마무리 상태 기록 API 호출
-                viewModel.notifyCompletion();
-            });
-            builder.setNegativeButton(R.string.popup_no, (dialog, id) -> {
-            });
-            builder.create().show();
-        });
-    }
-
     /* 스토리 작성 중: 다음 단계로 이동 버튼 */
-    private void writingStory() {
-        listFooterContainer.setUiWritingStory();
-
-        button.setText(R.string.next_stage_button);
-        button.setOnClickListener(v -> {
-            listFooterContainer.showLoadingText(true);
-            // 스토리 저장 API 호출
-            viewModel.saveStory(listFooterContainer.getStoryTitle(),
-                listFooterContainer.getStoryContent());
-        });
-    }
+//    private void writingStory() {
+//        listFooterContainer.setUiWritingStory();
+//
+//        button.setText(R.string.next_stage_button);
+//        button.setOnClickListener(v -> {
+//            listFooterContainer.showLoadingText(true);
+//            // 스토리 저장 API 호출
+//            viewModel.saveStory(listFooterContainer.getStoryTitle(),
+//                listFooterContainer.getStoryContent());
+//        });
+//    }
 
     /* 감정 선택 중: 다음 단계로 이동 버튼 */
-    private void selectingEmotion() {
-        listFooterContainer.setUiSelectingEmotion();
-        listFooterContainer.freezeStoryEditText();
+//    private void selectingEmotion() {
+//        listFooterContainer.setUiSelectingEmotion();
+//        listFooterContainer.freezeStoryEditText();
+//
+//        button.setText(R.string.next_stage_button);
+//        button.setOnClickListener(v -> {
+//            listFooterContainer.showLoadingText(true);
+//            // 감정 저장 API 호출
+//            viewModel.saveEmotion(listFooterContainer.getSelectedEmotion());
+//        });
+//    }
 
-        button.setText(R.string.next_stage_button);
-        button.setOnClickListener(v -> {
-            listFooterContainer.showLoadingText(true);
-            // 감정 저장 API 호출
-            viewModel.saveEmotion(listFooterContainer.getSelectedEmotion());
-        });
-    }
+//    private void writingTags() {
+//        listFooterContainer.setUiWritingTags();
+//        listFooterContainer.freezeEmotionSelector();
+//
+//        button.setText(R.string.next_stage_button);
+//        button.setOnClickListener(v -> {
+//            listFooterContainer.showLoadingText(true);
+//            // 태그 저장 API 호출
+//            viewModel.saveHashtags(listFooterContainer.getTags());
+//        });
+//    }
 
-    private void writingTags() {
-        listFooterContainer.setUiWritingTags();
-        listFooterContainer.freezeEmotionSelector();
-
-        button.setText(R.string.next_stage_button);
-        button.setOnClickListener(v -> {
-            listFooterContainer.showLoadingText(true);
-            // 태그 저장 API 호출
-            viewModel.saveHashtags(listFooterContainer.getTags());
-        });
-    }
-
-    private void completionDone() {
-        listFooterContainer.setUiSelectingScore();
-        listFooterContainer.freezeTagEditText();
-
-        setActivated(false, true);
-    }
+//    private void completionDone() {
+//        listFooterContainer.setUiSelectingScore();
+//        listFooterContainer.freezeTagEditText();
+//
+//        setActivated(false, true);
+//    }
 
     public Observer<Boolean> waitingAiReplySwitchObserver() {
         // ListViewAdapter가 가지고 있는 LiveData에 등록해서 사용
@@ -120,10 +171,10 @@ public class BottomButtonContainer {
             Log.d("BottomButtonContainer", "waitingAiReplySwitchObserver: " + isWaitingAiReply);
             if (isWaitingAiReply) {
                 setActivated(false);
-                listFooterContainer.setUiWaitingAiReply();
+                listFooterContainer.setState(WritePageState.MOMENT_WAITING_AI_REPLY);
             } else {
                 setActivated(true);
-                listFooterContainer.setUiReadyToAddMoment(true);
+                listFooterContainer.setState(WritePageState.MOMENT_READY_TO_ADD);
             }
         };
     }
@@ -132,7 +183,7 @@ public class BottomButtonContainer {
         return (CompletionState completionState) -> {
             listFooterContainer.showLoadingText(false);
             if (completionState.getError() == null) {
-                writingStory();
+                setState(WritePageState.STORY);
             } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
@@ -145,7 +196,7 @@ public class BottomButtonContainer {
         return (CompletionStoreResultState completionStoreResultState) -> {
             listFooterContainer.showLoadingText(false);
             if (completionStoreResultState.getError() == null) {
-                selectingEmotion();
+                setState(WritePageState.EMOTION);
             } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
@@ -158,7 +209,7 @@ public class BottomButtonContainer {
         return (CompletionStoreResultState completionStoreResultState) -> {
             listFooterContainer.showLoadingText(false);
             if (completionStoreResultState.getError() == null) {
-                writingTags();
+                setState(WritePageState.TAG);
             } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();
@@ -171,7 +222,7 @@ public class BottomButtonContainer {
         return (CompletionStoreResultState completionStoreResultState) -> {
             listFooterContainer.showLoadingText(false);
             if (completionStoreResultState.getError() == null) {
-                completionDone();
+                setState(WritePageState.SCORE);
             } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();

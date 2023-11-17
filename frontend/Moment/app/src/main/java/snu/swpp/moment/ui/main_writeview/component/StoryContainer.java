@@ -185,19 +185,16 @@ public class StoryContainer {
         switch (state) {
             case INVISIBLE:
                 setStoryText("", "");
-                storyTitleEditText.setEnabled(false);
-                storyContentEditText.setEnabled(false);
+                freeze(true);
                 storyContentLengthText.setVisibility(View.VISIBLE);
                 setStoryContentLengthText(0);
                 break;
             case WRITING:
-                storyTitleEditText.setEnabled(true);
-                storyContentEditText.setEnabled(true);
+                freeze(false);
                 storyContentLengthText.setVisibility(View.VISIBLE);
                 break;
             case COMPLETE:
-                storyTitleEditText.setEnabled(false);
-                storyContentEditText.setEnabled(false);
+                freeze(true);
                 storyContentLengthText.setVisibility(View.GONE);
                 setStoryContentLengthText(0);
                 break;
@@ -228,12 +225,12 @@ public class StoryContainer {
         return storyContentEditText.getText().toString();
     }
 
-    public void observeLimit(Observer<Boolean> observer) {
-        isLimitExceeded.observeForever(observer);
+    public void observeLimit(LifecycleOwner lifecycleOwner, Observer<Boolean> observer) {
+        isLimitExceeded.observe(lifecycleOwner, observer);
     }
 
-    public void observeAiButtonSwitch(Observer<Boolean> observer) {
-        aiButtonSwitch.observeForever(observer);
+    public void observeAiButtonSwitch(LifecycleOwner lifecycleOwner, Observer<Boolean> observer) {
+        aiButtonSwitch.observe(lifecycleOwner, observer);
     }
 
     public void removeObservers(LifecycleOwner lifecycleOwner) {
@@ -273,8 +270,7 @@ public class StoryContainer {
 //        storyAiButton.setVisibility(View.GONE);
 //    }
 
-    // FIXME: will be deleted
-    public void freeze(boolean freeze) {
+    private void freeze(boolean freeze) {
         storyTitleEditText.setEnabled(!freeze);
         storyContentEditText.setEnabled(!freeze);
         if (freeze) {

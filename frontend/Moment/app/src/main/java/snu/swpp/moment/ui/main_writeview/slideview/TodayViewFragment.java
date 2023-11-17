@@ -29,8 +29,9 @@ import snu.swpp.moment.data.source.MomentRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
-import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
+import snu.swpp.moment.ui.main_writeview.component.ListFooterContainerNew;
 import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
+import snu.swpp.moment.ui.main_writeview.component.WritePageState;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
@@ -47,7 +48,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
     private ListViewAdapter listViewAdapter;
 
     private BottomButtonContainer bottomButtonContainer;
-    private ListFooterContainer listFooterContainer;
+    private ListFooterContainerNew listFooterContainer;
     private NudgeHeaderContainer nudgeHeaderContainer;
 
     private TodayViewModel viewModel;
@@ -111,7 +112,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding.todayMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView, true);
+        listFooterContainer = new ListFooterContainerNew(footerView, getViewLifecycleOwner(), true);
 
         listFooterContainer.setAddButtonOnClickListener(v -> {
             int numMoments = viewModel.getMomentState().getNumMoments();
@@ -127,12 +128,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     Calendar.HOUR_OF_DAY); // This will give you the current hour
 
                 if (createdHourValue == currentHourValue) {
-                    listFooterContainer.setUiAddLimitExceeded();
+                    listFooterContainer.setState(WritePageState.MOMENT_ADD_LIMIT_EXCEEDED);
                 } else {
-                    listFooterContainer.setUiWritingMoment();
+                    listFooterContainer.setState(WritePageState.MOMENT_WRITING);
                 }
             } else {
-                listFooterContainer.setUiWritingMoment();
+                listFooterContainer.setState(WritePageState.MOMENT_WRITING);
             }
         });
 
@@ -140,7 +141,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
             // 소프트 키보드 숨기기
             KeyboardUtils.hideSoftKeyboard(requireContext());
 
-            String text = listFooterContainer.getMomentInputText();
+            String text = listFooterContainer.getMomentInput();
             if (!text.isEmpty()) {
                 // 새 item 추가
                 // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
@@ -161,11 +162,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
         listFooterContainer.observeAiStoryCallSwitch(isSet -> {
             if (isSet) {
                 viewModel.getAiStory();
-            }
-        });
-        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
-            if (saveScoreSwitch) {
-                viewModel.saveScore(listFooterContainer.getScore());
             }
         });
 
@@ -272,7 +268,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 return;
             }
 
-            listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
+            listFooterContainer.updateWithServerData(savedStoryState, true);
             if (savedStoryState.hasNoData()) {
                 Log.d("TodayViewFragment", "Got story GET response: story has no data");
                 bottomButtonContainer.setActivated(!listViewItems.isEmpty(), false);
