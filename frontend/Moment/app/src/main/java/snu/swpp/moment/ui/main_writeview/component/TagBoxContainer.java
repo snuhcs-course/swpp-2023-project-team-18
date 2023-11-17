@@ -36,6 +36,7 @@ public class TagBoxContainer {
     private final TextView tagHelpText;
     private final TextView limitHelpText;
     private final AnimationProvider animationProvider;
+    private boolean isLengthLimitExceeded = false;
     private final MutableLiveData<Boolean> isLimitExceeded = new MutableLiveData<>(false);
 
     private int characterCount = 0;
@@ -64,10 +65,12 @@ public class TagBoxContainer {
                 if (currentTags.size() > MAX_TAGS) {
                     // 개수 제한 초과
                     isLimitExceeded.setValue(true);
+                    isLengthLimitExceeded = true;
                     limitHelpText.setVisibility(View.VISIBLE);
                     tagEditText.setTextColor(
                         ContextCompat.getColor(tagEditText.getContext(), R.color.red));
-                } else {
+                } else if (isLengthLimitExceeded) {
+                    isLengthLimitExceeded = false;
                     isLimitExceeded.setValue(false);
                     limitHelpText.setVisibility(View.GONE);
                     tagEditText.setTextColor(

@@ -13,6 +13,7 @@ import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.AnimationProvider;
+import snu.swpp.moment.utils.EmotionMap;
 
 
 public class ListFooterContainerNew {
@@ -82,20 +83,23 @@ public class ListFooterContainerNew {
             if (isSet) {
                 showLoadingText(true, R.string.ai_story_loading);
                 setAiStoryCallSwitch();
-                setBottomButtonState(false);
             }
         });
 
         // 감정 선택 감지
         emotionContainer.observeSelectedEmotion((Integer emotion) -> {
             log("observeSelectedEmotion: " + emotion);
-            setBottomButtonState(emotion > -1);
+            if (state == WritePageState.EMOTION) {
+                setBottomButtonState(-1 < emotion && emotion < EmotionMap.INVALID_EMOTION);
+            }
         });
 
         // 태그 개수 제한 감지
         tagBoxContainer.observeLimit(lifecycleOwner, (Boolean isLimitExceeded) -> {
-            log("observeLimit: " + isLimitExceeded);
-            setBottomButtonState(!isLimitExceeded);
+            log("tag observeLimit: " + isLimitExceeded);
+            if (state == WritePageState.TAG) {
+                setBottomButtonState(!isLimitExceeded);
+            }
         });
     }
 

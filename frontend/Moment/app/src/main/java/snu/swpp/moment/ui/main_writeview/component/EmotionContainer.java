@@ -100,10 +100,8 @@ public class EmotionContainer {
     public void updateEmotionGrid() {
         switch (state) {
             case INVISIBLE:
-                selectEmotion(EmotionMap.INVALID_EMOTION);
-                freeze(false);
-                break;
             case SELECTING:
+                selectEmotion(EmotionMap.INVALID_EMOTION);
                 freeze(false);
                 break;
             case COMPLETE:
