@@ -23,7 +23,7 @@ public class ListFooterContainer {
     // 스토리 작성
     private final StoryContainer storyContainer;
     // 감정 선택
-    private final EmotionGridContainer emotionGridContainer;
+    private final EmotionContainer emotionContainer;
     // 태그 입력
     private final TagBoxContainer tagBoxContainer;
     // 점수 선택
@@ -66,7 +66,7 @@ public class ListFooterContainer {
         // 스토리 작성
         storyContainer = new StoryContainer(view.findViewById(R.id.story_wrapper));
         // 감정 선택
-        emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
+        emotionContainer = new EmotionContainer(view.findViewById(R.id.emotion_selector));
         // 태그 입력
         tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_wrapper));
         // 점수 선택
@@ -94,7 +94,7 @@ public class ListFooterContainer {
         });
 
         // 감정 선택 감지
-        emotionGridContainer.observeSelectedEmotion((Integer emotion) -> {
+        emotionContainer.observeSelectedEmotion((Integer emotion) -> {
             log("observeSelectedEmotion: " + emotion);
             setBottomButtonState(emotion > -1);
         });
@@ -110,8 +110,9 @@ public class ListFooterContainer {
         if (storyUiState.hasNoData()) {
             // 보여줄 데이터가 없는 경우
             storyContainer.setState(StoryContainerState.INVISIBLE);
+            emotionContainer.setState(EmotionContainerState.INVISIBLE);
 //            storyContainer.resetUi();
-            emotionGridContainer.resetUi();
+//            emotionContainer.resetUi();
             tagBoxContainer.resetUi();
             scoreContainer.resetUi();
 
@@ -136,9 +137,11 @@ public class ListFooterContainer {
 //        storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
 //        storyContainer.setUiCompleteStory();
 
-        freezeEmotionSelector();
-        emotionGridContainer.selectEmotion(storyUiState.getEmotion());
-        emotionGridContainer.setUiVisible();
+        emotionContainer.setState(EmotionContainerState.COMPLETE);
+        emotionContainer.selectEmotion(storyUiState.getEmotion());
+//        freezeEmotionSelector();
+//        emotionContainer.selectEmotion(storyUiState.getEmotion());
+//        emotionContainer.setUiVisible();
 
         freezeTagEditText();
         tagBoxContainer.setTags(storyUiState.getTags());
@@ -165,7 +168,7 @@ public class ListFooterContainer {
     }
 
     public int getSelectedEmotion() {
-        return emotionGridContainer.getSelectedEmotion();
+        return emotionContainer.getSelectedEmotion();
     }
 
     public int getScore() {
@@ -212,7 +215,7 @@ public class ListFooterContainer {
     }
 
     public void freezeEmotionSelector() {
-        emotionGridContainer.freeze(true);
+        emotionContainer.freeze(true);
     }
 
     public void freezeTagEditText() {
@@ -281,8 +284,9 @@ public class ListFooterContainer {
     public void setUiSelectingEmotion() {
         log("[STATE] setUiSelectingEmotion");
         storyContainer.setState(StoryContainerState.COMPLETE);
+        emotionContainer.setState(EmotionContainerState.SELECTING);
 //        storyContainer.setUiCompleteStory();
-        emotionGridContainer.setUiSelectingEmotion();
+//        emotionContainer.setUiSelectingEmotion();
 
         setBottomButtonState(false);
         setScrollToBottomSwitch();
@@ -354,7 +358,7 @@ public class ListFooterContainer {
 
     private void setHelpTextAfterCompleted(boolean isToday) {
         String day = isToday ? "오늘" : "이날";
-        emotionGridContainer.setHelpText(day + "의 감정");
+        emotionContainer.setHelpText(day + "의 감정");
         tagBoxContainer.setHelpText(day + "의 태그");
         scoreContainer.setHelpText(day + "의 점수");
     }
