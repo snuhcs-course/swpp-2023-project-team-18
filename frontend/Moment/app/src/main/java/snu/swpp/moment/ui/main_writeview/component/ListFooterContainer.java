@@ -286,7 +286,7 @@ public class ListFooterContainer {
         aiStoryCallSwitch.observe(lifecycleOwner, observer);
     }
 
-    public void removeObservers(LifecycleOwner lifecycleOwner) {
+    public void removeObservers() {
         bottomButtonState.removeObservers(lifecycleOwner);
         scrollToBottomSwitch.removeObservers(lifecycleOwner);
         aiStoryCallSwitch.removeObservers(lifecycleOwner);

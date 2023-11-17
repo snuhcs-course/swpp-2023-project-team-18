@@ -341,5 +341,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        listFooterContainer.removeObservers();
     }
 }
