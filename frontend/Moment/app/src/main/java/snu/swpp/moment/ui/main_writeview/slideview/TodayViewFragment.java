@@ -128,12 +128,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     Calendar.HOUR_OF_DAY); // This will give you the current hour
 
                 if (createdHourValue == currentHourValue) {
-                    listFooterContainer.setState(WritePageState.MOMENT_ADD_LIMIT_EXCEEDED);
+                    bottomButtonContainer.setState(WritePageState.MOMENT_ADD_LIMIT_EXCEEDED);
                 } else {
-                    listFooterContainer.setState(WritePageState.MOMENT_WRITING);
+                    bottomButtonContainer.setState(WritePageState.MOMENT_WRITING);
                 }
             } else {
-                listFooterContainer.setState(WritePageState.MOMENT_WRITING);
+                bottomButtonContainer.setState(WritePageState.MOMENT_WRITING);
             }
         });
 

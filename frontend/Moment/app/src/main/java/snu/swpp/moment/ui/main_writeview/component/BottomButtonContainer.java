@@ -126,10 +126,10 @@ public class BottomButtonContainer {
             Log.d("BottomButtonContainer", "waitingAiReplySwitchObserver: " + isWaitingAiReply);
             if (isWaitingAiReply) {
                 setActivated(false);
-                listFooterContainer.setState(WritePageState.MOMENT_WAITING_AI_REPLY);
+                setState(WritePageState.MOMENT_WAITING_AI_REPLY);
             } else {
                 setActivated(true);
-                listFooterContainer.setState(WritePageState.MOMENT_READY_TO_ADD);
+                setState(WritePageState.MOMENT_READY_TO_ADD);
             }
         };
     }
