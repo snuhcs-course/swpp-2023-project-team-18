@@ -110,14 +110,9 @@ public class DailyViewFragment extends BaseWritePageFragment {
         listFooterContainer = new ListFooterContainerNew(footerView, getViewLifecycleOwner(),
             false);
 
-        // moment GET API 호출 후 동작
-        viewModel.observeMomentState((MomentUiState momentUiState) -> {
-            Exception error = momentUiState.getError();
-            if (error != null) {
-                handleApiError(error);
-                return;
-            }
-
+        // api 호출 완료 후 동작
+        apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
+            // moment GET API 호출 후 동작
             listViewItems.clear();
             if (momentUiState.getNumMoments() > 0) {
                 binding.noMomentText.setVisibility(View.GONE);
@@ -128,6 +123,35 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 binding.noMomentText.setVisibility(View.VISIBLE);
             }
             listViewAdapter.notifyDataSetChanged();
+
+            // story GET API 호출 후 동작
+            listFooterContainer.updateWithServerData(storyUiState, false);
+            if (!storyUiState.hasNoData()) {
+                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
+                    binding.dailyMomentList.getCount() - 1));
+            }
+        }));
+
+        // moment GET API 호출 후 동작
+        viewModel.observeMomentState((MomentUiState momentUiState) -> {
+            Exception error = momentUiState.getError();
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
+            apiResponseManager.saveResponse(momentUiState);
+            apiResponseManager.process();
+
+//            listViewItems.clear();
+//            if (momentUiState.getNumMoments() > 0) {
+//                binding.noMomentText.setVisibility(View.GONE);
+//                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+//                    listViewItems.add(new ListViewItem(momentPair));
+//                }
+//            } else {
+//                binding.noMomentText.setVisibility(View.VISIBLE);
+//            }
+//            listViewAdapter.notifyDataSetChanged();
         });
 
         // story GET API 호출 후 동작
@@ -137,12 +161,14 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 handleApiError(error);
                 return;
             }
+            apiResponseManager.saveResponse(storyUiState);
+            apiResponseManager.process();
 
-            listFooterContainer.updateWithServerData(storyUiState, false);
-            if (!storyUiState.isEmpty()) {
-                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
-                    binding.dailyMomentList.getCount() - 1));
-            }
+//            listFooterContainer.updateWithServerData(storyUiState, false);
+//            if (!storyUiState.isEmpty()) {
+//                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
+//                    binding.dailyMomentList.getCount() - 1));
+//            }
         });
 
         Log.d("DailyViewFragment", "onCreateView: initial API call to refresh");
@@ -178,6 +204,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
     protected void callApisToRefresh() {
         LocalDateTime currentDateTime = getCurrentDateTime();
         Log.d("DailyViewFragment", "callApisToRefresh: called with timestamp " + currentDateTime);
+        apiResponseManager.reset();
         viewModel.getMoment(currentDateTime);
         viewModel.getStory(currentDateTime);
     }

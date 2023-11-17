@@ -250,6 +250,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 Log.d("TodayViewFragment",
                     "Got story GET response: story has valid data");
                 bottomButtonContainer.setState(WritePageState.COMPLETE);
+                scrollToBottom();
             }
         }));
 
