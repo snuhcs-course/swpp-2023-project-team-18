@@ -309,8 +309,10 @@ public class ListFooterContainer {
                 return;
             }
             storyContainer.setStoryText(aiStoryState.getTitle(), aiStoryState.getContent());
-            Toast.makeText(view.getContext(), R.string.ai_story_done, Toast.LENGTH_SHORT)
-                .show();
+            if (state == WritePageState.STORY) {
+                Toast.makeText(view.getContext(), R.string.ai_story_done, Toast.LENGTH_SHORT)
+                    .show();
+            }
         };
     }
 
