@@ -56,7 +56,7 @@ class StatViewModel(
 
         authenticationRepository.isTokenValid(object : TokenCallBack {
             override fun onSuccess() {
-                val accessToken = authenticationRepository.token.accessToken;
+                val accessToken = authenticationRepository.token.accessToken
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
                     object : StoryGetCallBack {
                         override fun onSuccess(storyList: MutableList<StoryModel>) {

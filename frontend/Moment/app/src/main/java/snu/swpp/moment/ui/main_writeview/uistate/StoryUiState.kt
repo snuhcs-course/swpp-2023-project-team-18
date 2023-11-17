@@ -44,7 +44,7 @@ class StoryUiState(
     }
 
     fun hasNoData(): Boolean {
-        Log.d("StoryUiState", "title: $title, isEmpty: $isEmpty, emotion: $emotion");
+        Log.d("StoryUiState", "title: $title, isEmpty: $isEmpty, emotion: $emotion")
         return isEmpty || (emotion == EmotionMap.INVALID_EMOTION)
     }
 }

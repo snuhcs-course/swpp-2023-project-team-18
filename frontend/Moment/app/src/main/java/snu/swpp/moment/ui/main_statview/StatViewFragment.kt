@@ -71,7 +71,7 @@ class StatViewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val statViewModel = ViewModelProvider(this).get(
             StatViewModel::class.java
 
@@ -189,7 +189,7 @@ class StatViewFragment : Fragment() {
 
         dataset.circleColors = listOf(requireContext().getColor(R.color.red))
         dataset.color = requireContext().getColor(R.color.black)
-        dataset.setCircleRadius(3.5f)
+        dataset.circleRadius = 3.5f
         dataset.setDrawCircleHole(false)
         dataset.setDrawValues(false)
 
@@ -230,13 +230,13 @@ class StatViewFragment : Fragment() {
         lineChart.axisLeft.axisMaximum = 6.0F
         lineChart.axisRight.axisMinimum = 0.0F
         lineChart.axisRight.axisMaximum = 6.0F
-        lineChart.axisLeft.setLabelCount(7, true);
+        lineChart.axisLeft.setLabelCount(7, true)
         lineChart.axisLeft.typeface =
             ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
-        lineChart.axisRight.setLabelCount(7, true);
+        lineChart.axisRight.setLabelCount(7, true)
 
-        dataset.setDrawHorizontalHighlightIndicator(false);
-        dataset.setDrawVerticalHighlightIndicator(false);
+        dataset.setDrawHorizontalHighlightIndicator(false)
+        dataset.setDrawVerticalHighlightIndicator(false)
         lineChart.xAxis.setLabelCount(entries.size, false)
         Log.d("stat_view", entries.size.toString())
         lineChart.xAxis.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
@@ -342,7 +342,7 @@ class StatViewFragment : Fragment() {
             valueTextColor = requireContext().getColor(R.color.white)
             valueTextSize = 0f
             valueTypeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
-            setSliceSpace(1f) // space between slices
+            sliceSpace = 1f // space between slices
         }
 
         // Configure the pie chart

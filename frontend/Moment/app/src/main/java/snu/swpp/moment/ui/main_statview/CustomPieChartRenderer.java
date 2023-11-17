@@ -46,17 +46,17 @@ public class CustomPieChartRenderer extends DataRenderer {
     /**
      * paint object for the text that can be displayed in the center of the chart
      */
-    private TextPaint mCenterTextPaint;
+    private final TextPaint mCenterTextPaint;
 
     /**
      * paint object used for drwing the slice-text
      */
-    private Paint mEntryLabelsPaint;
+    private final Paint mEntryLabelsPaint;
 
     private StaticLayout mCenterTextLayout;
     private CharSequence mCenterTextLastValue;
-    private RectF mCenterTextLastBounds = new RectF();
-    private RectF[] mRectBuffer = {new RectF(), new RectF(), new RectF()};
+    private final RectF mCenterTextLastBounds = new RectF();
+    private final RectF[] mRectBuffer = {new RectF(), new RectF(), new RectF()};
 
     /**
      * Bitmap for drawing the center hole
@@ -151,8 +151,8 @@ public class CustomPieChartRenderer extends DataRenderer {
         }
     }
 
-    private Path mPathBuffer = new Path();
-    private RectF mInnerRectBuffer = new RectF();
+    private final Path mPathBuffer = new Path();
+    private final RectF mInnerRectBuffer = new RectF();
 
     protected float calculateMinimumRadiusForSpacedSlice(
         MPPointF center,
@@ -700,7 +700,7 @@ public class CustomPieChartRenderer extends DataRenderer {
         drawCenterText(c);
     }
 
-    private Path mHoleCirclePath = new Path();
+    private final Path mHoleCirclePath = new Path();
 
     /**
      * draws the hole in the center of the chart and the transparent circle / hole
