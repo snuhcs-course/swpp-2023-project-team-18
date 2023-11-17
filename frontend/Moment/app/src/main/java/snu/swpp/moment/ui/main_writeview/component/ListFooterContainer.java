@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
@@ -112,10 +113,11 @@ public class ListFooterContainer {
             storyContainer.setState(StoryContainerState.INVISIBLE);
             emotionContainer.setState(EmotionContainerState.INVISIBLE);
             tagBoxContainer.setState(TagBoxContainerState.INVISIBLE);
+            scoreContainer.setState(ScoreContainerState.INVISIBLE);
 //            storyContainer.resetUi();
 //            emotionContainer.resetUi();
 //            tagBoxContainer.resetUi();
-            scoreContainer.resetUi();
+//            scoreContainer.resetUi();
 
             if (isToday) {
                 setUiReadyToAddMoment(false);
@@ -150,8 +152,9 @@ public class ListFooterContainer {
 //        tagBoxContainer.setTags(storyUiState.getTags());
 //        tagBoxContainer.setUiVisible();
 
+        scoreContainer.setState(ScoreContainerState.COMPLETE);
         scoreContainer.setScore(storyUiState.getScore());
-        scoreContainer.setUiVisible();
+//        scoreContainer.setUiVisible();
         scoreContainer.showAutoCompleteWarnText(!storyUiState.isPointCompleted());
 
         setHelpTextAfterCompleted(isToday);
@@ -211,6 +214,11 @@ public class ListFooterContainer {
 
     public void observeSaveScoreSwitch(Observer<Boolean> observer) {
         scoreContainer.observeSaveScoreSwitch(observer);
+    }
+
+    public void removeObservers(LifecycleOwner lifecycleOwner) {
+        // TODO: 생성자에서 owner 받고, observeForever 대신 그냥 observe 쓰고,
+        //      여기서 일괄 해제 (fragment의 onDestroy에서 호출)
     }
 
     public void freezeStoryEditText() {
@@ -306,7 +314,8 @@ public class ListFooterContainer {
 
     public void setUiSelectingScore() {
         log("[STATE] setUiSelectingScore");
-        scoreContainer.setUiVisible();
+        scoreContainer.setState(ScoreContainerState.SELECTING);
+//        scoreContainer.setUiVisible();
         setScrollToBottomSwitch();
         state = ListFooterState.SCORE_SELECTING;
     }

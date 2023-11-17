@@ -1,16 +1,28 @@
 package snu.swpp.moment.ui.main_writeview.component;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
 
+
+enum ScoreContainerState {
+    INVISIBLE,
+    SELECTING,
+    COMPLETE,
+}
+
+
 public class ScoreContainer {
+
+    private ScoreContainerState state;
 
     private final ConstraintLayout scoreWrapper;
     private final SeekBar scoreSeekBar;
@@ -22,7 +34,7 @@ public class ScoreContainer {
 
     private int score = -1;
     private final MutableLiveData<Boolean> saveScoreSwitch = new MutableLiveData<>(false);
-    private final int DEFAULT_SCORE = 3;
+    private static final int DEFAULT_SCORE = 3;
 
     public ScoreContainer(@NonNull View view) {
         scoreWrapper = (ConstraintLayout) view;
@@ -52,6 +64,41 @@ public class ScoreContainer {
         setScore(DEFAULT_SCORE);
     }
 
+    public void setState(ScoreContainerState state) {
+        Log.d("ScoreContainer", String.format("setState: %s -> %s", this.state, state));
+        this.state = state;
+
+        updateScoreWrapper();
+        updateScoreSeekBar();
+    }
+
+    private void updateScoreWrapper() {
+        switch (state) {
+            case INVISIBLE:
+                scoreWrapper.setVisibility(View.GONE);
+                break;
+            case SELECTING:
+                scoreWrapper.setVisibility(View.VISIBLE);
+                scoreWrapper.startAnimation(animationProvider.fadeIn);
+                break;
+            case COMPLETE:
+                scoreWrapper.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private void updateScoreSeekBar() {
+        switch (state) {
+            case INVISIBLE:
+            case COMPLETE:
+                scoreSeekBar.setEnabled(false);
+                break;
+            case SELECTING:
+                scoreSeekBar.setEnabled(true);
+                break;
+        }
+    }
+
     public int getScore() {
         return score;
     }
@@ -62,22 +109,17 @@ public class ScoreContainer {
         scoreSeekBar.setProgress(score);
     }
 
-    public void resetUi() {
-        freeze(false);
-        scoreWrapper.setVisibility(View.GONE);
-        setScore(DEFAULT_SCORE);
-        scoreHelpText.setText(R.string.score_help_text);
-        showAutoCompleteWarnText(false);
-    }
+//    public void resetUi() {
+//        scoreWrapper.setVisibility(View.GONE);
+//        setScore(DEFAULT_SCORE);
+//        scoreHelpText.setText(R.string.score_help_text);
+//        showAutoCompleteWarnText(false);
+//    }
 
-    public void setUiVisible() {
-        scoreWrapper.setVisibility(View.VISIBLE);
-        scoreWrapper.startAnimation(animationProvider.fadeIn);
-    }
-
-    public void freeze(boolean freeze) {
-        // TODO: 점수 수정 못하도록 freeze
-    }
+//    public void setUiVisible() {
+//        scoreWrapper.setVisibility(View.VISIBLE);
+//        scoreWrapper.startAnimation(animationProvider.fadeIn);
+//    }
 
     public void setHelpText(String text) {
         scoreHelpText.setText(text);
@@ -98,5 +140,9 @@ public class ScoreContainer {
 
     public void observeSaveScoreSwitch(Observer<Boolean> observer) {
         saveScoreSwitch.observeForever(observer);
+    }
+
+    public void removeObservers(LifecycleOwner lifecycleOwner) {
+        saveScoreSwitch.removeObservers(lifecycleOwner);
     }
 }
