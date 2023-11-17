@@ -188,6 +188,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
         viewModel.observeTagsResultState(activity.tagsResultObserver());
         viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
+        viewModel.observeScoreResultState(bottomButtonContainer.scoreResultObserver());
         viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
 
         // AI 답글 대기 중 동작 설정

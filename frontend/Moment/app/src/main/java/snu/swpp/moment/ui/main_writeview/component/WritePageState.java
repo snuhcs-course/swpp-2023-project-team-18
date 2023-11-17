@@ -1,7 +1,7 @@
 package snu.swpp.moment.ui.main_writeview.component;
 
 public enum WritePageState {
-    INVISIBLE,
+    FOOTER_INVISIBLE,
     MOMENT_READY_TO_ADD,
     MOMENT_WRITING,
     MOMENT_WAITING_AI_REPLY,

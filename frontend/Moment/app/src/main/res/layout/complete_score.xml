@@ -72,18 +72,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/autoCompleteWarnText"
-        style="@style/SMALL_RED"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingVertical="15dp"
-        android:text="@string/auto_complete_warning"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scoreWrapper"
-        tools:visibility="visible" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

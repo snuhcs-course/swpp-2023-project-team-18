@@ -28,12 +28,10 @@ public class ScoreContainer {
     private final SeekBar scoreSeekBar;
     private final TextView scoreHelpText;
     private final TextView scoreText;
-    private final TextView autoCompleteWarnText;
 
     private final AnimationProvider animationProvider;
 
     private int score = -1;
-    private final MutableLiveData<Boolean> saveScoreSwitch = new MutableLiveData<>(false);
     private static final int DEFAULT_SCORE = 3;
 
     public ScoreContainer(@NonNull View view) {
@@ -41,7 +39,6 @@ public class ScoreContainer {
         scoreSeekBar = view.findViewById(R.id.scoreSeekBar);
         scoreHelpText = view.findViewById(R.id.scoreHelpText);
         scoreText = view.findViewById(R.id.scoreText);
-        autoCompleteWarnText = view.findViewById(R.id.autoCompleteWarnText);
         animationProvider = new AnimationProvider(view);
 
         scoreSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -56,8 +53,6 @@ public class ScoreContainer {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 setScore(seekBar.getProgress());
-                showAutoCompleteWarnText(false);
-                setSaveScoreSwitch();
             }
         });
 
@@ -109,40 +104,7 @@ public class ScoreContainer {
         scoreSeekBar.setProgress(score);
     }
 
-//    public void resetUi() {
-//        scoreWrapper.setVisibility(View.GONE);
-//        setScore(DEFAULT_SCORE);
-//        scoreHelpText.setText(R.string.score_help_text);
-//        showAutoCompleteWarnText(false);
-//    }
-
-//    public void setUiVisible() {
-//        scoreWrapper.setVisibility(View.VISIBLE);
-//        scoreWrapper.startAnimation(animationProvider.fadeIn);
-//    }
-
     public void setHelpText(String text) {
         scoreHelpText.setText(text);
-    }
-
-    public void showAutoCompleteWarnText(boolean visible) {
-        if (visible) {
-            autoCompleteWarnText.setVisibility(View.VISIBLE);
-        } else {
-            autoCompleteWarnText.setVisibility(View.GONE);
-        }
-    }
-
-    private void setSaveScoreSwitch() {
-        saveScoreSwitch.setValue(true);
-        saveScoreSwitch.setValue(false);
-    }
-
-    public void observeSaveScoreSwitch(Observer<Boolean> observer) {
-        saveScoreSwitch.observeForever(observer);
-    }
-
-    public void removeObservers(LifecycleOwner lifecycleOwner) {
-        saveScoreSwitch.removeObservers(lifecycleOwner);
     }
 }

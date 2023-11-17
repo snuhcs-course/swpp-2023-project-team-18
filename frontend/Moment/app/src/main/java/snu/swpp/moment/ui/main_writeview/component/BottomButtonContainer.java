@@ -34,7 +34,7 @@ public class BottomButtonContainer {
             setActivated(state);
         });
 
-        setState(WritePageState.INVISIBLE);
+        setState(WritePageState.FOOTER_INVISIBLE);
     }
 
     public void setState(WritePageState state) {
@@ -47,7 +47,8 @@ public class BottomButtonContainer {
 
     private void updateButton() {
         switch (state) {
-            case INVISIBLE:
+            default:
+                button.setVisibility(View.VISIBLE);
                 button.setText(R.string.day_complete_string);
                 button.setOnClickListener(v -> {
                     // Popup dialog
@@ -67,6 +68,7 @@ public class BottomButtonContainer {
                 });
                 break;
             case STORY:
+                button.setVisibility(View.VISIBLE);
                 button.setText(R.string.day_complete_story);
                 button.setOnClickListener(v -> {
                     listFooterContainer.showLoadingText(true);
@@ -76,6 +78,7 @@ public class BottomButtonContainer {
                 });
                 break;
             case EMOTION:
+                button.setVisibility(View.VISIBLE);
                 button.setText(R.string.day_complete_emotion);
                 button.setOnClickListener(v -> {
                     listFooterContainer.showLoadingText(true);
@@ -84,6 +87,7 @@ public class BottomButtonContainer {
                 });
                 break;
             case TAG:
+                button.setVisibility(View.VISIBLE);
                 button.setText(R.string.day_completion_tag);
                 button.setOnClickListener(v -> {
                     listFooterContainer.showLoadingText(true);
@@ -92,6 +96,7 @@ public class BottomButtonContainer {
                 });
                 break;
             case SCORE:
+                button.setVisibility(View.VISIBLE);
                 button.setText(R.string.day_completion_score);
                 button.setOnClickListener(v -> {
                     listFooterContainer.showLoadingText(true);
@@ -101,6 +106,7 @@ public class BottomButtonContainer {
                 break;
             case COMPLETE:
                 button.setVisibility(View.GONE);
+                setActivated(false);
                 button.setText(R.string.day_complete_string);
                 button.setOnClickListener(v -> {
                 });
@@ -231,6 +237,21 @@ public class BottomButtonContainer {
             listFooterContainer.showLoadingText(false);
             if (completionStoreResultState.getError() == null) {
                 setState(WritePageState.SCORE);
+            } else {
+                Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
+                    .show();
+                setActivated(true);
+            }
+        };
+    }
+
+    public Observer<CompletionStoreResultState> scoreResultObserver() {
+        return (CompletionStoreResultState completionStoreResultState) -> {
+            Log.d("scoreResultObserver",
+                "completionStoreResultState: " + completionStoreResultState.getError());
+            listFooterContainer.showLoadingText(false);
+            if (completionStoreResultState.getError() == null) {
+                setState(WritePageState.COMPLETE);
             } else {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
                     .show();

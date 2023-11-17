@@ -37,6 +37,8 @@ public class ListFooterContainerNew {
     private final ScoreContainer scoreContainer;
     // 로딩 메시지
     private final TextView loadingText;
+    // 마무리된 하루 텍스트
+    private final TextView completedText;
 
     // 애니메이션 개체 묶음
     private final AnimationProvider animationProvider;
@@ -70,6 +72,8 @@ public class ListFooterContainerNew {
 
         // 애니메이션 개체 묶음
         animationProvider = new AnimationProvider(view);
+        // 마무리된 하루 텍스트
+        completedText = view.findViewById(R.id.completed_text);
 
         // 스토리 자수 제한 감지
         storyContainer.observeLimit(lifecycleOwner, isLimitExceeded -> {
@@ -109,7 +113,7 @@ public class ListFooterContainerNew {
             if (isToday) {
                 setState(WritePageState.MOMENT_READY_TO_ADD);
             } else {
-                setState(WritePageState.INVISIBLE);
+                setState(WritePageState.FOOTER_INVISIBLE);
             }
         } else {
             setState(WritePageState.COMPLETE);
@@ -124,7 +128,6 @@ public class ListFooterContainerNew {
             tagBoxContainer.setHelpText(day + "의 태그");
             scoreContainer.setHelpText(day + "의 점수");
         }
-
     }
 
     public void setState(WritePageState state) {
@@ -136,6 +139,7 @@ public class ListFooterContainerNew {
         updateEmotionContainer();
         updateTagBoxContainer();
         updateScoreContainer();
+        updateCompletedText();
     }
 
     private void updateMomentContainer() {
@@ -215,6 +219,16 @@ public class ListFooterContainerNew {
         }
     }
 
+    private void updateCompletedText() {
+        switch (state) {
+            case COMPLETE:
+                completedText.setVisibility(View.VISIBLE);
+                break;
+            default:
+                completedText.setVisibility(View.GONE);
+        }
+    }
+
     public String getMomentInput() {
         return momentContainer.getInputText();
     }
@@ -273,7 +287,6 @@ public class ListFooterContainerNew {
         storyContainer.removeObservers(lifecycleOwner);
         emotionContainer.removeObservers(lifecycleOwner);
         tagBoxContainer.removeObservers(lifecycleOwner);
-        scoreContainer.removeObservers(lifecycleOwner);
     }
 
     public Observer<AiStoryState> aiStoryObserver() {

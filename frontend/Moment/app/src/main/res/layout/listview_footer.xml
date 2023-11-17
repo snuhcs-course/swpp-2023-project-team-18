@@ -71,6 +71,16 @@
         android:text="@string/completion_loading"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/completed_text"
+        style="@style/BIG_BLACK_BOLD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="15dp"
+        android:text="마무리된 하루"
+        android:textAlignment="center"
+        android:visibility="gone" />
+
     <!-- 스크롤 시 맨 밑이 보이게 하기 위한 padding -->
     <View
         android:layout_width="match_parent"
