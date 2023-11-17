@@ -224,7 +224,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         requireActivity().getOnBackPressedDispatcher()
             .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
-        // api 호출 완료 후 동작
+        // moment & story GET API response를 모두 받았을 때
         apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
             // moment state
             listViewItems.clear();
@@ -254,7 +254,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         }));
 
-        // moment GET API 호출 후 동작
+        // moment GET API response를 받았을 때
         viewModel.observeMomentState(momentUiState -> {
             Exception error = momentUiState.getError();
             Log.d("TodayViewFragment", "Got moment GET response: error=" + error);
@@ -264,36 +264,9 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
             apiResponseManager.saveResponse(momentUiState);
             apiResponseManager.process();
-
-//            listViewItems.clear();
-//            listViewAdapter.setAnimation(false);
-//
-//            if (momentUiState.getNumMoments() > 0) {
-//                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
-//                    + momentUiState.getNumMoments());
-//
-//                StoryUiState savedStoryState = viewModel.getSavedStoryState();
-//                Log.d("TodayViewFragment",
-//                    "savedStoryState == null ?: " + (savedStoryState == null));
-//                if (savedStoryState != null) {
-//                    bottomButtonContainer.setActivated(savedStoryState.hasNoData());
-//                } else {
-//                    bottomButtonContainer.setActivated(true);
-//                }
-//
-//                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-//                    listViewItems.add(new ListViewItem(momentPair));
-//                }
-//                listViewAdapter.notifyDataSetChanged();
-//                scrollToBottom();
-//            } else {
-//                Log.d("TodayViewFragment", "Got moment GET response: no moments");
-//                bottomButtonContainer.setActivated(false);
-//                listViewAdapter.notifyDataSetChanged();
-//            }
         });
 
-        // story GET API 호출 후 동작
+        // story GET API response를 받았을 때
         viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
             Exception error = savedStoryState.getError();
             Log.d("TodayViewFragment", "Got story GET response: error=" + error + ", isEmpty="
@@ -302,20 +275,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 handleApiError(error);
                 return;
             }
-
             apiResponseManager.saveResponse(savedStoryState);
             apiResponseManager.process();
-
-//            listFooterContainer.updateWithServerData(savedStoryState, true);
-//            if (savedStoryState.hasNoData()) {
-//                Log.d("TodayViewFragment", "Got story GET response: story has no data");
-//                bottomButtonContainer.setActivated(!listViewItems.isEmpty());
-//            } else {
-//                Log.d("TodayViewFragment",
-//                    "Got story GET response: story has valid data");
-//                // TODO: 여기서 bottom button의 state를 complete으로 주면 될 듯 (버튼 없애고 텍스트 띄우는 거)
-//                bottomButtonContainer.setActivated(false);
-//            }
         });
 
         Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");

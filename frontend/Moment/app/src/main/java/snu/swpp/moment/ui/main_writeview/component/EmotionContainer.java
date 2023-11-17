@@ -146,28 +146,7 @@ public class EmotionContainer {
         selectedEmotion.removeObservers(lifecycleOwner);
     }
 
-//    public void setUiVisible() {
-//        emotionWrapper.setVisibility(View.VISIBLE);
-//    }
-
-//    public void setUiSelectingEmotion() {
-//        emotionWrapper.setVisibility(View.VISIBLE);
-//        emotionWrapper.startAnimation(animationProvider.fadeIn);
-//    }
-
-//    public void resetUi() {
-//        freeze(false);
-//        emotionHelpText.setText(R.string.emotion_help_text);
-//        emotionWrapper.setVisibility(View.GONE);
-//        selectedEmotion.setValue(EmotionMap.INVALID_EMOTION);
-//        for (TextView textButton : textButtonList) {
-//            textButton.setTypeface(maruburiLight);
-//            textButton.setTextColor(colorBlack);
-//        }
-//    }
-
-    // FIXME: will be changed to private
-    public void freeze(boolean freeze) {
+    private void freeze(boolean freeze) {
         for (int i = 0; i < textButtonList.size(); i++) {
             TextView textButton = textButtonList.get(i);
             textButton.setClickable(!freeze);

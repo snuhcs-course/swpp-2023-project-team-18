@@ -244,38 +244,6 @@ public class StoryContainer {
         aiButtonSwitch.removeObservers(lifecycleOwner);
     }
 
-//    public void resetUi() {
-//        storyWrapper.setVisibility(View.GONE);
-//
-//        setStoryText("", "");
-//        freeze(false);
-//
-//        storyContentLengthText.setVisibility(View.VISIBLE);
-//        setStoryContentLengthText(0);
-//
-//        storyAiButton.setVisibility(View.VISIBLE);
-//        aiButtonHelpText.setVisibility(View.VISIBLE);
-//    }
-
-//    public void setUiWritingStory(Date completeTime) {
-//        // 과거 스토리: 서버에서 받아온 createdAt 표시
-//        storyWrapper.setVisibility(View.VISIBLE);
-//        setCompleteTimeText(completeTime);
-//        storyWrapper.startAnimation(animationProvider.fadeIn);
-//    }
-
-//    public void setUiWritingStory() {
-//        // 오늘 스토리: 현재 시간 표시
-//        Date completeTime = new Date();
-//        setUiWritingStory(completeTime);
-//    }
-
-//    public void setUiCompleteStory() {
-//        storyContentLengthText.setVisibility(View.GONE);
-//        aiButtonHelpText.setVisibility(View.GONE);
-//        storyAiButton.setVisibility(View.GONE);
-//    }
-
     private void freeze(boolean freeze) {
         storyTitleEditText.setEnabled(!freeze);
         storyContentEditText.setEnabled(!freeze);
@@ -297,10 +265,6 @@ public class StoryContainer {
         storyAiButton.setVisibility(visibility);
         aiButtonHelpText.setVisibility(visibility);
     }
-
-//    private void setCompleteTimeText(Date completeTime) {
-//        completeTimeText.setText(TimeConverter.formatDate(completeTime, "HH:mm"));
-//    }
 
     private void checkLimitExceeded() {
         isLimitExceeded.setValue(isTitleLimitExceeded || isContentLimitExceeded);

@@ -110,7 +110,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
         listFooterContainer = new ListFooterContainerNew(footerView, getViewLifecycleOwner(),
             false);
 
-        // api 호출 완료 후 동작
+        // moment & story GET API response를 모두 받았을 때
         apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
             // moment GET API 호출 후 동작
             listViewItems.clear();
@@ -132,7 +132,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
             }
         }));
 
-        // moment GET API 호출 후 동작
+        // moment GET API response를 받았을 때
         viewModel.observeMomentState((MomentUiState momentUiState) -> {
             Exception error = momentUiState.getError();
             if (error != null) {
@@ -141,20 +141,9 @@ public class DailyViewFragment extends BaseWritePageFragment {
             }
             apiResponseManager.saveResponse(momentUiState);
             apiResponseManager.process();
-
-//            listViewItems.clear();
-//            if (momentUiState.getNumMoments() > 0) {
-//                binding.noMomentText.setVisibility(View.GONE);
-//                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-//                    listViewItems.add(new ListViewItem(momentPair));
-//                }
-//            } else {
-//                binding.noMomentText.setVisibility(View.VISIBLE);
-//            }
-//            listViewAdapter.notifyDataSetChanged();
         });
 
-        // story GET API 호출 후 동작
+        // story GET API response를 받았을 때
         viewModel.observeStoryState((StoryUiState storyUiState) -> {
             Exception error = storyUiState.getError();
             if (error != null) {
@@ -163,12 +152,6 @@ public class DailyViewFragment extends BaseWritePageFragment {
             }
             apiResponseManager.saveResponse(storyUiState);
             apiResponseManager.process();
-
-//            listFooterContainer.updateWithServerData(storyUiState, false);
-//            if (!storyUiState.isEmpty()) {
-//                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
-//                    binding.dailyMomentList.getCount() - 1));
-//            }
         });
 
         Log.d("DailyViewFragment", "onCreateView: initial API call to refresh");

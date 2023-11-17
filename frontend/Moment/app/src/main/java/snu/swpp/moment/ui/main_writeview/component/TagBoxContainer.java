@@ -137,30 +137,8 @@ public class TagBoxContainer {
         tagEditText.setText(sb.toString());
     }
 
-//    public void setUiVisible() {
-//        tagWrapper.setVisibility(View.VISIBLE);
-//        tagWrapper.startAnimation(animationProvider.fadeIn);
-//    }
-
-//    public void resetUi() {
-//        freeze(false);
-//        tagEditText.setText("");
-//        tagHelpText.setText(R.string.tag_help_text);
-//        tagWrapper.setVisibility(View.GONE);
-//    }
-
     public void setHelpText(String text) {
         tagHelpText.setText(text);
-    }
-
-    // FIXME: will be changed to private
-    public void freeze(boolean freeze) {
-        tagEditText.setEnabled(!freeze);
-        if (freeze) {
-            tagEditText.setHint("");
-        } else {
-            tagEditText.setHint(R.string.tag_hint);
-        }
     }
 
     public void observeLimit(LifecycleOwner lifecycleOwner, Observer<Boolean> observer) {
@@ -169,6 +147,15 @@ public class TagBoxContainer {
 
     public void removeObservers(LifecycleOwner lifecycleOwner) {
         isLimitExceeded.removeObservers(lifecycleOwner);
+    }
+
+    private void freeze(boolean freeze) {
+        tagEditText.setEnabled(!freeze);
+        if (freeze) {
+            tagEditText.setHint("");
+        } else {
+            tagEditText.setHint(R.string.tag_hint);
+        }
     }
 
     private static List<String> parseTags(String s) {

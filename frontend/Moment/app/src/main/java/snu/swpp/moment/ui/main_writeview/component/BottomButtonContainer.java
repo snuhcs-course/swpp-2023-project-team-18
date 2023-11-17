@@ -114,62 +114,11 @@ public class BottomButtonContainer {
         }
     }
 
-//    public void setActivated(boolean activated, boolean completed) {
-//        Log.d("BottomButtonContainer", "setActivated: " + activated + ", " + completed);
-//        setActivated(activated);
-//        button.setText(completed ? R.string.completed_day : R.string.day_complete_string);
-//    }
-
     public void setActivated(boolean activated) {
         Log.d("BottomButtonContainer", "setActivated: " + activated);
         button.setActivated(activated);
         button.setEnabled(activated);
     }
-
-    /* 스토리 작성 중: 다음 단계로 이동 버튼 */
-//    private void writingStory() {
-//        listFooterContainer.setUiWritingStory();
-//
-//        button.setText(R.string.next_stage_button);
-//        button.setOnClickListener(v -> {
-//            listFooterContainer.showLoadingText(true);
-//            // 스토리 저장 API 호출
-//            viewModel.saveStory(listFooterContainer.getStoryTitle(),
-//                listFooterContainer.getStoryContent());
-//        });
-//    }
-
-    /* 감정 선택 중: 다음 단계로 이동 버튼 */
-//    private void selectingEmotion() {
-//        listFooterContainer.setUiSelectingEmotion();
-//        listFooterContainer.freezeStoryEditText();
-//
-//        button.setText(R.string.next_stage_button);
-//        button.setOnClickListener(v -> {
-//            listFooterContainer.showLoadingText(true);
-//            // 감정 저장 API 호출
-//            viewModel.saveEmotion(listFooterContainer.getSelectedEmotion());
-//        });
-//    }
-
-//    private void writingTags() {
-//        listFooterContainer.setUiWritingTags();
-//        listFooterContainer.freezeEmotionSelector();
-//
-//        button.setText(R.string.next_stage_button);
-//        button.setOnClickListener(v -> {
-//            listFooterContainer.showLoadingText(true);
-//            // 태그 저장 API 호출
-//            viewModel.saveHashtags(listFooterContainer.getTags());
-//        });
-//    }
-
-//    private void completionDone() {
-//        listFooterContainer.setUiSelectingScore();
-//        listFooterContainer.freezeTagEditText();
-//
-//        setActivated(false, true);
-//    }
 
     public Observer<Boolean> waitingAiReplySwitchObserver() {
         // ListViewAdapter가 가지고 있는 LiveData에 등록해서 사용

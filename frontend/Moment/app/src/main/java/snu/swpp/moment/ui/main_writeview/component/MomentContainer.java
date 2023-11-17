@@ -187,52 +187,6 @@ public class MomentContainer {
         }
     }
 
-//    public void setUiWritingMoment() {
-//        // add 누르고 입력창 뜨는 동작
-//        addButton.startAnimation(animationProvider.fadeOut);
-//        addButtonText.startAnimation(animationProvider.fadeOut);
-//        addButton.setVisibility(View.GONE);
-//        addButtonText.setVisibility(View.GONE);
-//
-//        momentEditTextWrapper.setVisibility(View.VISIBLE);
-//        momentEditTextWrapper.startAnimation(animationProvider.delayedFadeIn);
-//    }
-
-//    public void setUiWaitingAiReply() {
-//        // submit 직후 AI 답글 대기 중일 때 입력창 사라지는 동작
-//        momentEditText.setText("");
-//        submitButton.setVisibility(View.GONE);
-//        submitButtonInactive.setVisibility(View.VISIBLE);
-//        momentEditTextWrapper.setVisibility(View.GONE);
-//    }
-
-//    public void setUiReadyToAddMoment() {
-//        // submit 후 AI 답글 받았을 때 add 버튼 표시되는 동작
-//        addButton.startAnimation(animationProvider.fadeIn);
-//        addButtonText.startAnimation(animationProvider.fadeIn);
-//        addButton.setVisibility(View.VISIBLE);
-//        addButtonText.setVisibility(View.VISIBLE);
-//    }
-
-//    public void setUiAddLimitExceeded() {
-//        // 모먼트 한 시간 2개 제한 초과했을 때
-//        addButton.setVisibility(View.GONE);
-//        addButtonText.setVisibility(View.GONE);
-//
-//        addButtonInactive.setVisibility(View.VISIBLE);
-//        addLimitWarnText.setVisibility(View.VISIBLE);
-//    }
-
-//    public void setInvisible() {
-//        // 하루 마무리 시작되었을 때, 또는 과거 데이터 볼 때 모먼트 작성 칸 숨기기
-//        addButton.setVisibility(View.GONE);
-//        addButtonText.setVisibility(View.GONE);
-//        addLimitWarnText.setVisibility(View.GONE);
-//
-//        submitButtonInactive.setVisibility(View.VISIBLE);
-//        momentEditTextWrapper.setVisibility(View.GONE);
-//    }
-
     private void setMomentLengthText(int count) {
         momentLengthText.setText(
             String.format(Locale.getDefault(), "%d / %d", count, MOMENT_MAX_LENGTH));
