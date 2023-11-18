@@ -31,6 +31,7 @@ import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
+import snu.swpp.moment.ui.main_writeview.component.WritePageState;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
@@ -111,7 +112,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding.todayMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView, true);
+        listFooterContainer = new ListFooterContainer(footerView, getViewLifecycleOwner(), true);
 
         listFooterContainer.setAddButtonOnClickListener(v -> {
             int numMoments = viewModel.getMomentState().getNumMoments();
@@ -127,12 +128,12 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     Calendar.HOUR_OF_DAY); // This will give you the current hour
 
                 if (createdHourValue == currentHourValue) {
-                    listFooterContainer.setUiAddLimitExceeded();
+                    bottomButtonContainer.setState(WritePageState.MOMENT_ADD_LIMIT_EXCEEDED);
                 } else {
-                    listFooterContainer.setUiWritingMoment();
+                    bottomButtonContainer.setState(WritePageState.MOMENT_WRITING);
                 }
             } else {
-                listFooterContainer.setUiWritingMoment();
+                bottomButtonContainer.setState(WritePageState.MOMENT_WRITING);
             }
         });
 
@@ -140,7 +141,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
             // 소프트 키보드 숨기기
             KeyboardUtils.hideSoftKeyboard(requireContext());
 
-            String text = listFooterContainer.getMomentInputText();
+            String text = listFooterContainer.getMomentInput();
             if (!text.isEmpty()) {
                 // 새 item 추가
                 // 이때 footer의 변화는 아래에서 ListViewAdapter에 등록하는 observer가 처리
@@ -163,11 +164,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 viewModel.getAiStory();
             }
         });
-        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
-            if (saveScoreSwitch) {
-                viewModel.saveScore(listFooterContainer.getScore());
-            }
-        });
 
         // nudge header 관리 객체 초기화
         nudgeHeaderContainer = new NudgeHeaderContainer(headerView);
@@ -182,21 +178,68 @@ public class TodayViewFragment extends BaseWritePageFragment {
         });
 
         // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
+        MainActivity activity = (MainActivity) requireActivity();
+        bottomButtonContainer = new BottomButtonContainer(activity, root, viewModel,
+            listFooterContainer);
 
         // 하루 마무리 API 호출 시 동작 설정
-        MainActivity activity = (MainActivity) requireActivity();
-        viewModel.observeCompletionState(activity.completionStateObserver());
         viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
         viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
         viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
-        viewModel.observeTagsResultState(activity.tagsResultObserver());
         viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
+        viewModel.observeScoreResultState(bottomButtonContainer.scoreResultObserver());
         viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());
 
         // AI 답글 대기 중 동작 설정
         listViewAdapter.observeWaitingAiReplySwitch(
             bottomButtonContainer.waitingAiReplySwitchObserver());
+
+        // moment & story GET API response를 모두 받았을 때
+        apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
+            listViewItems.clear();
+            listViewAdapter.setAnimation(false);
+
+            boolean doMomentsExist = momentUiState.getNumMoments() > 0;
+            if (doMomentsExist) {
+                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
+                    + momentUiState.getNumMoments());
+                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                    listViewItems.add(new ListViewItem(momentPair));
+                }
+            }
+            listViewAdapter.notifyDataSetChanged();
+
+            bottomButtonContainer.updateWithServerData(storyUiState, doMomentsExist);
+        }));
+
+        // moment GET API response를 받았을 때
+        viewModel.observeMomentState(momentUiState -> {
+            Exception error = momentUiState.getError();
+            Log.d("TodayViewFragment", "Got moment GET response: error=" + error);
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
+            apiResponseManager.saveResponse(momentUiState);
+            apiResponseManager.process();
+        });
+
+        // story GET API response를 받았을 때
+        viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
+            Exception error = savedStoryState.getError();
+            Log.d("TodayViewFragment", "Got story GET response: error=" + error + ", isEmpty="
+                + savedStoryState.isEmpty());
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
+            apiResponseManager.saveResponse(savedStoryState);
+            apiResponseManager.process();
+        });
+
+        Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
+        callApisToRefresh();
+        updateRefreshTime();
 
         // 마무리 과정 중 뒤로가기 버튼 경고
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
@@ -226,66 +269,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
         };
         requireActivity().getOnBackPressedDispatcher()
             .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
-
-        // moment GET API 호출 후 동작
-        viewModel.observeMomentState(momentUiState -> {
-            Exception error = momentUiState.getError();
-            Log.d("TodayViewFragment", "Got moment GET response: error=" + error);
-            if (error != null) {
-                handleApiError(error);
-                return;
-            }
-
-            listViewItems.clear();
-            listViewAdapter.setAnimation(false);
-
-            if (momentUiState.getNumMoments() > 0) {
-                Log.d("TodayViewFragment", "Got moment GET response: numMoments="
-                    + momentUiState.getNumMoments());
-
-                StoryUiState savedStoryState = viewModel.getSavedStoryState();
-                if (savedStoryState != null) {
-                    bottomButtonContainer.setActivated(savedStoryState.hasNoData());
-                } else {
-                    bottomButtonContainer.setActivated(true);
-                }
-
-                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-                    listViewItems.add(new ListViewItem(momentPair));
-                }
-                listViewAdapter.notifyDataSetChanged();
-                scrollToBottom();
-            } else {
-                Log.d("TodayViewFragment", "Got moment GET response: no moments");
-                bottomButtonContainer.setActivated(false);
-                listViewAdapter.notifyDataSetChanged();
-            }
-        });
-
-        // story GET API 호출 후 동작
-        viewModel.observeSavedStoryState((StoryUiState savedStoryState) -> {
-            Exception error = savedStoryState.getError();
-            Log.d("TodayViewFragment", "Got story GET response: error=" + error + ", isEmpty="
-                + savedStoryState.isEmpty());
-            if (error != null) {
-                handleApiError(error);
-                return;
-            }
-
-            listFooterContainer.updateUiWithRemoteData(savedStoryState, true);
-            if (savedStoryState.hasNoData()) {
-                Log.d("TodayViewFragment", "Got story GET response: story has no data");
-                bottomButtonContainer.setActivated(!listViewItems.isEmpty(), false);
-            } else {
-                Log.d("TodayViewFragment",
-                    "Got story GET response: story has valid data");
-                bottomButtonContainer.setActivated(false, true);
-            }
-        });
-
-        Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
-        callApisToRefresh();
-        updateRefreshTime();
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
@@ -317,6 +300,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
     protected void callApisToRefresh() {
         LocalDateTime now = getCurrentDateTime();
         Log.d("TodayViewFragment", "callApisToRefresh: called with timestamp " + now);
+        apiResponseManager.reset();
         viewModel.getMoment(now);
         viewModel.getStory(now);
     }
@@ -344,5 +328,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        listFooterContainer.removeObservers();
     }
 }

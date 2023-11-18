@@ -114,30 +114,9 @@ public class MainActivity extends AppCompatActivity {
         toolbarTitle.setText(title);
     }
 
-    public Observer<CompletionState> completionStateObserver() {
-        return (CompletionState completionState) -> {
-            if (completionState.getError() == null) {
-                System.out.println("#HAMBURGER: disable started");
-                getSupportActionBar().setHomeButtonEnabled(false);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            } else {
-                System.out.println("#HAMBURGER: disable not started");
-                getSupportActionBar().setHomeButtonEnabled(true);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
-        };
-    }
-
-    public Observer<CompletionStoreResultState> tagsResultObserver() {
-        return (CompletionStoreResultState completionStoreResultState) -> {
-            if (completionStoreResultState.getError() == null) {
-                System.out.println("#HAMBURGER: back to enable");
-                getSupportActionBar().setHomeButtonEnabled(true);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            } else {
-                System.out.println("#HAMBURGER: stay disabled");
-            }
-        };
+    public void showHamburgerButton(boolean show) {
+        getSupportActionBar().setHomeButtonEnabled(show);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(show);
     }
 
     public void navigateToWriteViewPage(LocalDate date) {

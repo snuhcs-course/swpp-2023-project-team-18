@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import snu.swpp.moment.data.repository.AuthenticationRepository
 import snu.swpp.moment.data.repository.StoryRepository
-import snu.swpp.moment.ui.main_monthview.MonthViewModel
 
 class StatViewModelFactory(
     private val authenticationRepository: AuthenticationRepository,

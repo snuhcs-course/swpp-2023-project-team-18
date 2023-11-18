@@ -55,6 +55,12 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="BIG_BLACK_BOLD">
+        <item name="android:fontFamily">@font/maruburi_bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="stat_piechart_legend_font">
         <item name="android:fontFamily">@font/maruburi_light</item>
         <item name="android:textSize">11sp</item>

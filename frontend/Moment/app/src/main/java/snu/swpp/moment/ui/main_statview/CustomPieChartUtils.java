@@ -18,19 +18,16 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
-
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-
 import com.github.mikephil.charting.utils.FSize;
 import com.github.mikephil.charting.utils.MPPointF;
 import java.util.List;
 
 /**
- * Utilities class that has some helper methods. Needs to be initialized by
- * calling Utils.init(...) before usage. Inside the Chart.init() method, this is
- * done, if the Utils are used before that, Utils.init(...) needs to be called
- * manually.
+ * Utilities class that has some helper methods. Needs to be initialized by calling Utils.init(...)
+ * before usage. Inside the Chart.init() method, this is done, if the Utils are used before that,
+ * Utils.init(...) needs to be called manually.
  *
  * @author Philipp Jahoda
  */
@@ -76,8 +73,8 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * initialize method, called inside the Chart.init() method. backwards
-     * compatibility - to not break existing code
+     * initialize method, called inside the Chart.init() method. backwards compatibility - to not
+     * break existing code
      *
      * @param res
      */
@@ -93,13 +90,12 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * This method converts dp unit to equivalent pixels, depending on device
-     * density. NEEDS UTILS TO BE INITIALIZED BEFORE USAGE.
+     * This method converts dp unit to equivalent pixels, depending on device density. NEEDS UTILS
+     * TO BE INITIALIZED BEFORE USAGE.
      *
-     * @param dp A value in dp (density independent pixels) unit. Which we need
-     *           to convert into pixels
-     * @return A float value to represent px equivalent to dp depending on
-     * device density
+     * @param dp A value in dp (density independent pixels) unit. Which we need to convert into
+     *           pixels
+     * @return A float value to represent px equivalent to dp depending on device density
      */
     public static float convertDpToPixel(float dp) {
 
@@ -116,8 +112,8 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * This method converts device specific pixels to density independent
-     * pixels. NEEDS UTILS TO BE INITIALIZED BEFORE USAGE.
+     * This method converts device specific pixels to density independent pixels. NEEDS UTILS TO BE
+     * INITIALIZED BEFORE USAGE.
      *
      * @param px A value in px (pixels) unit. Which we need to convert into db
      * @return A float value to represent dp equivalent to px value
@@ -137,8 +133,8 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * calculates the approximate width of a text, depending on a demo text
-     * avoid repeated calls (e.g. inside drawing methods)
+     * calculates the approximate width of a text, depending on a demo text avoid repeated calls
+     * (e.g. inside drawing methods)
      *
      * @param paint
      * @param demoText
@@ -148,10 +144,11 @@ public abstract class CustomPieChartUtils {
         return (int) paint.measureText(demoText);
     }
 
-    private static Rect mCalcTextHeightRect = new Rect();
+    private static final Rect mCalcTextHeightRect = new Rect();
+
     /**
-     * calculates the approximate height of a text, depending on a demo text
-     * avoid repeated calls (e.g. inside drawing methods)
+     * calculates the approximate height of a text, depending on a demo text avoid repeated calls
+     * (e.g. inside drawing methods)
      *
      * @param paint
      * @param demoText
@@ -160,18 +157,18 @@ public abstract class CustomPieChartUtils {
     public static int calcTextHeight(Paint paint, String demoText) {
 
         Rect r = mCalcTextHeightRect;
-        r.set(0,0,0,0);
+        r.set(0, 0, 0, 0);
         paint.getTextBounds(demoText, 0, demoText.length(), r);
         return r.height();
     }
 
-    private static Paint.FontMetrics mFontMetrics = new Paint.FontMetrics();
+    private static final Paint.FontMetrics mFontMetrics = new Paint.FontMetrics();
 
     public static float getLineHeight(Paint paint) {
         return getLineHeight(paint, mFontMetrics);
     }
 
-    public static float getLineHeight(Paint paint, Paint.FontMetrics fontMetrics){
+    public static float getLineHeight(Paint paint, Paint.FontMetrics fontMetrics) {
         paint.getFontMetrics(fontMetrics);
         return fontMetrics.descent - fontMetrics.ascent;
     }
@@ -180,15 +177,14 @@ public abstract class CustomPieChartUtils {
         return getLineSpacing(paint, mFontMetrics);
     }
 
-    public static float getLineSpacing(Paint paint, Paint.FontMetrics fontMetrics){
+    public static float getLineSpacing(Paint paint, Paint.FontMetrics fontMetrics) {
         paint.getFontMetrics(fontMetrics);
         return fontMetrics.ascent - fontMetrics.top + fontMetrics.bottom;
     }
 
     /**
-     * Returns a recyclable FSize instance.
-     * calculates the approximate size of a text, depending on a demo text
-     * avoid repeated calls (e.g. inside drawing methods)
+     * Returns a recyclable FSize instance. calculates the approximate size of a text, depending on
+     * a demo text avoid repeated calls (e.g. inside drawing methods)
      *
      * @param paint
      * @param demoText
@@ -196,15 +192,16 @@ public abstract class CustomPieChartUtils {
      */
     public static FSize calcTextSize(Paint paint, String demoText) {
 
-        FSize result = FSize.getInstance(0,0);
+        FSize result = FSize.getInstance(0, 0);
         calcTextSize(paint, demoText, result);
         return result;
     }
 
-    private static Rect mCalcTextSizeRect = new Rect();
+    private static final Rect mCalcTextSizeRect = new Rect();
+
     /**
-     * calculates the approximate size of a text, depending on a demo text
-     * avoid repeated calls (e.g. inside drawing methods)
+     * calculates the approximate size of a text, depending on a demo text avoid repeated calls
+     * (e.g. inside drawing methods)
      *
      * @param paint
      * @param demoText
@@ -213,7 +210,7 @@ public abstract class CustomPieChartUtils {
     public static void calcTextSize(Paint paint, String demoText, FSize outputFSize) {
 
         Rect r = mCalcTextSizeRect;
-        r.set(0,0,0,0);
+        r.set(0, 0, 0, 0);
         paint.getTextBounds(demoText, 0, demoText.length(), r);
         outputFSize.width = r.width();
         outputFSize.height = r.height();
@@ -222,29 +219,26 @@ public abstract class CustomPieChartUtils {
 
 
     /**
-     * Math.pow(...) is very expensive, so avoid calling it and create it
-     * yourself.
+     * Math.pow(...) is very expensive, so avoid calling it and create it yourself.
      */
-    private static final int POW_10[] = {
+    private static final int[] POW_10 = {
         1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000
     };
 
-    private static ValueFormatter mDefaultValueFormatter = generateDefaultValueFormatter();
+    private static final ValueFormatter mDefaultValueFormatter = generateDefaultValueFormatter();
 
     private static ValueFormatter generateDefaultValueFormatter() {
         return new DefaultValueFormatter(1);
     }
 
     /// - returns: The default value formatter used for all chart components that needs a default
-    public static ValueFormatter getDefaultValueFormatter()
-    {
+    public static ValueFormatter getDefaultValueFormatter() {
         return mDefaultValueFormatter;
     }
 
     /**
-     * Formats the given number to the given number of decimals, and returns the
-     * number as a string, maximum 35 characters. If thousands are separated, the separating
-     * character is a dot (".").
+     * Formats the given number to the given number of decimals, and returns the number as a string,
+     * maximum 35 characters. If thousands are separated, the separating character is a dot (".").
      *
      * @param number
      * @param digitCount
@@ -256,8 +250,8 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * Formats the given number to the given number of decimals, and returns the
-     * number as a string, maximum 35 characters.
+     * Formats the given number to the given number of decimals, and returns the number as a string,
+     * maximum 35 characters.
      *
      * @param number
      * @param digitCount
@@ -275,10 +269,7 @@ public abstract class CustomPieChartUtils {
             return "0";
         }
 
-        boolean zero = false;
-        if (number < 1 && number > -1) {
-            zero = true;
-        }
+        boolean zero = number < 1 && number > -1;
 
         if (number < 0) {
             neg = true;
@@ -354,8 +345,9 @@ public abstract class CustomPieChartUtils {
     public static float roundToNextSignificant(double number) {
         if (Double.isInfinite(number) ||
             Double.isNaN(number) ||
-            number == 0.0)
+            number == 0.0) {
             return 0;
+        }
 
         final float d = (float) Math.ceil((float) Math.log10(number < 0 ? -number : number));
         final int pw = 1 - (int) d;
@@ -365,8 +357,7 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * Returns the appropriate number of decimals to be used for the provided
-     * number.
+     * Returns the appropriate number of decimals to be used for the provided number.
      *
      * @param number
      * @return
@@ -375,8 +366,9 @@ public abstract class CustomPieChartUtils {
 
         float i = roundToNextSignificant(number);
 
-        if (Float.isInfinite(i))
+        if (Float.isInfinite(i)) {
             return 0;
+        }
 
         return (int) Math.ceil(-Math.log10(i)) + 2;
     }
@@ -396,9 +388,9 @@ public abstract class CustomPieChartUtils {
         return ret;
     }
 
-    public static void copyIntegers(List<Integer> from, int[] to){
+    public static void copyIntegers(List<Integer> from, int[] to) {
         int count = to.length < from.size() ? to.length : from.size();
-        for(int i = 0 ; i < count ; i++){
+        for (int i = 0; i < count; i++) {
             to[i] = from.get(i);
         }
     }
@@ -420,24 +412,24 @@ public abstract class CustomPieChartUtils {
         return ret;
     }
 
-    public static void copyStrings(List<String> from, String[] to){
+    public static void copyStrings(List<String> from, String[] to) {
         int count = to.length < from.size() ? to.length : from.size();
-        for(int i = 0 ; i < count ; i++){
+        for (int i = 0; i < count; i++) {
             to[i] = from.get(i);
         }
     }
 
     /**
-     * Replacement for the Math.nextUp(...) method that is only available in
-     * HONEYCOMB and higher. Dat's some seeeeek sheeet.
+     * Replacement for the Math.nextUp(...) method that is only available in HONEYCOMB and higher.
+     * Dat's some seeeeek sheeet.
      *
      * @param d
      * @return
      */
     public static double nextUp(double d) {
-        if (d == Double.POSITIVE_INFINITY)
+        if (d == Double.POSITIVE_INFINITY) {
             return d;
-        else {
+        } else {
             d += 0.0d;
             return Double.longBitsToDouble(Double.doubleToRawLongBits(d) +
                 ((d >= 0.0d) ? +1L : -1L));
@@ -445,9 +437,8 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * Returns a recyclable MPPointF instance.
-     * Calculates the position around a center point, depending on the distance
-     * from the center, and the angle of the position around the center.
+     * Returns a recyclable MPPointF instance. Calculates the position around a center point,
+     * depending on the distance from the center, and the angle of the position around the center.
      *
      * @param center
      * @param dist
@@ -456,12 +447,12 @@ public abstract class CustomPieChartUtils {
      */
     public static MPPointF getPosition(MPPointF center, float dist, float angle) {
 
-        MPPointF p = MPPointF.getInstance(0,0);
+        MPPointF p = MPPointF.getInstance(0, 0);
         getPosition(center, dist, angle, p);
         return p;
     }
 
-    public static void getPosition(MPPointF center, float dist, float angle, MPPointF outputPoint){
+    public static void getPosition(MPPointF center, float dist, float angle, MPPointF outputPoint) {
         outputPoint.x = (float) (center.x + dist * Math.cos(Math.toRadians(angle)));
         outputPoint.y = (float) (center.y + dist * Math.sin(Math.toRadians(angle)));
     }
@@ -477,8 +468,9 @@ public abstract class CustomPieChartUtils {
         final float x1 = tracker.getXVelocity(id1);
         final float y1 = tracker.getYVelocity(id1);
         for (int i = 0, count = ev.getPointerCount(); i < count; i++) {
-            if (i == upIndex)
+            if (i == upIndex) {
                 continue;
+            }
 
             final int id2 = ev.getPointerId(i);
             final float x = x1 * tracker.getXVelocity(id2);
@@ -493,17 +485,18 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * Original method view.postInvalidateOnAnimation() only supportd in API >=
-     * 16, This is a replica of the code from ViewCompat.
+     * Original method view.postInvalidateOnAnimation() only supportd in API >= 16, This is a
+     * replica of the code from ViewCompat.
      *
      * @param view
      */
     @SuppressLint("NewApi")
     public static void postInvalidateOnAnimation(View view) {
-        if (Build.VERSION.SDK_INT >= 16)
+        if (Build.VERSION.SDK_INT >= 16) {
             view.postInvalidateOnAnimation();
-        else
+        } else {
             view.postInvalidateDelayed(10);
+        }
     }
 
     public static int getMinimumFlingVelocity() {
@@ -518,13 +511,14 @@ public abstract class CustomPieChartUtils {
      * returns an angle between 0.f < 360.f (not less than zero, less than 360)
      */
     public static float getNormalizedAngle(float angle) {
-        while (angle < 0.f)
+        while (angle < 0.f) {
             angle += 360.f;
+        }
 
         return angle % 360.f;
     }
 
-    private static Rect mDrawableBoundsCache = new Rect();
+    private static final Rect mDrawableBoundsCache = new Rect();
 
     public static void drawImage(Canvas canvas,
         Drawable drawable,
@@ -549,8 +543,8 @@ public abstract class CustomPieChartUtils {
         canvas.restoreToCount(saveId);
     }
 
-    private static Rect mDrawTextRectBuffer = new Rect();
-    private static Paint.FontMetrics mFontMetricsBuffer = new Paint.FontMetrics();
+    private static final Rect mDrawTextRectBuffer = new Rect();
+    private static final Paint.FontMetrics mFontMetricsBuffer = new Paint.FontMetrics();
 
     public static void drawXAxisValue(Canvas c, String text, float x, float y,
         Paint paint,
@@ -707,13 +701,11 @@ public abstract class CustomPieChartUtils {
             (int) Math.max(Math.ceil(constrainedToSize.width), 1.f),
             Layout.Alignment.ALIGN_NORMAL, 1.f, 0.f, false);
 
-
         drawMultilineText(c, textLayout, x, y, paint, anchor, angleDegrees);
     }
 
     /**
-     * Returns a recyclable FSize instance.
-     * Represents size of a rotated rectangle by degrees.
+     * Returns a recyclable FSize instance. Represents size of a rotated rectangle by degrees.
      *
      * @param rectangleSize
      * @param degrees
@@ -726,8 +718,7 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * Returns a recyclable FSize instance.
-     * Represents size of a rotated rectangle by radians.
+     * Returns a recyclable FSize instance. Represents size of a rotated rectangle by radians.
      *
      * @param rectangleSize
      * @param radians
@@ -739,8 +730,7 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * Returns a recyclable FSize instance.
-     * Represents size of a rotated rectangle by degrees.
+     * Returns a recyclable FSize instance. Represents size of a rotated rectangle by degrees.
      *
      * @param rectangleWidth
      * @param rectangleHeight
@@ -754,8 +744,7 @@ public abstract class CustomPieChartUtils {
     }
 
     /**
-     * Returns a recyclable FSize instance.
-     * Represents size of a rotated rectangle by radians.
+     * Returns a recyclable FSize instance. Represents size of a rotated rectangle by radians.
      *
      * @param rectangleWidth
      * @param rectangleHeight

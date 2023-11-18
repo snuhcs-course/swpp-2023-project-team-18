@@ -2,6 +2,7 @@ package snu.swpp.moment.ui.main_writeview.component;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +13,19 @@ import java.util.Locale;
 import snu.swpp.moment.R;
 import snu.swpp.moment.utils.AnimationProvider;
 
-public class MomentWriterContainer {
+
+enum MomentContainerState {
+    INVISIBLE,
+    READY_TO_ADD,
+    WRITING,
+    WAITING_AI_REPLY,
+    ADD_LIMIT_EXCEEDED,
+}
+
+
+public class MomentContainer {
+
+    private MomentContainerState state;
 
     private final ConstraintLayout momentEditTextWrapper;
     private final EditText momentEditText;
@@ -28,7 +41,7 @@ public class MomentWriterContainer {
 
     private final int MOMENT_MAX_LENGTH = 100;
 
-    public MomentWriterContainer(View view) {
+    public MomentContainer(View view) {
         momentEditTextWrapper = view.findViewById(R.id.momentEditTextWrapper);
         momentEditText = view.findViewById(R.id.momentEditText);
         momentLengthText = view.findViewById(R.id.momentLengthText);
@@ -61,8 +74,7 @@ public class MomentWriterContainer {
 
                 // 글자 수에 따라 submitButton의 활성화/비활성화 상태 변경
                 if (s.length() == 0) {
-                    submitButton.setVisibility(View.GONE);
-                    submitButtonInactive.setVisibility(View.VISIBLE);
+                    setSubmitButtonActivated(false);
                 } else if (s.length() > MOMENT_MAX_LENGTH) {
                     // 글자 수가 1000자를 초과하면 1000자까지의 텍스트만 유지
                     momentEditText.setText(s.subSequence(0, MOMENT_MAX_LENGTH));
@@ -74,14 +86,22 @@ public class MomentWriterContainer {
                 } else {
                     momentLengthText.setTextColor(
                         ContextCompat.getColor(view.getContext(), R.color.black));
-                    submitButton.setVisibility(View.VISIBLE);
-                    submitButtonInactive.setVisibility(View.GONE);
+                    setSubmitButtonActivated(true);
                 }
             }
         });
 
         addButtonInactive.setOnClickListener(v -> {
         });
+    }
+
+    public void setState(MomentContainerState state) {
+        Log.d("MomentWriterContainer", "setState: " + state);
+        this.state = state;
+
+        updateAddButton();
+        updateMomentEditTextWrapper();
+        updateSubmitButton();
     }
 
     public String getInputText() {
@@ -96,50 +116,75 @@ public class MomentWriterContainer {
         submitButton.setOnClickListener(listener);
     }
 
-    public void setUiWritingMoment() {
-        // add 누르고 입력창 뜨는 동작
-        addButton.startAnimation(animationProvider.fadeOut);
-        addButtonText.startAnimation(animationProvider.fadeOut);
-        addButton.setVisibility(View.GONE);
-        addButtonText.setVisibility(View.GONE);
-
-        momentEditTextWrapper.setVisibility(View.VISIBLE);
-        momentEditTextWrapper.startAnimation(animationProvider.delayedFadeIn);
+    private void updateAddButton() {
+        switch (state) {
+            case INVISIBLE:
+                addButton.setVisibility(View.GONE);
+                addButtonText.setVisibility(View.GONE);
+                addButtonInactive.setVisibility(View.GONE);
+                addLimitWarnText.setVisibility(View.GONE);
+                break;
+            case READY_TO_ADD:
+                addButton.startAnimation(animationProvider.fadeIn);
+                addButton.setVisibility(View.VISIBLE);
+                addButtonText.startAnimation(animationProvider.fadeIn);
+                addButtonText.setVisibility(View.VISIBLE);
+                addButtonInactive.setVisibility(View.GONE);
+                addLimitWarnText.setVisibility(View.GONE);
+                break;
+            case WRITING:
+                addButton.startAnimation(animationProvider.fadeOut);
+                addButton.setVisibility(View.GONE);
+                addButtonText.startAnimation(animationProvider.fadeOut);
+                addButtonText.setVisibility(View.GONE);
+                addButtonInactive.setVisibility(View.GONE);
+                addLimitWarnText.setVisibility(View.GONE);
+            case WAITING_AI_REPLY:
+                addButton.setVisibility(View.GONE);
+                addButtonText.setVisibility(View.GONE);
+                addButtonInactive.setVisibility(View.GONE);
+                addLimitWarnText.setVisibility(View.GONE);
+                break;
+            case ADD_LIMIT_EXCEEDED:
+                addButton.setVisibility(View.GONE);
+                addButtonText.setVisibility(View.GONE);
+                addButtonInactive.setVisibility(View.VISIBLE);
+                addLimitWarnText.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
-    public void setUiWaitingAiReply() {
-        // submit 직후 AI 답글 대기 중일 때 입력창 사라지는 동작
-        momentEditText.setText("");
-        submitButton.setVisibility(View.GONE);
-        submitButtonInactive.setVisibility(View.VISIBLE);
-        momentEditTextWrapper.setVisibility(View.GONE);
+    private void updateMomentEditTextWrapper() {
+        switch (state) {
+            case INVISIBLE:
+            case READY_TO_ADD:
+            case ADD_LIMIT_EXCEEDED:
+                momentEditTextWrapper.setVisibility(View.GONE);
+                break;
+
+            case WRITING:
+                momentEditTextWrapper.setVisibility(View.VISIBLE);
+                momentEditTextWrapper.startAnimation(animationProvider.delayedFadeIn);
+                break;
+            case WAITING_AI_REPLY:
+                momentEditTextWrapper.setVisibility(View.GONE);
+                momentEditText.setText("");
+                break;
+        }
     }
 
-    public void setUiReadyToAddMoment() {
-        // submit 후 AI 답글 받았을 때 add 버튼 표시되는 동작
-        addButton.startAnimation(animationProvider.fadeIn);
-        addButtonText.startAnimation(animationProvider.fadeIn);
-        addButton.setVisibility(View.VISIBLE);
-        addButtonText.setVisibility(View.VISIBLE);
+    private void updateSubmitButton() {
+        setSubmitButtonActivated(false);
     }
 
-    public void setUiAddLimitExceeded() {
-        // 모먼트 한 시간 2개 제한 초과했을 때
-        addButton.setVisibility(View.GONE);
-        addButtonText.setVisibility(View.GONE);
-
-        addButtonInactive.setVisibility(View.VISIBLE);
-        addLimitWarnText.setVisibility(View.VISIBLE);
-    }
-
-    public void setInvisible() {
-        // 하루 마무리 시작되었을 때, 또는 과거 데이터 볼 때 모먼트 작성 칸 숨기기
-        addButton.setVisibility(View.GONE);
-        addButtonText.setVisibility(View.GONE);
-        addLimitWarnText.setVisibility(View.GONE);
-
-        submitButtonInactive.setVisibility(View.VISIBLE);
-        momentEditTextWrapper.setVisibility(View.GONE);
+    private void setSubmitButtonActivated(boolean activated) {
+        if (activated) {
+            submitButton.setVisibility(View.VISIBLE);
+            submitButtonInactive.setVisibility(View.GONE);
+        } else {
+            submitButton.setVisibility(View.GONE);
+            submitButtonInactive.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setMomentLengthText(int count) {

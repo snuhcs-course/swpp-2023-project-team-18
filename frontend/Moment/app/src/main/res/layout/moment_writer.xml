@@ -117,6 +117,7 @@
         style="@style/SMALL_RED"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="@string/moment_limit_help_text"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"

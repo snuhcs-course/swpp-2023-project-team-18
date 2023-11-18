@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -59,7 +60,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
 
         momentRemoteDataSource = Objects.requireNonNullElse(momentRemoteDataSource,
@@ -106,21 +107,11 @@ public class DailyViewFragment extends BaseWritePageFragment {
         binding.dailyMomentList.addFooterView(footerView);
 
         // list footer 관리 객체 초기화
-        listFooterContainer = new ListFooterContainer(footerView, false);
-        listFooterContainer.observeSaveScoreSwitch(saveScoreSwitch -> {
-            if (saveScoreSwitch) {
-                viewModel.saveScore(listFooterContainer.getScore());
-            }
-        });
+        listFooterContainer = new ListFooterContainer(footerView, getViewLifecycleOwner(),
+            false);
 
-        // moment GET API 호출 후 동작
-        viewModel.observeMomentState((MomentUiState momentUiState) -> {
-            Exception error = momentUiState.getError();
-            if (error != null) {
-                handleApiError(error);
-                return;
-            }
-
+        // moment & story GET API response를 모두 받았을 때
+        apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
             listViewItems.clear();
             if (momentUiState.getNumMoments() > 0) {
                 binding.noMomentText.setVisibility(View.GONE);
@@ -131,21 +122,30 @@ public class DailyViewFragment extends BaseWritePageFragment {
                 binding.noMomentText.setVisibility(View.VISIBLE);
             }
             listViewAdapter.notifyDataSetChanged();
+
+            listFooterContainer.updateWithServerData(storyUiState, false);
+        }));
+
+        // moment GET API response를 받았을 때
+        viewModel.observeMomentState((MomentUiState momentUiState) -> {
+            Exception error = momentUiState.getError();
+            if (error != null) {
+                handleApiError(error);
+                return;
+            }
+            apiResponseManager.saveResponse(momentUiState);
+            apiResponseManager.process();
         });
 
-        // story GET API 호출 후 동작
+        // story GET API response를 받았을 때
         viewModel.observeStoryState((StoryUiState storyUiState) -> {
             Exception error = storyUiState.getError();
             if (error != null) {
                 handleApiError(error);
                 return;
             }
-
-            listFooterContainer.updateUiWithRemoteData(storyUiState, false);
-            if (!storyUiState.isEmpty()) {
-                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
-                    binding.dailyMomentList.getCount() - 1));
-            }
+            apiResponseManager.saveResponse(storyUiState);
+            apiResponseManager.process();
         });
 
         Log.d("DailyViewFragment", "onCreateView: initial API call to refresh");
@@ -181,6 +181,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
     protected void callApisToRefresh() {
         LocalDateTime currentDateTime = getCurrentDateTime();
         Log.d("DailyViewFragment", "callApisToRefresh: called with timestamp " + currentDateTime);
+        apiResponseManager.reset();
         viewModel.getMoment(currentDateTime);
         viewModel.getStory(currentDateTime);
     }
@@ -199,5 +200,6 @@ public class DailyViewFragment extends BaseWritePageFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        listFooterContainer.removeObservers();
     }
 }
