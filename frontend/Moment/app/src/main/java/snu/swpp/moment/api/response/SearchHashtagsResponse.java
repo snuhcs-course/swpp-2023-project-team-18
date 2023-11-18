@@ -5,6 +5,11 @@ import java.util.List;
 public class SearchHashtagsResponse {
     private List<SearchEntry> searchentries;
 
+    public void setSearchentries(
+        List<SearchEntry> searchentries) {
+        this.searchentries = searchentries;
+    }
+
     // Getter and setter for searchentries
     public List<SearchEntry> getSearchentries() {
         return searchentries;
@@ -36,6 +41,26 @@ public class SearchHashtagsResponse {
 
         public int getId() {
             return id;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public void setCreated_at(long created_at) {
+            this.created_at = created_at;
+        }
+
+        public void setEmotion(String emotion) {
+            this.emotion = emotion;
+        }
+
+        public void setId(int id) {
+            this.id = id;
         }
     }
 }
