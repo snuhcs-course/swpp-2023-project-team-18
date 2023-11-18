@@ -21,6 +21,7 @@
         android:layout_column="0"
         android:layout_columnWeight="1"
         android:layout_row="0"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_sunny" />
 
@@ -47,6 +48,7 @@
         android:layout_column="2"
         android:layout_columnWeight="1"
         android:layout_row="0"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_sun_cloud" />
 
@@ -76,6 +78,7 @@
         android:layout_column="4"
         android:layout_columnWeight="1"
         android:layout_row="0"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_cloud" />
 
@@ -96,12 +99,13 @@
 
 
     <ImageView
-        android:id="@+id/emotionRain"
+        android:id="@+id/emotionRainRow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="6"
         android:layout_columnWeight="1"
         android:layout_row="0"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_rain" />
 
@@ -121,12 +125,13 @@
 
     <!-- Image 2 -->
     <ImageView
-        android:id="@+id/emotionLightning"
+        android:id="@+id/emotionLightningRow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="8"
         android:layout_columnWeight="1"
         android:layout_row="0"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_lightning" />
 
@@ -157,6 +162,7 @@
         android:layout_column="0"
         android:layout_columnWeight="1"
         android:layout_row="1"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_sunny" />
 
@@ -183,6 +189,7 @@
         android:layout_column="2"
         android:layout_columnWeight="1"
         android:layout_row="1"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_sun_cloud" />
 
@@ -212,6 +219,7 @@
         android:layout_column="4"
         android:layout_columnWeight="1"
         android:layout_row="1"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_cloud" />
 
@@ -232,12 +240,13 @@
 
 
     <ImageView
-        android:id="@+id/emotionRain2"
+        android:id="@+id/emotionRainRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="6"
         android:layout_columnWeight="1"
         android:layout_row="1"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_rain" />
 
@@ -257,12 +266,13 @@
 
     <!-- Image 2 -->
     <ImageView
-        android:id="@+id/emotionLightning2"
+        android:id="@+id/emotionLightningRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="8"
         android:layout_columnWeight="1"
         android:layout_row="1"
+        android:clickable="true"
         android:paddingVertical="@dimen/emotionVerticalPadding"
         app:srcCompat="@drawable/icon_lightning" />
 
