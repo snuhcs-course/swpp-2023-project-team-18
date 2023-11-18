@@ -127,6 +127,8 @@ public class ListFooterContainer {
             emotionContainer.setHelpText(day + "의 감정");
             tagBoxContainer.setHelpText(day + "의 태그");
             scoreContainer.setHelpText(day + "의 점수");
+
+            setScrollToBottomSwitch();
         }
     }
 

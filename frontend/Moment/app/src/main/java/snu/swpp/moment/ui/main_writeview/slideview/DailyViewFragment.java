@@ -112,7 +112,6 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
         // moment & story GET API response를 모두 받았을 때
         apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
-            // moment GET API 호출 후 동작
             listViewItems.clear();
             if (momentUiState.getNumMoments() > 0) {
                 binding.noMomentText.setVisibility(View.GONE);
@@ -124,12 +123,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
             }
             listViewAdapter.notifyDataSetChanged();
 
-            // story GET API 호출 후 동작
             listFooterContainer.updateWithServerData(storyUiState, false);
-            if (!storyUiState.hasNoData()) {
-                binding.dailyMomentList.post(() -> binding.dailyMomentList.setSelection(
-                    binding.dailyMomentList.getCount() - 1));
-            }
         }));
 
         // moment GET API response를 받았을 때

@@ -194,63 +194,22 @@ public class TodayViewFragment extends BaseWritePageFragment {
         listViewAdapter.observeWaitingAiReplySwitch(
             bottomButtonContainer.waitingAiReplySwitchObserver());
 
-        // 마무리 과정 중 뒤로가기 버튼 경고
-        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                Log.d("TodayViewFragment", "handleOnBackPressed: called / isCompletionInProgress="
-                    + listFooterContainer.isCompletionInProgress());
-                if (!listFooterContainer.isCompletionInProgress()) {
-                    doOriginalAction();
-                    return;
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),
-                    R.style.DialogTheme);
-                builder.setMessage(R.string.completion_back_button_popup)
-                    .setPositiveButton(R.string.popup_yes, (dialog, id) -> {
-                        doOriginalAction();
-                    }).setNegativeButton(R.string.popup_no, (dialog, id) -> {
-                    });
-                builder.create().show();
-            }
-
-            private void doOriginalAction() {
-                setEnabled(false);
-                requireActivity().getOnBackPressedDispatcher().onBackPressed();
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher()
-            .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
-
         // moment & story GET API response를 모두 받았을 때
         apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
-            // moment state
             listViewItems.clear();
             listViewAdapter.setAnimation(false);
 
-            boolean hasMoment = momentUiState.getNumMoments() > 0;
-            if (hasMoment) {
+            boolean doMomentsExist = momentUiState.getNumMoments() > 0;
+            if (doMomentsExist) {
                 Log.d("TodayViewFragment", "Got moment GET response: numMoments="
                     + momentUiState.getNumMoments());
-            }
-            for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
-                listViewItems.add(new ListViewItem(momentPair));
+                for (MomentPairModel momentPair : momentUiState.getMomentPairList()) {
+                    listViewItems.add(new ListViewItem(momentPair));
+                }
             }
             listViewAdapter.notifyDataSetChanged();
 
-            // story state
-            listFooterContainer.updateWithServerData(storyUiState, true);
-            if (storyUiState.hasNoData()) {
-                Log.d("TodayViewFragment", "Got story GET response: story has no data");
-                bottomButtonContainer.setState(WritePageState.MOMENT_READY_TO_ADD);
-                bottomButtonContainer.setActivated(hasMoment);
-            } else {
-                Log.d("TodayViewFragment",
-                    "Got story GET response: story has valid data");
-                bottomButtonContainer.setState(WritePageState.COMPLETE);
-                scrollToBottom();
-            }
+            bottomButtonContainer.updateWithServerData(storyUiState, doMomentsExist);
         }));
 
         // moment GET API response를 받았을 때
@@ -281,6 +240,35 @@ public class TodayViewFragment extends BaseWritePageFragment {
         Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
         callApisToRefresh();
         updateRefreshTime();
+
+        // 마무리 과정 중 뒤로가기 버튼 경고
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Log.d("TodayViewFragment", "handleOnBackPressed: called / isCompletionInProgress="
+                    + listFooterContainer.isCompletionInProgress());
+                if (!listFooterContainer.isCompletionInProgress()) {
+                    doOriginalAction();
+                    return;
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),
+                    R.style.DialogTheme);
+                builder.setMessage(R.string.completion_back_button_popup)
+                    .setPositiveButton(R.string.popup_yes, (dialog, id) -> {
+                        doOriginalAction();
+                    }).setNegativeButton(R.string.popup_no, (dialog, id) -> {
+                    });
+                builder.create().show();
+            }
+
+            private void doOriginalAction() {
+                setEnabled(false);
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher()
+            .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {

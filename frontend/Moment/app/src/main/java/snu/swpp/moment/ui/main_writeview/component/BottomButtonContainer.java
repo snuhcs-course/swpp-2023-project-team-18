@@ -11,6 +11,7 @@ import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
+import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 
 public class BottomButtonContainer {
@@ -44,11 +45,27 @@ public class BottomButtonContainer {
         setState(WritePageState.FOOTER_INVISIBLE);
     }
 
+    public void updateWithServerData(@NonNull StoryUiState storyUiState, boolean doMomentsExist) {
+        if (storyUiState.hasNoData()) {
+            setState(WritePageState.MOMENT_READY_TO_ADD, false);
+            setActivated(doMomentsExist);
+        } else {
+            setState(WritePageState.COMPLETE, false);
+        }
+        listFooterContainer.updateWithServerData(storyUiState, true);
+    }
+
     public void setState(WritePageState state) {
+        setState(state, true);
+    }
+
+    private void setState(WritePageState state, boolean updateFooterState) {
         Log.d("BottomButtonContainer", String.format("setState: %s -> %s", this.state, state));
         this.state = state;
 
-        listFooterContainer.setState(state);
+        if (updateFooterState) {
+            listFooterContainer.setState(state);
+        }
         updateButton();
         updateHamburgerButtonState();
     }
