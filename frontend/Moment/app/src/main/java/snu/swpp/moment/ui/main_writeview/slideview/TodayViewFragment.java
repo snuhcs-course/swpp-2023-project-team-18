@@ -178,15 +178,14 @@ public class TodayViewFragment extends BaseWritePageFragment {
         });
 
         // 하단 버튼 관리 객체 초기화
-        bottomButtonContainer = new BottomButtonContainer(root, viewModel, listFooterContainer);
+        MainActivity activity = (MainActivity) requireActivity();
+        bottomButtonContainer = new BottomButtonContainer(activity, root, viewModel,
+            listFooterContainer);
 
         // 하루 마무리 API 호출 시 동작 설정
-        MainActivity activity = (MainActivity) requireActivity();
-        viewModel.observeCompletionState(activity.completionStateObserver());
         viewModel.observeCompletionState(bottomButtonContainer.completionStateObserver());
         viewModel.observeStoryResultState(bottomButtonContainer.storyResultObserver());
         viewModel.observeEmotionResultState(bottomButtonContainer.emotionResultObserver());
-        viewModel.observeTagsResultState(activity.tagsResultObserver());
         viewModel.observeTagsResultState(bottomButtonContainer.tagsResultObserver());
         viewModel.observeScoreResultState(bottomButtonContainer.scoreResultObserver());
         viewModel.observeAiStoryState(listFooterContainer.aiStoryObserver());

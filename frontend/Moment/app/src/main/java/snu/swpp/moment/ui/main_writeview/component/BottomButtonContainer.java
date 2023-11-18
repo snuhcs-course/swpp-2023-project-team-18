@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
@@ -16,15 +17,21 @@ public class BottomButtonContainer {
 
     private WritePageState state;
 
-    private final Button button;
+    private final MainActivity mainActivity;
     private final View view;
+    private final Button button;
     private final TodayViewModel viewModel;
     private final ListFooterContainer listFooterContainer;
 
-    public BottomButtonContainer(@NonNull View view, TodayViewModel viewModel,
-        ListFooterContainer listFooterContainer) {
+    public BottomButtonContainer(
+        @NonNull MainActivity mainActivity,
+        @NonNull View view,
+        TodayViewModel viewModel,
+        ListFooterContainer listFooterContainer
+    ) {
         button = view.findViewById(R.id.bottomButton);
 
+        this.mainActivity = mainActivity;
         this.view = view;
         this.viewModel = viewModel;
         this.listFooterContainer = listFooterContainer;
@@ -43,6 +50,7 @@ public class BottomButtonContainer {
 
         listFooterContainer.setState(state);
         updateButton();
+        updateHamburgerButtonState();
     }
 
     private void updateButton() {
@@ -110,6 +118,20 @@ public class BottomButtonContainer {
                 button.setText(R.string.day_complete_string);
                 button.setOnClickListener(v -> {
                 });
+                break;
+        }
+    }
+
+    private void updateHamburgerButtonState() {
+        switch (state) {
+            default:
+                mainActivity.showHamburgerButton(true);
+                break;
+            case STORY:
+            case EMOTION:
+            case TAG:
+            case SCORE:
+                mainActivity.showHamburgerButton(false);
                 break;
         }
     }
