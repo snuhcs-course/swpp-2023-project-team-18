@@ -18,12 +18,13 @@ class StatViewModel(
 ) : ViewModel() {
     val today: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     val stat: MutableLiveData<StatState> = MutableLiveData()
+
     // 기간을 표시하기 위한 변수
     val startDate: MutableLiveData<LocalDate> = MutableLiveData()
     val endDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
 
     // 버튼 타입을 나타내는 livedata
-    val selectedButtonType:MutableLiveData<ButtonType> = MutableLiveData(ButtonType.WEEK)
+    val selectedButtonType: MutableLiveData<ButtonType> = MutableLiveData(ButtonType.WEEK)
 
     // 통계 평균값을 7일 30일
     val selectedPeriod: MutableLiveData<ButtonType> = MutableLiveData(ButtonType.WEEK)
@@ -33,8 +34,8 @@ class StatViewModel(
     val lowestScore: MutableLiveData<Int> = MutableLiveData()
     val averageScore: MutableLiveData<Double> = MutableLiveData()
 
-    fun getStats(todayDate:LocalDate,isMonth: Boolean) {
-      //  val todayDate = TimeConverter.getToday()
+    fun getStats(todayDate: LocalDate, isMonth: Boolean) {
+        //  val todayDate = TimeConverter.getToday()
         today.value = todayDate
         val startEndTimes =
             if (isMonth) TimeConverter.getRecentMonthTimestamps(todayDate) else TimeConverter.getRecentWeekTimestamps(
@@ -55,11 +56,14 @@ class StatViewModel(
 
         authenticationRepository.isTokenValid(object : TokenCallBack {
             override fun onSuccess() {
-                val accessToken = authenticationRepository.token.accessToken;
+                val accessToken = authenticationRepository.token.accessToken
                 storyRepository.getStory(accessToken, startEndTimes[0], startEndTimes[1],
                     object : StoryGetCallBack {
                         override fun onSuccess(storyList: MutableList<StoryModel>) {
-                            stat.value = StatState.fromStoryModels(storyList.filter{it.emotionInt != EmotionMap.INVALID_EMOTION}, todayDate)
+                            stat.value = StatState.fromStoryModels(
+                                storyList.filter { it.emotionInt != EmotionMap.INVALID_EMOTION },
+                                todayDate
+                            )
 
 
                             // score stat

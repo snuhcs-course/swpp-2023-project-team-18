@@ -11,13 +11,12 @@ import android.widget.TextView
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
-
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.Font
@@ -48,7 +47,6 @@ import snu.swpp.moment.databinding.FragmentStatviewBinding
 import snu.swpp.moment.databinding.StatButtonDateBinding
 import snu.swpp.moment.databinding.StatDurationBinding
 import snu.swpp.moment.utils.TimeConverter
-import java.sql.Time
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -60,6 +58,7 @@ class StatViewFragment : Fragment() {
     private val authenticationRepository: AuthenticationRepository =
         AuthenticationRepository.getInstance(context)
     private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
+
     //private lateinit var emotionColors: Map<String, Int>
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -72,7 +71,7 @@ class StatViewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val statViewModel = ViewModelProvider(this).get(
             StatViewModel::class.java
 
@@ -127,11 +126,11 @@ class StatViewFragment : Fragment() {
         }
 
         buttonDateBinding.statWeekButton.setOnClickListener {
-            statViewModel.getStats(TimeConverter.getToday(),false)
+            statViewModel.getStats(TimeConverter.getToday(), false)
         }
 
         buttonDateBinding.statMonthButton.setOnClickListener {
-            statViewModel.getStats(TimeConverter.getToday(),true)
+            statViewModel.getStats(TimeConverter.getToday(), true)
         }
 
         // 점수 평균값
@@ -139,7 +138,8 @@ class StatViewFragment : Fragment() {
         viewModel.averageScore.observe(viewLifecycleOwner) { average ->
             val averageScoreTextView: TextView = root.findViewById(R.id.average_score_text_view)
             // Assuming you want to display the average score to one decimal place
-            averageScoreTextView.text = getString(R.string.average_score_text, String.format("%.1f", average))
+            averageScoreTextView.text =
+                getString(R.string.average_score_text, String.format("%.1f", average))
         }
 
         viewModel.stat.observe(viewLifecycleOwner) { state ->
@@ -162,7 +162,7 @@ class StatViewFragment : Fragment() {
                 }
             }
         }
-        viewModel.getStats(TimeConverter.getToday(),false)
+        viewModel.getStats(TimeConverter.getToday(), false)
 
         return root
     }
@@ -189,7 +189,7 @@ class StatViewFragment : Fragment() {
 
         dataset.circleColors = listOf(requireContext().getColor(R.color.red))
         dataset.color = requireContext().getColor(R.color.black)
-        dataset.setCircleRadius(3.5f)
+        dataset.circleRadius = 3.5f
         dataset.setDrawCircleHole(false)
         dataset.setDrawValues(false)
 
@@ -230,13 +230,13 @@ class StatViewFragment : Fragment() {
         lineChart.axisLeft.axisMaximum = 6.0F
         lineChart.axisRight.axisMinimum = 0.0F
         lineChart.axisRight.axisMaximum = 6.0F
-        lineChart.axisLeft.setLabelCount(7, true);
+        lineChart.axisLeft.setLabelCount(7, true)
         lineChart.axisLeft.typeface =
             ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
-        lineChart.axisRight.setLabelCount(7, true);
+        lineChart.axisRight.setLabelCount(7, true)
 
-        dataset.setDrawHorizontalHighlightIndicator(false);
-        dataset.setDrawVerticalHighlightIndicator(false);
+        dataset.setDrawHorizontalHighlightIndicator(false)
+        dataset.setDrawVerticalHighlightIndicator(false)
         lineChart.xAxis.setLabelCount(entries.size, false)
         Log.d("stat_view", entries.size.toString())
         lineChart.xAxis.typeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_light)
@@ -326,7 +326,8 @@ class StatViewFragment : Fragment() {
             if (sumValue > 0) { // Check if the value is greater than 0
                 val pieEntry = PieEntry(sumValue.toFloat(), category)
                 categoryIcons[category]?.let { iconId ->
-                    val drawable = ResourcesCompat.getDrawable(requireContext().resources, iconId, null)
+                    val drawable =
+                        ResourcesCompat.getDrawable(requireContext().resources, iconId, null)
                     drawable?.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
                     pieEntry.icon = drawable
                 }
@@ -341,12 +342,13 @@ class StatViewFragment : Fragment() {
             valueTextColor = requireContext().getColor(R.color.white)
             valueTextSize = 0f
             valueTypeface = ResourcesCompat.getFont(requireContext(), R.font.maruburi_bold)
-            setSliceSpace(1f) // space between slices
+            sliceSpace = 1f // space between slices
         }
 
         // Configure the pie chart
         with(pieChart) {
-            pieChart.renderer = CustomPieChartRenderer(pieChart,pieChart.animator,pieChart.viewPortHandler)
+            pieChart.renderer =
+                CustomPieChartRenderer(pieChart, pieChart.animator, pieChart.viewPortHandler)
             data = PieData(pieDataSet)
             legend.isEnabled = false // Disable the legend
             legend.apply {
@@ -381,7 +383,6 @@ class StatViewFragment : Fragment() {
         return m
 
     }
-
 
 
     fun getEmotionColor_grayScale(category: String): Int {
@@ -425,9 +426,11 @@ class StatViewFragment : Fragment() {
                         .tagCloudItemScaleDown()
                 ) {
                     Text(
-                        text = "#"+it.first,
+                        text = "#" + it.first,
                         //    color = Color.BLUE,
-                        modifier = Modifier.padding(2.dp).padding(start = 5.dp, end = 5.dp),
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .padding(start = 5.dp, end = 5.dp),
                         fontFamily = FontFamily(Font(R.font.maruburi_bold)),
                         color = androidx.compose.ui.graphics.Color.White
 

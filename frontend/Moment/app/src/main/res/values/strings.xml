@@ -48,13 +48,19 @@
     <string name="no_moment">작성된 모먼트가 없어요</string>
     <string name="day_complete_string">하루 마무리하기</string>
     <string name="day_complete_popup">하루를 마무리하면 더 이상 모먼트를 작성할 수 없어요. 지금 마무리하실래요?</string>
+    <string name="ai_reply_loading">· · ·\nAI가 일기를 읽고 있어요</string>
+
+    <string name="day_complete_story">스토리 저장하기</string>
+    <string name="day_complete_emotion">감정 저장하기</string>
+    <string name="day_completion_tag">태그 저장하기</string>
+    <string name="day_completion_score">점수 저장하기</string>
 
     <string name="story_title_hint">스토리 제목</string>
     <string name="story_content_hint">오늘 하루를 마무리하는 스토리를 써보세요.\n작성 완료 후에는 다시 수정할 수 없어요.</string>
     <string name="ai_button_help_text">AI에게 부탁하기</string>
     <string name="ai_story_popup">AI에게 오늘의 스토리 작성을 부탁하실래요?</string>
     <string name="ai_story_unavailable_popup">직접 작성한 내용이 있는 경우 AI에게 작성을 부탁할 수 없어요.</string>
-    <string name="ai_story_loading">· · ·AI가 하루를 요약하고 있어요</string>
+    <string name="ai_story_loading">· · ·\nAI가 하루를 요약하고 있어요</string>
     <string name="next_stage_button">다음 단계로 이동</string>
     <string name="emotion_help_text">오늘 하루를 가장 잘 나타내는 감정을 골라주세요</string>
     <string name="tag_help_text">오늘 하루를 표현하는 태그를 달아주세요</string>
@@ -62,8 +68,9 @@
     <string name="tag_hint">#태그를 #적어주세요</string>
     <string name="score_help_text">마지막으로 오늘 하루에 점수를 매겨주세요</string>
     <string name="completed_day">마무리된 하루</string>
-    <string name="completion_loading">· · · \n잠시만 기다려주세요</string>
-    <string name="please_retry">다시 시도해주세요.</string>
+    <string name="completion_loading">· · ·\n잠시만 기다려주세요</string>
+    <string name="please_retry">다시 시도해주세요</string>
+    <string name="ai_story_done">AI가 스토리 작성을 완료했어요</string>
     <string name="auto_complete_warning">직접 점수를 매기지 않아 자동으로 입력되었으니 수정해주세요</string>
     <string name="completion_back_button_popup">하루 마무리를 중단하면 지금까지의 내용이 제대로 저장되지 않을 수 있어요. 지금 중단하실래요?</string>
     <string name="back_to_today">오늘로 돌아가기</string>
@@ -89,8 +96,6 @@
     <string name="stat_seven_avg">7일 평균</string>
     <string name="stat_thirty_avg">30일 평균</string>
     <string name="average_score_text">%1$s</string>
-
-
 
 
     <string name="stat_section_score">하루 점수</string>

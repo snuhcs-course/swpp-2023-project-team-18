@@ -6,72 +6,63 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.AnimationProvider;
+import snu.swpp.moment.utils.EmotionMap;
+
 
 public class ListFooterContainer {
 
     private final View view;
+    private final LifecycleOwner lifecycleOwner;
     private final boolean isToday;  // for debugging
 
+    // 현재 상태
+    private WritePageState state;
+
     // 모먼트 작성
-    private final MomentWriterContainer momentWriterContainer;
+    private final MomentContainer momentContainer;
     // 스토리 작성
     private final StoryContainer storyContainer;
     // 감정 선택
-    private final ConstraintLayout emotionWrapper;
-    private final EmotionGridContainer emotionGridContainer;
-    private final TextView emotionHelpText;
+    private final EmotionContainer emotionContainer;
     // 태그 입력
     private final TagBoxContainer tagBoxContainer;
     // 점수 선택
     private final ScoreContainer scoreContainer;
     // 로딩 메시지
     private final TextView loadingText;
+    // 마무리된 하루 텍스트
+    private final TextView completedText;
 
     // 애니메이션 개체 묶음
     private final AnimationProvider animationProvider;
 
     // 하단 버튼 활성화 상태
-    private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>();
 
     // 새 요소 추가 시 하단으로 스크롤 하기 위한 스위치
     private final MutableLiveData<Boolean> scrollToBottomSwitch = new MutableLiveData<>(false);
     // AI 요약 API call을 위한 스위치
     private final MutableLiveData<Boolean> aiStoryCallSwitch = new MutableLiveData<>(false);
 
-    private enum ListFooterState {
-        INVISIBLE,
-        MOMENT_WRITING,
-        MOMENT_WAITING_AI_REPLY,
-        MOMENT_READY_TO_ADD,
-        MOMENT_ADD_LIMIT_EXCEEDED,
-        STORY_WRITING,
-        EMOTION_SELECTING,
-        TAG_WRITING,
-        SCORE_SELECTING
-    }
-
-    private ListFooterState state = ListFooterState.INVISIBLE;
-
-
-    public ListFooterContainer(@NonNull View view, boolean isToday) {
+    public ListFooterContainer(@NonNull View view, @NonNull LifecycleOwner lifecycleOwner,
+        boolean isToday) {
         this.view = view;
+        this.lifecycleOwner = lifecycleOwner;
         this.isToday = isToday;
 
         // 모먼트 작성
-        momentWriterContainer = new MomentWriterContainer(view.findViewById(R.id.moment_writer));
+        momentContainer = new MomentContainer(view.findViewById(R.id.moment_writer));
         // 스토리 작성
         storyContainer = new StoryContainer(view.findViewById(R.id.story_wrapper));
         // 감정 선택
-        emotionWrapper = view.findViewById(R.id.emotion_wrapper);
-        emotionGridContainer = new EmotionGridContainer(view.findViewById(R.id.emotion_selector));
-        emotionHelpText = view.findViewById(R.id.emotion_help_text);
+        emotionContainer = new EmotionContainer(view.findViewById(R.id.emotion_wrapper));
         // 태그 입력
         tagBoxContainer = new TagBoxContainer(view.findViewById(R.id.tag_wrapper));
         // 점수 선택
@@ -81,229 +72,249 @@ public class ListFooterContainer {
 
         // 애니메이션 개체 묶음
         animationProvider = new AnimationProvider(view);
+        // 마무리된 하루 텍스트
+        completedText = view.findViewById(R.id.completed_text);
 
         // 스토리 자수 제한 감지
-        storyContainer.observeLimit((Boolean isLimitExceeded) -> {
-            log("observeLimit: " + isLimitExceeded);
-            setBottomButtonState(!isLimitExceeded);
+        storyContainer.observeLimit(lifecycleOwner, isLimitExceeded -> {
+            if (state != WritePageState.STORY) {
+                return;
+            }
+            log("story observeLimit: " + isLimitExceeded);
+            setBottomButtonActivated(!isLimitExceeded);
         });
 
         // AI에게 부탁하기 버튼 감지
-        storyContainer.observeAiButtonSwitch(isSet -> {
+        storyContainer.observeAiButtonSwitch(lifecycleOwner, isSet -> {
+            if (state != WritePageState.STORY) {
+                return;
+            }
             log("observeAiButtonSwitch: " + isSet);
             if (isSet) {
                 showLoadingText(true, R.string.ai_story_loading);
                 setAiStoryCallSwitch();
-                setBottomButtonState(false);
             }
         });
 
         // 감정 선택 감지
-        emotionGridContainer.observeSelectedEmotion((Integer emotion) -> {
+        emotionContainer.observeSelectedEmotion((Integer emotion) -> {
+            if (state != WritePageState.EMOTION) {
+                return;
+            }
             log("observeSelectedEmotion: " + emotion);
-            setBottomButtonState(emotion > -1);
+            setBottomButtonActivated(-1 < emotion && emotion < EmotionMap.INVALID_EMOTION);
         });
 
         // 태그 개수 제한 감지
-        tagBoxContainer.observeLimit((Boolean isLimitExceeded) -> {
-            log("observeLimit: " + isLimitExceeded);
-            setBottomButtonState(!isLimitExceeded);
+        tagBoxContainer.observeLimit(lifecycleOwner, (Boolean isLimitExceeded) -> {
+            if (state != WritePageState.TAG) {
+                return;
+            }
+            log("tag observeLimit: " + isLimitExceeded);
+            setBottomButtonActivated(!isLimitExceeded);
         });
     }
 
-    public void updateUiWithRemoteData(@NonNull StoryUiState storyUiState, boolean isToday) {
+    public void updateWithServerData(@NonNull StoryUiState storyUiState, boolean isToday) {
         if (storyUiState.hasNoData()) {
             // 보여줄 데이터가 없는 경우
-            storyContainer.resetUi();
-            tagBoxContainer.resetUi();
-            scoreContainer.resetUi();
-
-            emotionGridContainer.resetUi();
-            emotionHelpText.setText(R.string.emotion_help_text);
-            emotionWrapper.setVisibility(View.GONE);
-
             if (isToday) {
-                setUiReadyToAddMoment(false);
+                setState(WritePageState.MOMENT_READY_TO_ADD);
             } else {
-                momentWriterContainer.setInvisible();
-                state = ListFooterState.INVISIBLE;
+                setState(WritePageState.FOOTER_INVISIBLE);
             }
+        } else {
+            setState(WritePageState.COMPLETE);
+            storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
+            storyContainer.setCompletedDate(storyUiState.getCreatedAt());
+            emotionContainer.selectEmotion(storyUiState.getEmotion());
+            tagBoxContainer.setTags(storyUiState.getTags());
+            scoreContainer.setScore(storyUiState.getScore());
+
+            String day = isToday ? "오늘" : "이날";
+            emotionContainer.setHelpText(day + "의 감정");
+            tagBoxContainer.setHelpText(day + "의 태그");
+            scoreContainer.setHelpText(day + "의 점수");
+
+            setScrollToBottomSwitch();
+        }
+    }
+
+    public void setState(WritePageState state) {
+        log(String.format("setState: %s -> %s", this.state, state));
+        this.state = state;
+
+        updateMomentContainer();
+        updateStoryContainer();
+        updateEmotionContainer();
+        updateTagBoxContainer();
+        updateScoreContainer();
+        updateCompletedText();
+
+        if (state != WritePageState.FOOTER_INVISIBLE) {
+            setScrollToBottomSwitch();
+        }
+    }
+
+    private void updateMomentContainer() {
+        switch (state) {
+            case MOMENT_READY_TO_ADD:
+                momentContainer.setState(MomentContainerState.READY_TO_ADD);
+                break;
+            case MOMENT_WRITING:
+                momentContainer.setState(MomentContainerState.WRITING);
+                break;
+            case MOMENT_WAITING_AI_REPLY:
+                momentContainer.setState(MomentContainerState.WAITING_AI_REPLY);
+                break;
+            case MOMENT_ADD_LIMIT_EXCEEDED:
+                momentContainer.setState(MomentContainerState.ADD_LIMIT_EXCEEDED);
+                break;
+            default:
+                momentContainer.setState(MomentContainerState.INVISIBLE);
+        }
+    }
+
+    private void updateStoryContainer() {
+        switch (state) {
+            case STORY:
+                storyContainer.setState(StoryContainerState.WRITING);
+                break;
+            case EMOTION:
+            case TAG:
+            case SCORE:
+            case COMPLETE:
+                storyContainer.setState(StoryContainerState.COMPLETE);
+                break;
+            default:
+                storyContainer.setState(StoryContainerState.INVISIBLE);
+        }
+    }
+
+    private void updateEmotionContainer() {
+        switch (state) {
+            case EMOTION:
+                emotionContainer.setState(EmotionContainerState.SELECTING);
+                break;
+            case TAG:
+            case SCORE:
+            case COMPLETE:
+                emotionContainer.setState(EmotionContainerState.COMPLETE);
+                break;
+            default:
+                emotionContainer.setState(EmotionContainerState.INVISIBLE);
+        }
+    }
+
+    private void updateTagBoxContainer() {
+        switch (state) {
+            case TAG:
+                tagBoxContainer.setState(TagBoxContainerState.WRITING);
+                break;
+            case SCORE:
+            case COMPLETE:
+                tagBoxContainer.setState(TagBoxContainerState.COMPLETE);
+                break;
+            default:
+                tagBoxContainer.setState(TagBoxContainerState.INVISIBLE);
+        }
+    }
+
+    private void updateScoreContainer() {
+        switch (state) {
+            case SCORE:
+                scoreContainer.setState(ScoreContainerState.SELECTING);
+                break;
+            case COMPLETE:
+                scoreContainer.setState(ScoreContainerState.COMPLETE);
+                break;
+            default:
+                scoreContainer.setState(ScoreContainerState.INVISIBLE);
+        }
+    }
+
+    private void updateCompletedText() {
+        if (!isToday) {
             return;
         }
-
-        momentWriterContainer.setInvisible();
-
-        freezeStoryEditText();
-        storyContainer.setUiWritingStory(storyUiState.getCreatedAt());
-        storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
-        storyContainer.setUiCompleteStory();
-
-        freezeEmotionSelector();
-        emotionGridContainer.selectEmotion(storyUiState.getEmotion());
-        emotionWrapper.setVisibility(View.VISIBLE);
-
-        freezeTagEditText();
-        tagBoxContainer.setTags(storyUiState.getTags());
-        tagBoxContainer.setUiVisible();
-
-        scoreContainer.setScore(storyUiState.getScore());
-        scoreContainer.setUiVisible();
-        scoreContainer.showAutoCompleteWarnText(!storyUiState.isPointCompleted());
-
-        setHelpTextAfterCompleted(isToday);
-        state = ListFooterState.SCORE_SELECTING;
+        switch (state) {
+            case COMPLETE:
+                completedText.setVisibility(View.VISIBLE);
+                break;
+            default:
+                completedText.setVisibility(View.GONE);
+        }
     }
 
-    public String getMomentInputText() {
-        return momentWriterContainer.getInputText();
+    public String getMomentInput() {
+        return momentContainer.getInputText();
     }
 
-    public String getStoryTitle() {
-        return storyContainer.getStoryTitle();
+    public String[] getStoryInput() {
+        return new String[]{
+            storyContainer.getStoryTitle(),
+            storyContainer.getStoryContent()
+        };
     }
 
-    public String getStoryContent() {
-        return storyContainer.getStoryContent();
+    public int getEmotionInput() {
+        return emotionContainer.getSelectedEmotion();
     }
 
-    public int getSelectedEmotion() {
-        return emotionGridContainer.getSelectedEmotion();
-    }
-
-    public int getScore() {
-        return scoreContainer.getScore();
-    }
-
-    public String getTags() {
+    public String getTagInput() {
         return tagBoxContainer.getTags();
     }
 
+    public int getScoreInput() {
+        return scoreContainer.getScore();
+    }
+
     public boolean isCompletionInProgress() {
-        log("isCompletionInProgress: " + state.name());
-        return (state == ListFooterState.STORY_WRITING ||
-            state == ListFooterState.EMOTION_SELECTING ||
-            state == ListFooterState.TAG_WRITING);
+        return (state == WritePageState.STORY
+            || state == WritePageState.EMOTION
+            || state == WritePageState.TAG
+            || state == WritePageState.SCORE);
     }
 
     public void setAddButtonOnClickListener(View.OnClickListener listener) {
-        momentWriterContainer.setAddButtonOnClickListener(listener);
+        momentContainer.setAddButtonOnClickListener(listener);
     }
 
     public void setSubmitButtonOnClickListener(View.OnClickListener listener) {
-        momentWriterContainer.setSubmitButtonOnClickListener(listener);
+        momentContainer.setSubmitButtonOnClickListener(listener);
     }
 
     public void observeBottomButtonState(Observer<Boolean> observer) {
-        bottomButtonState.observeForever(observer);
+        bottomButtonState.observe(lifecycleOwner, observer);
     }
 
     public void observeScrollToBottomSwitch(Observer<Boolean> observer) {
-        scrollToBottomSwitch.observeForever(observer);
+        scrollToBottomSwitch.observe(lifecycleOwner, observer);
     }
 
     public void observeAiStoryCallSwitch(Observer<Boolean> observer) {
-        aiStoryCallSwitch.observeForever(observer);
+        aiStoryCallSwitch.observe(lifecycleOwner, observer);
     }
 
-    public void observeSaveScoreSwitch(Observer<Boolean> observer) {
-        scoreContainer.observeSaveScoreSwitch(observer);
-    }
+    public void removeObservers() {
+        bottomButtonState.removeObservers(lifecycleOwner);
+        scrollToBottomSwitch.removeObservers(lifecycleOwner);
+        aiStoryCallSwitch.removeObservers(lifecycleOwner);
 
-    public void freezeStoryEditText() {
-        storyContainer.freeze(true);
-    }
-
-    public void freezeEmotionSelector() {
-        emotionGridContainer.freeze(true);
-    }
-
-    public void freezeTagEditText() {
-        tagBoxContainer.freeze(true);
-    }
-
-    public void setUiWritingMoment() {
-        // add 누르고 입력창 뜨는 동작
-        log("[STATE] setUiWritingMoment");
-        momentWriterContainer.setUiWritingMoment();
-
-        setBottomButtonState(false);
-        setScrollToBottomSwitch();
-        state = ListFooterState.MOMENT_WRITING;
-    }
-
-    public void setUiWaitingAiReply() {
-        // submit 누른 후 AI 답글 대기 중일 때
-        log("[STATE] setUiWaitingAiReply");
-        momentWriterContainer.setUiWaitingAiReply();
-
-        setBottomButtonState(false);
-        state = ListFooterState.MOMENT_WAITING_AI_REPLY;
-    }
-
-    public void setUiReadyToAddMoment(boolean activateBottomButton) {
-        // submit 버튼 눌렀을 때 입력창 사라지고 add 버튼 표시되는 동작
-        log("[STATE] setUiReadyToAddMoment - " + activateBottomButton);
-        momentWriterContainer.setUiReadyToAddMoment();
-
-        if (activateBottomButton) {
-            setBottomButtonState(true);
-        }
-        setScrollToBottomSwitch();
-        state = ListFooterState.MOMENT_READY_TO_ADD;
-    }
-
-    public void setUiAddLimitExceeded() {
-        // 모먼트 한 시간 2개 제한 초과했을 때
-        log("[STATE] setUiAddLimitExceeded");
-        momentWriterContainer.setUiAddLimitExceeded();
-
-        setBottomButtonState(true);
-        setScrollToBottomSwitch();
-        state = ListFooterState.MOMENT_ADD_LIMIT_EXCEEDED;
-    }
-
-    public void setUiWritingStory() {
-        // 스토리 작성 칸 나올 때
-        log("[STATE] setUiWritingStory");
-        momentWriterContainer.setInvisible();
-
-        storyContainer.setUiWritingStory();
-
-        setBottomButtonState(true);
-        setScrollToBottomSwitch();
-        state = ListFooterState.STORY_WRITING;
-    }
-
-    public void setUiSelectingEmotion() {
-        log("[STATE] setUiSelectingEmotion");
-        storyContainer.setUiCompleteStory();
-
-        emotionWrapper.setVisibility(View.VISIBLE);
-        emotionWrapper.startAnimation(animationProvider.fadeIn);
-
-        setBottomButtonState(false);
-        setScrollToBottomSwitch();
-        state = ListFooterState.EMOTION_SELECTING;
-    }
-
-    public void setUiWritingTags() {
-        log("[STATE] setUiWritingTags");
-        tagBoxContainer.setUiVisible();
-        setScrollToBottomSwitch();
-        state = ListFooterState.TAG_WRITING;
-    }
-
-    public void setUiSelectingScore() {
-        log("[STATE] setUiSelectingScore");
-        scoreContainer.setUiVisible();
-        setScrollToBottomSwitch();
-        state = ListFooterState.SCORE_SELECTING;
+        storyContainer.removeObservers(lifecycleOwner);
+        emotionContainer.removeObservers(lifecycleOwner);
+        tagBoxContainer.removeObservers(lifecycleOwner);
     }
 
     public Observer<AiStoryState> aiStoryObserver() {
         return (AiStoryState aiStoryState) -> {
+            if (state != WritePageState.STORY) {
+                return;
+            }
+
+            log("aiStoryObserver: " + aiStoryState);
             showLoadingText(false);
-            setBottomButtonState(true);
+            setBottomButtonActivated(true);
 
             if (aiStoryState.getError() != null) {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
@@ -312,30 +323,32 @@ public class ListFooterContainer {
                 return;
             }
             storyContainer.setStoryText(aiStoryState.getTitle(), aiStoryState.getContent());
+            Toast.makeText(view.getContext(), R.string.ai_story_done, Toast.LENGTH_SHORT)
+                .show();
         };
-    }
-
-    public void showLoadingText(boolean on, @StringRes int textResId) {
-        log("showLoadingText: " + on);
-        if (on) {
-            loadingText.setText(textResId);
-            loadingText.clearAnimation();
-            loadingText.startAnimation(animationProvider.fadeInOut);
-            loadingText.setVisibility(View.VISIBLE);
-            setBottomButtonState(false);
-        } else {
-            loadingText.setVisibility(View.GONE);
-            loadingText.clearAnimation();
-            setBottomButtonState(true);
-        }
     }
 
     public void showLoadingText(boolean on) {
         showLoadingText(on, R.string.completion_loading);
     }
 
+    private void showLoadingText(boolean on, @StringRes int textResId) {
+        log("showLoadingText: " + on);
+        if (on) {
+            loadingText.setText(textResId);
+            loadingText.clearAnimation();
+            loadingText.startAnimation(animationProvider.fadeInOut);
+            loadingText.setVisibility(View.VISIBLE);
+            setBottomButtonActivated(false);
+        } else {
+            loadingText.setVisibility(View.GONE);
+            loadingText.clearAnimation();
+            setBottomButtonActivated(true);
+        }
+    }
 
-    private void setBottomButtonState(boolean activated) {
+    private void setBottomButtonActivated(boolean activated) {
+        log("setBottomButtonState: " + activated);
         bottomButtonState.setValue(activated);
     }
 
@@ -347,13 +360,6 @@ public class ListFooterContainer {
     private void setAiStoryCallSwitch() {
         aiStoryCallSwitch.setValue(true);
         aiStoryCallSwitch.setValue(false);
-    }
-
-    private void setHelpTextAfterCompleted(boolean isToday) {
-        String day = isToday ? "오늘" : "이날";
-        emotionHelpText.setText(day + "의 감정");
-        tagBoxContainer.setHelpText(day + "의 태그");
-        scoreContainer.setHelpText(day + "의 점수");
     }
 
     private void log(String msg) {

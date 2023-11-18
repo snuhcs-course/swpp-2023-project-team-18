@@ -14,7 +14,6 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -30,7 +29,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -39,28 +37,26 @@ public class CustomPieChartRenderer extends DataRenderer {
     protected PieChart mChart;
 
     /**
-     * paint for the hole in the center of the pie chart and the transparent
-     * circle
+     * paint for the hole in the center of the pie chart and the transparent circle
      */
     protected Paint mHolePaint;
     protected Paint mTransparentCirclePaint;
     protected Paint mValueLinePaint;
 
     /**
-     * paint object for the text that can be displayed in the center of the
-     * chart
+     * paint object for the text that can be displayed in the center of the chart
      */
-    private TextPaint mCenterTextPaint;
+    private final TextPaint mCenterTextPaint;
 
     /**
      * paint object used for drwing the slice-text
      */
-    private Paint mEntryLabelsPaint;
+    private final Paint mEntryLabelsPaint;
 
     private StaticLayout mCenterTextLayout;
     private CharSequence mCenterTextLastValue;
-    private RectF mCenterTextLastBounds = new RectF();
-    private RectF[] mRectBuffer = {new RectF(), new RectF(), new RectF()};
+    private final RectF mCenterTextLastBounds = new RectF();
+    private final RectF[] mRectBuffer = {new RectF(), new RectF(), new RectF()};
 
     /**
      * Bitmap for drawing the center hole
@@ -138,8 +134,9 @@ public class CustomPieChartRenderer extends DataRenderer {
                 drawBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
                 mDrawBitmap = new WeakReference<>(drawBitmap);
                 mBitmapCanvas = new Canvas(drawBitmap);
-            } else
+            } else {
                 return;
+            }
         }
 
         drawBitmap.eraseColor(Color.TRANSPARENT);
@@ -148,13 +145,14 @@ public class CustomPieChartRenderer extends DataRenderer {
 
         for (IPieDataSet set : pieData.getDataSets()) {
 
-            if (set.isVisible() && set.getEntryCount() > 0)
+            if (set.isVisible() && set.getEntryCount() > 0) {
                 drawDataSet(c, set);
+            }
         }
     }
 
-    private Path mPathBuffer = new Path();
-    private RectF mInnerRectBuffer = new RectF();
+    private final Path mPathBuffer = new Path();
+    private final RectF mInnerRectBuffer = new RectF();
 
     protected float calculateMinimumRadiusForSpacedSlice(
         MPPointF center,
@@ -167,8 +165,10 @@ public class CustomPieChartRenderer extends DataRenderer {
         final float angleMiddle = startAngle + sweepAngle / 2.f;
 
         // Other point of the arc
-        float arcEndPointX = center.x + radius * (float) Math.cos((startAngle + sweepAngle) * Utils.FDEG2RAD);
-        float arcEndPointY = center.y + radius * (float) Math.sin((startAngle + sweepAngle) * Utils.FDEG2RAD);
+        float arcEndPointX =
+            center.x + radius * (float) Math.cos((startAngle + sweepAngle) * Utils.FDEG2RAD);
+        float arcEndPointY =
+            center.y + radius * (float) Math.sin((startAngle + sweepAngle) * Utils.FDEG2RAD);
 
         // Middle point on the arc
         float arcMidPointX = center.x + radius * (float) Math.cos(angleMiddle * Utils.FDEG2RAD);
@@ -197,17 +197,20 @@ public class CustomPieChartRenderer extends DataRenderer {
     }
 
     /**
-     * Calculates the sliceSpace to use based on visible values and their size compared to the set sliceSpace.
+     * Calculates the sliceSpace to use based on visible values and their size compared to the set
+     * sliceSpace.
      *
      * @param dataSet
      * @return
      */
     protected float getSliceSpace(IPieDataSet dataSet) {
 
-        if (!dataSet.isAutomaticallyDisableSliceSpacingEnabled())
+        if (!dataSet.isAutomaticallyDisableSliceSpacingEnabled()) {
             return dataSet.getSliceSpace();
+        }
 
-        float spaceSizeRatio = dataSet.getSliceSpace() / mViewPortHandler.getSmallestContentExtension();
+        float spaceSizeRatio =
+            dataSet.getSliceSpace() / mViewPortHandler.getSmallestContentExtension();
         float minValueRatio = dataSet.getYMin() / mChart.getData().getYValueSum() * 2;
 
         float sliceSpace = spaceSizeRatio > minValueRatio ? 0f : dataSet.getSliceSpace();
@@ -229,7 +232,8 @@ public class CustomPieChartRenderer extends DataRenderer {
         final float[] drawAngles = mChart.getDrawAngles();
         final MPPointF center = mChart.getCenterCircleBox();
         final float radius = mChart.getRadius();
-        final boolean drawInnerArc = mChart.isDrawHoleEnabled() && !mChart.isDrawSlicesUnderHoleEnabled();
+        final boolean drawInnerArc =
+            mChart.isDrawHoleEnabled() && !mChart.isDrawSlicesUnderHoleEnabled();
         final float userInnerRadius = drawInnerArc
             ? radius * (mChart.getHoleRadius() / 100.f)
             : 0.f;
@@ -273,7 +277,8 @@ public class CustomPieChartRenderer extends DataRenderer {
             final float sliceSpaceAngleOuter = visibleAngleCount == 1 ?
                 0.f :
                 sliceSpace / (Utils.FDEG2RAD * radius);
-            final float startAngleOuter = rotationAngle + (angle + sliceSpaceAngleOuter / 2.f) * phaseY;
+            final float startAngleOuter =
+                rotationAngle + (angle + sliceSpaceAngleOuter / 2.f) * phaseY;
             float sweepAngleOuter = (sliceAngle - sliceSpaceAngleOuter) * phaseY;
             if (sweepAngleOuter < 0.f) {
                 sweepAngleOuter = 0.f;
@@ -282,13 +287,18 @@ public class CustomPieChartRenderer extends DataRenderer {
             mPathBuffer.reset();
 
             if (drawRoundedSlices) {
-                float x = center.x + (radius - roundedRadius) * (float) Math.cos(startAngleOuter * Utils.FDEG2RAD);
-                float y = center.y + (radius - roundedRadius) * (float) Math.sin(startAngleOuter * Utils.FDEG2RAD);
-                roundedCircleBox.set(x - roundedRadius, y - roundedRadius, x + roundedRadius, y + roundedRadius);
+                float x = center.x + (radius - roundedRadius) * (float) Math.cos(
+                    startAngleOuter * Utils.FDEG2RAD);
+                float y = center.y + (radius - roundedRadius) * (float) Math.sin(
+                    startAngleOuter * Utils.FDEG2RAD);
+                roundedCircleBox.set(x - roundedRadius, y - roundedRadius, x + roundedRadius,
+                    y + roundedRadius);
             }
 
-            float arcStartPointX = center.x + radius * (float) Math.cos(startAngleOuter * Utils.FDEG2RAD);
-            float arcStartPointY = center.y + radius * (float) Math.sin(startAngleOuter * Utils.FDEG2RAD);
+            float arcStartPointX =
+                center.x + radius * (float) Math.cos(startAngleOuter * Utils.FDEG2RAD);
+            float arcStartPointY =
+                center.y + radius * (float) Math.sin(startAngleOuter * Utils.FDEG2RAD);
 
             if (sweepAngleOuter >= 360.f && sweepAngleOuter % 360f <= Utils.FLOAT_EPSILON) {
                 // Android is doing "mod 360"
@@ -324,8 +334,9 @@ public class CustomPieChartRenderer extends DataRenderer {
                             startAngleOuter,
                             sweepAngleOuter);
 
-                    if (minSpacedRadius < 0.f)
+                    if (minSpacedRadius < 0.f) {
                         minSpacedRadius = -minSpacedRadius;
+                    }
 
                     innerRadius = Math.max(innerRadius, minSpacedRadius);
                 }
@@ -333,7 +344,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                 final float sliceSpaceAngleInner = visibleAngleCount == 1 || innerRadius == 0.f ?
                     0.f :
                     sliceSpace / (Utils.FDEG2RAD * innerRadius);
-                final float startAngleInner = rotationAngle + (angle + sliceSpaceAngleInner / 2.f) * phaseY;
+                final float startAngleInner =
+                    rotationAngle + (angle + sliceSpaceAngleInner / 2.f) * phaseY;
                 float sweepAngleInner = (sliceAngle - sliceSpaceAngleInner) * phaseY;
                 if (sweepAngleInner < 0.f) {
                     sweepAngleInner = 0.f;
@@ -346,14 +358,20 @@ public class CustomPieChartRenderer extends DataRenderer {
                 } else {
 
                     if (drawRoundedSlices) {
-                        float x = center.x + (radius - roundedRadius) * (float) Math.cos(endAngleInner * Utils.FDEG2RAD);
-                        float y = center.y + (radius - roundedRadius) * (float) Math.sin(endAngleInner * Utils.FDEG2RAD);
-                        roundedCircleBox.set(x - roundedRadius, y - roundedRadius, x + roundedRadius, y + roundedRadius);
+                        float x = center.x + (radius - roundedRadius) * (float) Math.cos(
+                            endAngleInner * Utils.FDEG2RAD);
+                        float y = center.y + (radius - roundedRadius) * (float) Math.sin(
+                            endAngleInner * Utils.FDEG2RAD);
+                        roundedCircleBox.set(x - roundedRadius, y - roundedRadius,
+                            x + roundedRadius, y + roundedRadius);
                         mPathBuffer.arcTo(roundedCircleBox, endAngleInner, 180);
-                    } else
+                    } else {
                         mPathBuffer.lineTo(
-                            center.x + innerRadius * (float) Math.cos(endAngleInner * Utils.FDEG2RAD),
-                            center.y + innerRadius * (float) Math.sin(endAngleInner * Utils.FDEG2RAD));
+                            center.x + innerRadius * (float) Math.cos(
+                                endAngleInner * Utils.FDEG2RAD),
+                            center.y + innerRadius * (float) Math.sin(
+                                endAngleInner * Utils.FDEG2RAD));
+                    }
 
                     mPathBuffer.arcTo(
                         mInnerRectBuffer,
@@ -455,8 +473,9 @@ public class CustomPieChartRenderer extends DataRenderer {
 
             final boolean drawValues = dataSet.isDrawValuesEnabled();
 
-            if (!drawValues && !drawEntryLabels)
+            if (!drawValues && !drawEntryLabels) {
                 continue;
+            }
 
             final PieDataSet.ValuePosition xValuePosition = dataSet.getXValuePosition();
             final PieDataSet.ValuePosition yValuePosition = dataSet.getYValuePosition();
@@ -484,10 +503,11 @@ public class CustomPieChartRenderer extends DataRenderer {
 
                 PieEntry entry = dataSet.getEntryForIndex(j);
 
-                if (xIndex == 0)
+                if (xIndex == 0) {
                     angle = 0.f;
-                else
+                } else {
                     angle = absoluteAngles[xIndex - 1] * phaseX;
+                }
 
                 final float sliceAngle = drawAngles[xIndex];
                 final float sliceSpaceMiddleAngle = sliceSpace / (Utils.FDEG2RAD * labelRadius);
@@ -520,19 +540,21 @@ public class CustomPieChartRenderer extends DataRenderer {
 
                     final float valueLineLength1 = dataSet.getValueLinePart1Length();
                     final float valueLineLength2 = dataSet.getValueLinePart2Length();
-                    final float valueLinePart1OffsetPercentage = dataSet.getValueLinePart1OffsetPercentage() / 100.f;
+                    final float valueLinePart1OffsetPercentage =
+                        dataSet.getValueLinePart1OffsetPercentage() / 100.f;
 
                     float pt2x, pt2y;
                     float labelPtx, labelPty;
 
                     float line1Radius;
 
-                    if (mChart.isDrawHoleEnabled())
+                    if (mChart.isDrawHoleEnabled()) {
                         line1Radius = (radius - (radius * holeRadiusPercent))
                             * valueLinePart1OffsetPercentage
                             + (radius * holeRadiusPercent);
-                    else
+                    } else {
                         line1Radius = radius * valueLinePart1OffsetPercentage;
+                    }
 
                     final float polyline2Width = dataSet.isValueLineVariableLength()
                         ? labelRadius * valueLineLength2 * (float) Math.abs(Math.sin(
@@ -551,8 +573,9 @@ public class CustomPieChartRenderer extends DataRenderer {
 
                         mValuePaint.setTextAlign(Align.RIGHT);
 
-                        if(drawXOutside)
+                        if (drawXOutside) {
                             mEntryLabelsPaint.setTextAlign(Align.RIGHT);
+                        }
 
                         labelPtx = pt2x - offset;
                         labelPty = pt2y;
@@ -561,8 +584,9 @@ public class CustomPieChartRenderer extends DataRenderer {
                         pt2y = pt1y;
                         mValuePaint.setTextAlign(Align.LEFT);
 
-                        if(drawXOutside)
+                        if (drawXOutside) {
                             mEntryLabelsPaint.setTextAlign(Align.LEFT);
+                        }
 
                         labelPtx = pt2x + offset;
                         labelPty = pt2y;
@@ -581,7 +605,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                     // draw everything, depending on settings
                     if (drawXOutside && drawYOutside) {
 
-                        drawValue(c, formattedValue, labelPtx, labelPty, dataSet.getValueTextColor(j));
+                        drawValue(c, formattedValue, labelPtx, labelPty,
+                            dataSet.getValueTextColor(j));
 
                         if (j < data.getEntryCount() && entryLabel != null) {
                             drawEntryLabel(c, entryLabel, labelPtx, labelPty + lineHeight);
@@ -593,7 +618,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                         }
                     } else if (drawYOutside) {
 
-                        drawValue(c, formattedValue, labelPtx, labelPty + lineHeight / 2.f, dataSet.getValueTextColor(j));
+                        drawValue(c, formattedValue, labelPtx, labelPty + lineHeight / 2.f,
+                            dataSet.getValueTextColor(j));
                     }
                 }
 
@@ -618,7 +644,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                             drawEntryLabel(c, entryLabel, x, y + lineHeight / 2f);
                         }
                     } else if (drawYInside) {
-                        drawValue(c, formattedValue, x, y + lineHeight / 2f, dataSet.getValueTextColor(j));
+                        drawValue(c, formattedValue, x, y + lineHeight / 2f,
+                            dataSet.getValueTextColor(j));
                     }
                 }
 
@@ -633,8 +660,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                     CustomPieChartUtils.drawImage(
                         c,
                         icon,
-                        (int)x,
-                        (int)y,
+                        (int) x,
+                        (int) y,
                         icon.getIntrinsicWidth(),
                         icon.getIntrinsicHeight());
                 }
@@ -673,11 +700,10 @@ public class CustomPieChartRenderer extends DataRenderer {
         drawCenterText(c);
     }
 
-    private Path mHoleCirclePath = new Path();
+    private final Path mHoleCirclePath = new Path();
 
     /**
-     * draws the hole in the center of the chart and the transparent circle /
-     * hole
+     * draws the hole in the center of the chart and the transparent circle / hole
      */
     protected void drawHole(Canvas c) {
 
@@ -701,7 +727,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                 int alpha = mTransparentCirclePaint.getAlpha();
                 float secondHoleRadius = radius * (mChart.getTransparentCircleRadius() / 100);
 
-                mTransparentCirclePaint.setAlpha((int) ((float) alpha * mAnimator.getPhaseX() * mAnimator.getPhaseY()));
+                mTransparentCirclePaint.setAlpha(
+                    (int) ((float) alpha * mAnimator.getPhaseX() * mAnimator.getPhaseY()));
 
                 // draw the transparent-circle
                 mHoleCirclePath.reset();
@@ -717,9 +744,10 @@ public class CustomPieChartRenderer extends DataRenderer {
     }
 
     protected Path mDrawCenterTextPathBuffer = new Path();
+
     /**
-     * draws the description text in the center of the pie chart makes most
-     * sense when center-hole is enabled
+     * draws the description text in the center of the pie chart makes most sense when center-hole
+     * is enabled
      */
     protected void drawCenterText(Canvas c) {
 
@@ -753,7 +781,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                 );
             }
 
-            if (!centerText.equals(mCenterTextLastValue) || !boundingRect.equals(mCenterTextLastBounds)) {
+            if (!centerText.equals(mCenterTextLastValue) || !boundingRect.equals(
+                mCenterTextLastBounds)) {
 
                 // Next time we won't recalculate StaticLayout...
                 mCenterTextLastBounds.set(boundingRect);
@@ -779,7 +808,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                 c.clipPath(path);
             }
 
-            c.translate(boundingRect.left, boundingRect.top + (boundingRect.height() - layoutHeight) / 2.f);
+            c.translate(boundingRect.left,
+                boundingRect.top + (boundingRect.height() - layoutHeight) / 2.f);
             mCenterTextLayout.draw(c);
 
             c.restore();
@@ -790,6 +820,7 @@ public class CustomPieChartRenderer extends DataRenderer {
     }
 
     protected RectF mDrawHighlightedRectF = new RectF();
+
     @Override
     public void drawHighlighted(Canvas c, Highlight[] indices) {
 
@@ -798,9 +829,11 @@ public class CustomPieChartRenderer extends DataRenderer {
          * TODO: add support for changing slice color with highlighting rather than only shifting the slice
          */
 
-        final boolean drawInnerArc = mChart.isDrawHoleEnabled() && !mChart.isDrawSlicesUnderHoleEnabled();
-        if (drawInnerArc && mChart.isDrawRoundedSlicesEnabled())
+        final boolean drawInnerArc =
+            mChart.isDrawHoleEnabled() && !mChart.isDrawSlicesUnderHoleEnabled();
+        if (drawInnerArc && mChart.isDrawRoundedSlicesEnabled()) {
             return;
+        }
 
         float phaseX = mAnimator.getPhaseX();
         float phaseY = mAnimator.getPhaseY();
@@ -817,22 +850,24 @@ public class CustomPieChartRenderer extends DataRenderer {
             : 0.f;
 
         final RectF highlightedCircleBox = mDrawHighlightedRectF;
-        highlightedCircleBox.set(0,0,0,0);
+        highlightedCircleBox.set(0, 0, 0, 0);
 
         for (int i = 0; i < indices.length; i++) {
 
             // get the index to highlight
             int index = (int) indices[i].getX();
 
-            if (index >= drawAngles.length)
+            if (index >= drawAngles.length) {
                 continue;
+            }
 
             IPieDataSet set = mChart.getData()
                 .getDataSetByIndex(indices[i]
                     .getDataSetIndex());
 
-            if (set == null || !set.isHighlightEnabled())
+            if (set == null || !set.isHighlightEnabled()) {
                 continue;
+            }
 
             final int entryCount = set.getEntryCount();
             int visibleAngleCount = 0;
@@ -843,10 +878,11 @@ public class CustomPieChartRenderer extends DataRenderer {
                 }
             }
 
-            if (index == 0)
+            if (index == 0) {
                 angle = 0.f;
-            else
+            } else {
                 angle = absoluteAngles[index - 1] * phaseX;
+            }
 
             final float sliceSpace = visibleAngleCount <= 1 ? 0.f : set.getSliceSpace();
 
@@ -870,13 +906,15 @@ public class CustomPieChartRenderer extends DataRenderer {
                 0.f :
                 sliceSpace / (Utils.FDEG2RAD * highlightedRadius);
 
-            final float startAngleOuter = rotationAngle + (angle + sliceSpaceAngleOuter / 2.f) * phaseY;
+            final float startAngleOuter =
+                rotationAngle + (angle + sliceSpaceAngleOuter / 2.f) * phaseY;
             float sweepAngleOuter = (sliceAngle - sliceSpaceAngleOuter) * phaseY;
             if (sweepAngleOuter < 0.f) {
                 sweepAngleOuter = 0.f;
             }
 
-            final float startAngleShifted = rotationAngle + (angle + sliceSpaceAngleShifted / 2.f) * phaseY;
+            final float startAngleShifted =
+                rotationAngle + (angle + sliceSpaceAngleShifted / 2.f) * phaseY;
             float sweepAngleShifted = (sliceAngle - sliceSpaceAngleShifted) * phaseY;
             if (sweepAngleShifted < 0.f) {
                 sweepAngleShifted = 0.f;
@@ -890,8 +928,10 @@ public class CustomPieChartRenderer extends DataRenderer {
             } else {
 
                 mPathBuffer.moveTo(
-                    center.x + highlightedRadius * (float) Math.cos(startAngleShifted * Utils.FDEG2RAD),
-                    center.y + highlightedRadius * (float) Math.sin(startAngleShifted * Utils.FDEG2RAD));
+                    center.x + highlightedRadius * (float) Math.cos(
+                        startAngleShifted * Utils.FDEG2RAD),
+                    center.y + highlightedRadius * (float) Math.sin(
+                        startAngleShifted * Utils.FDEG2RAD));
 
                 mPathBuffer.arcTo(
                     highlightedCircleBox,
@@ -925,8 +965,9 @@ public class CustomPieChartRenderer extends DataRenderer {
                 if (accountForSliceSpacing) {
                     float minSpacedRadius = sliceSpaceRadius;
 
-                    if (minSpacedRadius < 0.f)
+                    if (minSpacedRadius < 0.f) {
                         minSpacedRadius = -minSpacedRadius;
+                    }
 
                     innerRadius = Math.max(innerRadius, minSpacedRadius);
                 }
@@ -934,7 +975,8 @@ public class CustomPieChartRenderer extends DataRenderer {
                 final float sliceSpaceAngleInner = visibleAngleCount == 1 || innerRadius == 0.f ?
                     0.f :
                     sliceSpace / (Utils.FDEG2RAD * innerRadius);
-                final float startAngleInner = rotationAngle + (angle + sliceSpaceAngleInner / 2.f) * phaseY;
+                final float startAngleInner =
+                    rotationAngle + (angle + sliceSpaceAngleInner / 2.f) * phaseY;
                 float sweepAngleInner = (sliceAngle - sliceSpaceAngleInner) * phaseY;
                 if (sweepAngleInner < 0.f) {
                     sweepAngleInner = 0.f;
@@ -998,13 +1040,15 @@ public class CustomPieChartRenderer extends DataRenderer {
      */
     protected void drawRoundedSlices(Canvas c) {
 
-        if (!mChart.isDrawRoundedSlicesEnabled())
+        if (!mChart.isDrawRoundedSlicesEnabled()) {
             return;
+        }
 
         IPieDataSet dataSet = mChart.getData().getDataSet();
 
-        if (!dataSet.isVisible())
+        if (!dataSet.isVisible()) {
             return;
+        }
 
         float phaseX = mAnimator.getPhaseX();
         float phaseY = mAnimator.getPhaseY();
@@ -1044,7 +1088,8 @@ public class CustomPieChartRenderer extends DataRenderer {
     }
 
     /**
-     * Releases the drawing bitmap. This should be called when {@link LineChart#onDetachedFromWindow()}.
+     * Releases the drawing bitmap. This should be called when
+     * {@link LineChart#onDetachedFromWindow()}.
      */
     public void releaseBitmap() {
         if (mBitmapCanvas != null) {

@@ -140,6 +140,7 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void notifyCompletion() {
+        Log.d("TodayViewModel", "notifyCompletion: called");
         authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
             @Override
             public void onSuccess() {
@@ -169,6 +170,7 @@ public class TodayViewModel extends ViewModel {
     }
 
     public void saveStory(String title, String content) {
+        Log.d("TodayViewModel", "saveStory: called");
         final String titleToSave = (title.isEmpty()) ? "제목 없음" : title;
         authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
             @Override

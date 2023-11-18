@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -104,7 +103,9 @@ public class RegisterActivity extends AppCompatActivity {
                     !passwordCheckEditText.getText().toString().isEmpty() &&
                     !passwordEditText.getText().toString()
                         .equals(passwordCheckEditText.getText().toString())) {
-                    passwordCheckEditText.setError("Passwords do not match");
+                    passwordCheckEditText.setError(
+                        getResources().getString(R.string.register_password_check)
+                    );
                 }
             }
         };
