@@ -1,6 +1,9 @@
 package snu.swpp.moment.data.repository;
 
 import android.content.Context;
+import android.util.Log;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.idling.CountingIdlingResource;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
@@ -21,6 +24,7 @@ public class AuthenticationRepository {
 
     private final UserRemoteDataSource remoteDataSource;
     private final UserLocalDataSource localDataSource;
+    private final CountingIdlingResource idlingResource;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
@@ -31,6 +35,7 @@ public class AuthenticationRepository {
         UserLocalDataSource localDataSource) {
         this.remoteDataSource = remoteDataSource;
         this.localDataSource = localDataSource;
+        this.idlingResource = new CountingIdlingResource("authentication");
     }
 
     public static AuthenticationRepository getInstance(Context context)
@@ -48,11 +53,13 @@ public class AuthenticationRepository {
 
     public void isTokenValid(TokenCallBack callBack) {
         TokenModel token = localDataSource.getToken();
+        idlingResource.increment();
         remoteDataSource.isTokenValid(token.getAccessToken(), new TokenCallBack() {
 
             @Override
             public void onSuccess() {
                 callBack.onSuccess();
+                decrementIdlingResource();
             }
 
             @Override
@@ -65,11 +72,13 @@ public class AuthenticationRepository {
                             public void onSuccess(String access) {
                                 localDataSource.saveToken(access);
                                 callBack.onSuccess();
+                                decrementIdlingResource();
                             }
 
                             @Override
                             public void onFailure() {
                                 callBack.onFailure();
+                                decrementIdlingResource();
                             }
                         });
                     }
@@ -77,6 +86,7 @@ public class AuthenticationRepository {
                     @Override
                     public void onFailure() {
                         callBack.onFailure();
+                        decrementIdlingResource();
                     }
                 });
             }
@@ -96,16 +106,21 @@ public class AuthenticationRepository {
     }
 
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
+        idlingResource.increment();
         remoteDataSource.login(username, password, new AuthenticationCallBack() {
             @Override
             public void onSuccess(LoggedInUserModel loggedInUser) {
+                Log.d("AuthenticationRepository", "login success");
                 setLoggedInUser(loggedInUser);
                 loginCallBack.onSuccess(loggedInUser);
+                decrementIdlingResource();
             }
 
             @Override
             public void onFailure(String errorMessage) {
+                Log.d("AuthenticationRepository", "login failure");
                 loginCallBack.onFailure(errorMessage);
+                decrementIdlingResource();
             }
         });
     }
@@ -133,5 +148,15 @@ public class AuthenticationRepository {
 
     public String getCreatedAt() {
         return localDataSource.getCreatedAt();
+    }
+
+    public IdlingResource getIdlingResource() {
+        return idlingResource;
+    }
+
+    private void decrementIdlingResource() {
+        if (!idlingResource.isIdleNow()) {
+            idlingResource.decrement();
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -120,9 +121,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(
-            v -> loginViewModel.login(usernameEditText.getText().toString(),
-                passwordEditText.getText().toString()));
-
+            v -> {
+                Log.d("LoginActivity", "loginButtonClicked");
+                loginViewModel.login(
+                    usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString()
+                );
+            }
+        );
         View root = binding.getRoot();
         KeyboardUtils.hideKeyboardOnOutsideTouch(root, this);
     }

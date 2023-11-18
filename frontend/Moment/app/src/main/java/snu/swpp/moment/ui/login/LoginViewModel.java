@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.login;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -28,8 +29,7 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        System.out.println(
-            "#Debug from ViewModel || username : " + username + "password : " + password);
+        Log.d("LoginViewModel", "login");
         authenticationRepository.login(username, password, new AuthenticationCallBack() {
             @Override
             public void onSuccess(LoggedInUserModel loggedInUser) {

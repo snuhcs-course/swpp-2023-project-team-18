@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import net.bytebuddy.asm.Advice.Local;
 import org.junit.Before;
 import org.junit.Test;
 import snu.swpp.moment.ui.main_monthview.CalendarDayState;
