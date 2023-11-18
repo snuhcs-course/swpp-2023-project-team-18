@@ -15,11 +15,7 @@ import snu.swpp.moment.utils.AnimationProvider;
 
 
 enum MomentContainerState {
-    INVISIBLE,
-    READY_TO_ADD,
-    WRITING,
-    WAITING_AI_REPLY,
-    ADD_LIMIT_EXCEEDED,
+    INVISIBLE, READY_TO_ADD, WRITING, WAITING_AI_REPLY, ADD_LIMIT_EXCEEDED,
 }
 
 
@@ -33,7 +29,9 @@ public class MomentContainer {
     private final TextView addButtonText;
     private final TextView addLimitWarnText;
     private final Button submitButton;
-   // private final Button submitButtonInactive;
+    private final Button submitButtonInactive;
+    private final TextView submitButtonText;
+    private final TextView submitButtonTextInactive;
     private final Button addButton;
     private final Button addButtonInactive;
 
@@ -45,11 +43,13 @@ public class MomentContainer {
         momentEditTextWrapper = view.findViewById(R.id.momentEditTextWrapper);
         momentEditText = view.findViewById(R.id.momentEditText);
         momentLengthText = view.findViewById(R.id.momentLengthText);
+        submitButton = view.findViewById(R.id.submitButton);
+        submitButtonInactive = view.findViewById(R.id.submitButtonInactive);
+        submitButtonText = view.findViewById(R.id.submitHelpText);
+        submitButtonTextInactive = view.findViewById(R.id.submitHelpTextInactive);
         addButtonText = view.findViewById(R.id.addHelpText);
         addLimitWarnText = view.findViewById(R.id.addLimitWarnText);
 
-        submitButton = view.findViewById(R.id.submitButton);
-      //  submitButtonInactive = view.findViewById(R.id.submitButtonInactive);
         addButton = view.findViewById(R.id.addButton);
         addButtonInactive = view.findViewById(R.id.addButtonInactive);
 
@@ -91,8 +91,8 @@ public class MomentContainer {
             }
         });
 
-       // addButtonInactive.setOnClickListener(v -> {
-      //  });
+        // addButtonInactive.setOnClickListener(v -> {
+        //  });
     }
 
     public void setState(MomentContainerState state) {
@@ -123,6 +123,9 @@ public class MomentContainer {
                 addButtonInactive.setVisibility(View.GONE);
                 addButtonText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
+                submitButtonInactive.setVisibility(View.GONE);
+                submitButtonText.setVisibility(View.GONE);
+                submitButtonTextInactive.setVisibility(View.GONE);
                 addLimitWarnText.setVisibility(View.GONE);
                 break;
             case READY_TO_ADD:
@@ -132,6 +135,10 @@ public class MomentContainer {
                 addButtonText.setVisibility(View.VISIBLE);
                 addButtonInactive.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
+                submitButtonText.setVisibility(View.GONE);
+                submitButtonInactive.setVisibility(View.GONE);
+                submitButtonText.setVisibility(View.GONE);
+                submitButtonTextInactive.setVisibility(View.GONE);
                 addLimitWarnText.setVisibility(View.GONE);
                 break;
             case WRITING:
@@ -140,12 +147,20 @@ public class MomentContainer {
                 addButtonText.startAnimation(animationProvider.fadeOut);
                 addButtonText.setVisibility(View.GONE);
                 addButtonInactive.setVisibility(View.GONE);
-                submitButton.setVisibility(View.INVISIBLE);
+                submitButtonInactive.startAnimation(animationProvider.fadeIn);
+                submitButtonInactive.setVisibility(View.VISIBLE);
+                submitButton.setVisibility(View.GONE);
+                submitButtonTextInactive.setVisibility(View.VISIBLE);
+                submitButtonText.setVisibility(View.GONE);
                 addLimitWarnText.setVisibility(View.GONE);
             case WAITING_AI_REPLY:
                 addButton.setVisibility(View.GONE);
                 addButtonText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
+                submitButtonText.setVisibility(View.GONE);
+                submitButtonInactive.setVisibility(View.GONE);
+                submitButtonText.setVisibility(View.GONE);
+                submitButtonTextInactive.setVisibility(View.GONE);
                 addLimitWarnText.setVisibility(View.GONE);
                 break;
             case ADD_LIMIT_EXCEEDED:
@@ -153,6 +168,10 @@ public class MomentContainer {
                 addButtonInactive.setVisibility(View.VISIBLE);
                 addButtonText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
+                submitButtonText.setVisibility(View.GONE);
+                submitButtonInactive.setVisibility(View.GONE);
+                submitButtonText.setVisibility(View.GONE);
+                submitButtonTextInactive.setVisibility(View.GONE);
                 addLimitWarnText.setVisibility(View.VISIBLE);
                 break;
         }
@@ -182,12 +201,22 @@ public class MomentContainer {
     }
 
     private void setSubmitButtonActivated(boolean activated) {
+        if (state != MomentContainerState.WRITING) {
+            return;
+        }
         if (activated) {
             submitButton.setVisibility(View.VISIBLE);
-            //submitButtonInactive.setVisibility(View.GONE);
+            submitButtonInactive.setVisibility(View.GONE);
+            submitButtonText.setVisibility(View.VISIBLE);
+            submitButtonTextInactive.setVisibility(View.GONE);
+
+
         } else {
-            submitButton.setVisibility(View.INVISIBLE);//GONE으로 하면 키보드가 올라간 후 버튼이 생겨 하루 마무리하기 버튼에 붙어버림
-           // submitButtonInactive.setVisibility(View.VISIBLE);
+            submitButton.setVisibility(
+                View.GONE);
+            submitButtonInactive.setVisibility(View.VISIBLE);
+            submitButtonText.setVisibility(View.GONE);
+            submitButtonTextInactive.setVisibility(View.VISIBLE);
         }
     }
 
