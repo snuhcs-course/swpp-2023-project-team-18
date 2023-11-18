@@ -21,6 +21,8 @@ import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.slideview.ListViewItem;
 import snu.swpp.moment.utils.AnimationProvider;
+import snu.swpp.moment.utils.CalendarUtilsKt;
+import snu.swpp.moment.utils.EmotionMap;
 
 public class SearchAdapter extends BaseAdapter {
 
@@ -70,7 +72,7 @@ public class SearchAdapter extends BaseAdapter {
         titleView.setText(item.title);
         contentView.setText(item.content);
         dateView.setText(item.createdAt.toString());
-        emotionView.setImageDrawable(context.getDrawable(R.drawable.icon_sun_cloud));
+        emotionView.setImageDrawable(context.getDrawable(CalendarUtilsKt.convertEmotionImage(item.emotion)));
 
         convertView.setOnClickListener(new OnClickListener() {
             @Override
@@ -88,6 +90,7 @@ public class SearchAdapter extends BaseAdapter {
 
         return convertView;
     }
+
 
 
 
