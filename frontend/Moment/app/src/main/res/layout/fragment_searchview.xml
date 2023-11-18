@@ -73,7 +73,7 @@
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:divider="@null"
-
+        android:layout_marginTop="30dp"
       android:visibility="gone"
       app:layout_constraintTop_toBottomOf="@+id/search_content_edittext"
       app:layout_constraintBottom_toBottomOf="parent"/>
@@ -98,7 +98,7 @@
       android:divider="@null"
       app:layout_constraintTop_toBottomOf="@+id/hashtag_complete_list"
       app:layout_constraintBottom_toBottomOf="parent"
-
+        android:layout_marginTop="15dp"
         android:visibility="visible"
         />
 
