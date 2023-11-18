@@ -298,6 +298,10 @@ public class ListFooterContainer {
 
     public Observer<AiStoryState> aiStoryObserver() {
         return (AiStoryState aiStoryState) -> {
+            if (state != WritePageState.STORY) {
+                return;
+            }
+
             log("aiStoryObserver: " + aiStoryState);
             showLoadingText(false);
             setBottomButtonState(true);
@@ -309,10 +313,8 @@ public class ListFooterContainer {
                 return;
             }
             storyContainer.setStoryText(aiStoryState.getTitle(), aiStoryState.getContent());
-            if (state == WritePageState.STORY) {
-                Toast.makeText(view.getContext(), R.string.ai_story_done, Toast.LENGTH_SHORT)
-                    .show();
-            }
+            Toast.makeText(view.getContext(), R.string.ai_story_done, Toast.LENGTH_SHORT)
+                .show();
         };
     }
 
