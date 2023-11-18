@@ -152,6 +152,12 @@ public class SearchViewFragment extends Fragment {
                 hashTagCompletionAdapter.notifyDataSetChanged();
             }
         });
+        searchViewModel.selectedHashtag.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                hashTagCompletionAdapter.notifyDataSetChanged();
+            }
+        });
         // Hashtag 자동 완성을 위한 로직
 
         hashtagEditText.addTextChangedListener(new TextWatcher() {

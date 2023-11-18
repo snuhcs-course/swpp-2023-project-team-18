@@ -23,6 +23,7 @@ public class SearchViewModel extends ViewModel {
     MutableLiveData<SearchType> searchType = new MutableLiveData<>(SearchType.HASHTAG);
     MutableLiveData<HashtagCompletionState> hashtagCompletionState = new MutableLiveData<>();
     MutableLiveData<SearchState> searchState = new MutableLiveData<>();
+    MutableLiveData<String> selectedHashtag = new MutableLiveData<>("");
 
 
 
@@ -69,12 +70,13 @@ public class SearchViewModel extends ViewModel {
                 public void onSuccess() {
                     String access_token = authenticationRepository.getToken().getAccessToken();
                     if(searchType.getValue() == SearchType.HASHTAG){
+
                         searchRepository.getHashtagSearchList(access_token, query,
                             new SearchHashTagGetCallBack() {
                                 @Override
                                 public void onSuccess(SearchHashtagsResponse response) {
                                     Log.d("SearchViewModel", "Hashtag search successful: " + response.getSearchentries());
-
+                                    selectedHashtag.setValue(query);
                                     searchState.setValue(SearchState.fromSearchHashtagsResponse(response));
                                 }
 

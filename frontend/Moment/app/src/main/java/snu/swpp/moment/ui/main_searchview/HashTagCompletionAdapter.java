@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_searchview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,8 @@ public class HashTagCompletionAdapter extends RecyclerView.Adapter<HashTagComple
     public void onBindViewHolder(@NonNull HashTagCompletionAdapter.Holder holder, int position) {
         Log.d("holder",items.get(position));
         holder.button.setText(items.get(position));
+        Log.d("hashtag",searchViewModel.selectedHashtag.getValue());
+        holder.button.setTextColor(holder.button.getText().equals(searchViewModel.selectedHashtag.getValue()) ? Color.RED : Color.BLACK);
         holder.button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
