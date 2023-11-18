@@ -2,14 +2,14 @@
     <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
 
       xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-      android:id = "@+id/con"
+        android:id = "@+id/con"
         tools:context=".ui.main_statview.StatViewFragment">
 
         <include
