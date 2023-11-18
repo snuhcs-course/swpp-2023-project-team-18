@@ -22,7 +22,6 @@ import snu.swpp.moment.R;
 
 public class HashTagCompletionAdapter extends RecyclerView.Adapter<HashTagCompletionAdapter.Holder>{
 
-
     class Holder extends RecyclerView.ViewHolder{
         Button button;
 
@@ -65,62 +64,3 @@ public class HashTagCompletionAdapter extends RecyclerView.Adapter<HashTagComple
         return items.size();
     }
 }
-
-/*public class HashTagCompletionAdapter extends BaseAdapter {
-    private List<String> items;
-    private final Context context;
-    private SearchViewModel viewModel;
-
-    private int size;
-
-    public HashTagCompletionAdapter(SearchViewModel viewModel, Context context, List<String> items) {
-        this.viewModel = viewModel;
-        this.items = items;
-        this.context = context;
-        this.size = items.size();
-    }
-    public void setData(List<String> data){
-        this.items = data;
-    }
-
-    @Override
-    public int getCount() {
-        return items.size();
-    }
-
-    @Override
-    public String getItem(int position) {
-        return items.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(
-                    Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.search_hashtag_completion_item, parent, false);
-        }
-
-        String item = items.get(position);
-        Button button = convertView.findViewById(R.id.hashtag_complete_item);
-        button.setText(item);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        Log.d("SearchAdapter",
-                String.format("getView() called: position %d, size %d", position,
-                        size));
-
-        return convertView;
-    }
-
-}
-
-*/

@@ -32,6 +32,7 @@ import snu.swpp.moment.data.source.SearchRemoteDataSource;
 import snu.swpp.moment.databinding.FragmentSearchviewBinding;
 import snu.swpp.moment.ui.main_searchview.SearchViewModel.SearchType;
 import snu.swpp.moment.ui.main_statview.SearchViewModelFactory;
+import snu.swpp.moment.utils.KeyboardUtils;
 
 public class SearchViewFragment extends Fragment {
 
@@ -110,6 +111,7 @@ public class SearchViewFragment extends Fragment {
                 searchViewModel.setSearchType(SearchViewModel.SearchType.CONTENT);
             }
             searchViewModel.search(query);
+            KeyboardUtils.hideSoftKeyboard(getContext());
         });
         SearchAdapter adapter = new SearchAdapter((MainActivity) getActivity(), new ArrayList<>());
         SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),new ArrayList<>());
@@ -131,8 +133,6 @@ public class SearchViewFragment extends Fragment {
                 }
             }
         });
-
-
 
 
 
