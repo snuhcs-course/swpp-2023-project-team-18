@@ -273,6 +273,7 @@ class AutoCompletionTest(TestCase):
         auto_completion_job()
         created_story = Story.objects.get(user=self.test_user)
         self.assertEqual(created_story.emotion, Emotions.INVALID)
+        self.assertEqual(created_story.score, 0)
         self.assertEqual(
             created_story.created_at.timestamp(),
             (datetime.datetime.now() - datetime.timedelta(seconds=2)).timestamp(),
@@ -318,7 +319,8 @@ class AutoCompletionTest(TestCase):
 
         auto_completion_job()
         created_story = Story.objects.get(user=self.test_user)
-        self.assertEqual(created_story.emotion, Emotions.NORMAL1)
+        self.assertEqual(created_story.emotion, Emotions.INVALID)
+        self.assertEqual(created_story.score, 0)
         self.assertEqual(created_story.title, ai_sample_title)
         self.assertEqual(created_story.content, ai_sample_story)
         mock_add.assert_any_call(
@@ -364,7 +366,8 @@ class AutoCompletionTest(TestCase):
 
         auto_completion_job()
         created_story = Story.objects.get(user=self.test_user)
-        self.assertEqual(created_story.emotion, Emotions.NORMAL1)
+        self.assertEqual(created_story.emotion, Emotions.INVALID)
+        self.assertEqual(created_story.score, 0)
         self.assertEqual(created_story.title, GPT_AUTOCOMPLETION_ERROR_TITLE)
         self.assertEqual(created_story.content, GPT_AUTOCOMPLETION_ERROR_CONTENT)
         mock_add.assert_any_call(
