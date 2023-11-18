@@ -37,11 +37,12 @@ public class BottomButtonContainer {
         this.viewModel = viewModel;
         this.listFooterContainer = listFooterContainer;
 
-        this.listFooterContainer.observeBottomButtonState((Boolean state) -> {
-            Log.d("BottomButtonContainer", "observeBottomButtonState: " + state);
-            setActivated(state);
+        this.listFooterContainer.observeBottomButtonState((Boolean activated) -> {
+            Log.d("BottomButtonContainer", "observeBottomButtonState: " + activated);
+            setActivated(activated);
         });
 
+        setActivated(false);
         setState(WritePageState.FOOTER_INVISIBLE);
     }
 
@@ -153,12 +154,6 @@ public class BottomButtonContainer {
         }
     }
 
-    public void setActivated(boolean activated) {
-        Log.d("BottomButtonContainer", "setActivated: " + activated);
-        button.setActivated(activated);
-        button.setEnabled(activated);
-    }
-
     public Observer<Boolean> waitingAiReplySwitchObserver() {
         // ListViewAdapter가 가지고 있는 LiveData에 등록해서 사용
         return (Boolean isWaitingAiReply) -> {
@@ -246,5 +241,11 @@ public class BottomButtonContainer {
                 setActivated(true);
             }
         };
+    }
+
+    private void setActivated(boolean activated) {
+        Log.d("BottomButtonContainer", "setActivated: " + activated);
+        button.setActivated(activated);
+        button.setEnabled(activated);
     }
 }

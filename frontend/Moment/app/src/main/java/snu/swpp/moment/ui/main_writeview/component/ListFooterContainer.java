@@ -44,7 +44,7 @@ public class ListFooterContainer {
     private final AnimationProvider animationProvider;
 
     // 하단 버튼 활성화 상태
-    private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> bottomButtonState = new MutableLiveData<>();
 
     // 새 요소 추가 시 하단으로 스크롤 하기 위한 스위치
     private final MutableLiveData<Boolean> scrollToBottomSwitch = new MutableLiveData<>(false);
@@ -77,12 +77,18 @@ public class ListFooterContainer {
 
         // 스토리 자수 제한 감지
         storyContainer.observeLimit(lifecycleOwner, isLimitExceeded -> {
+            if (state != WritePageState.STORY) {
+                return;
+            }
             log("story observeLimit: " + isLimitExceeded);
-            setBottomButtonState(!isLimitExceeded);
+            setBottomButtonActivated(!isLimitExceeded);
         });
 
         // AI에게 부탁하기 버튼 감지
         storyContainer.observeAiButtonSwitch(lifecycleOwner, isSet -> {
+            if (state != WritePageState.STORY) {
+                return;
+            }
             log("observeAiButtonSwitch: " + isSet);
             if (isSet) {
                 showLoadingText(true, R.string.ai_story_loading);
@@ -92,18 +98,20 @@ public class ListFooterContainer {
 
         // 감정 선택 감지
         emotionContainer.observeSelectedEmotion((Integer emotion) -> {
-            log("observeSelectedEmotion: " + emotion);
-            if (state == WritePageState.EMOTION) {
-                setBottomButtonState(-1 < emotion && emotion < EmotionMap.INVALID_EMOTION);
+            if (state != WritePageState.EMOTION) {
+                return;
             }
+            log("observeSelectedEmotion: " + emotion);
+            setBottomButtonActivated(-1 < emotion && emotion < EmotionMap.INVALID_EMOTION);
         });
 
         // 태그 개수 제한 감지
         tagBoxContainer.observeLimit(lifecycleOwner, (Boolean isLimitExceeded) -> {
-            log("tag observeLimit: " + isLimitExceeded);
-            if (state == WritePageState.TAG) {
-                setBottomButtonState(!isLimitExceeded);
+            if (state != WritePageState.TAG) {
+                return;
             }
+            log("tag observeLimit: " + isLimitExceeded);
+            setBottomButtonActivated(!isLimitExceeded);
         });
     }
 
@@ -306,7 +314,7 @@ public class ListFooterContainer {
 
             log("aiStoryObserver: " + aiStoryState);
             showLoadingText(false);
-            setBottomButtonState(true);
+            setBottomButtonActivated(true);
 
             if (aiStoryState.getError() != null) {
                 Toast.makeText(view.getContext(), R.string.please_retry, Toast.LENGTH_SHORT)
@@ -331,15 +339,15 @@ public class ListFooterContainer {
             loadingText.clearAnimation();
             loadingText.startAnimation(animationProvider.fadeInOut);
             loadingText.setVisibility(View.VISIBLE);
-            setBottomButtonState(false);
+            setBottomButtonActivated(false);
         } else {
             loadingText.setVisibility(View.GONE);
             loadingText.clearAnimation();
-            setBottomButtonState(true);
+            setBottomButtonActivated(true);
         }
     }
 
-    private void setBottomButtonState(boolean activated) {
+    private void setBottomButtonActivated(boolean activated) {
         log("setBottomButtonState: " + activated);
         bottomButtonState.setValue(activated);
     }
