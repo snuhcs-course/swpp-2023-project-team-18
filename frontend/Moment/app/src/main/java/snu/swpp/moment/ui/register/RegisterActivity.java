@@ -103,7 +103,9 @@ public class RegisterActivity extends AppCompatActivity {
                     !passwordCheckEditText.getText().toString().isEmpty() &&
                     !passwordEditText.getText().toString()
                         .equals(passwordCheckEditText.getText().toString())) {
-                    passwordCheckEditText.setError("Passwords do not match");
+                    passwordCheckEditText.setError(
+                        getResources().getString(R.string.register_password_check)
+                    );
                 }
             }
         };
