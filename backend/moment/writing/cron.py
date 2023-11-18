@@ -47,6 +47,7 @@ def auto_completion_job():
                     minute=59,
                     second=59,
                 ),
+                score=0,
             )
             story.save()
         else:
@@ -69,6 +70,8 @@ def auto_completion_job():
                     minute=59,
                     second=59,
                 ),
+                score=0,
+                emotion=Emotions.INVALID,
             )
             story.save()
 
