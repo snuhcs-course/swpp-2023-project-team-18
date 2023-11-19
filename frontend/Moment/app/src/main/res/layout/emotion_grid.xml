@@ -31,8 +31,8 @@
 
     <ImageView
         android:id="@+id/emotionSunRow1"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -67,8 +67,8 @@
 
     <ImageView
         android:id="@+id/emotionSunCloudRow1"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -102,8 +102,8 @@
 
     <ImageView
         android:id="@+id/emotionCloudRow1"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -138,8 +138,8 @@
 
     <ImageView
         android:id="@+id/emotionRainRow1"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -174,8 +174,8 @@
 
     <ImageView
         android:id="@+id/emotionLightningRow1"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -210,8 +210,8 @@
 
     <ImageView
         android:id="@+id/emotionSunRow2"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -245,8 +245,8 @@
 
     <ImageView
         android:id="@+id/emotionSunCloudRow2"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -280,8 +280,8 @@
 
     <ImageView
         android:id="@+id/emotionCloudRow2"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -315,8 +315,8 @@
 
     <ImageView
         android:id="@+id/emotionRainRow2"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
@@ -350,8 +350,8 @@
 
     <ImageView
         android:id="@+id/emotionLightningRow2"
-        android:layout_width="14sp"
-        android:layout_height="14sp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:padding="0dp"
         android:layout_marginRight="2dp"
         android:clickable="true"
