@@ -2,10 +2,13 @@ package snu.swpp.moment.utils;
 
 import static org.junit.Assert.*;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import org.junit.Before;
@@ -17,14 +20,12 @@ public class TimeConverterTest {
 
     @Before
     public void setUp() {
+        int SECONDS_PER_HOUR = 3600;
         ZoneId localZoneId = ZoneId.systemDefault();
-        ZoneId gmtZoneId = ZoneId.of("GMT");
-
-        ZonedDateTime localZonedDateTime = LocalDateTime.now().atZone(localZoneId);
-        ZonedDateTime gmtZonedDateTime = localZonedDateTime.withZoneSameInstant(gmtZoneId);
+        ZoneOffset offset = localZoneId.getRules().getOffset(Instant.now());
 
         // Calculate the hour difference
-        hourDiff = localZonedDateTime.getHour() - gmtZonedDateTime.getHour();
+        hourDiff = offset.getTotalSeconds() / SECONDS_PER_HOUR;
     }
 
     @Test
@@ -120,9 +121,10 @@ public class TimeConverterTest {
         assertEquals(answer1, timestamps[0]);
         assertEquals(answer2, timestamps[1]);
     }
+
     @Test
-    public void getRecentWeekTimeStamps(){
-        LocalDate date = LocalDate.of(2023,11,3);
+    public void getRecentWeekTimeStamps() {
+        LocalDate date = LocalDate.of(2023, 11, 3);
         long[] timestamps = TimeConverter.getRecentWeekTimestamps(date);
 
         long secondDiff = 3600 * hourDiff;
@@ -133,11 +135,11 @@ public class TimeConverterTest {
         assertEquals(answer1, timestamps[0]);
 
 
-
     }
+
     @Test
-    public void getRecentMonthTimeStamps(){
-        LocalDate date = LocalDate.of(2023,11,3);
+    public void getRecentMonthTimeStamps() {
+        LocalDate date = LocalDate.of(2023, 11, 3);
         long[] timestamps = TimeConverter.getRecentMonthTimestamps(date);
 
         long secondDiff = 3600 * hourDiff;
@@ -146,7 +148,6 @@ public class TimeConverterTest {
 
         assertEquals(answer1, timestamps[0]);
         assertEquals(answer2, timestamps[1]);
-
 
 
     }
