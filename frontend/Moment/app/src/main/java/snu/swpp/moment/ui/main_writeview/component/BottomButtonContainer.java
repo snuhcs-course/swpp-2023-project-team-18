@@ -125,6 +125,17 @@ public class BottomButtonContainer {
                 button.setText(R.string.day_completion_score);
                 button.setOnClickListener(v -> {
                     listFooterContainer.showLoadingText(true);
+
+                    // 태그 입력값 가져오기
+                    String tagInput = listFooterContainer.getTagInput();
+
+                    // 마지막 # 또는 #과 스페이스바 제거
+                    if (tagInput.endsWith("# ") || tagInput.endsWith(" #")) {
+                        tagInput = tagInput.substring(0, tagInput.length() - 2);
+                    } else if (tagInput.endsWith("#")) {
+                        tagInput = tagInput.substring(0, tagInput.length() - 1);
+                    }
+
                     // 점수 저장 API 호출
                     viewModel.saveScore(listFooterContainer.getScoreInput());
                 });
