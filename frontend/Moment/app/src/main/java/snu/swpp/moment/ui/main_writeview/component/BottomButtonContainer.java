@@ -126,6 +126,7 @@ public class BottomButtonContainer {
                 button.setText(R.string.day_completion_score);
                 button.setOnClickListener(v -> {
                     listFooterContainer.showLoadingText(true);
+
                     // 점수 저장 API 호출
                     viewModel.saveScore(listFooterContainer.getScoreInput());
                 });

@@ -33,7 +33,7 @@
 
     <style name="SMALL_BLACK">
         <item name="android:fontFamily">@font/maruburi_regular</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/darkgray</item>
     </style>
 
@@ -66,6 +66,14 @@
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+
+    <style name="EMOTION">
+        <item name="android:fontFamily">@font/maruburi_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 
 
 </resources>

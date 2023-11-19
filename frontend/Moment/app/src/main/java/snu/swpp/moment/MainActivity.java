@@ -19,8 +19,6 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.databinding.ActivityMainBinding;
-import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
-import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -42,6 +42,7 @@
     <!-- 쓰기 탭 -->
     <string name="edit_text_message">오늘의 모먼트를 기록해 주세요</string>
     <string name="add_moment_help_text">새 모먼트 추가</string>
+    <string name="submit_moment_help_text">모먼트 저장</string>
     <string name="ai_response_help_text">AI의 답글</string>
     <string name="moment_limit_help_text">모먼트는 1시간에 2개만 쓸 수 있어요</string>
     <string name="moment_reply_loading">AI의 답글을 기다리고 있어요</string>
