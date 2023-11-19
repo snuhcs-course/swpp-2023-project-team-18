@@ -101,4 +101,9 @@
     <string name="stat_section_score">하루 점수</string>
     <string name="title_activity_min">MinActivity</string>
 
+
+    <!-- 찾아보기 탭 -->
+    <string name="search_hashtag_button">해시태그</string>
+    <string name="search_content_button">내용</string>
+
 </resources>

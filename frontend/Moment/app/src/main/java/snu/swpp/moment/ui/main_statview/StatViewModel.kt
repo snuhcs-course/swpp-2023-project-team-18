@@ -96,18 +96,14 @@ class StatViewModel(
 
             override fun onFailure() {
                 stat.value = StatState.withError(UnauthorizedAccessException())
-
             }
-
         })
 
         // 버튼의 상태 업데이트,
         selectedButtonType.value = if (isMonth) ButtonType.MONTH else ButtonType.WEEK
-
     }
 
     enum class ButtonType {
         WEEK, MONTH
     }
-
 }
