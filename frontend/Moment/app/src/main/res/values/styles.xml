@@ -68,4 +68,12 @@
     </style>
 
 
+    <style name="EMOTION">
+        <item name="android:fontFamily">@font/maruburi_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+
 </resources>
