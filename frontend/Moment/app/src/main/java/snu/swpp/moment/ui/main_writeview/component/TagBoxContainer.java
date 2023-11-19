@@ -52,6 +52,7 @@ public class TagBoxContainer {
         tagEditText.addTextChangedListener(new TextWatcher() {
             // #의 연속 입력을 막기 위한 변수 (스페이스바만 계속 누르는 경우 스페이스바 무시)
             private boolean isHashJustEntered = false;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // 사용자가 삭제를 눌렀는지 확인 (스페이스바 무시 로직에서 예외 처리)
@@ -81,7 +82,7 @@ public class TagBoxContainer {
                     // 사용자 입력이 시작되면 맨 앞에 # 추가
                     s.insert(0, "#");
                 }
-                Log.d("TagBoxContainer", "afterTextChanged: " + s.toString());
+                Log.d("TagBoxContainer", "afterTextChanged: " + s);
                 List<String> currentTags = parseTags(s.toString());
                 if (currentTags.size() > MAX_TAGS) {
                     // 개수 제한 초과

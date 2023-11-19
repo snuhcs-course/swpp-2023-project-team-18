@@ -60,31 +60,30 @@ public class EmotionContainer {
         );
 
         linearLayoutList = Arrays.asList(
-                view.findViewById(R.id.emotionSun1),
-                view.findViewById(R.id.emotionSun2),
-                view.findViewById(R.id.emotionSunCloud1),
-                view.findViewById(R.id.emotionSunCloud2),
-                view.findViewById(R.id.emotionCloud1),
-                view.findViewById(R.id.emotionCloud2),
-                view.findViewById(R.id.emotionRain1),
-                view.findViewById(R.id.emotionRain2),
-                view.findViewById(R.id.emotionLightning1),
-                view.findViewById(R.id.emotionLightning2)
+            view.findViewById(R.id.emotionSun1),
+            view.findViewById(R.id.emotionSun2),
+            view.findViewById(R.id.emotionSunCloud1),
+            view.findViewById(R.id.emotionSunCloud2),
+            view.findViewById(R.id.emotionCloud1),
+            view.findViewById(R.id.emotionCloud2),
+            view.findViewById(R.id.emotionRain1),
+            view.findViewById(R.id.emotionRain2),
+            view.findViewById(R.id.emotionLightning1),
+            view.findViewById(R.id.emotionLightning2)
         );
 
         imageViewList = Arrays.asList(
-                view.findViewById(R.id.emotionSunRow1),
-                view.findViewById(R.id.emotionSunRow2),
-                view.findViewById(R.id.emotionSunCloudRow1),
-                view.findViewById(R.id.emotionSunCloudRow2),
-                view.findViewById(R.id.emotionCloudRow1),
-                view.findViewById(R.id.emotionCloudRow2),
-                view.findViewById(R.id.emotionRainRow1),
-                view.findViewById(R.id.emotionRainRow2),
-                view.findViewById(R.id.emotionLightningRow1),
-                view.findViewById(R.id.emotionLightningRow2)
+            view.findViewById(R.id.emotionSunRow1),
+            view.findViewById(R.id.emotionSunRow2),
+            view.findViewById(R.id.emotionSunCloudRow1),
+            view.findViewById(R.id.emotionSunCloudRow2),
+            view.findViewById(R.id.emotionCloudRow1),
+            view.findViewById(R.id.emotionCloudRow2),
+            view.findViewById(R.id.emotionRainRow1),
+            view.findViewById(R.id.emotionRainRow2),
+            view.findViewById(R.id.emotionLightningRow1),
+            view.findViewById(R.id.emotionLightningRow2)
         );
-
 
         maruburiLight = ResourcesCompat.getFont(view.getContext(),
             R.font.maruburi_regular);
@@ -97,29 +96,21 @@ public class EmotionContainer {
         for (int i = 0; i < textButtonList.size(); i++) {
             TextView textButton = textButtonList.get(i);
             final int emotionIdx = i;
-            textButton.setOnClickListener(v -> {
-                selectEmotion(emotionIdx);
-            });
+            textButton.setOnClickListener(v -> selectEmotion(emotionIdx));
         }
 
         for (int i = 0; i < linearLayoutList.size(); i++) {
             LinearLayout linearLayout = linearLayoutList.get(i);
             final int linearLayoutIndex = i;
-            linearLayout.setOnClickListener(v -> {
-                selectEmotion(linearLayoutIndex);
-            });
+            linearLayout.setOnClickListener(v -> selectEmotion(linearLayoutIndex));
         }
 
         for (int i = 0; i < imageViewList.size(); i++) {
             ImageView imageView = imageViewList.get(i);
             final int imageViewIndex = i;
-            imageView.setOnClickListener(v -> {
-                selectEmotion(imageViewIndex);
-            });
+            imageView.setOnClickListener(v -> selectEmotion(imageViewIndex));
         }
     }
-
-
 
     public void setState(EmotionContainerState state) {
         Log.d("EmotionContainer", String.format("state: %s -> %s", this.state, state));
@@ -194,10 +185,6 @@ public class EmotionContainer {
         }
         selectedEmotion.setValue(emotion);
     }
-
-
-
-
 
     public void setHelpText(String text) {
         emotionHelpText.setText(text);
