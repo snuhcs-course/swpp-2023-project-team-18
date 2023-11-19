@@ -2,14 +2,13 @@ package snu.swpp.moment.ui.main_writeview;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -17,100 +16,133 @@ import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
+import snu.swpp.moment.ui.main_writeview.slideview.SlideViewAdapter;
+import snu.swpp.moment.utils.AnimationProvider;
 import snu.swpp.moment.utils.TimeConverter;
 
 
 public class WriteViewFragment extends Fragment {
 
-    private final int DEFAULT_PAGE = 100;
-    private int num_page = DEFAULT_PAGE;
     private FragmentWriteviewBinding binding;
 
-    // ViewPager variables
-    private ViewPager2 mPager;
-    private FragmentStateAdapter pagerAdapter;
-    private final Handler slideHandler = new Handler(); // 슬라이드를 자동으로 변경하는 Handler
+    private SlideViewAdapter slideViewAdapter;
+    private int numPages = -1;
+    private boolean isInTodayPage = true;
+    private final int OFF_SCREEN_PAGE_LIMIT = 3;
 
     private AuthenticationRepository authenticationRepository;
 
+    private AnimationProvider animationProvider;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
+        Log.d("WriteViewFragment", "onCreateView");
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(getContext());
+            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
         } catch (Exception e) {
-            Toast.makeText(getContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
         }
 
-        initializeNumPage();
+        numPages = calculateNumPages();
 
         binding = FragmentWriteviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // 여기부터 slide가 가능해짐
-        mPager = binding.viewpager;
-        pagerAdapter = new SlideViewAdapter(WriteViewFragment.this, num_page);
-        mPager.setAdapter(pagerAdapter);
-        mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        // 최초의 페이지 설정은 이거로 함 (numpage 보다 크면 마지막페이지가 세팅되는듯 - 아래 onPageChangeCallBack)
-        mPager.setCurrentItem(num_page);
-        // offscreen 몇 페이지가 로드되어 있을지 설정 (Latency 감소)
-        mPager.setOffscreenPageLimit(3);
+        binding.backToTodayButton.setActivated(true);
+        animationProvider = new AnimationProvider(binding.backToTodayButton);
 
-        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        slideViewAdapter = new SlideViewAdapter(WriteViewFragment.this, numPages);
+        binding.viewpager.setAdapter(slideViewAdapter);
+        binding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+
+        // 처음에 보여줄 페이지 설정
+        binding.viewpager.setCurrentItem(numPages - 1, false);
+        // 항상 로딩 상태로 둘 페이지 수 설정
+        binding.viewpager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT);
+
+        // 오늘로 돌아가기 버튼
+        binding.backToTodayButton.setOnClickListener(
+            v -> binding.viewpager.setCurrentItem(numPages - 1, true));
+        showBackToTodayButton(false, false);
+
+        binding.viewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
                 int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
 
                 if (positionOffsetPixels == 0) {
-                    int index = position;
-                    if (position >= num_page) { // 마지막 페이지에서 오른쪽으로 넘어갈 때 마지막 페이지로 고정
-                        index = num_page - 1;
-                        mPager.setCurrentItem(num_page - 1, false);
+                    if (position >= numPages) { // 마지막 페이지에서 오른쪽으로 넘어갈 때 마지막 페이지로 고정
+                        binding.viewpager.setCurrentItem(numPages - 1, false);
                     } else if (position < 0) { // 첫 페이지에서 왼쪽으로 넘어갈 때 첫 페이지로 고정
-                        index = 0;
-                        mPager.setCurrentItem(0, false);
+                        binding.viewpager.setCurrentItem(0, false);
                     }
-                    LocalDate pageDate = TimeConverter.getToday().minusDays(num_page - index - 1);
-                    String formattedDate = TimeConverter.formatLocalDate(pageDate, "yyyy. MM. dd.");
-                    MainActivity activity = (MainActivity) getActivity();
-                    activity.setToolbarTitle(formattedDate);
                 }
             }
 
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                //mIndicator.animatePageSelected(position % 4);
+
+                boolean newValue = position == numPages - 1;
+                showBackToTodayButton(!newValue, isInTodayPage && !newValue);
+                isInTodayPage = newValue;
             }
+        });
+
+        // 한달보기 탭에서 버튼을 눌러 넘어왔을 때 동작
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.observeWriteDestinationDate(localDate -> {
+            Log.d("WriteViewFragment", "writeDestinationDateObserver: " + localDate);
+            if (localDate == null) {
+                return;
+            }
+            long minusDays = ChronoUnit.DAYS.between(localDate, TimeConverter.getToday());
+            binding.viewpager.setCurrentItem(numPages - (int) minusDays - 1, true);
+            mainActivity.resetWriteDestinationDate();
         });
 
         return root;
     }
 
-    private void initializeNumPage() {
-        int hour;
-        LocalDate created_at, today;
+    private int calculateNumPages() {
         String dateInString = authenticationRepository.getCreatedAt();
         if (dateInString.isBlank()) {
-            return;
+            return 1;
         }
-        today = TimeConverter.getToday();
-        created_at = LocalDate.parse(dateInString.substring(0, 10));
-        hour = Integer.parseInt(dateInString.substring(11, 13));
-        created_at = TimeConverter.updateDateFromThree(created_at, hour);
+        LocalDate today = TimeConverter.getToday();
+        LocalDate createdAt = LocalDate.parse(dateInString.substring(0, 10));
+        int hour = Integer.parseInt(dateInString.substring(11, 13));
+        createdAt = TimeConverter.adjustToServiceDate(createdAt, hour);
 
-        int dayDiff = (int) ChronoUnit.DAYS.between(created_at, today);
-        this.num_page = dayDiff + 1;
+        return (int) ChronoUnit.DAYS.between(createdAt, today) + 1;
+    }
 
+    private void showBackToTodayButton(boolean show, boolean withAnimation) {
+        if (show) {
+            binding.backToTodayButton.setVisibility(View.VISIBLE);
+            if (withAnimation) {
+                binding.backToTodayButton.startAnimation(animationProvider.fadeIn);
+            }
+        } else {
+            binding.backToTodayButton.setVisibility(View.GONE);
+            binding.backToTodayButton.startAnimation(animationProvider.fadeOut);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("WriteViewFragment", "onResume");
+        super.onResume();
+        showBackToTodayButton(!isInTodayPage, false);
     }
 
     @Override
     public void onDestroyView() {
+        ((MainActivity) requireActivity()).unobserveWriteDestinationDate();
         super.onDestroyView();
-        binding = null;
     }
 }

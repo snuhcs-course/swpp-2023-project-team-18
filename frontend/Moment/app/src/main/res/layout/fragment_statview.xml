@@ -1,22 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main_statview.StatViewFragment">
-
-    <TextView
-        android:id="@+id/statview"
+    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+
+      xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id = "@+id/con"
+        tools:context=".ui.main_statview.StatViewFragment">
+
+        <include
+            android:id="@+id/statUtilContainer"
+            layout="@layout/stat_button_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/stat_duration_container"
+            tools:visibility="visible" />
+
+
+
+        <include
+            android:id="@+id/stat_duration_container"
+            layout="@layout/stat_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/statUtilContainer"
+            app:layout_constraintBottom_toTopOf="@+id/stat_border"
+
+            />
+        <View
+            android:id="@+id/stat_border"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintTop_toBottomOf="@+id/stat_duration_container"
+            app:layout_constraintBottom_toTopOf="@+id/stat_day_score_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/stat_day_score_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/stat_border"
+            app:layout_constraintBottom_toTopOf="@+id/stat_day_score_alert_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="하루의 점수"
+            android:textSize="14sp"
+            android:fontFamily="@font/maruburi_bold"
+            />
+
+        <TextView
+            android:id="@+id/stat_day_score_alert_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintTop_toBottomOf="@+id/stat_day_score_info"
+            app:layout_constraintBottom_toTopOf="@+id/stat_line_chart"
+            app:layout_constraintEnd_toEndOf="@+id/stat_line_chart"
+            android:layout_marginRight="15dp"
+            android:textAlignment="textEnd"
+            android:text="모먼트 기록이 있는 날짜만 표시됩니다."
+            android:textSize="9sp"
+            android:textColor="@color/red"
+            android:fontFamily="@font/maruburi_bold"
+            />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/stat_line_chart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintDimensionRatio="2:1"
+            app:layout_constraintTop_toBottomOf="@+id/stat_day_score_info"
+            app:layout_constraintBottom_toTopOf="@id/average_score_text"
+            />
+
+
+        <TextView
+            android:id="@+id/average_score_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Average Score"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:fontFamily="@font/maruburi_bold"
+            app:layout_constraintTop_toBottomOf="@+id/stat_line_chart"
+            app:layout_constraintBottom_toTopOf="@+id/average_score_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <TextView
+            android:id="@+id/average_score_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/maruburi_bold"
+            android:text="Average Score"
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/score_unit"
+            app:layout_constraintBottom_toTopOf="@+id/stat_border2"
+            app:layout_constraintEnd_toStartOf="@+id/score_unit"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/average_score_text" />
+
+        <TextView
+            android:id="@+id/score_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="점"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:fontFamily="@font/maruburi_bold"
+            app:layout_constraintTop_toBottomOf="@+id/average_score_text"
+            app:layout_constraintStart_toEndOf="@+id/average_score_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/stat_border2"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <View
+            android:id="@+id/stat_border2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintTop_toBottomOf="@+id/average_score_text_view"
+            app:layout_constraintBottom_toTopOf="@+id/stat_emotion_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/stat_emotion_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/stat_border2"
+            app:layout_constraintBottom_toTopOf="@+id/stat_pie_chart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="하루의 감정"
+            android:textSize="14sp"
+            android:fontFamily="@font/maruburi_bold"
+            />
+
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/stat_pie_chart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintWidth_percent="1"
+            app:layout_constraintDimensionRatio="1.8:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stat_emotion_info"
+            app:layout_constraintBottom_toTopOf="@+id/statPieChartLegend"
+            />
+
+        <include
+            android:id="@+id/statPieChartLegend"
+            layout="@layout/stat_piechart_legend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/stat_pie_chart"
+            app:layout_constraintBottom_toTopOf="@+id/stat_border3"
+            tools:visibility="visible" />
+
+
+
+        <View
+            android:id="@+id/stat_border3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintTop_toBottomOf="@+id/statPieChartLegend"
+            app:layout_constraintBottom_toTopOf="@+id/stat_hashtag_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/stat_hashtag_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/stat_border3"
+            app:layout_constraintBottom_toTopOf="@+id/frame"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="하루의 태그"
+            android:textSize="14sp"
+            android:fontFamily="@font/maruburi_bold"
+            />
+
+
+        <FrameLayout
+          android:id="@+id/frame"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          app:layout_constraintWidth_percent="1"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintTop_toBottomOf="@id/stat_hashtag_info"
+          app:layout_constraintEnd_toEndOf="parent">
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/stat_word_cloud"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="1"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toBottomOf="@id/stat_hashtag_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        </FrameLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>

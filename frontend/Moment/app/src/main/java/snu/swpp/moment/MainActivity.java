@@ -1,30 +1,40 @@
 package snu.swpp.moment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.databinding.ActivityMainBinding;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
+import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private NavController navController;
     private ActivityMainBinding binding;
 
     private TextView toolbarTitle;
 
+    private final MutableLiveData<LocalDate> writeDestinationDate = new MutableLiveData<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("MainActivity", "created");
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -45,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             R.id.LogoutView)
             .setOpenableLayout(drawer)
             .build();
-        NavController navController = Navigation.findNavController(this,
+        navController = Navigation.findNavController(this,
             R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -102,5 +112,30 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         toolbarTitle.setText(title);
+    }
+
+    public void showHamburgerButton(boolean show) {
+        getSupportActionBar().setHomeButtonEnabled(show);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(show);
+    }
+
+    public void navigateToWriteViewPage(LocalDate date) {
+        Log.d("MainActivity", "navigateToWriteViewPage: " + date);
+        navController.navigate(R.id.WriteView);
+        writeDestinationDate.setValue(date);
+    }
+
+    public void observeWriteDestinationDate(Observer<LocalDate> observer) {
+        Log.d("MainActivity", "observer for writeDestinationDate set");
+        writeDestinationDate.observe(this, observer);
+    }
+
+    public void unobserveWriteDestinationDate() {
+        Log.d("MainActivity", "observer for writeDestinationDate removed");
+        writeDestinationDate.removeObservers(this);
+    }
+
+    public void resetWriteDestinationDate() {
+        writeDestinationDate.setValue(null);
     }
 }

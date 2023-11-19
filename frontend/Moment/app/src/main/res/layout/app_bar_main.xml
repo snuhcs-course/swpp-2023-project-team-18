@@ -27,12 +27,10 @@
         app:popupTheme="@style/Theme.Moment.NoActionBar">
         <TextView
             android:id="@+id/text_title"
+            style="@style/BIG_BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="20sp"
-            android:fontFamily="@font/maruburi_light"
-            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.appcompat.widget.Toolbar>

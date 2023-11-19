@@ -9,8 +9,8 @@
     tools:layout_height="200dp">
 
     <TextView
-        android:id="@+id/tag_help_text"
-        style="@style/HELP_TEXT"
+        android:id="@+id/tagHelpText"
+        style="@style/SMALL_GRAY"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -20,26 +20,25 @@
 
     <EditText
         android:id="@+id/tagsEditText"
-        style="@style/NORMAL_TEXT"
+        style="@style/NORMAL_BLACK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:background="@drawable/box_border"
+        android:background="@drawable/box_border_gray"
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/tag_hint"
         android:importantForAutofill="no"
         android:inputType="text|textMultiLine"
         android:minLines="2"
-        android:textColor="@color/black"
         android:textColorHint="@color/darkgray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tag_help_text" />
+        app:layout_constraintTop_toBottomOf="@+id/tagHelpText" />
 
     <TextView
         android:id="@+id/tagLimitHelpText"
-        style="@style/WARN_TEXT"
+        style="@style/SMALL_RED"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

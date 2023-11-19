@@ -1,7 +1,6 @@
 package snu.swpp.moment.data.repository;
 
 import java.util.List;
-import snu.swpp.moment.api.response.StoryCompletionNotifyResponse;
 import snu.swpp.moment.data.callback.AiStoryCallback;
 import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
@@ -23,8 +22,8 @@ public class StoryRepository {
     public void getStory(String access_token, long start, long end, StoryGetCallBack callback) {
         remoteDataSource.getStory(access_token, start, end, new StoryGetCallBack() {
             @Override
-            public void onSuccess(List<StoryModel> story) {
-                callback.onSuccess(story);
+            public void onSuccess(List<StoryModel> storyList) {
+                callback.onSuccess(storyList);
             }
 
             @Override

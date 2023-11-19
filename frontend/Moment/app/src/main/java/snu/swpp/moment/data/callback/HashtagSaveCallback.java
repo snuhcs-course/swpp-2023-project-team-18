@@ -2,7 +2,7 @@ package snu.swpp.moment.data.callback;
 
 public interface HashtagSaveCallback {
 
-    public void onSuccess();
+    void onSuccess();
 
-    public void onFailure(Exception error);
+    void onFailure(Exception error);
 }

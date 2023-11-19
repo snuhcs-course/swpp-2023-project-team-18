@@ -9,7 +9,7 @@
         android:id="@+id/momentEditTextWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/box_border"
+        android:background="@drawable/box_border_gray"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,17 +18,17 @@
 
         <EditText
             android:id="@+id/momentEditText"
+            style="@style/NORMAL_BLACK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/editTextPadding"
             android:backgroundTint="@android:color/transparent"
-            android:fontFamily="@font/maruburi_light"
             android:gravity="top|start"
             android:hint="@string/edit_text_message"
             android:importantForAutofill="no"
             android:inputType="text|textMultiLine"
             android:minLines="5"
-            android:textSize="15sp"
+            android:textColorHint="@color/darkgray"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -48,13 +48,12 @@
             <!-- 글자수 실시간으로 보여줌 -->
             <TextView
                 android:id="@+id/momentLengthText"
+                style="@style/SMALL_GRAY"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@color/white"
-                android:fontFamily="@font/maruburi_light"
                 android:text=""
-                android:textColor="@color/gray"
                 tools:text="0/1000" />
 
             <Button
@@ -104,9 +103,10 @@
 
     <TextView
         android:id="@+id/addHelpText"
-        style="@style/HELP_TEXT"
+        style="@style/SMALL_GRAY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="@string/add_moment_help_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,9 +114,10 @@
 
     <TextView
         android:id="@+id/addLimitWarnText"
-        style="@style/WARN_TEXT"
+        style="@style/SMALL_RED"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="@string/moment_limit_help_text"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.login;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -28,8 +29,7 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        System.out.println(
-            "#Debug from ViewModel || username : " + username + "password : " + password);
+        Log.d("LoginViewModel", "login");
         authenticationRepository.login(username, password, new AuthenticationCallBack() {
             @Override
             public void onSuccess(LoggedInUserModel loggedInUser) {
@@ -40,15 +40,19 @@ public class LoginViewModel extends ViewModel {
 
             @Override
             public void onFailure(String errorMessage) {
-                if (errorMessage.equals(
-                    "{\"error\":[\"Unable to log in with provided credentials.\"]}")) {
-                    loginResult.setValue(new LoginResultState(R.string.wrong_password));
-                } else if (errorMessage.equals("Server")) {
-                    loginResult.setValue(new LoginResultState(R.string.server_error));
-                } else if (errorMessage.equals("NO INTERNET")) {
-                    loginResult.setValue(new LoginResultState(R.string.internet_error));
-                } else {
-                    loginResult.setValue(new LoginResultState(R.string.unknown_error));
+                switch (errorMessage) {
+                    case "{\"error\":[\"Unable to log in with provided credentials.\"]}":
+                        loginResult.setValue(new LoginResultState(R.string.wrong_password));
+                        break;
+                    case "Server":
+                        loginResult.setValue(new LoginResultState(R.string.server_error));
+                        break;
+                    case "NO INTERNET":
+                        loginResult.setValue(new LoginResultState(R.string.internet_error));
+                        break;
+                    default:
+                        loginResult.setValue(new LoginResultState(R.string.unknown_error));
+                        break;
                 }
             }
         });

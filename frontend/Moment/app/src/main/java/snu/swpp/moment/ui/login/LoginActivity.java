@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,13 +14,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.databinding.ActivityLoginBinding;
+import snu.swpp.moment.utils.KeyboardUtils;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -44,51 +44,44 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
+        final Button loginButton = binding.loginButton;
         final ProgressBar loadingProgressBar = binding.loading;
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
+        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
+            if (loginFormState == null) {
+                return;
+            }
+            loginButton.setEnabled(loginFormState.isDataValid());
+            loginButton.setActivated(loginFormState.isDataValid());
+            if (loginFormState.getUsernameError() != null) {
+                usernameEditText.setError(getString(loginFormState.getUsernameError()));
+            }
+            if (loginFormState.getPasswordError() != null) {
+                passwordEditText.setError(getString(loginFormState.getPasswordError()));
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResultState>() {
-            @Override
-            public void onChanged(@Nullable LoginResultState loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    System.out.println("#DEBUG : ACTIVITY HIHIHII");
-
-                    //updateUiWithUser(loginResult.getSuccess());
-
-                    Intent testLoginSuccess = new Intent(LoginActivity.this, MainActivity.class);
-                    System.out.println("#DEBUG : ACTIVITY @@@@@@");
-                    startActivity(testLoginSuccess);
-
-
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                //finish();
+        loginViewModel.getLoginResult().observe(this, loginResult -> {
+            if (loginResult == null) {
+                return;
             }
+            loadingProgressBar.setVisibility(View.GONE);
+            if (loginResult.getError() != null) {
+                showLoginFailed(loginResult.getError());
+            }
+            if (loginResult.getSuccess() != null) {
+                System.out.println("#DEBUG : ACTIVITY HIHIHII");
+
+                //updateUiWithUser(loginResult.getSuccess());
+
+                Intent testLoginSuccess = new Intent(LoginActivity.this, MainActivity.class);
+                System.out.println("#DEBUG : ACTIVITY @@@@@@");
+                startActivity(testLoginSuccess);
+            }
+            setResult(Activity.RESULT_OK);
+
+            //Complete and destroy login activity once successful
+            //finish();
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -127,13 +120,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginViewModel.login(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString());
+        loginButton.setOnClickListener(
+            v -> {
+                Log.d("LoginActivity", "loginButtonClicked");
+                loginViewModel.login(
+                    usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString()
+                );
             }
-        });
+        );
+        View root = binding.getRoot();
+        KeyboardUtils.hideKeyboardOnOutsideTouch(root, this);
     }
 
 

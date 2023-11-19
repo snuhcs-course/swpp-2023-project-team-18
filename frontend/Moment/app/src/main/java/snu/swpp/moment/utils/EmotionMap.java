@@ -38,6 +38,7 @@ public class EmotionMap {
         }
     };
 
+
     public static int getEmotionInt(String emotion) {
         Integer emotionInt = emotionEnumMap.getOrDefault(emotion, INVALID_EMOTION);
         return Objects.requireNonNullElse(emotionInt, INVALID_EMOTION);
@@ -48,4 +49,5 @@ public class EmotionMap {
         String emotionStr = reverseMap.getOrDefault(code, "invalid");
         return Objects.requireNonNullElse(emotionStr, "invalid");
     }
+
 }

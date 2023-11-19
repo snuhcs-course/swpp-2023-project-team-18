@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -21,17 +22,23 @@ public class TimeConverter {
         return localDateTime.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
     }
 
-    public static LocalDate updateDateFromThree(LocalDate date, int hour) {
+    public static LocalDate adjustToServiceDate(LocalDate date, int hour) {
         if (hour < 3) {
             date = date.minusDays(1);
         }
         return date;
     }
 
+    public static LocalDate adjustToServiceDate(LocalDateTime dateTime) {
+        return adjustToServiceDate(dateTime.toLocalDate(), dateTime.getHour());
+    }
+
+    public static boolean hasDayPassed(LocalDateTime base, LocalDateTime cur) {
+        return adjustToServiceDate(base).isBefore(adjustToServiceDate(cur));
+    }
+
     public static LocalDate getToday() {
-        LocalDate today = LocalDate.now();
-        int hour = LocalTime.now().getHour();
-        return updateDateFromThree(today, hour);
+        return adjustToServiceDate(LocalDateTime.now());
     }
 
     public static String formatLocalDate(LocalDate date, String formatString) {
@@ -58,5 +65,54 @@ public class TimeConverter {
         Log.d("TimeConverter",
             "startTimestamp: " + startTimestamp + ", endTimestamp: " + endTimestamp);
         return new long[]{startTimestamp, endTimestamp};
+    }
+
+    public static long[] getOneMonthTimestamps(YearMonth yearMonth) {
+        LocalDate startDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), 1);
+        LocalDate endDate = yearMonth.atEndOfMonth().plusDays(1);
+
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(2, 59, 59));
+
+        long startTimestamp = convertLocalDateTimeToTimestamp(startDateTime);
+        long endTimestamp = convertLocalDateTimeToTimestamp(endDateTime);
+
+        return new long[]{startTimestamp, endTimestamp};
+    }
+
+    public static long[] getRecentMonthTimestamps(LocalDate date) {
+        LocalDate startDate = date.minusDays(30);
+        LocalDate endDate = date.plusDays(1);
+
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(2, 59, 59));
+
+        long startTimestamp = convertLocalDateTimeToTimestamp(startDateTime);
+        long endTimestamp = convertLocalDateTimeToTimestamp(endDateTime);
+
+        return new long[]{startTimestamp, endTimestamp};
+    }
+
+    public static long[] getRecentWeekTimestamps(LocalDate date) {
+        LocalDate startDate = date.minusDays(7);
+        LocalDate endDate = date.plusDays(1);
+        System.out.println(startDate.toString());
+
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(3, 0, 0));
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(2, 59, 59));
+
+        long startTimestamp = convertLocalDateTimeToTimestamp(startDateTime);
+        long endTimestamp = convertLocalDateTimeToTimestamp(endDateTime);
+
+        return new long[]{startTimestamp, endTimestamp};
+    }
+
+
+    public static LocalDate convertDateToLocalDate(Date date) {
+        LocalDate result = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (date.getHours() < 3) {
+            result = result.minusDays(1);
+        }
+        return result;
     }
 }
