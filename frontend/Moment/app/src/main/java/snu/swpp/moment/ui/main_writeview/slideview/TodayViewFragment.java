@@ -17,16 +17,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.model.MomentPairModel;
-import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.data.repository.MomentRepository;
-import snu.swpp.moment.data.repository.StoryRepository;
-import snu.swpp.moment.data.source.MomentRemoteDataSource;
-import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
@@ -34,8 +28,6 @@ import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
 import snu.swpp.moment.ui.main_writeview.component.WritePageState;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
-import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
-import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
@@ -53,50 +45,34 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     private TodayViewModel viewModel;
 
-    private AuthenticationRepository authenticationRepository;
-    private MomentRepository momentRepository;
-    private MomentRemoteDataSource momentRemoteDataSource;
-    private StoryRepository storyRepository;
-    private StoryRemoteDataSource storyRemoteDataSource;
-    private GetStoryUseCase getStoryUseCase;
-    private SaveScoreUseCase saveScoreUseCase;
-
     private final int MOMENT_HOUR_LIMIT = 2;
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        momentRemoteDataSource = Objects.requireNonNullElse(momentRemoteDataSource,
-            new MomentRemoteDataSource());
-        momentRepository = Objects.requireNonNullElse(momentRepository,
-            new MomentRepository(momentRemoteDataSource));
-        storyRemoteDataSource = Objects.requireNonNullElse(storyRemoteDataSource,
-            new StoryRemoteDataSource());
-        storyRepository = Objects.requireNonNullElse(storyRepository,
-            new StoryRepository(storyRemoteDataSource));
-
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
-        } catch (RuntimeException e) {
-            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-            startActivity(intent);
-        }
-
-        getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
-            new GetStoryUseCase(authenticationRepository, storyRepository));
-        saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
-            new SaveScoreUseCase(authenticationRepository, storyRepository));
-
-        if (viewModel == null) {
-            viewModel = new ViewModelProvider(this,
-                new TodayViewModelFactory(authenticationRepository, momentRepository,
-                    storyRepository, getStoryUseCase, saveScoreUseCase)).get(TodayViewModel.class);
-        }
 
         binding = PageTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        super.onCreateView(inflater, container, savedInstanceState);
+        if (viewModel == null) {
+            try {
+                viewModel = new ViewModelProvider(this,
+                    new TodayViewModelFactory(
+                        dataUnitFactory.authenticationRepository(),
+                        dataUnitFactory.momentRepository(),
+                        dataUnitFactory.storyRepository(),
+                        dataUnitFactory.getStoryUseCase(),
+                        dataUnitFactory.saveScoreUseCase()
+                    )
+                ).get(TodayViewModel.class);
+            } catch (RuntimeException e) {
+                Toast.makeText(requireContext(), "알 수 없는 오류", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
+                startActivity(intent);
+            }
+        }
 
         // ListView setup
         listViewItems = new ArrayList<>();
