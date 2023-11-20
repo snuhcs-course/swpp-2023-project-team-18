@@ -12,7 +12,7 @@ from writing.constants import (
     GPT_AUTOCOMPLETION_ERROR_TITLE,
     GPT_NUDGE_GENERATE_NONE_CONTENT,
 )
-from writing.cron import auto_completion_job
+from writing.auto_cron import auto_completion_job
 from writing.nudge_cron import (
     nudge_creation_job,
     summarize_yesterday_nudge,

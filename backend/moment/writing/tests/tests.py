@@ -13,7 +13,7 @@ from writing.constants import (
     GPT_AUTOCOMPLETION_ERROR_CONTENT,
     GPT_AUTOCOMPLETION_ERROR_TITLE,
 )
-from writing.cron import auto_completion_job
+from writing.auto_cron import auto_completion_job
 from writing.models import MomentPair, Story, Hashtag
 from writing.utils.gpt import GPTAgent
 from writing.utils.prompt import StoryGenerateTemplate, MomentReplyTemplate
