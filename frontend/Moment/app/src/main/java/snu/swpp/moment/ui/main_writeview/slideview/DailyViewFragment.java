@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview.slideview;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,24 @@ public class DailyViewFragment extends BaseWritePageFragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            viewModel = new ViewModelProvider(this,
+                new DailyViewModelFactory(
+                    dataUnitFactory.authenticationRepository(),
+                    dataUnitFactory.momentRepository(),
+                    dataUnitFactory.getStoryUseCase(),
+                    dataUnitFactory.saveScoreUseCase()
+                )
+            ).get(DailyViewModel.class);
+        } catch (RuntimeException e) {
+            Toast.makeText(requireContext(), "알 수 없는 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
+            startActivity(intent);
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -50,24 +69,6 @@ public class DailyViewFragment extends BaseWritePageFragment {
 
         binding = PageDailyBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        super.onCreateView(inflater, container, savedInstanceState);
-        if (viewModel == null) {
-            try {
-                viewModel = new ViewModelProvider(this,
-                    new DailyViewModelFactory(
-                        dataUnitFactory.authenticationRepository(),
-                        dataUnitFactory.momentRepository(),
-                        dataUnitFactory.getStoryUseCase(),
-                        dataUnitFactory.saveScoreUseCase()
-                    )
-                ).get(DailyViewModel.class);
-            } catch (RuntimeException e) {
-                Toast.makeText(requireContext(), "알 수 없는 오류", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-                startActivity(intent);
-            }
-        }
 
         // ListView setup
         listViewItems = new ArrayList<>();

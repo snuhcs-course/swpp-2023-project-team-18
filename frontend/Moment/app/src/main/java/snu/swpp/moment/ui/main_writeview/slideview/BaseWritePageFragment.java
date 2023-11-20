@@ -1,12 +1,9 @@
 package snu.swpp.moment.ui.main_writeview.slideview;
 
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -32,12 +29,9 @@ public abstract class BaseWritePageFragment extends Fragment {
     private final long REFRESH_INTERVAL = 1000 * 60 * 5;  // 5 minutes
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
-        if (dataUnitFactory == null) {
-            dataUnitFactory = new WritePageDataUnitFactory(requireContext());
-        }
-        return null;
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        dataUnitFactory = new WritePageDataUnitFactory(requireContext());
     }
 
     @Override
