@@ -220,6 +220,10 @@ class NudgeGenerateTest(TestCase):
         self.assertEqual(should_create_nudge(["yay", "", ""]), False)
         self.assertEqual(should_create_nudge(["", "", ""]), False)
 
+        self.assertEqual(should_create_nudge(["yay1", "yay2"]), False)
+        self.assertEqual(should_create_nudge(["yay1"]), False)
+        self.assertEqual(should_create_nudge([]), False)
+
     def test_should_create_nudge_true(self):
         self.assertEqual(should_create_nudge(["yay1", "", "yay2"]), True)
         self.assertEqual(should_create_nudge(["", "yay1", "yay2"]), True)

@@ -76,6 +76,8 @@ def should_create_nudge(summ_stories: List[str]) -> bool:
         summ_story.replace("*", "").replace("\n", "").replace(" ", "").strip()
         for summ_story in summ_stories
     ]
+    if len(summ_stories_formatted) < 3:
+        return False
     if summ_stories_formatted[2] == "":
         return False
     elif summ_stories_formatted[1] == "" and summ_stories_formatted[0] == "":
