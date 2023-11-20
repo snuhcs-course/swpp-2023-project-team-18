@@ -145,6 +145,14 @@ Now, it's your turn to summarize the diary entry:
 [Summary]
 """
 
+NUDGE_GENERATE_STEP_TWO = """\
+You will be provided with two or three summarized versions of diary entries, \
+which the user has written in the past couple of days.
+Your job is to write a short message that will be shown to the user \
+when they open the app the next day.
+You should try to write something - not a blank - unless you cannot find any appropriate contents to write.
+"""
+
 
 class MomentReplyTemplate(PromptTemplate):
     template = MOMENT_REPLY
@@ -152,3 +160,7 @@ class MomentReplyTemplate(PromptTemplate):
 
 class StoryGenerateTemplate(PromptTemplate):
     template = STORY_GENERATE
+
+
+class NudgeGenerateStepOneTemplate(PromptTemplate):
+    template = NUDGE_GENERATE_STEP_ONE
