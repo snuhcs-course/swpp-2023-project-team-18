@@ -127,5 +127,4 @@ def get_ai_title_and_story_from_moments(
                 tag="error",
                 place="auto_completion_job",
             )
-    else:
-        return GPT_AUTOCOMPLETION_ERROR_TITLE, GPT_AUTOCOMPLETION_ERROR_CONTENT
+            return GPT_AUTOCOMPLETION_ERROR_TITLE, GPT_AUTOCOMPLETION_ERROR_CONTENT
