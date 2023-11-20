@@ -1,5 +1,5 @@
 import datetime
-from typing import Tuple
+from typing import Tuple, Optional
 
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
@@ -14,7 +14,7 @@ from .search_serializers import (
     ContentSearchSerializer,
 )
 from .utils.log import print_log
-from .utils.search import spread_korean
+from .utils.search import process_query
 from .constants import SearchFields
 
 
@@ -26,13 +26,14 @@ class HashtagCompleteView(GenericAPIView):
         params = HashtagCompleteSerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
 
-        tag_query = spread_korean(params.validated_data["tag_query"])
+        tag_query = process_query(params.validated_data["tag_query"])
 
         stories = Story.objects.filter(user_id=request.user.id)
         tag_set = set()
         for story in stories:
             for tag in story.hashtags.all():
-                if tag_query not in spread_korean(tag.content):
+                content = process_query(tag.content)
+                if tag_query not in content:
                     continue
                 tag_set.add(tag.content)
 
@@ -79,32 +80,11 @@ class HashtagSearchView(GenericAPIView):
 class ContentSearchView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def day_start_end(
-        self, time: datetime.datetime
-    ) -> Tuple[datetime.datetime, datetime.datetime]:
-        if time.hour < 3:
-            time = time - datetime.timedelta(days=1)
-        start_time = time.replace(hour=3, minute=0, second=0)
-        end_time = (
-            start_time + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)
-        )
-        return (start_time, end_time)
-
-    def search_moments(self, moments, query, start_time, end_time) -> str:
-        for moment in moments:
-            if (
-                start_time <= moment.moment_created_at
-                and moment.moment_created_at <= end_time
-            ):
-                if query in spread_korean(moment.moment):
-                    return moment.moment
-        return None
-
     def get(self, request: Request) -> Response:
         params = SearchQuerySerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
 
-        query = spread_korean(params.validated_data["query"])
+        query = process_query(params.validated_data["query"])
         results = []
         moments = MomentPair.objects.filter(user_id=request.user.id).order_by(
             "-moment_created_at"
@@ -112,16 +92,18 @@ class ContentSearchView(GenericAPIView):
 
         stories = Story.objects.filter(user_id=request.user.id).order_by("-created_at")
         for story in stories:
-            if query in spread_korean(story.content):
+            # 1순위: story content
+            if query in process_query(story.content):
                 results.append(
                     ContentSearchSerializer(
                         story,
                         context={"content": story.content, "field": SearchFields.STORY},
                     ).data
                 )
+            # 2순위: moment content
             elif (
-                moment := self.search_moments(
-                    moments, query, *self.day_start_end(story.created_at)
+                moment := ContentSearchView._search_moments(
+                    moments, query, *ContentSearchView._day_start_end(story.created_at)
                 )
             ) is not None:
                 results.append(
@@ -129,16 +111,46 @@ class ContentSearchView(GenericAPIView):
                         story, context={"content": moment, "field": SearchFields.MOMENT}
                     ).data
                 )
-            elif query in spread_korean(story.title):
+            # 3순위: story title
+            elif query in process_query(story.title):
                 results.append(
                     ContentSearchSerializer(
                         story,
                         context={"content": story.content, "field": SearchFields.TITLE},
                     ).data
                 )
-            print_log(
-                f"Successfully searched by contents (length: {len(results)})",
-                username=request.user.username,
-                place="ContentSearchView.get",
-            )
+
+        print_log(
+            f"Successfully searched by contents (length: {len(results)})",
+            username=request.user.username,
+            place="ContentSearchView.get",
+        )
         return Response({"searchentries": results}, status=200)
+
+    @staticmethod
+    def _day_start_end(
+        time: datetime.datetime,
+    ) -> Tuple[datetime.datetime, datetime.datetime]:
+        if time.hour < 3:
+            time = time - datetime.timedelta(days=1)
+        start_time = time.replace(hour=3, minute=0, second=0)
+        end_time = (
+            start_time + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)
+        )
+        return start_time, end_time
+
+    @staticmethod
+    def _search_moments(
+        moments,
+        query: str,
+        start_time: datetime.datetime,
+        end_time: datetime.datetime,
+    ) -> Optional[str]:
+        query = process_query(query)
+        for moment in moments:
+            if (
+                start_time <= moment.moment_created_at <= end_time
+                and query in process_query(moment.moment)
+            ):
+                return moment.moment
+        return None
