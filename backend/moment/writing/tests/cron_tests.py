@@ -432,4 +432,4 @@ class NudgeGenerateTest(TestCase):
 
         self.assertEqual(yesterday_story.content, "")
         self.assertEqual(yesterday_nudge.summarized_story, "dummy")
-        self.assertEqual(today_nudge.content, "")
+        self.assertEqual(today_nudge.content, GPT_NUDGE_GENERATE_NONE_CONTENT)
