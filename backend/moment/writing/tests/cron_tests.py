@@ -10,6 +10,7 @@ from writing.constants import (
     Emotions,
     GPT_AUTOCOMPLETION_ERROR_CONTENT,
     GPT_AUTOCOMPLETION_ERROR_TITLE,
+    GPT_NUDGE_GENERATE_NONE_CONTENT,
 )
 from writing.cron import auto_completion_job
 from writing.nudge_cron import (
@@ -228,3 +229,71 @@ class NudgeGenerateTest(TestCase):
         self.assertEqual(should_create_nudge(["yay1", "", "yay2"]), True)
         self.assertEqual(should_create_nudge(["", "yay1", "yay2"]), True)
         self.assertEqual(should_create_nudge(["yay1", "yay2", "yay3"]), True)
+
+    @freeze_time(lambda: intended_gmt + datetime.timedelta(seconds=1))
+    def test_generate_nudge_not_should_create(self):
+        yesterday_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay1",
+            content="nudge1",
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+        )
+        yesterday_nudge.save()
+        generate_nudge(self.test_user, intended_gmt + datetime.timedelta(seconds=1))
+        now = datetime.datetime.now()
+        created_nudge = Nudge.objects.get(
+            created_at=datetime.datetime(
+                year=now.year,
+                month=now.month,
+                day=now.day,
+                hour=18,
+                minute=0,
+                second=1,
+            )
+        )
+        self.assertEqual(created_nudge.content, GPT_NUDGE_GENERATE_NONE_CONTENT)
+
+    @freeze_time(lambda: intended_gmt + datetime.timedelta(seconds=1))
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value="nudge",
+    )
+    def test_generate_nudge(self, mock_get):
+        yesterday_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay1",
+            content="nudge1",
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+        )
+        two_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay2",
+            content="nudge2",
+            created_at=intended_gmt
+            - datetime.timedelta(days=1)
+            - datetime.timedelta(seconds=2),
+        )
+        three_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay3",
+            content="nudge3",
+            created_at=intended_gmt
+            - datetime.timedelta(days=2)
+            - datetime.timedelta(seconds=2),
+        )
+        yesterday_nudge.save()
+        two_nudge.save()
+        three_nudge.save()
+        generate_nudge(self.test_user, intended_gmt + datetime.timedelta(seconds=1))
+        now = datetime.datetime.now()
+        created_nudge = Nudge.objects.get(
+            created_at=datetime.datetime(
+                year=now.year,
+                month=now.month,
+                day=now.day,
+                hour=18,
+                minute=0,
+                second=1,
+            )
+        )
+        self.assertEqual(created_nudge.content, "nudge")

@@ -98,7 +98,7 @@ def generate_nudge(user: User, now: datetime.datetime):
     yesterday_end = datetime.datetime(
         year=now.year, month=now.month, day=now.day, hour=17, minute=59, second=59
     )
-    three_before_start = datetime.datetime(
+    three_before_start = (
         yesterday_end - datetime.timedelta(days=3) + datetime.timedelta(seconds=1)
     )
 
