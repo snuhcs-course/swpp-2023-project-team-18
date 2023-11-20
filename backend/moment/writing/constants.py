@@ -35,6 +35,12 @@ class Emotions(str, BaseEnum):
     INVALID = "invalid"
 
 
+class SearchFields(int, BaseEnum):
+    TITLE = 0
+    MOMENT = 1
+    STORY = 2
+
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 AUTO_COMPLETE_MAX_TRIAL = 5
@@ -43,3 +49,6 @@ MOMENT_REPLY_MAX_TRIAL = 2
 MOMENT_REPLY_TIMEOUT = 15
 STORY_GENERATION_MAX_TRIAL = 2
 STORY_GENERATION_TIMEOUT = 20
+
+GPT_AUTOCOMPLETION_ERROR_TITLE = ""
+GPT_AUTOCOMPLETION_ERROR_CONTENT = "마무리하는 과정에서 문제가 발생했어요"
