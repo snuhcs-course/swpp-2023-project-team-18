@@ -5,8 +5,6 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.api.request.LoginRequest;
 import snu.swpp.moment.api.request.RegisterRequest;
 import snu.swpp.moment.api.request.TokenRefreshRequest;
@@ -23,12 +21,9 @@ import snu.swpp.moment.data.model.LoggedInUserModel;
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-public class UserRemoteDataSource {
-
-    private ServiceApi service;
+public class UserRemoteDataSource extends BaseRemoteDataSource {
 
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         LoginRequest loginRequest = new LoginRequest(username, password);
         service.userLogin(loginRequest).enqueue(new Callback<>() {
             @Override
@@ -59,7 +54,6 @@ public class UserRemoteDataSource {
 
     public void register(String username, String password, String nickname,
         AuthenticationCallBack registerCallBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         RegisterRequest request = new RegisterRequest(username, password, nickname);
         service.userRegister(request).enqueue(new Callback<>() {
             @Override
@@ -93,7 +87,6 @@ public class UserRemoteDataSource {
     }
 
     public void isTokenValid(String token, TokenCallBack callBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         TokenVerifyRequest request = new TokenVerifyRequest(token);
         service.tokenVerify(request).enqueue(new Callback<>() {
             @Override
@@ -118,7 +111,6 @@ public class UserRemoteDataSource {
     }
 
     public void refresh(String token, RefreshCallBack callBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         TokenRefreshRequest request = new TokenRefreshRequest(token);
         service.tokenRefresh(request).enqueue(new Callback<>() {
             @Override

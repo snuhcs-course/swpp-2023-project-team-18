@@ -4,8 +4,6 @@ import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.api.response.SearchContentsResponse;
 import snu.swpp.moment.api.response.SearchHashTagGetCompleteResponse;
 import snu.swpp.moment.api.response.SearchHashtagsResponse;
@@ -16,13 +14,7 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
 
-public class SearchRemoteDataSource {
-
-    private ServiceApi service;
-
-    public SearchRemoteDataSource() {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
-    }
+public class SearchRemoteDataSource extends BaseRemoteDataSource {
 
     public void getCompleteHashTagList(String access_token, String query,
         SearchHashTagCompleteCallBack callback) {
