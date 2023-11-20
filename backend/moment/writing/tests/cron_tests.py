@@ -297,3 +297,69 @@ class NudgeGenerateTest(TestCase):
             )
         )
         self.assertEqual(created_nudge.content, "nudge")
+
+    @freeze_time(lambda: intended_gmt + datetime.timedelta(seconds=1))
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value="nudge",
+    )
+    def test_nudge_creation_job(self, mock_get):
+        yesterday_story = Story.objects.create(
+            user=self.test_user,
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+            title="title",
+            content="story",
+        )
+        yesterday_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay1",
+            content="nudge1",
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+        )
+        two_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay2",
+            content="nudge2",
+            created_at=intended_gmt
+            - datetime.timedelta(days=1)
+            - datetime.timedelta(seconds=2),
+        )
+        three_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay3",
+            content="nudge3",
+            created_at=intended_gmt
+            - datetime.timedelta(days=2)
+            - datetime.timedelta(seconds=2),
+        )
+        yesterday_story.save()
+        yesterday_nudge.save()
+        two_nudge.save()
+        three_nudge.save()
+        nudge_creation_job()
+        now = datetime.datetime.now()
+        created_nudge = Nudge.objects.get(
+            user=self.test_user,
+            created_at=datetime.datetime(
+                year=now.year,
+                month=now.month,
+                day=now.day,
+                hour=18,
+                minute=0,
+                second=1,
+            ),
+        )
+        self.assertEqual(created_nudge.content, "nudge")
+
+        no_nudge = Nudge.objects.get(
+            user=self.other_user,
+            created_at=datetime.datetime(
+                year=now.year,
+                month=now.month,
+                day=now.day,
+                hour=18,
+                minute=0,
+                second=1,
+            ),
+        )
+        self.assertEqual(no_nudge.content, GPT_NUDGE_GENERATE_NONE_CONTENT)

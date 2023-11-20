@@ -35,16 +35,20 @@ def summarize_yesterday_nudge(user: User, now: datetime.datetime):
     yesterday_start = (
         yesterday_end - datetime.timedelta(days=1) + datetime.timedelta(seconds=1)
     )
-    # Should be only one object filtered
-    yesterday_nudge = Nudge.objects.filter(
-        created_at__range=(yesterday_start, yesterday_end),
-        user=user,
-    )[0]
+    # error handling for new users that do not have any yesterday records
+    try:
+        # Should be only one object filtered
+        yesterday_nudge = Nudge.objects.filter(
+            created_at__range=(yesterday_start, yesterday_end),
+            user=user,
+        )[0]
 
-    yesterday_story = Story.objects.filter(
-        created_at__range=(yesterday_start, yesterday_end),
-        user=user,
-    )[0]
+        yesterday_story = Story.objects.filter(
+            created_at__range=(yesterday_start, yesterday_end),
+            user=user,
+        )[0]
+    except IndexError:
+        return
 
     gpt_agent = GPTAgent()
     gpt_agent.reset_messages()
