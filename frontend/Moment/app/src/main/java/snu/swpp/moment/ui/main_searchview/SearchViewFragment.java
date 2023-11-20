@@ -11,19 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 import java.util.ArrayList;
-
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
@@ -31,11 +25,9 @@ import snu.swpp.moment.data.repository.SearchRepository;
 import snu.swpp.moment.data.source.SearchRemoteDataSource;
 import snu.swpp.moment.databinding.FragmentSearchviewBinding;
 import snu.swpp.moment.ui.main_searchview.SearchViewModel.SearchType;
-import snu.swpp.moment.ui.main_statview.SearchViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
 
 public class SearchViewFragment extends Fragment {
-
 
     private FragmentSearchviewBinding binding;
     private SearchViewModel searchViewModel;

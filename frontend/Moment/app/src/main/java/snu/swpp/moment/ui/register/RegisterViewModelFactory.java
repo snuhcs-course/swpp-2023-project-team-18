@@ -4,8 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 /**

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;

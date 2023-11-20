@@ -9,8 +9,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import snu.swpp.moment.EntryActivity;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentLogoutviewBinding;

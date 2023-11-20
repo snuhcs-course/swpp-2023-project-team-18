@@ -2,11 +2,8 @@ package snu.swpp.moment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 public class EntryActivity extends AppCompatActivity {
