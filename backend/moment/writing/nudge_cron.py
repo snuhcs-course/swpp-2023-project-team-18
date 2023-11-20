@@ -35,20 +35,40 @@ def summarize_yesterday_nudge(user: User, now: datetime.datetime):
     yesterday_start = (
         yesterday_end - datetime.timedelta(days=1) + datetime.timedelta(seconds=1)
     )
-    # error handling for new users that do not have any yesterday records
-    try:
-        # Should be only one object filtered
-        yesterday_nudge = Nudge.objects.filter(
-            created_at__range=(yesterday_start, yesterday_end),
-            user=user,
-        )[0]
 
-        yesterday_story = Story.objects.filter(
-            created_at__range=(yesterday_start, yesterday_end),
+    filtered_nudges = Nudge.objects.filter(
+        created_at__range=(yesterday_start, yesterday_end),
+        user=user,
+    )
+    filtered_stories = Story.objects.filter(
+        created_at__range=(yesterday_start, yesterday_end),
+        user=user,
+    )
+    assert (
+        len(filtered_stories) == 1
+    ), f"Filtered story must always uniquely exist. {len(filtered_stories)} != 1"
+    # if the user is a new user, the nudge for the first day will not exist.
+    if len(filtered_nudges) == 0:
+        nudge = Nudge.objects.create(
             user=user,
-        )[0]
-    except IndexError:
-        return
+            created_at=(
+                datetime.datetime(
+                    year=now.year,
+                    month=now.month,
+                    day=now.day,
+                    hour=18,
+                    minute=0,
+                    second=1,
+                )
+                - datetime.timedelta(days=1)
+            ),
+        )
+        nudge.save()
+        yesterday_nudge = nudge
+    else:
+        yesterday_nudge = filtered_nudges[0]
+
+    yesterday_story = filtered_stories[0]
 
     gpt_agent = GPTAgent()
     gpt_agent.reset_messages()
@@ -112,6 +132,10 @@ def generate_nudge(user: User, now: datetime.datetime):
     ).order_by("created_at")
 
     summ_stories = [prev_nudge.summarized_story for prev_nudge in prev_nudges]
+
+    assert (
+        len(summ_stories) <= 3
+    ), "The length of summ_stories must be equal to or less than 3."
 
     if should_create_nudge(summ_stories):
         gpt_agent = GPTAgent(model=os.getenv("NUDGE_GENERATE_MODEL"))

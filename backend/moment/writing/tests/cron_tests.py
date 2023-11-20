@@ -187,7 +187,7 @@ class AutoCompletionTest(TestCase):
 class NudgeGenerateTest(TestCase):
     def setUp(self):
         self.test_user = User.objects.create(username="user1", nickname="user1")
-        self.other_user = User.objects.create(username="other", nickname="other")
+        self.new_user = User.objects.create(username="new", nickname="new")
 
     @patch(
         "writing.utils.gpt.GPTAgent.get_answer",
@@ -212,6 +212,25 @@ class NudgeGenerateTest(TestCase):
             self.test_user, intended_gmt + datetime.timedelta(seconds=1)
         )
         yesterday_nudge = Nudge.objects.get(user=self.test_user)
+        self.assertEqual(yesterday_nudge.summarized_story, "summary")
+
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value="summary",
+    )
+    # Summary should also be generated for a new user.
+    def test_summarize_yesterday_new_user(self, mock_get):
+        yesterday_story = Story.objects.create(
+            user=self.new_user,
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+            title="title",
+            content="story",
+        )
+        yesterday_story.save()
+        summarize_yesterday_nudge(
+            self.new_user, intended_gmt + datetime.timedelta(seconds=1)
+        )
+        yesterday_nudge = Nudge.objects.get(user=self.new_user)
         self.assertEqual(yesterday_nudge.summarized_story, "summary")
 
     def test_should_create_nudge_false(self):
@@ -336,6 +355,14 @@ class NudgeGenerateTest(TestCase):
         yesterday_nudge.save()
         two_nudge.save()
         three_nudge.save()
+        # other user also must have one story
+        yesterday_story_other = Story.objects.create(
+            user=self.new_user,
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+            title="title",
+            content="story",
+        )
+        yesterday_story_other.save()
         nudge_creation_job()
         now = datetime.datetime.now()
         created_nudge = Nudge.objects.get(
@@ -352,7 +379,7 @@ class NudgeGenerateTest(TestCase):
         self.assertEqual(created_nudge.content, "nudge")
 
         no_nudge = Nudge.objects.get(
-            user=self.other_user,
+            user=self.new_user,
             created_at=datetime.datetime(
                 year=now.year,
                 month=now.month,
