@@ -3,7 +3,7 @@ package snu.swpp.moment.data.factory;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 
-public class StoryRepositoryFactory implements BaseRepositoryFactory {
+public class StoryRepositoryFactory implements RepositoryFactory {
 
     private StoryRemoteDataSource dataSource;
     private StoryRepository repository;

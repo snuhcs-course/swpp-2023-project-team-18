@@ -3,7 +3,7 @@ package snu.swpp.moment.data.factory;
 import snu.swpp.moment.data.repository.SearchRepository;
 import snu.swpp.moment.data.source.SearchRemoteDataSource;
 
-public class SearchRepositoryFactory implements BaseRepositoryFactory {
+public class SearchRepositoryFactory implements RepositoryFactory {
 
     private SearchRemoteDataSource dataSource;
     private SearchRepository repository;
