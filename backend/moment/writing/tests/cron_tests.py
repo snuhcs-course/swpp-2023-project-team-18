@@ -212,3 +212,15 @@ class NudgeGenerateTest(TestCase):
         )
         yesterday_nudge = Nudge.objects.get(user=self.test_user)
         self.assertEqual(yesterday_nudge.summarized_story, "summary")
+
+    def test_should_create_nudge_false(self):
+        self.assertEqual(should_create_nudge(["yay1", "yay2", ""]), False)
+        self.assertEqual(should_create_nudge(["", "", "yay"]), False)
+        self.assertEqual(should_create_nudge(["", "yay", ""]), False)
+        self.assertEqual(should_create_nudge(["yay", "", ""]), False)
+        self.assertEqual(should_create_nudge(["", "", ""]), False)
+
+    def test_should_create_nudge_true(self):
+        self.assertEqual(should_create_nudge(["yay1", "", "yay2"]), True)
+        self.assertEqual(should_create_nudge(["", "yay1", "yay2"]), True)
+        self.assertEqual(should_create_nudge(["yay1", "yay2", "yay3"]), True)
