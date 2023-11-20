@@ -40,9 +40,14 @@ public class AuthenticationRepository {
 
     public static AuthenticationRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new AuthenticationRepository(new UserRemoteDataSource(),
-                new UserLocalDataSource(context));
+            synchronized (AuthenticationRepository.class) {
+                if (instance == null) {
+                    instance = new AuthenticationRepository(new UserRemoteDataSource(),
+                        new UserLocalDataSource(context));
+                }
+            }
         }
+
         return instance;
     }
 
