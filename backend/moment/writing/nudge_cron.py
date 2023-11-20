@@ -1,4 +1,4 @@
-import datetime
+import datetime, os
 from typing import List
 
 from user.models import User
@@ -114,7 +114,7 @@ def generate_nudge(user: User, now: datetime.datetime):
     summ_stories = [prev_nudge.summarized_story for prev_nudge in prev_nudges]
 
     if should_create_nudge(summ_stories):
-        gpt_agent = GPTAgent(model="ft:gpt-3.5-turbo-1106:snu-swpp-2023f::8LVIBzaa")
+        gpt_agent = GPTAgent(model=os.getenv("NUDGE_GENERATE_MODEL"))
         gpt_agent.reset_messages()
         gpt_agent.add_message(content=NUDGE_GENERATE_STEP_TWO, role="system")
         gpt_agent.add_message(format_summ_stories(summ_stories))
