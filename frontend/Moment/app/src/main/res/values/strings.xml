@@ -85,7 +85,6 @@
     <string name="day_section_tags">이날의 태그</string>
     <string name="day_section_score">이날의 점수</string>
     <string name="day_navigate_button">이날의 기록 보기</string>
-    <string name="day_no_record">기록이 없어요</string>
     <string name="auto_completed_warning">직접 하루를 마무리하지 않았어요</string>
 
     <!-- 돌아보기 탭 -->
