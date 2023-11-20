@@ -49,7 +49,7 @@ def summarize_yesterday_nudge(user: User, now: datetime.datetime):
     gpt_agent = GPTAgent()
     gpt_agent.reset_messages()
     gpt_agent.add_message(
-        NudgeGenerateStepOneTemplate.get_prompt(yesterday_story.content)
+        NudgeGenerateStepOneTemplate.get_prompt(diary=yesterday_story.content)
     )
 
     try:

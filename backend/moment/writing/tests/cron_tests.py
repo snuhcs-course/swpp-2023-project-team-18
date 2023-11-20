@@ -12,7 +12,13 @@ from writing.constants import (
     GPT_AUTOCOMPLETION_ERROR_TITLE,
 )
 from writing.cron import auto_completion_job
-from writing.models import MomentPair, Story
+from writing.nudge_cron import (
+    nudge_creation_job,
+    summarize_yesterday_nudge,
+    should_create_nudge,
+    generate_nudge,
+)
+from writing.models import MomentPair, Story, Nudge
 from writing.utils.prompt import StoryGenerateTemplate
 
 # Create your tests here.
@@ -175,3 +181,34 @@ class AutoCompletionTest(TestCase):
         mock_add.assert_any_call(
             StoryGenerateTemplate.get_prompt(moments=f"{content1};{content2}")
         )
+
+
+class NudgeGenerateTest(TestCase):
+    def setUp(self):
+        self.test_user = User.objects.create(username="user1", nickname="user1")
+        self.other_user = User.objects.create(username="other", nickname="other")
+
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value="summary",
+    )
+    def test_summarize_yesterday(self, mock_get):
+        yesterday_story = Story.objects.create(
+            user=self.test_user,
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+            title="title",
+            content="story",
+        )
+        yesterday_nudge = Nudge.objects.create(
+            user=self.test_user,
+            summarized_story="yay",
+            content="nudge",
+            created_at=intended_gmt - datetime.timedelta(seconds=2),
+        )
+        yesterday_story.save()
+        yesterday_nudge.save()
+        summarize_yesterday_nudge(
+            self.test_user, intended_gmt + datetime.timedelta(seconds=1)
+        )
+        yesterday_nudge = Nudge.objects.get(user=self.test_user)
+        self.assertEqual(yesterday_nudge.summarized_story, "summary")
