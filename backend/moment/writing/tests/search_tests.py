@@ -17,30 +17,28 @@ from writing.constants import SearchFields
 class HashtagCompleteTest(TestCase):
     def setUp(self):
         user1 = User.objects.create(username="test1")
-        user2 = User.objects.create(username="test2")
-
-        hashtag_1_1 = Hashtag.objects.create(content="우왕")
-        hashtag_1_2 = Hashtag.objects.create(content="우와아아")
-        hashtag_1_3 = Hashtag.objects.create(content="우아아")
-
-        hashtag_2_1 = Hashtag.objects.create(content="우아아아")
-
         story1 = Story.objects.create(
             created_at=datetime.datetime.now(),
             user=user1,
             content="yay",
             is_point_completed=True,
         )
-        story1.hashtags.add(hashtag_1_1)
-        story1.hashtags.add(hashtag_1_2)
-        story1.hashtags.add(hashtag_1_3)
+        hashtags1 = ("우왕", "우와아아", "우아아", "HaPpy")
+        for hashtag in hashtags1:
+            hashtag_item = Hashtag.objects.create(content=hashtag)
+            story1.hashtags.add(hashtag_item)
+
+        user2 = User.objects.create(username="test2")
         story2 = Story.objects.create(
             created_at=datetime.datetime.now(),
             user=user2,
             content="yay2",
             is_point_completed=True,
         )
-        story2.hashtags.add(hashtag_2_1)
+        hashtags2 = ("우아아아",)
+        for hashtag in hashtags2:
+            hashtag_item = Hashtag.objects.create(content=hashtag)
+            story2.hashtags.add(hashtag_item)
 
     def test_hashtag_completion(self):
         factory = APIRequestFactory()
@@ -67,6 +65,18 @@ class HashtagCompleteTest(TestCase):
         self.assertEqual(len(response.data["hashtags"]), 2)
         self.assertEqual(response.data["hashtags"][0], "우아아")
         self.assertEqual(response.data["hashtags"][1], "우와아아")
+
+    def test_hashtag_completion_alphabet_case(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="test1")
+        view = HashtagCompleteView.as_view()
+        params = {"tag_query": "happ"}
+
+        request = factory.get("writing/hashtags/complete/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(len(response.data["hashtags"]), 1)
+        self.assertEqual(response.data["hashtags"][0], "HaPpy")
 
     def test_hashtag_empty(self):
         factory = APIRequestFactory()
@@ -177,7 +187,6 @@ class ContentSearchTest(TestCase):
             content="검색내용",
             is_point_completed=True,
         )
-
         story2 = Story.objects.create(
             created_at=day_end + datetime.timedelta(days=1),
             user=user1,
@@ -198,6 +207,7 @@ class ContentSearchTest(TestCase):
             content="검색",
             is_point_completed=True,
         )
+
         moment1 = MomentPair.objects.create(
             moment_created_at=day_start,
             reply_created_at=day_start,
@@ -252,3 +262,19 @@ class ContentSearchTest(TestCase):
         self.assertEqual(entries[1]["title"], "검색제목")
         self.assertEqual(entries[2]["content"], "검색내용")
         self.assertEqual(entries[2]["field"], SearchFields.STORY)
+
+    def test_content_search_alphabet_case(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username="test1")
+        view = ContentSearchView.as_view()
+        params = {"query": "WHAT"}
+
+        request = factory.get("writing/search/contents/", params)
+        force_authenticate(request, user=user)
+        response = view(request)
+        entries = response.data["searchentries"]
+        self.assertEqual(len(entries), 2)
+        self.assertEqual(entries[0]["field"], SearchFields.STORY)
+        self.assertEqual(entries[0]["content"], "what")
+        self.assertEqual(entries[1]["field"], SearchFields.STORY)
+        self.assertEqual(entries[1]["content"], "what")
