@@ -8,12 +8,6 @@ from freezegun import freeze_time
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from user.models import User
-from writing.constants import (
-    Emotions,
-    GPT_AUTOCOMPLETION_ERROR_CONTENT,
-    GPT_AUTOCOMPLETION_ERROR_TITLE,
-)
-from writing.auto_cron import auto_completion_job
 from writing.models import MomentPair, Story, Hashtag
 from writing.utils.gpt import GPTAgent
 from writing.utils.prompt import StoryGenerateTemplate, MomentReplyTemplate
