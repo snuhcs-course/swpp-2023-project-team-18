@@ -8,17 +8,16 @@ import snu.swpp.moment.data.callback.SearchHashTagCompleteCallBack;
 import snu.swpp.moment.data.callback.SearchHashTagGetCallBack;
 import snu.swpp.moment.data.source.SearchRemoteDataSource;
 
-public class SearchRepository {
+public class SearchRepository extends BaseRepository<SearchRemoteDataSource> {
 
-    private final SearchRemoteDataSource searchRemoteDataSource;
 
     public SearchRepository(SearchRemoteDataSource remoteDataSource) {
-        this.searchRemoteDataSource = remoteDataSource;
+        super(remoteDataSource);
     }
 
     public void getCompleteHashTagList(String access_token, String query,
         SearchHashTagCompleteCallBack callback) {
-        searchRemoteDataSource.getCompleteHashTagList(access_token, query,
+        remoteDataSource.getCompleteHashTagList(access_token, query,
             new SearchHashTagCompleteCallBack() {
                 @Override
                 public void onSuccess(List<String> hashTagList) {
@@ -34,7 +33,7 @@ public class SearchRepository {
 
     public void getContentSearchList(String access_token, String query,
         SearchEntriesGetCallBack callback) {
-        searchRemoteDataSource.getContentSearchList(access_token, query,
+        remoteDataSource.getContentSearchList(access_token, query,
             new SearchEntriesGetCallBack() {
                 @Override
                 public void onSuccess(SearchContentsResponse response) {
@@ -50,7 +49,7 @@ public class SearchRepository {
 
     public void getHashtagSearchList(String access_token, String query,
         SearchHashTagGetCallBack callback) {
-        searchRemoteDataSource.getHashtagSearchList(access_token, query,
+        remoteDataSource.getHashtagSearchList(access_token, query,
             new SearchHashTagGetCallBack() {
                 @Override
                 public void onSuccess(SearchHashtagsResponse response) {

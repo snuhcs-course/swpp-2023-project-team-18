@@ -16,11 +16,10 @@ import snu.swpp.moment.data.source.UserRemoteDataSource;
  * Class that requests authentication and user information from the remote data source and maintains
  * an in-memory cache of login status and user credentials information.
  */
-public class AuthenticationRepository {
+public class AuthenticationRepository extends BaseRepository<UserRemoteDataSource> {
 
     private static volatile AuthenticationRepository instance;
 
-    private final UserRemoteDataSource remoteDataSource;
     private final UserLocalDataSource localDataSource;
     private final CountingIdlingResource idlingResource;
 
@@ -31,7 +30,7 @@ public class AuthenticationRepository {
     // private constructor : singleton access
     private AuthenticationRepository(UserRemoteDataSource remoteDataSource,
         UserLocalDataSource localDataSource) {
-        this.remoteDataSource = remoteDataSource;
+        super(remoteDataSource);
         this.localDataSource = localDataSource;
         this.idlingResource = new CountingIdlingResource("authentication");
     }
@@ -45,7 +44,6 @@ public class AuthenticationRepository {
                 }
             }
         }
-
         return instance;
     }
 

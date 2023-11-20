@@ -6,12 +6,10 @@ import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
 
-public class MomentRepository {
-
-    private final MomentRemoteDataSource remoteDataSource;
+public class MomentRepository extends BaseRepository<MomentRemoteDataSource> {
 
     public MomentRepository(MomentRemoteDataSource remoteDataSource) {
-        this.remoteDataSource = remoteDataSource;
+        super(remoteDataSource);
     }
 
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
