@@ -28,7 +28,7 @@ class CalendarDayContainer(view: View) : ViewContainer(view) {
                 return@setOnClickListener
             }
             val calendarDayState = viewModel.getDayState(day.date.dayOfMonth)
-            if (calendarDayState == null || calendarDayState.isEmotionInvalid) {
+            if (calendarDayState == null || (calendarDayState.isEmotionInvalid && calendarDayState.storyContent.isEmpty())) {
                 return@setOnClickListener
             }
 
@@ -64,7 +64,7 @@ class CalendarDayContainer(view: View) : ViewContainer(view) {
     }
 
     fun setUiMonthDate(calendarDayState: CalendarDayState) {
-        if (calendarDayState.isEmotionInvalid) {
+        if (calendarDayState.isEmotionInvalid && calendarDayState.storyContent.isEmpty()) {
             imageView.visibility = View.INVISIBLE
             autoCompletedDot.visibility = View.GONE
         } else {
