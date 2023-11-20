@@ -1,5 +1,5 @@
-from writing.auto_cron import auto_completion_job
-from writing.nudge_cron import nudge_creation_job
+from .auto_cron import auto_completion_job
+from .nudge_cron import nudge_creation_job
 
 
 def execute_cron_jobs():
