@@ -1,170 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-  <Button
-    android:id="@+id/addButton"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:background="@drawable/moment_add_button"
-    android:clickable="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
-
-  <Button
-    android:id="@+id/addButtonInactive"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:background="@drawable/moment_add_button_inactivated"
-    android:clickable="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
-  <Button
-    android:id="@+id/submitButton"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="5dp"
-    android:background="@drawable/moment_write_button"
-    android:clickable="true"
-    android:visibility="gone"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
-
-
-  <Button
-    android:id="@+id/submitButtonInactive"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="5dp"
-    android:background="@drawable/moment_write_inactivate"
-    android:clickable="false"
-    android:visibility="gone"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
-  <TextView
-    android:id="@+id/addHelpText"
-    style="@style/SMALL_GRAY"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:text="@string/add_moment_help_text"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/addButton" />
-
-  <TextView
-    android:id="@+id/submitHelpText"
-    style="@style/SMALL_GRAY"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:text="@string/submit_moment_help_text"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/submitButton" />
-  <TextView
-    android:id="@+id/submitHelpTextInactive"
-    style="@style/SMALL_GRAY"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:text="@string/submit_moment_help_text"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/submitButtonInactive" />
-  <TextView
-    android:id="@+id/addLimitWarnText"
-    style="@style/SMALL_RED"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:text="@string/moment_limit_help_text"
-    android:visibility="gone"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/addButtonInactive" />
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/momentEditTextWrapper"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/box_border_gray"
-    android:visibility="gone"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:visibility="visible">
+    android:layout_height="match_parent">
 
-    <EditText
-      android:id="@+id/momentEditText"
-      style="@style/NORMAL_BLACK"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="@dimen/editTextPadding"
-      android:backgroundTint="@android:color/transparent"
-      android:gravity="top|start"
-      android:hint="@string/edit_text_message"
-      android:importantForAutofill="no"
-      android:inputType="text|textMultiLine"
-      android:minLines="5"
-      android:textColorHint="@color/darkgray"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/moment_add_button"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
 
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="10dp"
-      android:layout_marginEnd="10dp"
-      android:layout_gravity="bottom|end"
-      android:orientation="horizontal"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/momentEditText">
+    <Button
+        android:id="@+id/addButtonInactive"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/moment_add_button_inactivated"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/moment_write_button"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
 
-      <!-- 글자수 실시간으로 보여줌 -->
-      <TextView
-        android:id="@+id/momentLengthText"
+
+    <Button
+        android:id="@+id/submitButtonInactive"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/moment_write_inactivate"
+        android:clickable="false"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
+    <TextView
+        android:id="@+id/addHelpText"
         style="@style/SMALL_GRAY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:background="@color/white"
-        android:text=""
-        tools:text="0/1000" />
+        android:layout_marginTop="5dp"
+        android:text="@string/add_moment_help_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addButton" />
 
-      <!--   <Button
-             android:id="@+id/submitButton"
-             android:layout_width="40dp"
-             android:layout_height="40dp"
-             android:layout_marginStart="10dp"
-             android:background="@drawable/moment_write_button"
-             android:gravity="center"
-             android:text=""
-             android:visibility="gone" />
+    <TextView
+        android:id="@+id/submitHelpText"
+        style="@style/SMALL_GRAY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/submit_moment_help_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/submitButton" />
+    <TextView
+        android:id="@+id/submitHelpTextInactive"
+        style="@style/SMALL_GRAY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/submit_moment_help_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/submitButtonInactive" />
+    <TextView
+        android:id="@+id/addLimitWarnText"
+        style="@style/SMALL_RED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/moment_limit_help_text"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addButtonInactive" />
 
-         <Button
-             android:id="@+id/submitButtonInactive"
-             android:layout_width="40dp"
-             android:layout_height="40dp"
-             android:layout_marginStart="10dp"
-             android:background="@drawable/moment_write_inactivate"
-             android:enabled="false"
-             android:gravity="center"
-             android:text="" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/momentEditTextWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_border_gray"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
-    </LinearLayout>
-  </androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/momentEditText"
+            style="@style/NORMAL_BLACK"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/editTextPadding"
+            android:backgroundTint="@android:color/transparent"
+            android:gravity="top|start"
+            android:hint="@string/edit_text_message"
+            android:importantForAutofill="no"
+            android:inputType="text|textMultiLine"
+            android:minLines="5"
+            android:textColorHint="@color/darkgray"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="bottom|end"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/momentEditText">
+
+            <!-- 글자수 실시간으로 보여줌 -->
+            <TextView
+                android:id="@+id/momentLengthText"
+                style="@style/SMALL_GRAY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/white"
+                android:text=""
+                tools:text="0/1000" />
+
+            <!--   <Button
+                   android:id="@+id/submitButton"
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:layout_marginStart="10dp"
+                   android:background="@drawable/moment_write_button"
+                   android:gravity="center"
+                   android:text=""
+                   android:visibility="gone" />
+
+               <Button
+                   android:id="@+id/submitButtonInactive"
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:layout_marginStart="10dp"
+                   android:background="@drawable/moment_write_inactivate"
+                   android:enabled="false"
+                   android:gravity="center"
+                   android:text="" />-->
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
