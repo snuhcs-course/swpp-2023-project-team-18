@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -20,9 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
-import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.data.repository.SearchRepository;
-import snu.swpp.moment.data.source.SearchRemoteDataSource;
+import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
+import snu.swpp.moment.data.factory.SearchRepositoryFactory;
 import snu.swpp.moment.databinding.FragmentSearchviewBinding;
 import snu.swpp.moment.ui.main_searchview.SearchViewModel.SearchType;
 import snu.swpp.moment.utils.KeyboardUtils;
@@ -33,11 +31,9 @@ public class SearchViewFragment extends Fragment {
     private SearchViewModel searchViewModel;
     private Button hashtagButton;
     private Button contentButton;
-    private EditText hashtagEditText;
-    private EditText contentEditText;
 
     // For hashtag completion
-    private Handler searchHandler = new Handler();
+    private final Handler searchHandler = new Handler();
     private Runnable searchRunnable;
 
 
@@ -52,12 +48,15 @@ public class SearchViewFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        AuthenticationRepository authenticationRepository = AuthenticationRepository.getInstance(
+        AuthenticationRepositoryFactory authenticationRepositoryFactory = new AuthenticationRepositoryFactory(
             context);
-        SearchRepository searchRepository = new SearchRepository(new SearchRemoteDataSource());
+        SearchRepositoryFactory searchRepositoryFactory = new SearchRepositoryFactory();
         searchViewModel = new ViewModelProvider(this,
-            new SearchViewModelFactory(authenticationRepository, searchRepository))
-            .get(SearchViewModel.class);
+            new SearchViewModelFactory(
+                authenticationRepositoryFactory.getRepository(),
+                searchRepositoryFactory.getRepository()
+            )
+        ).get(SearchViewModel.class);
     }
 
     @Override
@@ -69,8 +68,6 @@ public class SearchViewFragment extends Fragment {
         // Include된 레이아웃에서 버튼 찾기
         hashtagButton = root.findViewById(R.id.search_hashtag_button);
         contentButton = root.findViewById(R.id.search_content_button);
-        hashtagEditText = binding.searchHashtagEdittext;
-        contentEditText = binding.searchContentEdittext;
 
         // Set up listeners for the buttons
         hashtagButton.setOnClickListener(v -> {
@@ -97,7 +94,7 @@ public class SearchViewFragment extends Fragment {
                 searchViewModel.setSearchType(SearchViewModel.SearchType.CONTENT);
             }
             searchViewModel.search(query);
-            KeyboardUtils.hideSoftKeyboard(getContext());
+            KeyboardUtils.hideSoftKeyboard(requireContext());
         });
         SearchAdapter adapter = new SearchAdapter((MainActivity) getActivity(), new ArrayList<>());
         SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),
@@ -130,12 +127,9 @@ public class SearchViewFragment extends Fragment {
         binding.hashtagCompleteList.setAdapter(hashTagCompletionAdapter);
 
         searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(),
-            new Observer<HashtagCompletionState>() {
-                @Override
-                public void onChanged(HashtagCompletionState hashtagCompletionState) {
-                    hashTagCompletionAdapter.setItems(hashtagCompletionState.hashtags);
-                    hashTagCompletionAdapter.notifyDataSetChanged();
-                }
+            hashtagCompletionState -> {
+                hashTagCompletionAdapter.setItems(hashtagCompletionState.hashtags);
+                hashTagCompletionAdapter.notifyDataSetChanged();
             });
         searchViewModel.selectedHashtag.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -145,7 +139,7 @@ public class SearchViewFragment extends Fragment {
         });
         // Hashtag 자동 완성을 위한 로직
 
-        hashtagEditText.addTextChangedListener(new TextWatcher() {
+        binding.searchHashtagEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // 필요한 경우 여기에 코드 추가
