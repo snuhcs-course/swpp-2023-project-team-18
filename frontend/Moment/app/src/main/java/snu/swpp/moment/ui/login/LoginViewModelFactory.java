@@ -26,13 +26,7 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
-            try {
-                return (T) new LoginViewModel(AuthenticationRepository.getInstance(context));
-            } catch (GeneralSecurityException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            return (T) new LoginViewModel(AuthenticationRepository.getInstance(context));
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

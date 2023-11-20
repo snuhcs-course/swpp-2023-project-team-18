@@ -20,15 +20,8 @@ public class EntryActivity extends AppCompatActivity {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(
-                getApplicationContext());
-        } catch (GeneralSecurityException e) {
-            Toast.makeText(this, "개발자에게 연락하세요", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(this, "개발자에게 연락하세요", Toast.LENGTH_SHORT).show();
-        }
-
+        authenticationRepository = AuthenticationRepository.getInstance(
+            getApplicationContext());
         if (!authenticationRepository.isLoggedIn()) {
             System.out.println("#DEBUG: not logged in");
             Intent entryIntent = new Intent(EntryActivity.this, LoginRegisterActivity.class);

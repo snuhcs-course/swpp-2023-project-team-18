@@ -38,8 +38,7 @@ public class AuthenticationRepository {
         this.idlingResource = new CountingIdlingResource("authentication");
     }
 
-    public static AuthenticationRepository getInstance(Context context)
-        throws GeneralSecurityException, IOException {
+    public static AuthenticationRepository getInstance(Context context) {
         if (instance == null) {
             instance = new AuthenticationRepository(new UserRemoteDataSource(),
                 new UserLocalDataSource(context));
@@ -124,7 +123,6 @@ public class AuthenticationRepository {
             }
         });
     }
-
 
     public void register(String username, String password, String nickname,
         AuthenticationCallBack registerCallBack) {

@@ -24,22 +24,15 @@ public class DummyActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         final Button logoutButton = binding.logoutButton;
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(
-                getApplicationContext());
-            System.out.println("#DEBUG: go home");
-            logoutButton.setOnClickListener(v -> {
-                System.out.println("#DEBUG: logout button clicked");
-                authenticationRepository.logout();
-                Intent logoutIntent = new Intent(DummyActivity.this, EntryActivity.class);
-                startActivity(logoutIntent);
-            });
-        } catch (GeneralSecurityException e) {
-            System.out.println("#DEBUG: General");
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            System.out.println("#DEBUG: IO");
-            throw new RuntimeException(e);
-        }
+
+        authenticationRepository = AuthenticationRepository.getInstance(
+            getApplicationContext());
+        System.out.println("#DEBUG: go home");
+        logoutButton.setOnClickListener(v -> {
+            System.out.println("#DEBUG: logout button clicked");
+            authenticationRepository.logout();
+            Intent logoutIntent = new Intent(DummyActivity.this, EntryActivity.class);
+            startActivity(logoutIntent);
+        });
     }
 }

@@ -78,7 +78,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         try {
             authenticationRepository = AuthenticationRepository.getInstance(requireContext());
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);

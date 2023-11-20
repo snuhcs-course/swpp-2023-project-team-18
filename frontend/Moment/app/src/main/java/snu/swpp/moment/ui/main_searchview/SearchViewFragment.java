@@ -60,22 +60,17 @@ public class SearchViewFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        AuthenticationRepository authenticationRepository = null;
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(context);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        AuthenticationRepository authenticationRepository = AuthenticationRepository.getInstance(
+            context);
         SearchRepository searchRepository = new SearchRepository(new SearchRemoteDataSource());
-        searchViewModel = new ViewModelProvider(this, new SearchViewModelFactory(authenticationRepository, searchRepository ))
-                .get(SearchViewModel.class);
+        searchViewModel = new ViewModelProvider(this,
+            new SearchViewModelFactory(authenticationRepository, searchRepository))
+            .get(SearchViewModel.class);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSearchviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -99,7 +94,6 @@ public class SearchViewFragment extends Fragment {
             updateSearchUI();
         });
 
-
         // Listener for the searchContentQueryButton
         binding.searchContentQueryButton.setOnClickListener(v -> {
             String query;
@@ -114,10 +108,10 @@ public class SearchViewFragment extends Fragment {
             KeyboardUtils.hideSoftKeyboard(getContext());
         });
         SearchAdapter adapter = new SearchAdapter((MainActivity) getActivity(), new ArrayList<>());
-        SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),new ArrayList<>());
+        SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),
+            new ArrayList<>());
         binding.searchContentResult.setAdapter(adapter);
         binding.searchHashtagResult.setAdapter(hashtagSearchAdapter);
-
 
         searchViewModel.searchState.observe(getViewLifecycleOwner(), new Observer<SearchState>() {
             @Override
@@ -126,15 +120,12 @@ public class SearchViewFragment extends Fragment {
 
                     adapter.setData(searchState.searchEntries);
                     adapter.notifyDataSetChanged();
-                }
-                else{
+                } else {
                     hashtagSearchAdapter.setData(searchState.searchEntries);
                     hashtagSearchAdapter.notifyDataSetChanged();
                 }
             }
         });
-
-
 
         // RecyclerView 설정
         RecyclerView hashtagCompletionRecyclerView = binding.hashtagCompleteList;
@@ -142,16 +133,18 @@ public class SearchViewFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         hashtagCompletionRecyclerView.setLayoutManager(linearLayoutManager);
 
-        HashTagCompletionAdapter hashTagCompletionAdapter = new HashTagCompletionAdapter(searchViewModel);
+        HashTagCompletionAdapter hashTagCompletionAdapter = new HashTagCompletionAdapter(
+            searchViewModel);
         binding.hashtagCompleteList.setAdapter(hashTagCompletionAdapter);
 
-        searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(), new Observer<HashtagCompletionState>() {
-            @Override
-            public void onChanged(HashtagCompletionState hashtagCompletionState) {
-                hashTagCompletionAdapter.setItems(hashtagCompletionState.hashtags);
-                hashTagCompletionAdapter.notifyDataSetChanged();
-            }
-        });
+        searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(),
+            new Observer<HashtagCompletionState>() {
+                @Override
+                public void onChanged(HashtagCompletionState hashtagCompletionState) {
+                    hashTagCompletionAdapter.setItems(hashtagCompletionState.hashtags);
+                    hashTagCompletionAdapter.notifyDataSetChanged();
+                }
+            });
         searchViewModel.selectedHashtag.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -193,7 +186,7 @@ public class SearchViewFragment extends Fragment {
                     searchRunnable = () -> searchViewModel.completeHashtag(currentText);
                     searchHandler.postDelayed(searchRunnable, 300); // 300ms 후에 실행
                 }
-                if(currentText.isEmpty()){
+                if (currentText.isEmpty()) {
                     hashTagCompletionAdapter.setItems(new ArrayList<>());
                     hashtagSearchAdapter.setData(new ArrayList<>());
                 }
@@ -201,12 +194,13 @@ public class SearchViewFragment extends Fragment {
             }
         });
 
-        searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(), new Observer<HashtagCompletionState>() {
-            @Override
-            public void onChanged(HashtagCompletionState hashtagCompletionState) {
+        searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(),
+            new Observer<HashtagCompletionState>() {
+                @Override
+                public void onChanged(HashtagCompletionState hashtagCompletionState) {
 
-            }
-        });
+                }
+            });
 
         // 초기 상태 설정
         updateSearchUI();
