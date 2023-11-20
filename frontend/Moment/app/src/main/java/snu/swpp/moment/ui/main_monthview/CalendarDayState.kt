@@ -58,4 +58,8 @@ class CalendarDayState(
         get() {
             return emotion == EmotionMap.INVALID_EMOTION
         }
+    val isStoryInvalid:Boolean
+        get(){
+            return isEmotionInvalid && storyContent.isEmpty()
+        }
 }

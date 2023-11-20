@@ -150,19 +150,18 @@ class MonthViewFragment : Fragment() {
             binding.daySummaryContainer.daySummaryDateText.text = it.dateText
             binding.daySummaryContainer.dayStoryTitleText.text = it.storyTitle
             binding.daySummaryContainer.dayStoryContentText.text = it.storyContent
-            binding.daySummaryContainer.dayEmotionImage.setImageResource(
+            binding.daySummaryContainer.dayStatContainer.dayEmotionImage.setImageResource(
                 it.emotionImage
             )
-            binding.daySummaryContainer.dayEmotionText.text = it.emotionKoreanText
-            binding.daySummaryContainer.dayTagsText.text = it.tags.joinToString(" ")
-            binding.daySummaryContainer.dayScoreText.text = it.score.toString()
-
+            binding.daySummaryContainer.dayStatContainer.dayEmotionText.text = it.emotionKoreanText
+            binding.daySummaryContainer.dayStatContainer.dayTagsText.text = it.tags.joinToString(" ")
+            binding.daySummaryContainer.dayStatContainer.dayScoreText.text = it.score.toString()
             if (it.isAutoCompleted) {
-                binding.daySummaryContainer.infoAutoCompletedText.visibility = View.VISIBLE
-                binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.VISIBLE
+                binding.daySummaryContainer.dayStatContainer.root.visibility = View.INVISIBLE
+                binding.daySummaryContainer.dayNoStatView.visibility = View.VISIBLE
             } else {
-                binding.daySummaryContainer.infoAutoCompletedText.visibility = View.INVISIBLE
-                binding.daySummaryContainer.infoAutoCompletedDot.visibility = View.GONE
+                binding.daySummaryContainer.dayStatContainer.root.visibility = View.VISIBLE
+                binding.daySummaryContainer.dayNoStatView.visibility = View.INVISIBLE
             }
         }
 
