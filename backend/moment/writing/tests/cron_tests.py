@@ -12,6 +12,7 @@ from writing.constants import (
     GPT_AUTOCOMPLETION_ERROR_TITLE,
     GPT_NUDGE_GENERATE_NONE_CONTENT,
 )
+from writing.cron import execute_cron_jobs
 from writing.auto_cron import auto_completion_job
 from writing.nudge_cron import (
     nudge_creation_job,
@@ -390,3 +391,45 @@ class NudgeGenerateTest(TestCase):
             ),
         )
         self.assertEqual(no_nudge.content, GPT_NUDGE_GENERATE_NONE_CONTENT)
+
+    @freeze_time(lambda: intended_gmt + datetime.timedelta(seconds=1))
+    @patch(
+        "writing.utils.gpt.GPTAgent.get_answer",
+        return_value="dummy",
+    )
+    def test_execute_cron_jobs_for_new_user(self, mock_get):
+        # new user with no moments, no stories
+        execute_cron_jobs()
+        yesterday_story = Story.objects.get(
+            user=self.new_user,
+        )
+        now = datetime.datetime.now()
+        yesterday_nudge = Nudge.objects.get(
+            user=self.new_user,
+            created_at=(
+                datetime.datetime(
+                    year=now.year,
+                    month=now.month,
+                    day=now.day,
+                    hour=18,
+                    minute=0,
+                    second=1,
+                )
+                - datetime.timedelta(days=1)
+            ),
+        )
+        today_nudge = Nudge.objects.get(
+            user=self.new_user,
+            created_at=datetime.datetime(
+                year=now.year,
+                month=now.month,
+                day=now.day,
+                hour=18,
+                minute=0,
+                second=1,
+            ),
+        )
+
+        self.assertEqual(yesterday_story.content, "")
+        self.assertEqual(yesterday_nudge.summarized_story, "dummy")
+        self.assertEqual(today_nudge.content, "")
