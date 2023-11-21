@@ -61,21 +61,6 @@
       app:layout_constraintStart_toEndOf="@id/nickname_edittext"
       app:layout_constraintTop_toTopOf="@id/nickname_edittext"
       />
-    <ImageButton
-      android:id="@+id/check_icon"
-      android:layout_width="20dp"
-      android:layout_height="20dp"
-
-      android:adjustViewBounds="true"
-      android:background="@color/white"
-      android:scaleType="centerInside"
-      android:src="@drawable/moment_write_button"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="@id/nickname_edittext"
-      app:layout_constraintEnd_toEndOf="@id/border"
-      app:layout_constraintStart_toEndOf="@id/nickname_edittext"
-      app:layout_constraintTop_toTopOf="@id/nickname_edittext"
-      />
 
     <EditText
       android:id="@+id/nickname_edittext"
