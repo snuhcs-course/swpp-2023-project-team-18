@@ -67,7 +67,7 @@ public class UserInfoViewFragment extends Fragment {
             }
         });
 
-        int num = 12; // TODO
+        int num = 21; // TODO
         setCreatedAtText(binding, num);
 
         binding.logoutButton.setOnClickListener(observer -> {

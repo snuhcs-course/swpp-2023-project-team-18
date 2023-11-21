@@ -34,7 +34,7 @@ public class UserInfoWrapperContainer {
 
     private void updateUItoEditingMode() {
         Log.d("UserInfoWrapperContainer", "editing");
-        penIcon.setVisibility(View.VISIBLE);
+        penIcon.setEnabled(true);
         penIcon.setImageResource(R.drawable.moment_write_button);
         nicknameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         nicknameLengthWarningText.setVisibility(View.GONE);
@@ -42,7 +42,7 @@ public class UserInfoWrapperContainer {
 
     private void updateUItoReadingMode() {
         Log.d("UserInfoWrapperContainer", "non editing");
-        penIcon.setVisibility(View.VISIBLE);
+        penIcon.setEnabled(true);
         penIcon.setImageResource(R.drawable.pen);
         nicknameEditText.setInputType(InputType.TYPE_NULL);
         nicknameEditText.setGravity(Gravity.CENTER);
@@ -52,7 +52,8 @@ public class UserInfoWrapperContainer {
 
     private void updateUItoLongNicknameMode() {
         Log.d("UserInfoWrapperContainer", "long nickname");
-        penIcon.setVisibility(View.GONE);
+        penIcon.setEnabled(false);
+        penIcon.setImageResource(R.drawable.moment_write_inactivate);
         nicknameLengthWarningText.setVisibility(View.VISIBLE);
     }
 
