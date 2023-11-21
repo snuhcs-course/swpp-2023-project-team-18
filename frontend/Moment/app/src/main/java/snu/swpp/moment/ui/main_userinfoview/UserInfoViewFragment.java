@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_userinfoview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import snu.swpp.moment.EntryActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentUserinfoviewBinding;
@@ -68,6 +70,7 @@ public class UserInfoViewFragment extends Fragment {
 
         binding.logoutButton.setOnClickListener(observer -> {
             viewModel.logout();
+            startActivity(new Intent(requireActivity(), EntryActivity.class));
         });
 
         binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {

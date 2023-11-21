@@ -71,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 setToolbarTitle("찾아보기");
             } else if (destination.getId() == R.id.UserInfoView) {
                 setToolbarTitle("내 정보");
-            } else if (destination.getId() == R.id.LogoutView) {
-                setToolbarTitle("로그아웃");
             }
             // MonthView는 fragment 안에서 별도로 설정
         });
