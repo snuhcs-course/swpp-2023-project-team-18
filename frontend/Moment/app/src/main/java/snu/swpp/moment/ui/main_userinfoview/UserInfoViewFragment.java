@@ -26,7 +26,7 @@ public class UserInfoViewFragment extends Fragment {
     private FragmentUserinfoviewBinding binding;
     private UserInfoWrapperContainer userInfoWrapperContainer;
     private UserInfoViewModel viewModel;
-    private int fragmentState = FragmentState.READ;
+    private int fragmentState = UserInfoViewFragmentState.READ;
     private final int MAX_BYTE = 40;
 
     @Override
@@ -60,10 +60,10 @@ public class UserInfoViewFragment extends Fragment {
         updateUI();
 
         binding.userInfoWrapper.penIcon.setOnClickListener(observer -> {
-            if (fragmentState == FragmentState.EDIT) {
-                updateFragmentState(FragmentState.READ);
+            if (fragmentState == UserInfoViewFragmentState.EDIT) {
+                updateFragmentState(UserInfoViewFragmentState.READ);
             } else {
-                updateFragmentState(FragmentState.EDIT);
+                updateFragmentState(UserInfoViewFragmentState.EDIT);
             }
         });
 
@@ -95,9 +95,9 @@ public class UserInfoViewFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 int nicknameBytes = s.toString().getBytes().length;
                 if (nicknameBytes > MAX_BYTE) {
-                    updateFragmentState(FragmentState.EDIT_ERROR);
+                    updateFragmentState(UserInfoViewFragmentState.EDIT_ERROR);
                 } else if (isLongNicknameMode) {
-                    updateFragmentState(FragmentState.EDIT);
+                    updateFragmentState(UserInfoViewFragmentState.EDIT);
                 }
             }
         });

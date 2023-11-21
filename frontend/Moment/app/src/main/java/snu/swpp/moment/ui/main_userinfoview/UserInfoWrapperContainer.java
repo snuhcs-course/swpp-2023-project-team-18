@@ -23,11 +23,11 @@ public class UserInfoWrapperContainer {
     }
 
     public void updateUI(int state) {
-        if (state == FragmentState.READ) {
+        if (state == UserInfoViewFragmentState.READ) {
             updateUItoReadingMode();
-        } else if (state == FragmentState.EDIT) {
+        } else if (state == UserInfoViewFragmentState.EDIT) {
             updateUItoEditingMode();
-        } else if (state == FragmentState.EDIT_ERROR) {
+        } else if (state == UserInfoViewFragmentState.EDIT_ERROR) {
             updateUItoLongNicknameMode();
         }
     }
