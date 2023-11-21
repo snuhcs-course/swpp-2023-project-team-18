@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,8 +112,7 @@ public class UserInfoViewFragment extends Fragment {
     }
 
     private void updateUItoLongNicknameMode() {
-        binding.checkIcon.setActivated(false);
-        binding.checkIcon.setEnabled(false);
+        binding.checkIcon.setVisibility(View.GONE);
         binding.nicknameLengthWarningText.setVisibility(View.VISIBLE);
     }
 

@@ -65,7 +65,6 @@
       android:id="@+id/check_icon"
       android:layout_width="18dp"
       android:layout_height="18dp"
-      android:layout_marginLeft="2dp"
 
       android:adjustViewBounds="true"
       android:background="@color/white"
@@ -82,10 +81,10 @@
       android:id="@+id/username_edittext"
       android:layout_width="170dp"
       android:layout_height="wrap_content"
+      android:paddingRight="7dp"
       android:background="@null"
       android:fontFamily="@font/maruburi_light"
       android:inputType="text"
-      android:scrollHorizontally="true"
 
       android:textSize="15sp"
       app:layout_constraintHorizontal_chainStyle="packed"
