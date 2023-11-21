@@ -9,8 +9,6 @@ import static snu.swpp.moment.utils.CustomViewActions.forceClick;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 
@@ -20,7 +18,7 @@ public class LoginAction {
     private static final String password = "123456";
     private static IdlingResource idlingResource;
 
-    public static void setUp() throws GeneralSecurityException, IOException {
+    public static void setUp() {
         registerIdlingResource();
         login();
     }
