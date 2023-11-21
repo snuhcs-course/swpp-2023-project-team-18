@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,12 +50,14 @@ public class UserInfoViewFragment extends Fragment {
         binding = FragmentUserinfoviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.logoutButton.setActivated(true);
+        binding.nicknameEdittext.setText("닉네임"); // TODO
         updateUItoNonEditingMode();
+        binding.logoutButton.setActivated(true);
 
         binding.penIcon.setOnClickListener(observer -> {
             updateUItoEditingMode();
         });
+
 
         binding.checkIcon.setOnClickListener(observer -> {
             // TODO
@@ -70,7 +73,7 @@ public class UserInfoViewFragment extends Fragment {
             viewModel.logout();
         });
 
-        binding.usernameEdittext.addTextChangedListener(new TextWatcher() {
+        binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -110,25 +113,28 @@ public class UserInfoViewFragment extends Fragment {
     }
 
     private void updateUItoEditingMode() {
+        Log.d("UserInfoViewFragment", "editing");
         binding.penIcon.setVisibility(View.GONE);
         binding.checkIcon.setVisibility(View.VISIBLE);
         binding.checkIcon.setEnabled(true);
         binding.checkIcon.setActivated(true);
-        binding.usernameEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
+        binding.nicknameEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
         binding.nicknameLengthWarningText.setVisibility(View.GONE);
     }
 
     private void updateUItoNonEditingMode() {
+        Log.d("UserInfoViewFragment", "non editing");
         binding.checkIcon.setVisibility(View.GONE);
         binding.penIcon.setVisibility(View.VISIBLE);
-        binding.usernameEdittext.setText(viewModel.getNickname());
-        binding.usernameEdittext.setInputType(InputType.TYPE_NULL);
-        binding.usernameEdittext.setGravity(Gravity.CENTER);
+        //binding.usernameEdittext.setText(viewModel.getNickname());
+        binding.nicknameEdittext.setInputType(InputType.TYPE_NULL);
+        binding.nicknameEdittext.setGravity(Gravity.CENTER);
 
         binding.nicknameLengthWarningText.setVisibility(View.GONE);
     }
 
     private void updateUItoLongNicknameMode() {
+        Log.d("UserInfoViewFragment", "long nickname");
         binding.checkIcon.setVisibility(View.GONE);
         binding.nicknameLengthWarningText.setVisibility(View.VISIBLE);
     }
