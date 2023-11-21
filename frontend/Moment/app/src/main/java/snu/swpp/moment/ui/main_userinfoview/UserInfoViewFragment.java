@@ -4,16 +4,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import snu.swpp.moment.R;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentUserinfoviewBinding;
 
@@ -58,6 +63,9 @@ public class UserInfoViewFragment extends Fragment {
             updateUItoNonEditingMode();
         });
 
+        int digit = 2; // TODO
+        setCreatedAtText(binding, digit);
+
         binding.logoutButton.setOnClickListener(observer -> {
             viewModel.logout();
         });
@@ -78,7 +86,7 @@ public class UserInfoViewFragment extends Fragment {
                 String nickname = s.toString();
                 try {
                     byte[] nicknameBytes = nickname.getBytes("KSC5601");
-                    if (nicknameBytes.length > 20) {
+                    if (nicknameBytes.length > 40) {
                         updateUItoLongNicknameMode();
                     } else {
                         updateUItoEditingMode();
@@ -90,6 +98,15 @@ public class UserInfoViewFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void setCreatedAtText(FragmentUserinfoviewBinding binding, int digit) {
+        Spannable span = (Spannable) binding.createdAtText.getText();
+        span.setSpan(
+            new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.red)),
+            5,
+            5+digit,
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 
     private void updateUItoEditingMode() {

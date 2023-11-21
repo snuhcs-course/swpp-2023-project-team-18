@@ -109,6 +109,6 @@
 
     <!-- 유저정보 탭 -->
     <string name="username_too_long">닉네임은 20자까지만 쓸 수 있어요</string>
-    <string name="created_at_text">오늘까지 1일째\n 하루를 남기고 있어요</string>
+    <string name="created_at_text">오늘까지 12일째\n 하루를 남기고 있어요</string>
 
 </resources>

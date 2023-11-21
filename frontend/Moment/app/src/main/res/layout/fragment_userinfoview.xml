@@ -131,6 +131,7 @@
       android:layout_marginTop="20dp"
       android:gravity="center"
       android:text="@string/created_at_text"
+      android:bufferType="spannable"
 
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@id/username_edittext"
