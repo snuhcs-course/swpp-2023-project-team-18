@@ -114,6 +114,7 @@ public class UserInfoViewFragment extends Fragment {
 
     private void updateUItoEditingMode() {
         Log.d("UserInfoViewFragment", "editing");
+        binding.penIcon.setVisibility(View.VISIBLE);
         binding.penIcon.setImageResource(R.drawable.moment_write_button);
         binding.nicknameEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
         binding.nicknameLengthWarningText.setVisibility(View.GONE);
@@ -122,6 +123,7 @@ public class UserInfoViewFragment extends Fragment {
 
     private void updateUItoNonEditingMode() {
         Log.d("UserInfoViewFragment", "non editing");
+        binding.penIcon.setVisibility(View.VISIBLE);
         binding.penIcon.setImageResource(R.drawable.pen);
         binding.nicknameEdittext.setInputType(InputType.TYPE_NULL);
         binding.nicknameEdittext.setGravity(Gravity.CENTER);
