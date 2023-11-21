@@ -179,7 +179,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRONJOBS = [
     (
         "0 18 * * *",
-        "writing.cron.auto_completion_job",
+        "writing.cron.execute_cron_jobs",
         ">> " + os.path.join(BASE_DIR, "cron.log") + " 2>&1 ",
     )
 ]
