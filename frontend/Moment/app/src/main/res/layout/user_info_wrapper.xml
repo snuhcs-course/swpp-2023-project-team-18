@@ -32,14 +32,13 @@
 
   <EditText
     android:id="@+id/nickname_edittext"
-    style="@style/NORMAL_BLACK_BOLD"
+    style="@style/BIG_BLACK_BOLD"
     android:layout_width="170dp"
     android:layout_height="wrap_content"
     android:paddingRight="7dp"
     android:background="@null"
     android:inputType="text"
 
-    android:textSize="15sp"
     app:layout_constraintHorizontal_chainStyle="packed"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@id/pen_icon"
