@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+  <TextView
+    android:id="@+id/daySectionEmotionText"
+    style="@style/NORMAL_GRAY"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="5dp"
+    android:paddingEnd="20dp"
+    android:text="@string/day_section_emotion"
+    app:layout_constraintEnd_toStartOf="@id/dayEmotionImage"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/daySectionTagsText"
+    style="@style/NORMAL_GRAY"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingEnd="20dp"
+    android:text="@string/day_section_tags"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/daySectionEmotionText" />
+  <ImageView
+    android:id="@+id/dayEmotionImage"
+    android:layout_width="25dp"
+    android:layout_height="0dp"
+    app:layout_constraintEnd_toStartOf="@id/dayEmotionText"
+    app:layout_constraintStart_toEndOf="@+id/daySectionEmotionText"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/icon_sunny" />
+
+  <TextView
+    android:id="@+id/daySectionScoreText"
+    style="@style/NORMAL_GRAY"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingEnd="20dp"
+    android:text="@string/day_section_score"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/daySectionTagsText" />
+
+  <TextView
+    android:id="@+id/dayEmotionText"
+    style="@style/NORMAL_BLACK"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="5dp"
+    android:paddingStart="10dp"
+    app:layout_constraintStart_toEndOf="@id/dayEmotionImage"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="신남" />
+
+
+  <TextView
+    android:id="@+id/dayTagsText"
+    style="@style/NORMAL_BLACK"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:minLines="1"
+    android:singleLine="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/daySectionTagsText"
+    app:layout_constraintTop_toBottomOf="@+id/dayEmotionText"
+    tools:text="#어쩌구저쩌구 #신난다 #너무길어지면알아서줄여줘줄여줘" />
+
+  <TextView
+    android:id="@+id/dayScoreText"
+    style="@style/NORMAL_BLACK_BOLD"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/daySectionScoreText"
+    app:layout_constraintTop_toBottomOf="@+id/dayTagsText"
+    tools:text="5점" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
