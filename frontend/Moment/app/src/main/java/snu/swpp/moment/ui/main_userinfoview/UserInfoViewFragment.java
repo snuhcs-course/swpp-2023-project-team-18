@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
@@ -27,6 +26,7 @@ public class UserInfoViewFragment extends Fragment {
 
     private FragmentUserinfoviewBinding binding;
     private UserInfoViewModel viewModel;
+    private final int MAX_BYTE = 40;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -58,7 +58,6 @@ public class UserInfoViewFragment extends Fragment {
             updateUItoEditingMode();
         });
 
-
         binding.checkIcon.setOnClickListener(observer -> {
             // TODO
             // update nickname
@@ -74,9 +73,14 @@ public class UserInfoViewFragment extends Fragment {
         });
 
         binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {
+            boolean isLongNicknameMode = false;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                int bytes = s.toString().getBytes().length;
+                if (bytes > MAX_BYTE) {
+                    isLongNicknameMode = true;
+                }
             }
 
             @Override
@@ -86,15 +90,10 @@ public class UserInfoViewFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String nickname = s.toString();
-                try {
-                    byte[] nicknameBytes = nickname.getBytes("KSC5601");
-                    if (nicknameBytes.length > 40) {
-                        updateUItoLongNicknameMode();
-                    } else {
-                        updateUItoEditingMode();
-                    }
-                } catch (UnsupportedEncodingException e) {
+                int nicknameBytes = s.toString().getBytes().length;
+                if (nicknameBytes > MAX_BYTE) {
+                    updateUItoLongNicknameMode();
+                } else if (isLongNicknameMode) {
                     updateUItoEditingMode();
                 }
             }
@@ -108,7 +107,7 @@ public class UserInfoViewFragment extends Fragment {
         span.setSpan(
             new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.red)),
             5,
-            5+digit,
+            5 + digit,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 
