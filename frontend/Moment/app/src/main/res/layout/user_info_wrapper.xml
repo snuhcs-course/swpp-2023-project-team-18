@@ -32,11 +32,11 @@
 
   <EditText
     android:id="@+id/nickname_edittext"
+    style="@style/NORMAL_BLACK_BOLD"
     android:layout_width="170dp"
     android:layout_height="wrap_content"
     android:paddingRight="7dp"
     android:background="@null"
-    android:fontFamily="@font/maruburi_bold"
     android:inputType="text"
 
     android:textSize="15sp"
