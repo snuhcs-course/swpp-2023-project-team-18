@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +24,9 @@ import snu.swpp.moment.databinding.FragmentUserinfoviewBinding;
 public class UserInfoViewFragment extends Fragment {
 
     private FragmentUserinfoviewBinding binding;
+    private UserInfoWrapperContainer userInfoWrapperContainer;
     private UserInfoViewModel viewModel;
-    private boolean isEditingMode = false;
+    private int fragmentState = FragmentState.READ;
     private final int MAX_BYTE = 40;
 
     @Override
@@ -53,27 +51,31 @@ public class UserInfoViewFragment extends Fragment {
         binding = FragmentUserinfoviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.nicknameEdittext.setText("닉네임"); // TODO
-        updateUItoNonEditingMode();
+        userInfoWrapperContainer = new UserInfoWrapperContainer(binding.userInfoWrapper);
+
+        binding.userInfoWrapper.nicknameEdittext.setText("닉네임"); // TODO
+
         binding.logoutButton.setActivated(true);
 
-        binding.penIcon.setOnClickListener(observer -> {
-            if (isEditingMode) {
-                updateUItoNonEditingMode();
+        updateUI();
+
+        binding.userInfoWrapper.penIcon.setOnClickListener(observer -> {
+            if (fragmentState == FragmentState.EDIT) {
+                updateFragmentState(FragmentState.READ);
             } else {
-                updateUItoEditingMode();
+                updateFragmentState(FragmentState.EDIT);
             }
         });
 
-        int digit = 2; // TODO
-        setCreatedAtText(binding, digit);
+        int num = 12; // TODO
+        setCreatedAtText(binding, num);
 
         binding.logoutButton.setOnClickListener(observer -> {
             viewModel.logout();
             startActivity(new Intent(requireActivity(), EntryActivity.class));
         });
 
-        binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {
+        binding.userInfoWrapper.nicknameEdittext.addTextChangedListener(new TextWatcher() {
             boolean isLongNicknameMode = false;
 
             @Override
@@ -93,9 +95,9 @@ public class UserInfoViewFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 int nicknameBytes = s.toString().getBytes().length;
                 if (nicknameBytes > MAX_BYTE) {
-                    updateUItoLongNicknameMode();
+                    updateFragmentState(FragmentState.EDIT_ERROR);
                 } else if (isLongNicknameMode) {
-                    updateUItoEditingMode();
+                    updateFragmentState(FragmentState.EDIT);
                 }
             }
         });
@@ -103,8 +105,23 @@ public class UserInfoViewFragment extends Fragment {
         return root;
     }
 
-    private void setCreatedAtText(FragmentUserinfoviewBinding binding, int digit) {
-        Spannable span = (Spannable) binding.createdAtText.getText();
+    private void updateFragmentState(int state) {
+        if (fragmentState != state) {
+            this.fragmentState = state;
+            updateUI();
+        }
+    }
+
+    private void updateUI() {
+        userInfoWrapperContainer.updateUI(fragmentState);
+    }
+
+    private void setCreatedAtText(FragmentUserinfoviewBinding binding, int num) {
+        int digit = Integer.toString(num).length();
+        String text = "오늘까지 " + num + "일째\n 하루를 남기고 있어요";
+        binding.userInfoWrapper.createdAtText.setText(text);
+
+        Spannable span = (Spannable) binding.userInfoWrapper.createdAtText.getText();
         span.setSpan(
             new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.red)),
             5,
@@ -112,31 +129,6 @@ public class UserInfoViewFragment extends Fragment {
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 
-    private void updateUItoEditingMode() {
-        Log.d("UserInfoViewFragment", "editing");
-        binding.penIcon.setVisibility(View.VISIBLE);
-        binding.penIcon.setImageResource(R.drawable.moment_write_button);
-        binding.nicknameEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
-        binding.nicknameLengthWarningText.setVisibility(View.GONE);
-        isEditingMode = true;
-    }
-
-    private void updateUItoNonEditingMode() {
-        Log.d("UserInfoViewFragment", "non editing");
-        binding.penIcon.setVisibility(View.VISIBLE);
-        binding.penIcon.setImageResource(R.drawable.pen);
-        binding.nicknameEdittext.setInputType(InputType.TYPE_NULL);
-        binding.nicknameEdittext.setGravity(Gravity.CENTER);
-
-        binding.nicknameLengthWarningText.setVisibility(View.GONE);
-        isEditingMode = false;
-    }
-
-    private void updateUItoLongNicknameMode() {
-        Log.d("UserInfoViewFragment", "long nickname");
-        binding.penIcon.setVisibility(View.GONE);
-        binding.nicknameLengthWarningText.setVisibility(View.VISIBLE);
-    }
 
     @Override
     public void onDestroyView() {
