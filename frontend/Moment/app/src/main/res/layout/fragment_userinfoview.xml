@@ -11,15 +11,14 @@
     style="@style/NORMAL_WHITE_BOLD"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="100dp"
+    android:layout_marginTop="100dp"
     android:background="@drawable/button"
     android:text="로그아웃"
 
-    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintBottom_toBottomOf="@id/logo"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/user_info_wrapper" />
-
   <ImageView
     android:id="@+id/logo"
     android:layout_width="200dp"
@@ -30,7 +29,7 @@
     app:layout_constraintHeight_percent="0.1"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/logout_button"
-    app:layout_constraintVertical_bias="0.1"
+    app:layout_constraintVertical_bias="0.05"
     app:srcCompat="@drawable/text_logo" />
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,26 +42,13 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.25"
-    app:layout_constraintWidth_percent="0.5">
-
-
-    <EditText
-      android:id="@+id/username_edittext"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:fontFamily="@font/maruburi_light"
-      android:inputType="text"
-
-      android:textSize="16dp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintHorizontal_bias="0.55"
+    app:layout_constraintWidth_percent="0.6">
 
     <ImageButton
       android:id="@+id/pen_icon"
-      android:layout_width="20dp"
-      android:layout_height="20dp"
+      android:layout_width="18dp"
+      android:layout_height="18dp"
 
       android:adjustViewBounds="true"
       android:background="@color/white"
@@ -71,27 +57,55 @@
       android:visibility="visible"
 
       app:layout_constraintBottom_toBottomOf="@id/username_edittext"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.95"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@id/username_edittext" />
-
+      app:layout_constraintEnd_toEndOf="@id/border"
+      app:layout_constraintStart_toEndOf="@id/username_edittext"
+      app:layout_constraintTop_toTopOf="@id/username_edittext"
+      />
     <ImageButton
       android:id="@+id/check_icon"
-      android:layout_width="20dp"
-      android:layout_height="20dp"
+      android:layout_width="18dp"
+      android:layout_height="18dp"
+      android:layout_marginLeft="2dp"
 
       android:adjustViewBounds="true"
       android:background="@color/white"
       android:scaleType="centerInside"
       android:src="@drawable/moment_write_button"
       android:visibility="gone"
-
       app:layout_constraintBottom_toBottomOf="@id/username_edittext"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.95"
+      app:layout_constraintEnd_toEndOf="@id/border"
+      app:layout_constraintStart_toEndOf="@id/username_edittext"
+      app:layout_constraintTop_toTopOf="@id/username_edittext"
+      />
+
+    <EditText
+      android:id="@+id/username_edittext"
+      android:layout_width="170dp"
+      android:layout_height="wrap_content"
+      android:background="@null"
+      android:fontFamily="@font/maruburi_light"
+      android:inputType="text"
+      android:scrollHorizontally="true"
+
+      android:textSize="15sp"
+      app:layout_constraintHorizontal_chainStyle="packed"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/pen_icon"
+      app:layout_constraintStart_toStartOf="@id/border"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+      android:id="@+id/border"
+      android:layout_width="0dp"
+      android:layout_height="1dp"
+      android:background="@android:color/black"
+      android:layout_marginTop="10dp"
+      android:layout_marginBottom="20dp"
+      app:layout_constraintWidth_percent="0.8"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@id/username_edittext" />
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/username_edittext"
+      app:layout_constraintBottom_toTopOf="@id/nickname_length_warning_text"/>
 
     <TextView
       android:id="@+id/nickname_length_warning_text"
@@ -103,8 +117,8 @@
       android:text="@string/username_too_long"
 
       app:layout_constraintBottom_toTopOf="@id/created_at_text"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="@id/username_edittext"
+      app:layout_constraintStart_toStartOf="@id/username_edittext"
       app:layout_constraintTop_toBottomOf="@id/username_edittext"
       app:layout_constraintVertical_chainStyle="packed"
       app:layout_constraintWidth_percent="0.85" />
@@ -120,8 +134,8 @@
       android:text="@string/created_at_text"
 
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="@id/username_edittext"
+      app:layout_constraintStart_toStartOf="@id/username_edittext"
       app:layout_constraintTop_toBottomOf="@id/nickname_length_warning_text"
       app:layout_constraintWidth_percent="0.7" />
 
