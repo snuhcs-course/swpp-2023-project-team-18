@@ -11,9 +11,11 @@ import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.UserInfoWrapperBinding;
 
 public class UserInfoWrapperContainer {
+
     private ImageButton penIcon;
     private EditText nicknameEditText;
     private TextView nicknameLengthWarningText;
+
     public UserInfoWrapperContainer(UserInfoWrapperBinding binding) {
         penIcon = binding.penIcon;
         nicknameEditText = binding.nicknameEdittext;
@@ -21,12 +23,11 @@ public class UserInfoWrapperContainer {
     }
 
     public void updateUI(int state) {
-        if (state==FragmentState.READ) {
+        if (state == FragmentState.READ) {
             updateUItoReadingMode();
-        }
-        else if (state==FragmentState.EDIT) {
+        } else if (state == FragmentState.EDIT) {
             updateUItoEditingMode();
-        } else if (state==FragmentState.EDIT_ERROR) {
+        } else if (state == FragmentState.EDIT_ERROR) {
             updateUItoLongNicknameMode();
         }
     }
