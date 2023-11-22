@@ -12,6 +12,8 @@ from .views import (
 
 from .search_views import HashtagCompleteView, HashtagSearchView, ContentSearchView
 
+from .nudge_views import NudgeView
+
 urlpatterns = [
     path("moments/", MomentView.as_view()),
     path("day-completion/", DayCompletionView.as_view()),
@@ -23,4 +25,5 @@ urlpatterns = [
     path("hashtags/complete/", HashtagCompleteView.as_view()),
     path("search/hashtags/", HashtagSearchView.as_view()),
     path("search/contents/", ContentSearchView.as_view()),
+    path("nudge/", NudgeView.as_view()),
 ]
