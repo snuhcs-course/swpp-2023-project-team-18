@@ -7,6 +7,7 @@ from user.models import User
 from writing.models import Nudge
 from writing.nudge_views import (
     NudgeView,
+    NudgeMarkView,
 )
 
 
@@ -111,7 +112,7 @@ class NudgeTest(TestCase):
         nudge1.save()
         nudge2.save()
 
-        view = NudgeView.as_view()
+        view = NudgeMarkView.as_view()
 
         request = factory.post("writing/nudge/")
         force_authenticate(request, user=user)

@@ -44,6 +44,10 @@ class NudgeView(GenericAPIView):
             status=200,
         )
 
+
+class NudgeMarkView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request: Request) -> Response:
         user = User.objects.get(pk=request.user.id)
 
