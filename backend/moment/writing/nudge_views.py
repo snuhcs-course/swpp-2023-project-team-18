@@ -28,8 +28,9 @@ class NudgeView(GenericAPIView):
 
         assert len(nudges) < 2, "Filtered nudges should be less than 2."
 
-        nudge_content = ""
         if len(nudges) == 0 or nudges[0].content == "" or nudges[0].is_deleted == True:
+            nudge_content = ""
+        else:
             nudge_content = nudges[0].content
 
         print_log(
