@@ -25,6 +25,6 @@ urlpatterns = [
     path("hashtags/complete/", HashtagCompleteView.as_view()),
     path("search/hashtags/", HashtagSearchView.as_view()),
     path("search/contents/", ContentSearchView.as_view()),
-    path("nudge/", NudgeView.as_view()),
-    path("nudge/mark/", NudgeMarkView.as_view()),
+    path("nudges/", NudgeView.as_view()),
+    path("nudges/mark/", NudgeMarkView.as_view()),
 ]
