@@ -11,12 +11,10 @@ import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.model.StoryModel;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 
-public class StoryRepository {
-
-    private final StoryRemoteDataSource remoteDataSource;
+public class StoryRepository extends BaseRepository<StoryRemoteDataSource> {
 
     public StoryRepository(StoryRemoteDataSource remoteDataSource) {
-        this.remoteDataSource = remoteDataSource;
+        super(remoteDataSource);
     }
 
     public void getStory(String access_token, long start, long end, StoryGetCallBack callback) {

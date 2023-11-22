@@ -8,11 +8,8 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Before;
 import org.junit.Test;
 import snu.swpp.moment.ui.main_monthview.CalendarDayState;
-import snu.swpp.moment.utils.CalendarUtilsKt;
-import snu.swpp.moment.data.model.StoryModel;
 
 public class CalendarUtilsTest {
 

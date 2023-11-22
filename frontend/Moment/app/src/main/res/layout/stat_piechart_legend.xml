@@ -14,8 +14,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/stat_sunny_text"
-    />
+        app:layout_constraintEnd_toStartOf="@id/stat_sunny_text" />
 
     <TextView
         android:id="@+id/stat_sunny_text"
@@ -27,8 +26,7 @@
         android:layout_marginRight="@dimen/legendMarginRight"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/stat_sunny_image"
-        app:layout_constraintEnd_toStartOf="@id/stat_sun_cloud_image"
-    />
+        app:layout_constraintEnd_toStartOf="@id/stat_sun_cloud_image" />
 
     <ImageView
         android:id="@+id/stat_sun_cloud_image"
@@ -39,8 +37,7 @@
         android:layout_marginRight="@dimen/legendMarginBetweenPictureAndText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/stat_sunny_text"
-        app:layout_constraintEnd_toStartOf="@+id/stat_sun_cloud_text"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/stat_sun_cloud_text" />
 
     <TextView
         android:id="@+id/stat_sun_cloud_text"
@@ -52,8 +49,7 @@
         style="@style/stat_piechart_legend_font"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/stat_sun_cloud_image"
-        app:layout_constraintEnd_toStartOf="@id/stat_cloud_image"
-        />
+        app:layout_constraintEnd_toStartOf="@id/stat_cloud_image" />
 
     <ImageView
         android:id="@+id/stat_cloud_image"
@@ -64,8 +60,7 @@
         android:layout_marginRight="@dimen/legendMarginBetweenPictureAndText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/stat_sun_cloud_text"
-        app:layout_constraintEnd_toStartOf="@+id/stat_cloud_text"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/stat_cloud_text" />
 
     <TextView
         android:id="@+id/stat_cloud_text"
@@ -76,8 +71,7 @@
         android:layout_marginTop="@dimen/legendMarginTop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/stat_cloud_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <ImageView
@@ -90,8 +84,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/stat_rain_text"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/stat_rain_text" />
 
     <TextView
         android:id="@+id/stat_rain_text"
@@ -103,8 +96,7 @@
         style="@style/stat_piechart_legend_font"
         app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
         app:layout_constraintStart_toEndOf="@+id/stat_rain_image"
-        app:layout_constraintEnd_toEndOf="@+id/stat_lightning_image"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/stat_lightning_image" />
 
 
     <ImageView
@@ -116,8 +108,7 @@
         android:layout_marginTop="@dimen/legendMarginTop"
         app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
         app:layout_constraintStart_toEndOf="@id/stat_rain_text"
-        app:layout_constraintEnd_toStartOf="@+id/stat_lightning_text"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/stat_lightning_text" />
 
     <TextView
         android:id="@+id/stat_lightning_text"
@@ -128,8 +119,7 @@
         android:layout_marginTop="@dimen/legendMarginTop"
         app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
         app:layout_constraintStart_toEndOf="@+id/stat_lightning_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

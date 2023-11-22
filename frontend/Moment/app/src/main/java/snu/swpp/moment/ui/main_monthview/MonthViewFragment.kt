@@ -20,9 +20,8 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import snu.swpp.moment.MainActivity
-import snu.swpp.moment.data.repository.AuthenticationRepository
-import snu.swpp.moment.data.repository.StoryRepository
-import snu.swpp.moment.data.source.StoryRemoteDataSource
+import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory
+import snu.swpp.moment.data.factory.StoryRepositoryFactory
 import snu.swpp.moment.databinding.FragmentMonthviewBinding
 import snu.swpp.moment.utils.isFinalWeekOfMonth
 import java.time.YearMonth
@@ -33,16 +32,18 @@ class MonthViewFragment : Fragment() {
 
     private lateinit var binding: FragmentMonthviewBinding
 
-    private val authenticationRepository: AuthenticationRepository =
-        AuthenticationRepository.getInstance(context)
-    private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
+    private val authenticationRepositoryFactory = AuthenticationRepositoryFactory(context)
+    private val storyRepositoryFactory = StoryRepositoryFactory()
     private lateinit var viewModel: MonthViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(
             this,
-            MonthViewModelFactory(authenticationRepository, storyRepository)
+            MonthViewModelFactory(
+                authenticationRepositoryFactory.repository,
+                storyRepositoryFactory.repository
+            )
         )[MonthViewModel::class.java]
     }
 

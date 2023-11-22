@@ -1,9 +1,11 @@
 package snu.swpp.moment.ui.main_writeview.slideview;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,15 +16,23 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
+import snu.swpp.moment.ui.main_writeview.viewmodel.WritePageDataUnitFactory;
 import snu.swpp.moment.utils.TimeConverter;
 
 public abstract class BaseWritePageFragment extends Fragment {
 
+    protected WritePageDataUnitFactory dataUnitFactory;
     protected final ApiResponseManager apiResponseManager = new ApiResponseManager();
 
     protected LocalDateTime lastRefreshedTime = getCurrentDateTime();
     private final Handler refreshHandler = new Handler();
     private final long REFRESH_INTERVAL = 1000 * 60 * 5;  // 5 minutes
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        dataUnitFactory = new WritePageDataUnitFactory(requireContext());
+    }
 
     @Override
     public void onResume() {

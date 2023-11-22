@@ -13,8 +13,6 @@ import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,7 +32,7 @@ public class SearchViewFragmentTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Before
-    public void setUp() throws GeneralSecurityException, IOException {
+    public void setUp() {
         LoginAction.setUp();
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view))

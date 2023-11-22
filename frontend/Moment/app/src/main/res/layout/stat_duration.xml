@@ -16,8 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/stat_date_duration_start"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        />
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
     <TextView
         android:id="@+id/stat_date_duration_start"
@@ -28,8 +27,7 @@
         android:fontFamily="@font/maruburi_light"
         app:layout_constraintStart_toEndOf="@id/stat_date_duration_text"
         app:layout_constraintTop_toTopOf="@id/stat_date_duration_text"
-        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_dash"
-        />
+        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_dash" />
 
     <TextView
         android:id="@+id/stat_date_duration_dash"
@@ -40,8 +38,7 @@
         android:fontFamily="@font/maruburi_light"
         app:layout_constraintStart_toEndOf="@id/stat_date_duration_start"
         app:layout_constraintTop_toTopOf="@id/stat_date_duration_start"
-        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_end"
-        />
+        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_end" />
 
     <TextView
         android:id="@+id/stat_date_duration_end"
@@ -52,7 +49,6 @@
         android:fontFamily="@font/maruburi_light"
         app:layout_constraintStart_toEndOf="@id/stat_date_duration_dash"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/stat_date_duration_dash"
-        />
+        app:layout_constraintTop_toTopOf="@id/stat_date_duration_dash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

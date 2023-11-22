@@ -13,8 +13,6 @@ import static org.hamcrest.Matchers.not;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
@@ -37,7 +35,7 @@ public class WriteViewFragmentTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Before
-    public void setUp() throws GeneralSecurityException, IOException {
+    public void setUp() {
         LoginAction.setUp();
     }
 

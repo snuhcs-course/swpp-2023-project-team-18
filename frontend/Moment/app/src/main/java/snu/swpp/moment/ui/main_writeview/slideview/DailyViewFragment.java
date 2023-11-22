@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview.slideview;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,23 +14,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.model.MomentPairModel;
-import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.data.repository.MomentRepository;
-import snu.swpp.moment.data.repository.StoryRepository;
-import snu.swpp.moment.data.source.MomentRemoteDataSource;
-import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageDailyBinding;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModel;
 import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModelFactory;
-import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
-import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class DailyViewFragment extends BaseWritePageFragment {
@@ -41,13 +34,6 @@ public class DailyViewFragment extends BaseWritePageFragment {
     private ListViewAdapter listViewAdapter;
 
     private DailyViewModel viewModel;
-    private MomentRemoteDataSource momentRemoteDataSource;
-    private StoryRemoteDataSource storyRemoteDataSource;
-    private MomentRepository momentRepository;
-    private StoryRepository storyRepository;
-    private GetStoryUseCase getStoryUseCase;
-    private SaveScoreUseCase saveScoreUseCase;
-    private AuthenticationRepository authenticationRepository;
 
     private ListFooterContainer listFooterContainer;
 
@@ -58,40 +44,28 @@ public class DailyViewFragment extends BaseWritePageFragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            viewModel = new ViewModelProvider(this,
+                new DailyViewModelFactory(
+                    dataUnitFactory.authenticationRepository(),
+                    dataUnitFactory.momentRepository(),
+                    dataUnitFactory.getStoryUseCase(),
+                    dataUnitFactory.saveScoreUseCase()
+                )
+            ).get(DailyViewModel.class);
+        } catch (RuntimeException e) {
+            Toast.makeText(requireContext(), "알 수 없는 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
+            startActivity(intent);
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-
-        momentRemoteDataSource = Objects.requireNonNullElse(momentRemoteDataSource,
-            new MomentRemoteDataSource());
-        storyRemoteDataSource = Objects.requireNonNullElse(storyRemoteDataSource,
-            new StoryRemoteDataSource());
-        momentRepository = Objects.requireNonNullElse(momentRepository,
-            new MomentRepository(momentRemoteDataSource));
-        storyRepository = Objects.requireNonNullElse(storyRepository,
-            new StoryRepository(storyRemoteDataSource));
-
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
-        } catch (Exception e) {
-            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-            startActivity(intent);
-        }
-
-        getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
-            new GetStoryUseCase(authenticationRepository, storyRepository));
-        saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
-            new SaveScoreUseCase(authenticationRepository, storyRepository));
-
-        viewModel = Objects.requireNonNullElse(viewModel,
-            new ViewModelProvider(this, new DailyViewModelFactory(
-                authenticationRepository,
-                momentRepository,
-                getStoryUseCase,
-                saveScoreUseCase)).get(
-                DailyViewModel.class));
 
         binding = PageDailyBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -100,8 +74,8 @@ public class DailyViewFragment extends BaseWritePageFragment {
         listViewItems = new ArrayList<>();
         listViewAdapter = new ListViewAdapter(requireContext(), listViewItems);
         listViewAdapter.setAnimation(false);
-
         binding.dailyMomentList.setAdapter(listViewAdapter);
+
         View footerView = LayoutInflater.from(requireContext())
             .inflate(R.layout.listview_footer, binding.dailyMomentList, false);
         binding.dailyMomentList.addFooterView(footerView);

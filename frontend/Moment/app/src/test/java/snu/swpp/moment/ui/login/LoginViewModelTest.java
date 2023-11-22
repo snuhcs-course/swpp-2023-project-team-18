@@ -5,12 +5,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import java.util.Optional;
 import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.model.LoggedInUserModel;
