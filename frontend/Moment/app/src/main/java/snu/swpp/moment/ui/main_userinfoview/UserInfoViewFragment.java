@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import snu.swpp.moment.EntryActivity;
 import snu.swpp.moment.R;
+import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentUserinfoviewBinding;
 
@@ -25,14 +24,8 @@ public class UserInfoViewFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        AuthenticationRepository authenticationRepository = null;
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(context);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        AuthenticationRepository authenticationRepository =
+            new AuthenticationRepositoryFactory(context).getRepository();
 
         viewModel = new UserInfoViewModelFactory(authenticationRepository)
             .create(UserInfoViewModel.class);
