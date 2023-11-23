@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.MutableLiveData;
@@ -110,8 +111,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showHamburgerButton(boolean show) {
-        getSupportActionBar().setHomeButtonEnabled(show);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(show);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) {
+            return;
+        }
+        actionBar.setHomeButtonEnabled(show);
+        actionBar.setDisplayHomeAsUpEnabled(show);
     }
 
     public void navigateToWriteViewPage(LocalDate date) {

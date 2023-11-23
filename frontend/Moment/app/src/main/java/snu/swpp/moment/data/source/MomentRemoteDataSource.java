@@ -4,8 +4,6 @@ import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.api.request.MomentWriteRequest;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
@@ -15,13 +13,10 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
 
-public class MomentRemoteDataSource {
-
-    private ServiceApi service;
+public class MomentRemoteDataSource extends BaseRemoteDataSource {
 
     public void getMoment(String access_token, long start, long end, MomentGetCallBack callback) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         service.getMoments(bearer, start, end).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<MomentGetResponse> call,
@@ -48,7 +43,6 @@ public class MomentRemoteDataSource {
     public void writeMoment(String access_token, String moment, MomentWriteCallBack callback) {
         String bearer = "Bearer " + access_token;
         MomentWriteRequest request = new MomentWriteRequest(moment);
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         service.writeMoment(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<MomentWriteResponse> call,

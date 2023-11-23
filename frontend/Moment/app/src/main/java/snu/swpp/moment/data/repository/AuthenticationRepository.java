@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -18,11 +16,10 @@ import snu.swpp.moment.data.source.UserRemoteDataSource;
  * Class that requests authentication and user information from the remote data source and maintains
  * an in-memory cache of login status and user credentials information.
  */
-public class AuthenticationRepository {
+public class AuthenticationRepository extends BaseRepository<UserRemoteDataSource> {
 
     private static volatile AuthenticationRepository instance;
 
-    private final UserRemoteDataSource remoteDataSource;
     private final UserLocalDataSource localDataSource;
     private final CountingIdlingResource idlingResource;
 
@@ -33,16 +30,19 @@ public class AuthenticationRepository {
     // private constructor : singleton access
     private AuthenticationRepository(UserRemoteDataSource remoteDataSource,
         UserLocalDataSource localDataSource) {
-        this.remoteDataSource = remoteDataSource;
+        super(remoteDataSource);
         this.localDataSource = localDataSource;
         this.idlingResource = new CountingIdlingResource("authentication");
     }
 
-    public static AuthenticationRepository getInstance(Context context)
-        throws GeneralSecurityException, IOException {
+    public static AuthenticationRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new AuthenticationRepository(new UserRemoteDataSource(),
-                new UserLocalDataSource(context));
+            synchronized (AuthenticationRepository.class) {
+                if (instance == null) {
+                    instance = new AuthenticationRepository(new UserRemoteDataSource(),
+                        new UserLocalDataSource(context));
+                }
+            }
         }
         return instance;
     }
@@ -124,7 +124,6 @@ public class AuthenticationRepository {
             }
         });
     }
-
 
     public void register(String username, String password, String nickname,
         AuthenticationCallBack registerCallBack) {

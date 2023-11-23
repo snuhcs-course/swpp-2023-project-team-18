@@ -82,7 +82,7 @@ public class TagBoxContainer {
                     // 사용자 입력이 시작되면 맨 앞에 # 추가
                     s.insert(0, "#");
                 }
-                Log.d("TagBoxContainer", "afterTextChanged: " + s);
+                Log.d("TagBoxContainer", "afterTextChanged - changed to: " + s);
                 List<String> currentTags = parseTags(s.toString());
                 if (currentTags.size() > MAX_TAGS) {
                     // 개수 제한 초과
@@ -156,7 +156,11 @@ public class TagBoxContainer {
         for (String tag : tags) {
             sb.append("#").append(tag).append(" ");
         }
-        tagEditText.setText(sb.toString());
+        Log.d("TagBoxContainer", "setTags: " + tags + ", parsed to " + sb);
+        if (sb.length() > 0) {
+            // 마지막 공백은 제거
+            tagEditText.setText(sb.substring(0, sb.length() - 1));
+        }
     }
 
     public void setHelpText(String text) {

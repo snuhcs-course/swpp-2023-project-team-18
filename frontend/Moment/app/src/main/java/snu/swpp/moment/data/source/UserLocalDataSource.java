@@ -16,15 +16,19 @@ public class UserLocalDataSource {
     private final SharedPreferences.Editor editor;
     private final String DEFAULT_STRING = "";
 
-    public UserLocalDataSource(Context context) throws GeneralSecurityException, IOException {
-        String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-        sharedPreferences = EncryptedSharedPreferences.create(
-            "secret_tokens",
-            masterKeyAlias,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        );
+    public UserLocalDataSource(Context context) {
+        try {
+            String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+            sharedPreferences = EncryptedSharedPreferences.create(
+                "secret_tokens",
+                masterKeyAlias,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        } catch (GeneralSecurityException | IOException e) {
+            throw new RuntimeException("Fail to initialize shared preference", e);
+        }
         editor = sharedPreferences.edit(); // editor가 sharedPreference를 참조
         // read : shared prefernce, write : editor  -> secret_tokens에
     }
