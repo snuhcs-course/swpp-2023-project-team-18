@@ -55,10 +55,8 @@ public class UserInfoWrapperContainer {
             public void afterTextChanged(Editable s) {
                 int nicknameBytes = s.toString().getBytes().length;
                 if (nicknameBytes > MAX_LENGTH) {
-//                    updateFragmentState(UserInfoViewFragmentState.EDIT_ERROR);
                     setState(UserInfoWrapperState.EDIT_LIMIT_EXCEEDED);
                 } else if (isLimitExceeded) {
-//                    updateFragmentState(UserInfoViewFragmentState.EDIT);
                     setState(UserInfoWrapperState.EDIT);
                 }
             }
