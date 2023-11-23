@@ -41,8 +41,8 @@ public class UserInfoWrapperContainer {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int bytes = s.toString().getBytes().length;
-                if (bytes > MAX_LENGTH) {
+                int len = s.toString().length();
+                if (len > MAX_LENGTH) {
                     isLimitExceeded = true;
                 }
             }
@@ -53,8 +53,8 @@ public class UserInfoWrapperContainer {
 
             @Override
             public void afterTextChanged(Editable s) {
-                int nicknameBytes = s.toString().getBytes().length;
-                if (nicknameBytes > MAX_LENGTH) {
+                int len = s.toString().length();
+                if (len > MAX_LENGTH) {
                     setState(UserInfoWrapperState.EDIT_LIMIT_EXCEEDED);
                 } else if (isLimitExceeded) {
                     setState(UserInfoWrapperState.EDIT);
