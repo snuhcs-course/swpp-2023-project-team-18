@@ -1,19 +1,27 @@
 package snu.swpp.moment.ui.main_userinfoview;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 public class UserInfoViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private String nickname;
+    private final AuthenticationRepository repository;
 
-    public UserInfoViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+    public UserInfoViewModel(AuthenticationRepository repository) {
+        this.repository = repository;
+        this.nickname = "닉네임";
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void logout() {
+        repository.logout();
     }
 }

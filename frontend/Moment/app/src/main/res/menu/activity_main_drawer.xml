@@ -19,10 +19,5 @@
         <item
             android:id="@+id/UserInfoView"
             android:title="내 정보" />
-
-        <item
-            android:id="@+id/LogoutView"
-            android:title="로그아웃"
-            android:label="" />
     </group>
 </menu>
