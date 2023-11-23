@@ -1,7 +1,5 @@
 package snu.swpp.moment.ui.main_userinfoview;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 
@@ -14,6 +12,7 @@ public class UserInfoViewModel extends ViewModel {
         this.repository = repository;
         this.nickname = "닉네임";
     }
+
     public String getNickname() {
         return nickname;
     }
