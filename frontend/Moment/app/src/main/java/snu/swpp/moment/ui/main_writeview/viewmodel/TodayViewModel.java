@@ -15,6 +15,7 @@ import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.callback.NudgeGetCallback;
+import snu.swpp.moment.data.callback.NudgeMarkCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -281,6 +282,27 @@ public class TodayViewModel extends ViewModel {
         });
 
 
+    }
+    public void markNudge(){
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                nudgeRepository.markNudge(access_token, new NudgeMarkCallback() {
+                    @Override
+                    public void onSuccess() {
+                        nudgeState.setValue(new NudgeUiState(null,true,""));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        nudgeState.setValue(NudgeUiState.withError(error));
+                    }
+                });
+
+            }
+        });
     }
 
     public @Nullable StoryUiState getSavedStoryState() {

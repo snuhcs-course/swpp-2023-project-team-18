@@ -1,5 +1,9 @@
 package snu.swpp.moment.ui.main_writeview.component;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.utils.AnimationProvider;
 
@@ -20,7 +26,6 @@ public class NudgeHeaderContainer {
     private final TextView nudgeText;
     private final Button deleteButton;
 
-    private final MutableLiveData<Boolean> deleteSwitch = new MutableLiveData<>(false);
 
     private final AnimationProvider animationProvider;
 
@@ -32,10 +37,7 @@ public class NudgeHeaderContainer {
 
         animationProvider = new AnimationProvider(view);
 
-        deleteButton.setOnClickListener(v -> {
-            setVisibility(false);
-            // TODO: Delete 되었음을 알리는 API 호출
-        });
+
     }
 
     public void updateUi(NudgeUiState uiState) {
@@ -63,31 +65,37 @@ public class NudgeHeaderContainer {
             deleteButton.setVisibility(View.VISIBLE);
         }
     }
-    public Observer<NudgeUiState> nudgeUiStateObserver(){
+
+    public Observer<NudgeUiState> nudgeUiStateObserver() {
         return new Observer<NudgeUiState>() {
             @Override
             public void onChanged(NudgeUiState nudgeUiState) {
                 Log.d("NudgeHeaderContainer", "Got nudge GET response: nudge="
                     + nudgeUiState.getContent());
 
-                if(nudgeUiState == null)return;
-                if(nudgeUiState.getError()!=null){
-                    Toast.makeText(nudgeWrapper.getContext(),"넛지를 받아오지 못했어요",Toast.LENGTH_SHORT);
+                if (nudgeUiState == null) {
                     return;
+                }
+
+                if (nudgeUiState.getError() != null) {
+                    if (nudgeUiState.getError() instanceof UnauthorizedAccessException) {
+                        Intent intent = new Intent(nudgeWrapper.getContext(),
+                            LoginRegisterActivity.class);
+                        startActivity(nudgeWrapper.getContext(), intent, null);
+                    } else {
+                        Toast.makeText(nudgeWrapper.getContext(), "넛지를 받아오지 못했어요",
+                            Toast.LENGTH_SHORT);
+                        return;
+                    }
                 }
                 updateUi(nudgeUiState);
             }
         };
     }
 
-    private void setDeleteSwitch() {
-        deleteSwitch.setValue(true);
-        deleteSwitch.setValue(false);
-    }
 
-
-    public void observeDeleteSwitch(Observer<Boolean> observer) {
-        deleteSwitch.observeForever(observer);
+    public void setOnDeleteButtonClickedListener(View.OnClickListener listener) {
+        deleteButton.setOnClickListener(listener);
     }
 
 }

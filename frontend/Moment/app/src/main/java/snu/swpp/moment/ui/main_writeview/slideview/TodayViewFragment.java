@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
@@ -145,15 +146,16 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         // nudge header 관리 객체 초기화
         nudgeHeaderContainer = new NudgeHeaderContainer(headerView);
-        // TODO: API로 받아온 UiState를 observe 해서 내용 update
         viewModel.observeNudgeState(nudgeHeaderContainer.nudgeUiStateObserver());
-
-
-        nudgeHeaderContainer.observeDeleteSwitch(deleteSwitch -> {
-            if (deleteSwitch) {
-                // TODO: nudge 숨기기 API 호출
+        nudgeHeaderContainer.setOnDeleteButtonClickedListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.markNudge();
             }
         });
+
+
+
 
         // 하단 버튼 관리 객체 초기화
         MainActivity activity = (MainActivity) requireActivity();

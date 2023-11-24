@@ -102,7 +102,7 @@ public interface ServiceApi {
     Call<NudgeGetResponse> getNudge(@Header("Authorization") String bearerToken,
         @Query("start") long start, @Query("end") long end);
 
-    @POST("/api/writing/nudges/mark")
+    @POST("/api/writing/nudges/mark/")
     Call<NudgeMarkResponse> markNudge(@Header("Authorization") String bearerToken);
 
 }
