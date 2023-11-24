@@ -17,6 +17,8 @@ import snu.swpp.moment.R;
 import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentUserinfoviewBinding;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.ui.login.LoginActivity;
 import snu.swpp.moment.utils.TimeConverter;
 
 public class UserInfoViewFragment extends Fragment {
@@ -54,6 +56,9 @@ public class UserInfoViewFragment extends Fragment {
             if (errorState.getError() != null) {
                 String message = errorState.getError().getMessage();
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+                if (errorState.getError() instanceof UnauthorizedAccessException) {
+                    startActivity(new Intent(requireActivity(), LoginActivity.class));
+                }
             } else if (userInfoWrapperContainer.isIconClicked())  {
                 Toast.makeText(requireContext(), R.string.nickname_update_success, Toast.LENGTH_SHORT).show();
             }
