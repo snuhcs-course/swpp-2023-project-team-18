@@ -22,6 +22,8 @@ import snu.swpp.moment.api.response.HashtagSaveResponse;
 import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
+import snu.swpp.moment.api.response.NudgeGetResponse;
+import snu.swpp.moment.api.response.NudgeDeleteResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.response.ScoreSaveResponse;
 import snu.swpp.moment.api.response.SearchContentsResponse;
@@ -95,5 +97,12 @@ public interface ServiceApi {
     @GET("/api/writing/search/hashtags/")
     Call<SearchHashtagsResponse> getHashtagSearchList(@Header("Authorization") String bearerToken,
         @Query("query") String query);
+
+    @GET("/api/writing/nudges")
+    Call<NudgeGetResponse> getNudge(@Header("Authorization") String bearerToken,
+        @Query("start") long start, @Query("end") long end);
+
+    @POST("/api/writing/nudges/mark/")
+    Call<NudgeDeleteResponse> deleteNudge(@Header("Authorization") String bearerToken);
 
 }
