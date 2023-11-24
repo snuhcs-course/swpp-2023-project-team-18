@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import java.time.LocalDate;
 import snu.swpp.moment.data.callback.NicknameCallBack;
+import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
 
 public class UserInfoViewModel extends ViewModel {
 
@@ -33,16 +35,29 @@ public class UserInfoViewModel extends ViewModel {
     }
 
     public void updateNickname(String nickname) {
-        repository.updateNickname(nickname, new NicknameCallBack() {
+        repository.isTokenValid(new TokenCallBack() {
+            String access_token = repository.getToken().getAccessToken();
+
             @Override
-            public void onSuccess(String nickname) {
-                setNickname(nickname);
-                nicknameUpdateErrorState.setValue(new NicknameUpdateErrorState(null));
+            public void onSuccess() {
+                repository.updateNickname(access_token, nickname, new NicknameCallBack() {
+                    @Override
+                    public void onSuccess(String nickname) {
+                        setNickname(nickname);
+                        nicknameUpdateErrorState.setValue(new NicknameUpdateErrorState(null));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        nicknameUpdateErrorState.setValue(new NicknameUpdateErrorState(error));
+                    }
+                });
             }
 
             @Override
-            public void onFailure(Exception error) {
-                nicknameUpdateErrorState.setValue(new NicknameUpdateErrorState(error));
+            public void onFailure() {
+                nicknameUpdateErrorState.setValue(
+                    new NicknameUpdateErrorState(new UnauthorizedAccessException()));
             }
         });
     }

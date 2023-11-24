@@ -148,8 +148,7 @@ public class AuthenticationRepository extends BaseRepository<UserRemoteDataSourc
     }
 
 
-    public void updateNickname(String nickname, NicknameCallBack callback) {
-        String access_token = localDataSource.getToken().getAccessToken();
+    public void updateNickname(String access_token, String nickname, NicknameCallBack callback) {
         remoteDataSource.updateNickname(access_token, nickname, new NicknameCallBack() {
             @Override
             public void onSuccess(String nickname) {
