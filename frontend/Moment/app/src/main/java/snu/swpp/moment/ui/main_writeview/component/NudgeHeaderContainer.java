@@ -73,18 +73,12 @@ public class NudgeHeaderContainer {
                 Log.d("NudgeHeaderContainer", "Got nudge response: nudge="
                     + nudgeUiState.getContent());
 
-                if (nudgeUiState == null) {
-                    return;
-                }
-
                 if (nudgeUiState.getError() != null) {
                     if (nudgeUiState.getError() instanceof UnauthorizedAccessException) {
                         Intent intent = new Intent(nudgeWrapper.getContext(),
                             LoginRegisterActivity.class);
                         startActivity(nudgeWrapper.getContext(), intent, null);
                     } else {
-                        Toast.makeText(nudgeWrapper.getContext(), "넛지를 받아오지 못했어요",
-                            Toast.LENGTH_SHORT);
                         return;
                     }
                 }
