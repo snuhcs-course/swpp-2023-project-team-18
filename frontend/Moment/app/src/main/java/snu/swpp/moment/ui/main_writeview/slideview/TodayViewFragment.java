@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
@@ -57,6 +58,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     dataUnitFactory.authenticationRepository(),
                     dataUnitFactory.momentRepository(),
                     dataUnitFactory.storyRepository(),
+                    dataUnitFactory.nudgeRepository(),
                     dataUnitFactory.getStoryUseCase(),
                     dataUnitFactory.saveScoreUseCase()
                 )
@@ -144,13 +146,11 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         // nudge header 관리 객체 초기화
         nudgeHeaderContainer = new NudgeHeaderContainer(headerView);
-        // TODO: API로 받아온 UiState를 observe 해서 내용 update
-        final String nudgeContent = "요즘은 계속 우울한 나날을 보내고 계신 것 같아요. 오늘은 기분이 어때요? 어떤 재미있는 계획이 있나요?";
-        nudgeHeaderContainer.updateUi(new NudgeUiState(null, false, nudgeContent));
-
-        nudgeHeaderContainer.observeDeleteSwitch(deleteSwitch -> {
-            if (deleteSwitch) {
-                // TODO: nudge 숨기기 API 호출
+        viewModel.observeNudgeState(nudgeHeaderContainer.nudgeUiStateObserver());
+        nudgeHeaderContainer.setOnDeleteButtonClickedListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.deleteNudge();
             }
         });
 
@@ -280,6 +280,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         apiResponseManager.reset();
         viewModel.getMoment(now);
         viewModel.getStory(now);
+        viewModel.getNudge(now);
     }
 
     @Override
