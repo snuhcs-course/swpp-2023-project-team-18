@@ -42,6 +42,10 @@ public class UserLocalDataSource {
         // username은 오는데 저장은 따로 아직 안했음 (굳이?)
     }
 
+    public String getNickname() {
+        return sharedPreferences.getString("nickname", DEFAULT_STRING);
+    }
+
     public void saveToken(String token) {
         editor.putString("access_token", token);
         editor.apply();

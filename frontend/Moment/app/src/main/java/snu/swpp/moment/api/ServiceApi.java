@@ -5,11 +5,13 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import snu.swpp.moment.api.request.EmotionSaveRequest;
 import snu.swpp.moment.api.request.HashtagSaveRequest;
 import snu.swpp.moment.api.request.LoginRequest;
 import snu.swpp.moment.api.request.MomentWriteRequest;
+import snu.swpp.moment.api.request.NicknameUpdateRequest;
 import snu.swpp.moment.api.request.RegisterRequest;
 import snu.swpp.moment.api.request.ScoreSaveRequest;
 import snu.swpp.moment.api.request.StoryCompletionNotifyRequest;
@@ -22,6 +24,7 @@ import snu.swpp.moment.api.response.HashtagSaveResponse;
 import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
+import snu.swpp.moment.api.response.NicknameUpdateResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.response.ScoreSaveResponse;
 import snu.swpp.moment.api.response.SearchContentsResponse;
@@ -46,6 +49,9 @@ public interface ServiceApi {
 
     @POST("api/user/register")
     Call<RegisterResponse> userRegister(@Body RegisterRequest data);
+
+    @PUT("/api/user/info")
+    Call<NicknameUpdateResponse> updateNickname(@Body NicknameUpdateRequest data);
 
     @GET("api/writing/moments/")
     Call<MomentGetResponse> getMoments(@Header("Authorization") String bearerToken,
@@ -95,5 +101,4 @@ public interface ServiceApi {
     @GET("/api/writing/search/hashtags/")
     Call<SearchHashtagsResponse> getHashtagSearchList(@Header("Authorization") String bearerToken,
         @Query("query") String query);
-
 }
