@@ -3,6 +3,7 @@ package snu.swpp.moment.ui.main_userinfoview;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class UserInfoViewFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
-
+        Log.d("UserInfoViewFragment", "created");
         binding = FragmentUserinfoviewBinding.inflate(inflater, container, false);
 
         userInfoWrapperContainer = new UserInfoWrapperContainer(binding.userInfoWrapper);
@@ -45,8 +46,8 @@ public class UserInfoViewFragment extends Fragment {
 
         binding.logoutButton.setActivated(true);
 
-        long daysPassedSinceRegistration = viewModel.getCreatedAt()
-            .until(TimeConverter.getToday(), ChronoUnit.HOURS) + 1;
+        int daysPassedSinceRegistration = (int) ChronoUnit.DAYS.between(
+            viewModel.getCreatedAt(), TimeConverter.getToday());
         userInfoWrapperContainer.setCreatedAtText(daysPassedSinceRegistration);
 
         viewModel.getNicknameUpdateErrorState().observe(getViewLifecycleOwner(), errorState -> {
@@ -55,9 +56,6 @@ public class UserInfoViewFragment extends Fragment {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
             } else if (userInfoWrapperContainer.isIconClicked())  {
                 Toast.makeText(requireContext(), R.string.nickname_update_success, Toast.LENGTH_SHORT).show();
-            } else {
-                String message = errorState.getError().getMessage();
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
             }
             userInfoWrapperContainer.setIconClicked(true);
         });
