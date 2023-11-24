@@ -30,7 +30,7 @@ public class UserInfoViewModel extends ViewModel {
         return nickname;
     }
 
-    public void setNickname(String nickname) {
+    private void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
