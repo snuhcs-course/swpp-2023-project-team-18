@@ -71,7 +71,8 @@ public class UserLocalDataSource {
     }
 
     public LocalDate getCreatedAt() {
-        String dateTimeInString = sharedPreferences.getString("created_at", DEFAULT_STRING);
+        String dateTimeInString = sharedPreferences.getString("created_at", DEFAULT_STRING)
+            .substring(0, 19); // 초 단위까지만 parsing;
         if (dateTimeInString.isBlank()) {
             return TimeConverter.getToday();
         }
