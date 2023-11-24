@@ -40,7 +40,7 @@ public class NudgeHeaderContainer {
 
     }
 
-    public void updateUi(NudgeUiState uiState) {
+    private void updateUi(NudgeUiState uiState) {
         if (uiState.isDeleted()) {
             setVisibility(false);
         } else {
