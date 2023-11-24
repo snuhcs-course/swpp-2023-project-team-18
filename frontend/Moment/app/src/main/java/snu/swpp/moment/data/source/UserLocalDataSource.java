@@ -70,7 +70,6 @@ public class UserLocalDataSource {
             "refresh_token");
     }
 
-    // TODO
     public LocalDate getCreatedAt() {
         String dateTimeInString = sharedPreferences.getString("created_at", DEFAULT_STRING);
         if (dateTimeInString.isBlank()) {

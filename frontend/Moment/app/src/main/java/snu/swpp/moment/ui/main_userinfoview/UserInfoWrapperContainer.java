@@ -26,15 +26,6 @@ public class UserInfoWrapperContainer {
         this.binding = binding;
         this.state = UserInfoWrapperState.READ;
 
-        // 수정 아이콘
-        binding.penIcon.setOnClickListener(v -> {
-            if (state == UserInfoWrapperState.READ) {
-                setState(UserInfoWrapperState.EDIT);
-            } else if (state == UserInfoWrapperState.EDIT) {
-                setState(UserInfoWrapperState.READ);
-            }
-        });
-
         // 닉네임 자수 제한 검사
         binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {
             boolean isLimitExceeded = false;
@@ -61,6 +52,14 @@ public class UserInfoWrapperContainer {
                 }
             }
         });
+    }
+
+    public void setPenIconOnClickListener(View.OnClickListener listener) {
+        binding.penIcon.setOnClickListener(listener);
+    }
+
+    public UserInfoWrapperState getState() {
+        return state;
     }
 
     public void setState(UserInfoWrapperState state) {
@@ -113,12 +112,16 @@ public class UserInfoWrapperContainer {
         }
     }
 
+    public String getNickname() {
+        return binding.nicknameEdittext.getText().toString();
+    }
+
     public void setNickname(String nickname) {
         binding.nicknameEdittext.setText(nickname);
     }
 
-    public void setCreatedAtText(int dayCount) {
-        int digit = Integer.toString(dayCount).length();
+    public void setCreatedAtText(long dayCount) {
+        int digit = Long.toString(dayCount).length();
         String text = "오늘까지 " + dayCount + "일째\n하루를 남기고 있어요";
         binding.createdAtText.setText(text);
 
