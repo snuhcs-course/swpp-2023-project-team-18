@@ -155,7 +155,8 @@ class MonthViewFragment : Fragment() {
                 it.emotionImage
             )
             binding.daySummaryContainer.dayStatContainer.dayEmotionText.text = it.emotionKoreanText
-            binding.daySummaryContainer.dayStatContainer.dayTagsText.text = it.tags.joinToString(" ")
+            binding.daySummaryContainer.dayStatContainer.dayTagsText.text =
+                it.tags.joinToString(" ")
             binding.daySummaryContainer.dayStatContainer.dayScoreText.text = it.score.toString()
             if (it.isAutoCompleted) {
                 binding.daySummaryContainer.dayStatContainer.root.visibility = View.INVISIBLE

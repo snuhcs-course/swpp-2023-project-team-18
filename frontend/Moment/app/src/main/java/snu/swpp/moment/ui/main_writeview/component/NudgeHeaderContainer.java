@@ -70,7 +70,7 @@ public class NudgeHeaderContainer {
         return new Observer<NudgeUiState>() {
             @Override
             public void onChanged(NudgeUiState nudgeUiState) {
-                Log.d("NudgeHeaderContainer", "Got nudge GET response: nudge="
+                Log.d("NudgeHeaderContainer", "Got nudge response: nudge="
                     + nudgeUiState.getContent());
 
                 if (nudgeUiState == null) {

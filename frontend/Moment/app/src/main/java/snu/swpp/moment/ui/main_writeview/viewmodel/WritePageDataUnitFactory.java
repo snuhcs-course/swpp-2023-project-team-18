@@ -59,8 +59,9 @@ public class WritePageDataUnitFactory {
         }
         return storyRepositoryFactory.getRepository();
     }
-    public @NonNull NudgeRepository nudgeRepository(){
-        if(nudgeRepositoryFactory == null){
+
+    public @NonNull NudgeRepository nudgeRepository() {
+        if (nudgeRepositoryFactory == null) {
             nudgeRepositoryFactory = new NudgeRepositoryFactory();
         }
         return nudgeRepositoryFactory.getRepository();

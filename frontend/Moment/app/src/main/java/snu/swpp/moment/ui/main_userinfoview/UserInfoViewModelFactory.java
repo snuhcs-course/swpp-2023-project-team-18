@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 public class UserInfoViewModelFactory implements ViewModelProvider.Factory {
+
     private final AuthenticationRepository repository;
 
     public UserInfoViewModelFactory(AuthenticationRepository repository) {

@@ -9,7 +9,8 @@ public class NudgeRepository extends BaseRepository<NudgeRemoteDataSource> {
     public NudgeRepository(NudgeRemoteDataSource remoteDataSource) {
         super(remoteDataSource);
     }
-    public void getNudge(String access_token,long start,long end, NudgeGetCallback callback){
+
+    public void getNudge(String access_token, long start, long end, NudgeGetCallback callback) {
         remoteDataSource.getNudge(access_token, start, end, new NudgeGetCallback() {
             @Override
             public void onSuccess(String nudge) {
@@ -22,7 +23,8 @@ public class NudgeRepository extends BaseRepository<NudgeRemoteDataSource> {
             }
         });
     }
-    public void markNudge(String access_token, NudgeMarkCallback callback){
+
+    public void markNudge(String access_token, NudgeMarkCallback callback) {
         remoteDataSource.markNudge(access_token, new NudgeMarkCallback() {
             @Override
             public void onSuccess() {

@@ -38,7 +38,7 @@ public class TodayViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(TodayViewModel.class)) {
             return (T) new TodayViewModel(authenticationRepository, momentRepository,
-                storyRepository,nudgeRepository, getStoryUseCase, saveScoreUseCase);
+                storyRepository, nudgeRepository, getStoryUseCase, saveScoreUseCase);
         } else {
             System.out.println("#DEBUG: WriteViewModelFactory not working");
             throw new IllegalArgumentException("Unknown ViewModel class");

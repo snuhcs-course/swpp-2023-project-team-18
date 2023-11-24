@@ -270,7 +270,7 @@ public class TodayViewModel extends ViewModel {
                 nudgeRepository.getNudge(access_token, start, end, new NudgeGetCallback() {
                     @Override
                     public void onSuccess(String nudge) {
-                        nudgeState.setValue(new NudgeUiState(null,nudge.isEmpty(),nudge));
+                        nudgeState.setValue(new NudgeUiState(null, nudge.isEmpty(), nudge));
                     }
 
                     @Override
@@ -283,7 +283,8 @@ public class TodayViewModel extends ViewModel {
 
 
     }
-    public void markNudge(){
+
+    public void markNudge() {
         authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
 
             @Override
@@ -292,7 +293,7 @@ public class TodayViewModel extends ViewModel {
                 nudgeRepository.markNudge(access_token, new NudgeMarkCallback() {
                     @Override
                     public void onSuccess() {
-                        nudgeState.setValue(new NudgeUiState(null,true,""));
+                        nudgeState.setValue(new NudgeUiState(null, true, ""));
                     }
 
                     @Override

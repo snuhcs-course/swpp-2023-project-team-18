@@ -154,9 +154,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
             }
         });
 
-
-
-
         // 하단 버튼 관리 객체 초기화
         MainActivity activity = (MainActivity) requireActivity();
         bottomButtonContainer = new BottomButtonContainer(activity, root, viewModel,
@@ -216,7 +213,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
             apiResponseManager.saveResponse(savedStoryState);
             apiResponseManager.process();
         });
-
 
         Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
         callApisToRefresh();
