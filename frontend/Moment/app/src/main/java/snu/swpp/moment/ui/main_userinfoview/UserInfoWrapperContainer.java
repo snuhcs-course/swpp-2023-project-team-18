@@ -131,7 +131,7 @@ public class UserInfoWrapperContainer {
     }
 
     public void setCreatedAtText(int dayCount) {
-        int digit = Long.toString(dayCount).length();
+        int digit = Integer.toString(dayCount).length();
         String text = "오늘까지 " + dayCount + "일째\n하루를 남기고 있어요";
         binding.createdAtText.setText(text);
 
