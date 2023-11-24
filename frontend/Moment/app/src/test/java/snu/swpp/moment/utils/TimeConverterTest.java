@@ -192,4 +192,15 @@ public class TimeConverterTest {
         cur = LocalDateTime.of(2023, 11, 3, 3, 0, 0);
         assertTrue(TimeConverter.hasDayPassed(base, cur));
     }
+
+    @Test
+    public void convertUTCToLocalTimeZone() {
+        LocalDateTime utcDateTime = LocalDateTime.of(2023, 10, 13, 17, 16, 47);
+        String utcDateTimeInString = utcDateTime.toString() + ".210625Z"; // "2023-10-13T17:16:47.210625Z"
+
+        LocalDateTime localDateTime = utcDateTime.plusHours(hourDiff);
+        String answer = localDateTime.toString();
+
+        assertEquals(answer, TimeConverter.convertUTCToLocalTimeZone(utcDateTimeInString));
+    }
 }

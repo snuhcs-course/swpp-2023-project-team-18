@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
+import java.time.LocalDate;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
 import snu.swpp.moment.data.callback.NicknameCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
@@ -142,6 +143,10 @@ public class AuthenticationRepository extends BaseRepository<UserRemoteDataSourc
         });
     }
 
+    public String getNickname() {
+        return localDataSource.getNickname();
+    }
+
 
     public void updateNickname(String nickname, NicknameCallBack callback) {
         String access_token = localDataSource.getToken().getAccessToken();
@@ -163,7 +168,7 @@ public class AuthenticationRepository extends BaseRepository<UserRemoteDataSourc
         return localDataSource.getToken();
     }
 
-    public String getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return localDataSource.getCreatedAt();
     }
 

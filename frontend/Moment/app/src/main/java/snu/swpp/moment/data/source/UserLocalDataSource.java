@@ -7,8 +7,11 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import snu.swpp.moment.data.model.LoggedInUserModel;
 import snu.swpp.moment.data.model.TokenModel;
+import snu.swpp.moment.utils.TimeConverter;
 
 public class UserLocalDataSource {
 
@@ -67,8 +70,13 @@ public class UserLocalDataSource {
             "refresh_token");
     }
 
-    public String getCreatedAt() {
-        return sharedPreferences.getString("created_at", DEFAULT_STRING);
+    // TODO
+    public LocalDate getCreatedAt() {
+        String dateTimeInString = sharedPreferences.getString("created_at", DEFAULT_STRING);
+        if (dateTimeInString.isBlank()) {
+            return TimeConverter.getToday();
+        }
+        return TimeConverter.adjustToServiceDate(LocalDateTime.parse(dateTimeInString));
     }
 
     public void logout() {
