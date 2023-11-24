@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.callback.NicknameCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.LoggedInUserModel;
@@ -137,6 +138,23 @@ public class AuthenticationRepository extends BaseRepository<UserRemoteDataSourc
             @Override
             public void onFailure(String errorMessage) {
                 registerCallBack.onFailure(errorMessage);
+            }
+        });
+    }
+
+
+    public void updateNickname(String nickname, NicknameCallBack callback) {
+        String access_token = localDataSource.getToken().getAccessToken();
+        remoteDataSource.updateNickname(access_token, nickname, new NicknameCallBack() {
+            @Override
+            public void onSuccess(String nickname) {
+                localDataSource.saveNickname(nickname);
+                callback.onSuccess(nickname);
+            }
+
+            @Override
+            public void onFailure(Exception error) {
+                callback.onFailure(error);
             }
         });
     }
