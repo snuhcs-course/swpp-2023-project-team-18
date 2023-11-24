@@ -76,4 +76,9 @@
 
 
 
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+    </style>
+
 </resources>
+

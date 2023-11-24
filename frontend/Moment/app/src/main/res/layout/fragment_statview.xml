@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/stat_border"
-            app:layout_constraintBottom_toTopOf="@+id/stat_day_score_alert_text"
+            app:layout_constraintBottom_toTopOf="@+id/stat_line_chart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="하루의 점수"
@@ -61,21 +61,6 @@
             android:fontFamily="@font/maruburi_bold"
             />
 
-        <TextView
-            android:id="@+id/stat_day_score_alert_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:layout_constraintTop_toBottomOf="@+id/stat_day_score_info"
-            app:layout_constraintBottom_toTopOf="@+id/stat_line_chart"
-            app:layout_constraintEnd_toEndOf="@+id/stat_line_chart"
-            android:layout_marginRight="15dp"
-            android:textAlignment="textEnd"
-            android:text="모먼트 기록이 있는 날짜만 표시됩니다."
-            android:textSize="9sp"
-            android:textColor="@color/red"
-            android:fontFamily="@font/maruburi_bold"
-            />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/stat_line_chart"

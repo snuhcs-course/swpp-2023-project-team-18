@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_guide_outer_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/help_dialog_design">
+    <!--  android:fillViewport="true" 지우면 잘됨 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_guide_statview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <TextView
+            android:id="@+id/user_guide_statview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="돌아보기"
+            android:fontFamily="@font/maruburi_bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_statview_explanation1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="돌아보기 탭에서는 과거에 작성된 스토리들을 기반으로 최근 7일, 30일 동안의 점수의 변화, 감정들의 빈도와 작성된 태그를 볼 수 있어요. "
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_text"
+            app:layout_constraintBottom_toTopOf="@id/user_guide_statview_image1"/>
+
+
+        <ImageView
+            android:id="@+id/user_guide_statview_image1"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_statview_linechart"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation1"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_statview_explanation2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="해당 기간동안 스토리를 마무리하면서 선택한 하루의 감정 비율을 확인해볼 수 있어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_image1"
+            />
+
+        <ImageView
+            android:id="@+id/user_guide_statview_image2"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_statview_piechart"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation2"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_statview_explanation3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="지금까지 추가한 #태그들은 태그 클라우드로 볼 수 있어요. 태그 클라우드를 움직여서 확인해보세요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_image2"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_statview_image3"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gif_user_guide_hashcloud"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation3"
+            />
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:layout_marginTop="20dp"
+            android:text="이해했어요!"
+            android:fontFamily="@font/maruburi_regular"
+            app:layout_constraintTop_toBottomOf="@+id/user_guide_statview_image3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="32dp"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

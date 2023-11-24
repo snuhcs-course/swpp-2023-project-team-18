@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_guide_outer_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/help_dialog_design">
+    <!--  android:fillViewport="true" 지우면 잘됨 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_guide_writeview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="하루쓰기"
+            android:fontFamily="@font/maruburi_bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="하루쓰기 탭에서는 순간의 기록인 모먼트를 작성하고, AI의 답글을 받고, 하루를 마무리하는 스토리를 작성할 수 있어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_text"
+            app:layout_constraintBottom_toTopOf="@id/user_guide_writeview_image1"/>
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image1"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_moment_and_nudge"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation1"
+        />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="꾸준히 일기를 쓰다 보면 어느 날 일기를 쓰러 왔을 때 따뜻한 응원의 한 마디를 발견하게 될지도 몰라요. 메시지는 하루 동안만 볼 수 있고, X를 눌러 지울 수 있어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image1"
+            />
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image2"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_moment"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation2"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="새 모먼트 추가하기 버튼을 눌러 지금 이 순간의 생생한 감정과 생각을 작성해보세요. 모먼트를 작성하면 잠시 후 모먼트에 대한 AI의 응원과 격려가 담긴 응답을 받을 수 있어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image2"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image3"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_day_completion"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation3"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="하루 마무리하기 버튼을 누르면 스토리를 작성할 수 있어요. 만약, 스토리를 작성하지 않고 새벽 3시가 지나면 모먼트를 기반으로 AI가 스토리를 자동으로 생성해줘요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image3"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image4"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_story"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation4"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="스토리는 직접 작성할 수도 있고, 스토리 작성이 낯설다면 AI에게 부탁하기 버튼을 눌러보세요. 작성된 모먼트들을 기반으로 AI가 스토리를 생성해주고 직접 수정할 수 있어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image4"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image5"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_emotion"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation5"
+            />
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image6"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_hashtag"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image5"
+            />
+        <ImageView
+            android:id="@+id/user_guide_writeview_image7"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_score"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image6"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="스토리 작성이 끝나면 오늘의 감정과 해시태그, 점수를 입력할 수 있어요. 이 정보들은 돌아보기 탭에서 내가 작성한 과거의 스토리들에 대한 통계자료로 쓰여요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image7"
+            />
+
+
+        <TextView
+            android:id="@+id/user_guide_writeview_warning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="주의사항"
+            android:fontFamily="@font/maruburi_bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation6"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_warning_explanation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="1. 모먼트는 한 시간에 최대 두 개까지 작성이 가능해요. \n\n2. 모먼트가 없으면 스토리가 만들어지지 않아요. \n\n3. 새벽 3시가 지나서 자동 마무리가 되면 태그와 감정, 점수를 입력할 수 없어요. 해당 날짜는 통계에 반영되지 않아요.\n\n4. 하루 마무리를 하는 도중 다른 탭으로 이동하거나 앱을 끄면 다시 수정할 수 없어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_warning"
+            />
+
+
+
+
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:layout_marginTop="20dp"
+            android:text="이해했어요!"
+            android:fontFamily="@font/maruburi_regular"
+            app:layout_constraintTop_toBottomOf="@+id/user_guide_writeview_warning_explanation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="32dp"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

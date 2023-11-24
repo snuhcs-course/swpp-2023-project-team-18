@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_guide_outer_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/help_dialog_design">
+    <!--  android:fillViewport="true" 지우면 잘됨 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_guide_monthview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <TextView
+            android:id="@+id/user_guide_monthview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="한달보기"
+            android:fontFamily="@font/maruburi_bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_monthview_explanation1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="한달보기 탭에서는 달력을 통해 과거에 작성한 스토리를 살펴보고 쉽게 찾아갈 수 있어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_monthview_text"
+            app:layout_constraintBottom_toTopOf="@id/user_guide_writeview_image1"/>
+
+
+        <ImageView
+            android:id="@+id/user_guide_monthview_image1"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_monthview_calendar"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_monthview_explanation1"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_monthview_explanation2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="달력은 양 옆으로 스와이프 할 수 있고, 작성된 스토리가 있는 날짜의 기분 아이콘들이 나타나요. 날짜를 누르면 스토리의 내용을 간략하게 확인할 수 있어요"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_monthview_image1"
+            />
+
+        <ImageView
+            android:id="@+id/user_guide_monthview_image2"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_monthview_summary"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_monthview_explanation2"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_monthview_explanation3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="이날의 기록 보기 버튼을 누르면 해당 날짜의 하루 쓰기 탭으로 이동하여 작성된 모먼트와 스토리를 모두 볼 수 있어요."
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_monthview_image2"
+            />
+
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:layout_marginTop="20dp"
+            android:text="이해했어요!"
+            android:fontFamily="@font/maruburi_regular"
+            app:layout_constraintTop_toBottomOf="@+id/user_guide_monthview_explanation3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="32dp"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
