@@ -98,11 +98,11 @@ public interface ServiceApi {
     Call<SearchHashtagsResponse> getHashtagSearchList(@Header("Authorization") String bearerToken,
         @Query("query") String query);
 
-    @GET("/api/nudge")
+    @GET("/api/writing/nudges")
     Call<NudgeGetResponse> getNudge(@Header("Authorization") String bearerToken,
         @Query("start") long start, @Query("end") long end);
 
-    @POST("/api/nudge/mark")
+    @POST("/api/writing/nudges/mark")
     Call<NudgeMarkResponse> markNudge(@Header("Authorization") String bearerToken);
 
 }

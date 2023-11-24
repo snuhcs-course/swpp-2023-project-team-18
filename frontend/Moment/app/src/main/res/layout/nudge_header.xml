@@ -17,7 +17,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:background="@drawable/box_border_red"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

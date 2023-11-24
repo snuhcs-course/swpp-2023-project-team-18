@@ -1,8 +1,10 @@
 package snu.swpp.moment.ui.main_writeview.component;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
@@ -61,13 +63,31 @@ public class NudgeHeaderContainer {
             deleteButton.setVisibility(View.VISIBLE);
         }
     }
+    public Observer<NudgeUiState> nudgeUiStateObserver(){
+        return new Observer<NudgeUiState>() {
+            @Override
+            public void onChanged(NudgeUiState nudgeUiState) {
+                Log.d("NudgeHeaderContainer", "Got nudge GET response: nudge="
+                    + nudgeUiState.getContent());
+
+                if(nudgeUiState == null)return;
+                if(nudgeUiState.getError()!=null){
+                    Toast.makeText(nudgeWrapper.getContext(),"넛지를 받아오지 못했어요",Toast.LENGTH_SHORT);
+                    return;
+                }
+                updateUi(nudgeUiState);
+            }
+        };
+    }
 
     private void setDeleteSwitch() {
         deleteSwitch.setValue(true);
         deleteSwitch.setValue(false);
     }
 
+
     public void observeDeleteSwitch(Observer<Boolean> observer) {
         deleteSwitch.observeForever(observer);
     }
+
 }

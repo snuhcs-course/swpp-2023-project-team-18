@@ -4,9 +4,11 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
 import snu.swpp.moment.data.factory.MomentRepositoryFactory;
+import snu.swpp.moment.data.factory.NudgeRepositoryFactory;
 import snu.swpp.moment.data.factory.StoryRepositoryFactory;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.data.repository.NudgeRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 
 public class WritePageDataUnitFactory {
@@ -17,6 +19,7 @@ public class WritePageDataUnitFactory {
     private AuthenticationRepositoryFactory authenticationRepositoryFactory;
     private MomentRepositoryFactory momentRepositoryFactory;
     private StoryRepositoryFactory storyRepositoryFactory;
+    private NudgeRepositoryFactory nudgeRepositoryFactory;
 
     public WritePageDataUnitFactory(@NonNull Context context) {
         this.context = context;
@@ -55,5 +58,11 @@ public class WritePageDataUnitFactory {
             storyRepositoryFactory = new StoryRepositoryFactory();
         }
         return storyRepositoryFactory.getRepository();
+    }
+    public @NonNull NudgeRepository nudgeRepository(){
+        if(nudgeRepositoryFactory == null){
+            nudgeRepositoryFactory = new NudgeRepositoryFactory();
+        }
+        return nudgeRepositoryFactory.getRepository();
     }
 }

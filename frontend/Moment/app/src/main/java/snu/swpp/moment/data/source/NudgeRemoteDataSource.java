@@ -21,6 +21,7 @@ public class NudgeRemoteDataSource extends BaseRemoteDataSource {
             @Override
             public void onResponse(Call<NudgeGetResponse> call,
                 Response<NudgeGetResponse> response) {
+                Log.d("APICall", "getNudge: " + response.code());
                 if (response.isSuccessful()) {
                     NudgeGetResponse result = response.body();
                     callback.onSuccess(result.getNudge());
@@ -46,6 +47,8 @@ public class NudgeRemoteDataSource extends BaseRemoteDataSource {
             @Override
             public void onResponse(Call<NudgeMarkResponse> call,
                 Response<NudgeMarkResponse> response) {
+                Log.d("APICall", "markNudge: " + response.code());
+
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 } else if (response.code() == 401) {
@@ -57,7 +60,7 @@ public class NudgeRemoteDataSource extends BaseRemoteDataSource {
 
             @Override
             public void onFailure(Call<NudgeMarkResponse> call, Throwable t) {
-                Log.d("APICall", "getNudge: onFailure");
+                Log.d("APICall", "markNudge: onFailure");
                 callback.onFailure(new NoInternetException());
 
             }

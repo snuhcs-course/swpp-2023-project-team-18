@@ -57,6 +57,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
                     dataUnitFactory.authenticationRepository(),
                     dataUnitFactory.momentRepository(),
                     dataUnitFactory.storyRepository(),
+                    dataUnitFactory.nudgeRepository(),
                     dataUnitFactory.getStoryUseCase(),
                     dataUnitFactory.saveScoreUseCase()
                 )
@@ -145,8 +146,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
         // nudge header 관리 객체 초기화
         nudgeHeaderContainer = new NudgeHeaderContainer(headerView);
         // TODO: API로 받아온 UiState를 observe 해서 내용 update
-        final String nudgeContent = "요즘은 계속 우울한 나날을 보내고 계신 것 같아요. 오늘은 기분이 어때요? 어떤 재미있는 계획이 있나요?";
-        nudgeHeaderContainer.updateUi(new NudgeUiState(null, false, nudgeContent));
+        viewModel.observeNudgeState(nudgeHeaderContainer.nudgeUiStateObserver());
+
 
         nudgeHeaderContainer.observeDeleteSwitch(deleteSwitch -> {
             if (deleteSwitch) {
@@ -214,6 +215,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
             apiResponseManager.process();
         });
 
+
         Log.d("TodayViewFragment", "onCreateView: initial API call to refresh");
         callApisToRefresh();
         updateRefreshTime();
@@ -280,6 +282,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         apiResponseManager.reset();
         viewModel.getMoment(now);
         viewModel.getStory(now);
+        viewModel.getNudge(now);
     }
 
     @Override
