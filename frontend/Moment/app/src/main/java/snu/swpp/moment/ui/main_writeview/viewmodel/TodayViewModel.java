@@ -305,13 +305,7 @@ public class TodayViewModel extends ViewModel {
         });
     }
 
-    public @Nullable StoryUiState getSavedStoryState() {
-        return getStoryUseCase.getStoryState();
-    }
 
-    public NudgeUiState getNudgeState() {
-        return nudgeState.getValue();
-    }
 
     public void observeMomentState(Observer<MomentUiState> observer) {
         momentState.observeForever(observer);
