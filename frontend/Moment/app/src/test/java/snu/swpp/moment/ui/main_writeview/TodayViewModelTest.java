@@ -547,73 +547,78 @@ public class TodayViewModelTest {
         // When
         todayViewModel.saveScore(3);
     }
+
     @Test
-    public void getNudge_success(){
+    public void getNudge_success() {
         final String nudge = "nudge";
         doAnswer(invocation -> {
             NudgeGetCallback callback = (NudgeGetCallback) invocation.getArguments()[3];
             callback.onSuccess(nudge);
             return null;
-        }).when(nudgeDataSource).getNudge(anyString(),anyLong(),anyLong(),any());
+        }).when(nudgeDataSource).getNudge(anyString(), anyLong(), anyLong(), any());
         todayViewModel.getNudge(LocalDateTime.now());
         todayViewModel.observeNudgeState(nudgeUiState -> {
             System.out.println("observer for getNudge");
             assertNull(nudgeUiState.getError());
-            assertEquals(nudgeUiState.getContent(),nudge);
+            assertEquals(nudgeUiState.getContent(), nudge);
             assertFalse(nudgeUiState.isDeleted());
         });
 
     }
+
     @Test
-    public void getNudge_empty(){
+    public void getNudge_empty() {
         doAnswer(invocation -> {
             NudgeGetCallback callback = (NudgeGetCallback) invocation.getArguments()[3];
             callback.onSuccess("");
             return null;
-        }).when(nudgeDataSource).getNudge(anyString(),anyLong(),anyLong(),any());
+        }).when(nudgeDataSource).getNudge(anyString(), anyLong(), anyLong(), any());
         todayViewModel.getNudge(LocalDateTime.now());
         todayViewModel.observeNudgeState(nudgeUiState -> {
             System.out.println("observer for getNudge");
             assertNull(nudgeUiState.getError());
-            assertEquals(nudgeUiState.getContent(),"");
+            assertEquals(nudgeUiState.getContent(), "");
             assertTrue(nudgeUiState.isDeleted());
         });
     }
+
     @Test
-    public void getNudge_fail(){
+    public void getNudge_fail() {
         doAnswer(invocation -> {
             NudgeGetCallback callback = (NudgeGetCallback) invocation.getArguments()[3];
             callback.onFailure(new UnauthorizedAccessException());
             return null;
-        }).when(nudgeDataSource).getNudge(anyString(),anyLong(),anyLong(),any());
+        }).when(nudgeDataSource).getNudge(anyString(), anyLong(), anyLong(), any());
         todayViewModel.getNudge(LocalDateTime.now());
         todayViewModel.observeNudgeState(nudgeUiState -> {
             System.out.println("observer for getNudge");
             assertTrue(nudgeUiState.getError() instanceof UnauthorizedAccessException);
         });
     }
+
     @Test
-    public void deleteNudge_success(){
+    public void deleteNudge_success() {
         doAnswer(invocation -> {
             NudgeDeleteCallback callback = (NudgeDeleteCallback) invocation.getArguments()[1];
             callback.onSuccess();
             return null;
-        }).when(nudgeDataSource).deleteNudge(anyString(),any());
+        }).when(nudgeDataSource).deleteNudge(anyString(), any());
         todayViewModel.deleteNudge();
         todayViewModel.observeNudgeState(nudgeUiState -> {
             System.out.println("observer for deleteNudge");
             assertNull(nudgeUiState.getError());
-            assertEquals(nudgeUiState.getContent(),"");
+            assertEquals(nudgeUiState.getContent(), "");
             assertTrue(nudgeUiState.isDeleted());
         });
     }
+
     @Test
-    public void deleteNudge_fail(){
+    public void deleteNudge_fail() {
         doAnswer(invocation -> {
             NudgeDeleteCallback callback = (NudgeDeleteCallback) invocation.getArguments()[1];
             callback.onFailure(new UnauthorizedAccessException());
             return null;
-        }).when(nudgeDataSource).deleteNudge(anyString(),any());
+        }).when(nudgeDataSource).deleteNudge(anyString(), any());
         todayViewModel.deleteNudge();
         todayViewModel.observeNudgeState(nudgeUiState -> {
             System.out.println("observer for deleteNudge");

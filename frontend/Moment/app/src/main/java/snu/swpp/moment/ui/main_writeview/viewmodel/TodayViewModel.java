@@ -306,7 +306,6 @@ public class TodayViewModel extends ViewModel {
     }
 
 
-
     public void observeMomentState(Observer<MomentUiState> observer) {
         momentState.observeForever(observer);
     }
