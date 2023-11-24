@@ -4,11 +4,10 @@ import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.NudgeGetResponse;
-import snu.swpp.moment.api.response.NudgeMarkResponse;
+import snu.swpp.moment.api.response.NudgeDeleteResponse;
 import snu.swpp.moment.data.callback.NudgeGetCallback;
-import snu.swpp.moment.data.callback.NudgeMarkCallback;
+import snu.swpp.moment.data.callback.NudgeDeleteCallback;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
@@ -41,12 +40,12 @@ public class NudgeRemoteDataSource extends BaseRemoteDataSource {
         });
     }
 
-    public void markNudge(String access_token, NudgeMarkCallback callback) {
+    public void deleteNudge(String access_token, NudgeDeleteCallback callback) {
         String bearer = "Bearer " + access_token;
-        service.markNudge(bearer).enqueue(new Callback<>() {
+        service.deleteNudge(bearer).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<NudgeMarkResponse> call,
-                Response<NudgeMarkResponse> response) {
+            public void onResponse(Call<NudgeDeleteResponse> call,
+                Response<NudgeDeleteResponse> response) {
                 Log.d("APICall", "markNudge: " + response.code());
 
                 if (response.isSuccessful()) {
@@ -59,7 +58,7 @@ public class NudgeRemoteDataSource extends BaseRemoteDataSource {
             }
 
             @Override
-            public void onFailure(Call<NudgeMarkResponse> call, Throwable t) {
+            public void onFailure(Call<NudgeDeleteResponse> call, Throwable t) {
                 Log.d("APICall", "markNudge: onFailure");
                 callback.onFailure(new NoInternetException());
 

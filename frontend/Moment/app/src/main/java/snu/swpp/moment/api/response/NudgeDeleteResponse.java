@@ -2,7 +2,7 @@ package snu.swpp.moment.api.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class NudgeMarkResponse {
+public class NudgeDeleteResponse {
 
     public String getMessage() {
         return message;

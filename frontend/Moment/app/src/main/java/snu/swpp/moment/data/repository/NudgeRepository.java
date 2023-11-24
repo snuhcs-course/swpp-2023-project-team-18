@@ -1,7 +1,7 @@
 package snu.swpp.moment.data.repository;
 
 import snu.swpp.moment.data.callback.NudgeGetCallback;
-import snu.swpp.moment.data.callback.NudgeMarkCallback;
+import snu.swpp.moment.data.callback.NudgeDeleteCallback;
 import snu.swpp.moment.data.source.NudgeRemoteDataSource;
 
 public class NudgeRepository extends BaseRepository<NudgeRemoteDataSource> {
@@ -24,8 +24,8 @@ public class NudgeRepository extends BaseRepository<NudgeRemoteDataSource> {
         });
     }
 
-    public void markNudge(String access_token, NudgeMarkCallback callback) {
-        remoteDataSource.markNudge(access_token, new NudgeMarkCallback() {
+    public void deleteNudge(String access_token, NudgeDeleteCallback callback) {
+        remoteDataSource.deleteNudge(access_token, new NudgeDeleteCallback() {
             @Override
             public void onSuccess() {
                 callback.onSuccess();

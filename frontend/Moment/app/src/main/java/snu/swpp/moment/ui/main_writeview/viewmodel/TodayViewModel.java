@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
 import snu.swpp.moment.data.callback.NudgeGetCallback;
-import snu.swpp.moment.data.callback.NudgeMarkCallback;
+import snu.swpp.moment.data.callback.NudgeDeleteCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
@@ -284,13 +283,13 @@ public class TodayViewModel extends ViewModel {
 
     }
 
-    public void markNudge() {
+    public void deleteNudge() {
         authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
 
             @Override
             public void onSuccess() {
                 String access_token = authenticationRepository.getToken().getAccessToken();
-                nudgeRepository.markNudge(access_token, new NudgeMarkCallback() {
+                nudgeRepository.deleteNudge(access_token, new NudgeDeleteCallback() {
                     @Override
                     public void onSuccess() {
                         nudgeState.setValue(new NudgeUiState(null, true, ""));

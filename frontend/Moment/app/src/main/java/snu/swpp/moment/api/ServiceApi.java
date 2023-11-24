@@ -23,7 +23,7 @@ import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.MomentGetResponse;
 import snu.swpp.moment.api.response.MomentWriteResponse;
 import snu.swpp.moment.api.response.NudgeGetResponse;
-import snu.swpp.moment.api.response.NudgeMarkResponse;
+import snu.swpp.moment.api.response.NudgeDeleteResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.response.ScoreSaveResponse;
 import snu.swpp.moment.api.response.SearchContentsResponse;
@@ -103,6 +103,6 @@ public interface ServiceApi {
         @Query("start") long start, @Query("end") long end);
 
     @POST("/api/writing/nudges/mark/")
-    Call<NudgeMarkResponse> markNudge(@Header("Authorization") String bearerToken);
+    Call<NudgeDeleteResponse> deleteNudge(@Header("Authorization") String bearerToken);
 
 }

@@ -1,6 +1,6 @@
 package snu.swpp.moment.data.callback;
 
-public interface NudgeMarkCallback {
+public interface NudgeDeleteCallback {
 
     void onSuccess();
 

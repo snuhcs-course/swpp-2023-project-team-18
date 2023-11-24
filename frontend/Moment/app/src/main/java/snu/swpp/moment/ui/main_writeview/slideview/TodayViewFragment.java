@@ -150,7 +150,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         nudgeHeaderContainer.setOnDeleteButtonClickedListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.markNudge();
+                viewModel.deleteNudge();
             }
         });
 
