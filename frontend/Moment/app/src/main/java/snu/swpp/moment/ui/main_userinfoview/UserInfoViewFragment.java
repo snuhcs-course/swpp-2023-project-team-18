@@ -50,12 +50,16 @@ public class UserInfoViewFragment extends Fragment {
         userInfoWrapperContainer.setCreatedAtText(daysPassedSinceRegistration);
 
         viewModel.getNicknameUpdateErrorState().observe(getViewLifecycleOwner(), errorState -> {
-            if (errorState.getError() == null)  {
+            if (errorState.getError() != null) {
+                String message = errorState.getError().getMessage();
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            } else if (userInfoWrapperContainer.isIconClicked())  {
                 Toast.makeText(requireContext(), R.string.nickname_update_success, Toast.LENGTH_SHORT).show();
             } else {
                 String message = errorState.getError().getMessage();
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
             }
+            userInfoWrapperContainer.setIconClicked(true);
         });
 
         // 수정 아이콘

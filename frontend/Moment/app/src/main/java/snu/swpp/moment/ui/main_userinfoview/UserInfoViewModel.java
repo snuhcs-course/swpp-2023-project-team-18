@@ -37,6 +37,7 @@ public class UserInfoViewModel extends ViewModel {
             @Override
             public void onSuccess(String nickname) {
                 setNickname(nickname);
+                nicknameUpdateErrorState.setValue(new NicknameUpdateErrorState(null));
             }
 
             @Override

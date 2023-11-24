@@ -19,12 +19,14 @@ public class UserInfoWrapperContainer {
 
     private final UserInfoWrapperBinding binding;
     private UserInfoWrapperState state;
+    private boolean isIconClicked;
 
     private final int MAX_LENGTH = 20;
 
     public UserInfoWrapperContainer(UserInfoWrapperBinding binding) {
         this.binding = binding;
         this.state = UserInfoWrapperState.READ;
+        this.isIconClicked = false;
 
         // 닉네임 자수 제한 검사
         binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {
@@ -69,6 +71,14 @@ public class UserInfoWrapperContainer {
         updatePenIcon();
         updateEditText();
         updateWarningText();
+    }
+
+    public boolean isIconClicked() {
+        return isIconClicked;
+    }
+
+    public void setIconClicked(boolean isIconClicked) {
+        this.isIconClicked = isIconClicked;
     }
 
     private void updatePenIcon() {
@@ -120,7 +130,7 @@ public class UserInfoWrapperContainer {
         binding.nicknameEdittext.setText(nickname);
     }
 
-    public void setCreatedAtText(long dayCount) {
+    public void setCreatedAtText(int dayCount) {
         int digit = Long.toString(dayCount).length();
         String text = "오늘까지 " + dayCount + "일째\n하루를 남기고 있어요";
         binding.createdAtText.setText(text);
