@@ -51,7 +51,8 @@ public interface ServiceApi {
     Call<RegisterResponse> userRegister(@Body RegisterRequest data);
 
     @PUT("/api/user/info")
-    Call<NicknameUpdateResponse> updateNickname(@Body NicknameUpdateRequest data);
+    Call<NicknameUpdateResponse> updateNickname(@Header("Authorization") String bearerToken,
+        @Body NicknameUpdateRequest data);
 
     @GET("api/writing/moments/")
     Call<MomentGetResponse> getMoments(@Header("Authorization") String bearerToken,

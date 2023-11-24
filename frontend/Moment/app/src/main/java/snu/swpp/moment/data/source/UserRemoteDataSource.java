@@ -137,9 +137,10 @@ public class UserRemoteDataSource extends BaseRemoteDataSource {
         });
     }
 
-    public void updateNickname(String token, String nickname, NicknameCallBack callBack) {
+    public void updateNickname(String access_token, String nickname, NicknameCallBack callBack) {
+        String bearer = "Bearer " + access_token;
         NicknameUpdateRequest request = new NicknameUpdateRequest(nickname);
-        service.updateNickname(request).enqueue(new Callback<>() {
+        service.updateNickname(bearer, request).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<NicknameUpdateResponse> call,
                 Response<NicknameUpdateResponse> response) {
