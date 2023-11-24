@@ -50,7 +50,9 @@ public class UserInfoViewFragment extends Fragment {
         userInfoWrapperContainer.setCreatedAtText(daysPassedSinceRegistration);
 
         viewModel.getNicknameUpdateErrorState().observe(getViewLifecycleOwner(), errorState -> {
-            if (errorState != null) {
+            if (errorState.getError() == null)  {
+                Toast.makeText(requireContext(), R.string.nickname_update_success, Toast.LENGTH_SHORT).show();
+            } else {
                 String message = errorState.getError().getMessage();
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
             }
