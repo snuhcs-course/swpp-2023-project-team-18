@@ -59,10 +59,7 @@ public class UserInfoViewFragment extends Fragment {
                 if (errorState.getError() instanceof UnauthorizedAccessException) {
                     startActivity(new Intent(requireActivity(), LoginActivity.class));
                 }
-            } else if (userInfoWrapperContainer.isIconClicked())  {
-                Toast.makeText(requireContext(), R.string.nickname_update_success, Toast.LENGTH_SHORT).show();
             }
-            userInfoWrapperContainer.setIconClicked(true);
         });
 
         // 수정 아이콘

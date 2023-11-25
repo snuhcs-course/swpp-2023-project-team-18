@@ -19,14 +19,12 @@ public class UserInfoWrapperContainer {
 
     private final UserInfoWrapperBinding binding;
     private UserInfoWrapperState state;
-    private boolean isIconClicked;
 
     private final int MAX_LENGTH = 20;
 
     public UserInfoWrapperContainer(UserInfoWrapperBinding binding) {
         this.binding = binding;
         this.state = UserInfoWrapperState.READ;
-        this.isIconClicked = false;
 
         // 닉네임 자수 제한 검사
         binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {
@@ -71,14 +69,6 @@ public class UserInfoWrapperContainer {
         updatePenIcon();
         updateEditText();
         updateWarningText();
-    }
-
-    public boolean isIconClicked() {
-        return isIconClicked;
-    }
-
-    public void setIconClicked(boolean isIconClicked) {
-        this.isIconClicked = isIconClicked;
     }
 
     private void updatePenIcon() {
