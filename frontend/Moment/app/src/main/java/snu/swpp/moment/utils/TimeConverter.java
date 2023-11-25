@@ -2,11 +2,13 @@ package snu.swpp.moment.utils;
 
 import android.util.Log;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
@@ -114,5 +116,16 @@ public class TimeConverter {
             result = result.minusDays(1);
         }
         return result;
+    }
+
+    public static String convertUTCToLocalTimeZone(String input) {
+        String dateTimeInString = input.substring(0, 19); // 초 단위까지만 끊어서 parsing
+
+        int SECONDS_PER_HOUR = 3600;
+        ZoneId localZoneId = ZoneId.systemDefault();
+        ZoneOffset offset = localZoneId.getRules().getOffset(Instant.now());
+        int hourDiff = offset.getTotalSeconds() / SECONDS_PER_HOUR; // 시차 계산
+
+        return LocalDateTime.parse(dateTimeInString).plusHours(hourDiff).toString();
     }
 }

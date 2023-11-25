@@ -26,15 +26,6 @@ public class UserInfoWrapperContainer {
         this.binding = binding;
         this.state = UserInfoWrapperState.READ;
 
-        // 수정 아이콘
-        binding.penIcon.setOnClickListener(v -> {
-            if (state == UserInfoWrapperState.READ) {
-                setState(UserInfoWrapperState.EDIT);
-            } else if (state == UserInfoWrapperState.EDIT) {
-                setState(UserInfoWrapperState.READ);
-            }
-        });
-
         // 닉네임 자수 제한 검사
         binding.nicknameEdittext.addTextChangedListener(new TextWatcher() {
             boolean isLimitExceeded = false;
@@ -61,6 +52,14 @@ public class UserInfoWrapperContainer {
                 }
             }
         });
+    }
+
+    public void setPenIconOnClickListener(View.OnClickListener listener) {
+        binding.penIcon.setOnClickListener(listener);
+    }
+
+    public UserInfoWrapperState getState() {
+        return state;
     }
 
     public void setState(UserInfoWrapperState state) {
@@ -111,6 +110,10 @@ public class UserInfoWrapperContainer {
                 binding.nicknameLengthWarningText.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    public String getNickname() {
+        return binding.nicknameEdittext.getText().toString();
     }
 
     public void setNickname(String nickname) {

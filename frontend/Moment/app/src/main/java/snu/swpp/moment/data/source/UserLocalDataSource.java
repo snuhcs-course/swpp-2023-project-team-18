@@ -7,8 +7,11 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import snu.swpp.moment.data.model.LoggedInUserModel;
 import snu.swpp.moment.data.model.TokenModel;
+import snu.swpp.moment.utils.TimeConverter;
 
 public class UserLocalDataSource {
 
@@ -42,6 +45,15 @@ public class UserLocalDataSource {
         // username은 오는데 저장은 따로 아직 안했음 (굳이?)
     }
 
+    public void saveNickname(String nickname) {
+        editor.putString("nickname", nickname);
+        editor.apply();
+    }
+
+    public String getNickname() {
+        return sharedPreferences.getString("nickname", DEFAULT_STRING);
+    }
+
     public void saveToken(String token) {
         editor.putString("access_token", token);
         editor.apply();
@@ -58,8 +70,13 @@ public class UserLocalDataSource {
             "refresh_token");
     }
 
-    public String getCreatedAt() {
-        return sharedPreferences.getString("created_at", DEFAULT_STRING);
+    public LocalDate getCreatedAt() {
+        String dateTimeInString = sharedPreferences.getString("created_at", DEFAULT_STRING)
+            .substring(0, 19); // 초 단위까지만 parsing;
+        if (dateTimeInString.isBlank()) {
+            return TimeConverter.getToday();
+        }
+        return TimeConverter.adjustToServiceDate(LocalDateTime.parse(dateTimeInString));
     }
 
     public void logout() {
