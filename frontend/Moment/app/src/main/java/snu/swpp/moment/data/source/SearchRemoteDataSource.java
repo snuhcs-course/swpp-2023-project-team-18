@@ -1,36 +1,29 @@
 package snu.swpp.moment.data.source;
 
 import android.util.Log;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.api.response.SearchContentsResponse;
-import snu.swpp.moment.api.response.SearchHashtagsResponse;
 import snu.swpp.moment.api.response.SearchHashTagGetCompleteResponse;
+import snu.swpp.moment.api.response.SearchHashtagsResponse;
 import snu.swpp.moment.data.callback.SearchEntriesGetCallBack;
-import snu.swpp.moment.data.callback.SearchHashTagGetCallBack;
 import snu.swpp.moment.data.callback.SearchHashTagCompleteCallBack;
+import snu.swpp.moment.data.callback.SearchHashTagGetCallBack;
 import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
 
-public class SearchRemoteDataSource {
+public class SearchRemoteDataSource extends BaseRemoteDataSource {
 
-    private ServiceApi service;
-
-    public SearchRemoteDataSource() {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
-    }
-
-    public void getCompleteHashTagList(String access_token, String query, SearchHashTagCompleteCallBack callback) {
+    public void getCompleteHashTagList(String access_token, String query,
+        SearchHashTagCompleteCallBack callback) {
         String bearer = "Bearer " + access_token;
 
-        service.getCompleteHashTags(bearer, query).enqueue(new Callback<SearchHashTagGetCompleteResponse>() {
+        service.getCompleteHashTags(bearer, query).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<SearchHashTagGetCompleteResponse> call, Response<SearchHashTagGetCompleteResponse> response) {
+            public void onResponse(Call<SearchHashTagGetCompleteResponse> call,
+                Response<SearchHashTagGetCompleteResponse> response) {
                 Log.d("APICall", "getCompleteHashTags: " + response.code());
                 if (response.isSuccessful()) {
                     SearchHashTagGetCompleteResponse result = response.body();
@@ -50,15 +43,17 @@ public class SearchRemoteDataSource {
         });
     }
 
-    public void getContentSearchList(String access_token, String query, SearchEntriesGetCallBack callback) {
+    public void getContentSearchList(String access_token, String query,
+        SearchEntriesGetCallBack callback) {
         String bearer = "Bearer " + access_token;
 
-        service.getContentSearchList(bearer, query).enqueue(new Callback<SearchContentsResponse>() {
+        service.getContentSearchList(bearer, query).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<SearchContentsResponse> call, Response<SearchContentsResponse> response) {
+            public void onResponse(Call<SearchContentsResponse> call,
+                Response<SearchContentsResponse> response) {
                 Log.d("APICall", "getContentSearchList: " + response.code());
                 if (response.isSuccessful()) {
-                    Log.d("APIContent","content: "+response.body().getSearchentries());
+                    Log.d("APIContent", "content: " + response.body().getSearchentries());
 
                     SearchContentsResponse result = response.body();
                     callback.onSuccess(result);
@@ -77,12 +72,14 @@ public class SearchRemoteDataSource {
         });
     }
 
-    public void getHashtagSearchList(String access_token, String query, SearchHashTagGetCallBack callback) {
+    public void getHashtagSearchList(String access_token, String query,
+        SearchHashTagGetCallBack callback) {
         String bearer = "Bearer " + access_token;
 
-        service.getHashtagSearchList(bearer, query).enqueue(new Callback<SearchHashtagsResponse>() {
+        service.getHashtagSearchList(bearer, query).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<SearchHashtagsResponse> call, Response<SearchHashtagsResponse> response) {
+            public void onResponse(Call<SearchHashtagsResponse> call,
+                Response<SearchHashtagsResponse> response) {
                 Log.d("APICall", "getHashtagSearchList: " + response.code());
                 if (response.isSuccessful()) {
                     SearchHashtagsResponse result = response.body();

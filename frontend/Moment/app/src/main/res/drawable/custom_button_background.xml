@@ -3,18 +3,18 @@
     <!-- Button pressed state -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/button_pressed"/>
-            <corners android:radius="84.4dp"/>
-            <size android:width="150dp"/>
+            <solid android:color="@color/button_pressed" />
+            <corners android:radius="84.4dp" />
+            <size android:width="150dp" />
         </shape>
     </item>
 
     <!-- Button default state -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/button_idle"/>
-            <corners android:radius="84.4dp"/>
-            <size android:width="150dp"/>
+            <solid android:color="@color/button_idle" />
+            <corners android:radius="84.4dp" />
+            <size android:width="150dp" />
         </shape>
     </item>
 </selector>

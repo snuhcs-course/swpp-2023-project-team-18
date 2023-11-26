@@ -1,5 +1,6 @@
 package snu.swpp.moment.ui.main_writeview;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
+import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.databinding.FragmentWriteviewBinding;
 import snu.swpp.moment.ui.main_writeview.slideview.SlideViewAdapter;
@@ -30,17 +32,25 @@ public class WriteViewFragment extends Fragment {
     private boolean isInTodayPage = true;
     private final int OFF_SCREEN_PAGE_LIMIT = 3;
 
+    private AuthenticationRepositoryFactory authenticationRepositoryFactory;
     private AuthenticationRepository authenticationRepository;
 
     private AnimationProvider animationProvider;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        authenticationRepositoryFactory = new AuthenticationRepositoryFactory(context);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
         ViewGroup container, Bundle savedInstanceState) {
         Log.d("WriteViewFragment", "onCreateView");
 
         try {
-            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
-        } catch (Exception e) {
+            authenticationRepository = authenticationRepositoryFactory.getRepository();
+        } catch (RuntimeException e) {
             Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
             startActivity(intent);
@@ -109,14 +119,8 @@ public class WriteViewFragment extends Fragment {
     }
 
     private int calculateNumPages() {
-        String dateInString = authenticationRepository.getCreatedAt();
-        if (dateInString.isBlank()) {
-            return 1;
-        }
+        LocalDate createdAt = authenticationRepository.getCreatedAt();
         LocalDate today = TimeConverter.getToday();
-        LocalDate createdAt = LocalDate.parse(dateInString.substring(0, 10));
-        int hour = Integer.parseInt(dateInString.substring(11, 13));
-        createdAt = TimeConverter.adjustToServiceDate(createdAt, hour);
 
         return (int) ChronoUnit.DAYS.between(createdAt, today) + 1;
     }

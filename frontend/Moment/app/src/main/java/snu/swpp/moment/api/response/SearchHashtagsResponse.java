@@ -3,6 +3,7 @@ package snu.swpp.moment.api.response;
 import java.util.List;
 
 public class SearchHashtagsResponse {
+
     private List<SearchEntry> searchentries;
 
     public void setSearchentries(
@@ -16,6 +17,7 @@ public class SearchHashtagsResponse {
     }
 
     public static class SearchEntry {
+
         private String title;
         private String content;
         private long created_at;

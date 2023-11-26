@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
 
-      xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id = "@+id/con"
+        android:id="@+id/con"
         tools:context=".ui.main_statview.StatViewFragment">
 
         <include
@@ -22,7 +22,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/stat_duration_container"
             tools:visibility="visible" />
-
 
 
         <include
@@ -46,7 +45,7 @@
             app:layout_constraintTop_toBottomOf="@+id/stat_duration_container"
             app:layout_constraintBottom_toTopOf="@+id/stat_day_score_info"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/stat_day_score_info"
@@ -58,9 +57,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="하루의 점수"
             android:textSize="14sp"
-            android:fontFamily="@font/maruburi_bold"
-            />
-
+            android:fontFamily="@font/maruburi_bold" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/stat_line_chart"
@@ -71,8 +68,7 @@
             android:layout_marginLeft="15dp"
             app:layout_constraintDimensionRatio="2:1"
             app:layout_constraintTop_toBottomOf="@+id/stat_day_score_info"
-            app:layout_constraintBottom_toTopOf="@id/average_score_text"
-            />
+            app:layout_constraintBottom_toTopOf="@id/average_score_text" />
 
 
         <TextView
@@ -88,7 +84,7 @@
             app:layout_constraintBottom_toTopOf="@+id/average_score_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"/>
+            app:layout_constraintHorizontal_weight="1" />
 
         <TextView
             android:id="@+id/average_score_text_view"
@@ -119,7 +115,7 @@
             app:layout_constraintStart_toEndOf="@+id/average_score_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/stat_border2"
-            app:layout_constraintHorizontal_weight="1"/>
+            app:layout_constraintHorizontal_weight="1" />
 
         <View
             android:id="@+id/stat_border2"
@@ -132,7 +128,7 @@
             app:layout_constraintTop_toBottomOf="@+id/average_score_text_view"
             app:layout_constraintBottom_toTopOf="@+id/stat_emotion_info"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/stat_emotion_info"
@@ -145,8 +141,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="하루의 감정"
             android:textSize="14sp"
-            android:fontFamily="@font/maruburi_bold"
-            />
+            android:fontFamily="@font/maruburi_bold" />
 
 
         <com.github.mikephil.charting.charts.PieChart
@@ -159,8 +154,7 @@
             app:layout_constraintDimensionRatio="1.8:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/stat_emotion_info"
-            app:layout_constraintBottom_toTopOf="@+id/statPieChartLegend"
-            />
+            app:layout_constraintBottom_toTopOf="@+id/statPieChartLegend" />
 
         <include
             android:id="@+id/statPieChartLegend"
@@ -170,7 +164,6 @@
             app:layout_constraintTop_toBottomOf="@+id/stat_pie_chart"
             app:layout_constraintBottom_toTopOf="@+id/stat_border3"
             tools:visibility="visible" />
-
 
 
         <View
@@ -184,7 +177,7 @@
             app:layout_constraintTop_toBottomOf="@+id/statPieChartLegend"
             app:layout_constraintBottom_toTopOf="@+id/stat_hashtag_info"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/stat_hashtag_info"
@@ -198,30 +191,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="하루의 태그"
             android:textSize="14sp"
-            android:fontFamily="@font/maruburi_bold"
-            />
+            android:fontFamily="@font/maruburi_bold" />
 
 
         <FrameLayout
-          android:id="@+id/frame"
-          android:layout_width="0dp"
-          android:layout_height="0dp"
-          app:layout_constraintWidth_percent="1"
-          app:layout_constraintDimensionRatio="1:1"
-          app:layout_constraintTop_toBottomOf="@id/stat_hashtag_info"
-          app:layout_constraintEnd_toEndOf="parent">
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/stat_word_cloud"
+            android:id="@+id/frame"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintWidth_percent="1"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toBottomOf="@id/stat_hashtag_info"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/stat_word_cloud"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="1"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toBottomOf="@id/stat_hashtag_info"
+                app:layout_constraintEnd_toEndOf="parent" />
         </FrameLayout>
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+</ScrollView>

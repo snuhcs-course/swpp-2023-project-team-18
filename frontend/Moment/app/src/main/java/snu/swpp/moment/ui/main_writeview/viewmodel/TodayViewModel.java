@@ -13,18 +13,22 @@ import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
+import snu.swpp.moment.data.callback.NudgeGetCallback;
+import snu.swpp.moment.data.callback.NudgeDeleteCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.MomentPairModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.data.repository.NudgeRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.utils.EmotionMap;
 import snu.swpp.moment.utils.TimeConverter;
@@ -41,23 +45,27 @@ public class TodayViewModel extends ViewModel {
     private final MutableLiveData<CompletionStoreResultState> storyResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> emotionResultState = new MutableLiveData<>();
     private final MutableLiveData<CompletionStoreResultState> tagsResultState = new MutableLiveData<>();
+    private final MutableLiveData<NudgeUiState> nudgeState = new MutableLiveData<>();
     private final SaveScoreUseCase saveScoreUseCase;
 
     private final GetStoryUseCase getStoryUseCase;
     private final AuthenticationRepository authenticationRepository;
     private final MomentRepository momentRepository;
     private final StoryRepository storyRepository;
+    private final NudgeRepository nudgeRepository;
 
     public TodayViewModel(
         AuthenticationRepository authenticationRepository,
         MomentRepository momentRepository,
         StoryRepository storyRepository,
+        NudgeRepository nudgeRepository,
         GetStoryUseCase getStoryUseCase,
         SaveScoreUseCase saveScoreUseCase
     ) {
         this.authenticationRepository = authenticationRepository;
         this.momentRepository = momentRepository;
         this.storyRepository = storyRepository;
+        this.nudgeRepository = nudgeRepository;
         this.getStoryUseCase = getStoryUseCase;
         this.saveScoreUseCase = saveScoreUseCase;
     }
@@ -248,9 +256,55 @@ public class TodayViewModel extends ViewModel {
         saveScoreUseCase.saveScore(storyId, score);
     }
 
-    public @Nullable StoryUiState getSavedStoryState() {
-        return getStoryUseCase.getStoryState();
+    public void getNudge(LocalDateTime now) {
+
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+            long[] todayTomorrowTimestamp = TimeConverter.getOneDayIntervalTimestamps(now);
+            long start = todayTomorrowTimestamp[0];
+            long end = todayTomorrowTimestamp[1] + 1;
+
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                nudgeRepository.getNudge(access_token, start, end, new NudgeGetCallback() {
+                    @Override
+                    public void onSuccess(String nudge) {
+                        nudgeState.setValue(new NudgeUiState(null, nudge.isEmpty(), nudge));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        nudgeState.setValue(NudgeUiState.withError(error));
+                    }
+                });
+            }
+        });
+
+
     }
+
+    public void deleteNudge() {
+        authenticationRepository.isTokenValid(new WriteViewTokenCallback() {
+
+            @Override
+            public void onSuccess() {
+                String access_token = authenticationRepository.getToken().getAccessToken();
+                nudgeRepository.deleteNudge(access_token, new NudgeDeleteCallback() {
+                    @Override
+                    public void onSuccess() {
+                        nudgeState.setValue(new NudgeUiState(null, true, ""));
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+                        nudgeState.setValue(NudgeUiState.withError(error));
+                    }
+                });
+
+            }
+        });
+    }
+
 
     public void observeMomentState(Observer<MomentUiState> observer) {
         momentState.observeForever(observer);
@@ -282,6 +336,10 @@ public class TodayViewModel extends ViewModel {
 
     public void observeScoreResultState(Observer<CompletionStoreResultState> observer) {
         saveScoreUseCase.observeScoreResultState(observer);
+    }
+
+    public void observeNudgeState(Observer<NudgeUiState> observer) {
+        nudgeState.observeForever(observer);
     }
 
 

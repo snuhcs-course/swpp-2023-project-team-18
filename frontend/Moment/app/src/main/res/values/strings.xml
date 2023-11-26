@@ -107,4 +107,8 @@
     <string name="search_hashtag_button">해시태그</string>
     <string name="search_content_button">내용</string>
 
+    <!-- 유저정보 탭 -->
+    <string name="nickname_too_long">닉네임은 20자까지만 쓸 수 있어요</string>
+    <string name="nickname_update_success">닉네임이 변경되었습니다</string>
+
 </resources>

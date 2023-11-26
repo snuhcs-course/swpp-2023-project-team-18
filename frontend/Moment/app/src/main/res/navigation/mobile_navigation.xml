@@ -35,9 +35,4 @@
         android:name="snu.swpp.moment.ui.main_userinfoview.UserInfoViewFragment"
         tools:layout="@layout/fragment_userinfoview" />
 
-    <fragment
-        android:id="@+id/LogoutView"
-        android:name="snu.swpp.moment.ui.main_logout_temp.LogoutViewFragment"
-        tools:layout="@layout/fragment_logoutview" />
-
 </navigation>

@@ -1,10 +1,12 @@
 package snu.swpp.moment.ui.main_writeview.slideview;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
@@ -17,16 +19,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.model.MomentPairModel;
-import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.data.repository.MomentRepository;
-import snu.swpp.moment.data.repository.StoryRepository;
-import snu.swpp.moment.data.source.MomentRemoteDataSource;
-import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
@@ -34,8 +30,6 @@ import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
 import snu.swpp.moment.ui.main_writeview.component.WritePageState;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
-import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
-import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
@@ -53,47 +47,32 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
     private TodayViewModel viewModel;
 
-    private AuthenticationRepository authenticationRepository;
-    private MomentRepository momentRepository;
-    private MomentRemoteDataSource momentRemoteDataSource;
-    private StoryRepository storyRepository;
-    private StoryRemoteDataSource storyRemoteDataSource;
-    private GetStoryUseCase getStoryUseCase;
-    private SaveScoreUseCase saveScoreUseCase;
-
     private final int MOMENT_HOUR_LIMIT = 2;
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            viewModel = new ViewModelProvider(this,
+                new TodayViewModelFactory(
+                    dataUnitFactory.authenticationRepository(),
+                    dataUnitFactory.momentRepository(),
+                    dataUnitFactory.storyRepository(),
+                    dataUnitFactory.nudgeRepository(),
+                    dataUnitFactory.getStoryUseCase(),
+                    dataUnitFactory.saveScoreUseCase()
+                )
+            ).get(TodayViewModel.class);
+        } catch (RuntimeException e) {
+            Toast.makeText(context, "알 수 없는 오류", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, LoginRegisterActivity.class);
+            startActivity(intent);
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        momentRemoteDataSource = Objects.requireNonNullElse(momentRemoteDataSource,
-            new MomentRemoteDataSource());
-        momentRepository = Objects.requireNonNullElse(momentRepository,
-            new MomentRepository(momentRemoteDataSource));
-        storyRemoteDataSource = Objects.requireNonNullElse(storyRemoteDataSource,
-            new StoryRemoteDataSource());
-        storyRepository = Objects.requireNonNullElse(storyRepository,
-            new StoryRepository(storyRemoteDataSource));
-
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(requireContext());
-        } catch (Exception e) {
-            Toast.makeText(requireContext(), "알 수 없는 인증 오류", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(requireContext(), LoginRegisterActivity.class);
-            startActivity(intent);
-        }
-
-        getStoryUseCase = Objects.requireNonNullElse(getStoryUseCase,
-            new GetStoryUseCase(authenticationRepository, storyRepository));
-        saveScoreUseCase = Objects.requireNonNullElse(saveScoreUseCase,
-            new SaveScoreUseCase(authenticationRepository, storyRepository));
-
-        if (viewModel == null) {
-            viewModel = new ViewModelProvider(this,
-                new TodayViewModelFactory(authenticationRepository, momentRepository,
-                    storyRepository, getStoryUseCase, saveScoreUseCase)).get(TodayViewModel.class);
-        }
 
         binding = PageTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -167,13 +146,11 @@ public class TodayViewFragment extends BaseWritePageFragment {
 
         // nudge header 관리 객체 초기화
         nudgeHeaderContainer = new NudgeHeaderContainer(headerView);
-        // TODO: API로 받아온 UiState를 observe 해서 내용 update
-        final String nudgeContent = "요즘은 계속 우울한 나날을 보내고 계신 것 같아요. 오늘은 기분이 어때요? 어떤 재미있는 계획이 있나요?";
-        nudgeHeaderContainer.updateUi(new NudgeUiState(null, false, nudgeContent));
-
-        nudgeHeaderContainer.observeDeleteSwitch(deleteSwitch -> {
-            if (deleteSwitch) {
-                // TODO: nudge 숨기기 API 호출
+        viewModel.observeNudgeState(nudgeHeaderContainer.nudgeUiStateObserver());
+        nudgeHeaderContainer.setOnDeleteButtonClickedListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.deleteNudge();
             }
         });
 
@@ -303,6 +280,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
         apiResponseManager.reset();
         viewModel.getMoment(now);
         viewModel.getStory(now);
+        viewModel.getNudge(now);
     }
 
     @Override

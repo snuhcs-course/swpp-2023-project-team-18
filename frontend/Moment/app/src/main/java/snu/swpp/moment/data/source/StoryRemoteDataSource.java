@@ -4,8 +4,6 @@ import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.api.request.EmotionSaveRequest;
 import snu.swpp.moment.api.request.HashtagSaveRequest;
 import snu.swpp.moment.api.request.ScoreSaveRequest;
@@ -34,13 +32,10 @@ import snu.swpp.moment.exception.NoInternetException;
 import snu.swpp.moment.exception.UnauthorizedAccessException;
 import snu.swpp.moment.exception.UnknownErrorException;
 
-public class StoryRemoteDataSource {
-
-    private ServiceApi service;
+public class StoryRemoteDataSource extends BaseRemoteDataSource {
 
     public void getStory(String access_token, long start, long end, StoryGetCallBack callBack) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         Log.d("StoryRemoteDataSource", "getStory start: " + start + ", end: " + end);
         service.getStories(bearer, start, end).enqueue(new Callback<>() {
             @Override
@@ -67,7 +62,6 @@ public class StoryRemoteDataSource {
     public void notifyCompletion(String access_token, long start, long end,
         StoryCompletionNotifyCallBack callback) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         StoryCompletionNotifyRequest request = new StoryCompletionNotifyRequest(start, end);
 
         service.notifyStoryCompletion(bearer, request).enqueue(
@@ -96,7 +90,6 @@ public class StoryRemoteDataSource {
 
     public void getAiGeneratedStory(String access_token, AiStoryCallback callback) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
 
         service.getAIGeneratedStory(bearer).enqueue(new Callback<>() {
             @Override
@@ -124,7 +117,6 @@ public class StoryRemoteDataSource {
     public void saveStory(String access_token, String title, String content,
         StorySaveCallback callback) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         StorySaveRequest request = new StorySaveRequest(title, content);
 
         service.saveStory(bearer, request).enqueue(new Callback<>() {
@@ -150,7 +142,6 @@ public class StoryRemoteDataSource {
 
     public void saveEmotion(String access_token, String emotion, EmotionSaveCallback callback) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         EmotionSaveRequest request = new EmotionSaveRequest(emotion);
 
         service.saveEmotion(bearer, request).enqueue(new Callback<>() {
@@ -179,7 +170,6 @@ public class StoryRemoteDataSource {
     public void saveScore(String access_token, int story_id, int score,
         ScoreSaveCallback callback) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         ScoreSaveRequest request = new ScoreSaveRequest(story_id, score);
 
         service.saveScore(bearer, request).enqueue(new Callback<>() {
@@ -208,7 +198,6 @@ public class StoryRemoteDataSource {
     public void saveHashtags(String access_token, int story_id, String content,
         HashtagSaveCallback callback) {
         String bearer = "Bearer " + access_token;
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         HashtagSaveRequest request = new HashtagSaveRequest(story_id, content);
         Log.d("StoryRemoteDataSource", "saving hashtags: " + content);
 

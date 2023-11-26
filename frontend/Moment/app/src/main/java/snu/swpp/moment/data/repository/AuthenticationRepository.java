@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import java.time.LocalDate;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.callback.NicknameCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.LoggedInUserModel;
@@ -18,11 +18,10 @@ import snu.swpp.moment.data.source.UserRemoteDataSource;
  * Class that requests authentication and user information from the remote data source and maintains
  * an in-memory cache of login status and user credentials information.
  */
-public class AuthenticationRepository {
+public class AuthenticationRepository extends BaseRepository<UserRemoteDataSource> {
 
     private static volatile AuthenticationRepository instance;
 
-    private final UserRemoteDataSource remoteDataSource;
     private final UserLocalDataSource localDataSource;
     private final CountingIdlingResource idlingResource;
 
@@ -33,16 +32,19 @@ public class AuthenticationRepository {
     // private constructor : singleton access
     private AuthenticationRepository(UserRemoteDataSource remoteDataSource,
         UserLocalDataSource localDataSource) {
-        this.remoteDataSource = remoteDataSource;
+        super(remoteDataSource);
         this.localDataSource = localDataSource;
         this.idlingResource = new CountingIdlingResource("authentication");
     }
 
-    public static AuthenticationRepository getInstance(Context context)
-        throws GeneralSecurityException, IOException {
+    public static AuthenticationRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new AuthenticationRepository(new UserRemoteDataSource(),
-                new UserLocalDataSource(context));
+            synchronized (AuthenticationRepository.class) {
+                if (instance == null) {
+                    instance = new AuthenticationRepository(new UserRemoteDataSource(),
+                        new UserLocalDataSource(context));
+                }
+            }
         }
         return instance;
     }
@@ -125,7 +127,6 @@ public class AuthenticationRepository {
         });
     }
 
-
     public void register(String username, String password, String nickname,
         AuthenticationCallBack registerCallBack) {
         remoteDataSource.register(username, password, nickname, new AuthenticationCallBack() {
@@ -142,11 +143,31 @@ public class AuthenticationRepository {
         });
     }
 
+    public String getNickname() {
+        return localDataSource.getNickname();
+    }
+
+
+    public void updateNickname(String access_token, String nickname, NicknameCallBack callback) {
+        remoteDataSource.updateNickname(access_token, nickname, new NicknameCallBack() {
+            @Override
+            public void onSuccess(String nickname) {
+                localDataSource.saveNickname(nickname);
+                callback.onSuccess(nickname);
+            }
+
+            @Override
+            public void onFailure(Exception error) {
+                callback.onFailure(error);
+            }
+        });
+    }
+
     public TokenModel getToken() {
         return localDataSource.getToken();
     }
 
-    public String getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return localDataSource.getCreatedAt();
     }
 
