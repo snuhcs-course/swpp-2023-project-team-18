@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-        // Set info button size
         // View가 완전히 생성된 후에 크기를 가져옵니다.
         toolbarTitle.post(new Runnable() {
             @Override
@@ -109,14 +107,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         //Wirte View의 타이틀이 항상 날짜로 나오도록 NavController의 타이틀 업데이트 비활성화:
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd.", Locale.getDefault());
         String currentDate = sdf.format(new Date());
         System.out.println("#Debug Mainactivity date ok");
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-
             if (destination.getId() == R.id.WriteView) {
                 setToolbarTitle(currentDate);
                 infoButton.setVisibility(View.VISIBLE);
@@ -137,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 setToolbarTitle("로그아웃");
             }
         });
-
 
         // MainActivity에서 뒤로가기 버튼이 눌린 경우 로그인 화면으로 돌아가지 않도록
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
