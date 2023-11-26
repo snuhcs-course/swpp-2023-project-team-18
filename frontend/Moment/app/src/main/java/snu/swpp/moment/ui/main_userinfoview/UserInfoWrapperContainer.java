@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 import snu.swpp.moment.R;
 import snu.swpp.moment.databinding.UserInfoWrapperBinding;
@@ -75,17 +76,23 @@ public class UserInfoWrapperContainer {
         switch (state) {
             case READ:
                 binding.penIcon.setEnabled(true);
-                binding.penIcon.setImageResource(R.drawable.pen);
+                setPenIconImage(R.drawable.pen);
                 break;
             case EDIT:
                 binding.penIcon.setEnabled(true);
-                binding.penIcon.setImageResource(R.drawable.moment_write_button);
+                setPenIconImage(R.drawable.moment_write_button);
                 break;
             case EDIT_LIMIT_EXCEEDED:
                 binding.penIcon.setEnabled(false);
-                binding.penIcon.setImageResource(R.drawable.moment_write_inactivate);
+                setPenIconImage(R.drawable.moment_write_inactivate);
                 break;
         }
+        Log.d("UserInfoWrapperContainer", "updatePenIcon: " + binding.penIcon.getTag());
+    }
+
+    private void setPenIconImage(@DrawableRes int resId) {
+        binding.penIcon.setImageResource(resId);
+        binding.penIcon.setTag(resId);  // for UI testing
     }
 
     private void updateEditText() {
