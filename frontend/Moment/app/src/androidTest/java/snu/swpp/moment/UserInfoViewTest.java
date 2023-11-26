@@ -1,6 +1,7 @@
 package snu.swpp.moment;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -71,5 +72,14 @@ public class UserInfoViewTest {
             .check(matches(withTagValue(equalTo(R.drawable.pen))));
         // 닉네임 입력창이 not clickable 상태가 됨
         onView(withId(R.id.nickname_edittext)).check(matches(isNotEnabled()));
+    }
+
+    @Test
+    public void whenNicknameLengthLimitExceeded_WarningIsDisplayed() {
+        onView(withId(R.id.pen_icon)).perform(forceClick());
+        onView(withId(R.id.nickname_edittext)).perform(forceClick(),
+            replaceText("닉네임!닉네임!닉네임!닉네임!닉네임!닉네임!"));
+        // 경고 문구 표시됨
+        onView(withId(R.id.nickname_length_warning_text)).check(matches(isDisplayed()));
     }
 }
