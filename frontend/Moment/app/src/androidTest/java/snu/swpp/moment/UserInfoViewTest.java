@@ -58,7 +58,7 @@ public class UserInfoViewTest {
         onView(withId(R.id.pen_icon)).perform(forceClick());
         // pen icon이 저장 버튼으로 바뀜
         onView(withId(R.id.pen_icon))
-            .check(matches(withTagValue(equalTo(R.drawable.moment_add_button))));
+            .check(matches(withTagValue(equalTo(R.drawable.moment_write_button))));
         // 닉네임 입력창이 clickable 상태가 됨
         onView(withId(R.id.nickname_edittext)).check(matches(isEnabled()));
     }
