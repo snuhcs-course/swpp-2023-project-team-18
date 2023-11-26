@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_guide_outer_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@drawable/help_dialog_design">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_guide_searchview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+
+
+        <TextView
+            android:id="@+id/user_guide_searchview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/user_guide_search_title"
+            android:fontFamily="@font/maruburi_bold"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_searchview_explanation1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_search_explanation1"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_text"
+            app:layout_constraintBottom_toTopOf="@id/user_guide_searchview_image1"/>
+
+
+        <ImageView
+            android:id="@+id/user_guide_searchview_image1"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_searchview_tagsearch"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation1"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_searchview_explanation2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_search_explanation2"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_image1"
+            />
+
+        <ImageView
+            android:id="@+id/user_guide_searchview_image2"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_searchview_tagsearch_result"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation2"
+            />
+
+
+        <TextView
+            android:id="@+id/user_guide_searchview_explanation3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_search_explanation3"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_image2"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_searchview_image3"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_searchview_content"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation3"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_searchview_explanation4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_search_explanation4"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_image3"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_searchview_image4"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_searchview_last"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation4"
+            />
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:layout_marginTop="20dp"
+            android:text="@string/user_guide_got_it"
+            android:fontFamily="@font/maruburi_regular"
+            app:layout_constraintTop_toBottomOf="@+id/user_guide_searchview_image4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="32dp"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
