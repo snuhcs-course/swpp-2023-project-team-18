@@ -40,7 +40,7 @@
         android:id="@+id/search_content_edittext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-      android:inputType="text"
+        android:inputType="text"
 
 
       android:layout_marginBottom="40dp"

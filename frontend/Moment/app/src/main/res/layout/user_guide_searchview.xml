@@ -8,7 +8,7 @@
     <!--  android:fillViewport="true" 지우면 잘됨 -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/user_guide_statview"
+        android:id="@+id/user_guide_searchview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
@@ -30,7 +30,7 @@
             app:layout_constraintGuide_percent="0.95" />
 
         <TextView
-            android:id="@+id/user_guide_statview_text"
+            android:id="@+id/user_guide_searchview_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="찾아보기"
@@ -44,7 +44,7 @@
             />
 
         <TextView
-            android:id="@+id/user_guide_statview_explanation1"
+            android:id="@+id/user_guide_searchview_explanation1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="찾아보기 탭에서는 작성된 스토리와 모먼트들을 해시태그 또는 내용으로 검색할 수 있어요. "
@@ -55,12 +55,12 @@
             android:layout_marginTop="14dp"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_text"
-            app:layout_constraintBottom_toTopOf="@id/user_guide_statview_image1"/>
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_text"
+            app:layout_constraintBottom_toTopOf="@id/user_guide_searchview_image1"/>
 
 
         <ImageView
-            android:id="@+id/user_guide_statview_image1"
+            android:id="@+id/user_guide_searchview_image1"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
 
@@ -70,11 +70,11 @@
             android:src="@drawable/user_guide_searchview_tagsearch"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation1"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation1"
             />
 
         <TextView
-            android:id="@+id/user_guide_statview_explanation2"
+            android:id="@+id/user_guide_searchview_explanation2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="해시태그 검색은 검색창에 입력된 글자가 포함된 해시태그를 추천해주고, 태그를 누르면 해시태그가 포함된 모든 스토리 목록을 보여줘요."
@@ -84,11 +84,11 @@
             android:layout_marginTop="14dp"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_image1"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_image1"
             />
 
         <ImageView
-            android:id="@+id/user_guide_statview_image2"
+            android:id="@+id/user_guide_searchview_image2"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
 
@@ -98,11 +98,11 @@
             android:src="@drawable/user_guide_searchview_tagsearch_result"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation2"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation2"
             />
 
         <TextView
-            android:id="@+id/user_guide_statview_explanation3"
+            android:id="@+id/user_guide_searchview_explanation3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="내용 검색은 찾고 싶은 단어를 입력하고 돋보기 버튼을 누르면 단어가 포함된 모든 스토리 목록을 보여줘요."
@@ -112,12 +112,12 @@
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_image2"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_image2"
             />
 
 
         <ImageView
-            android:id="@+id/user_guide_statview_image3"
+            android:id="@+id/user_guide_searchview_image3"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
 
@@ -127,11 +127,11 @@
             android:src="@drawable/user_guide_searchview_content"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation3"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation3"
             />
 
         <TextView
-            android:id="@+id/user_guide_statview_explanation4"
+            android:id="@+id/user_guide_searchview_explanation4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="검색 결과로 나타난 스토리를 터치하면 해당 날짜의 하루쓰기 탭으로 이동하고 모먼트와 스토리를 볼 수 있어요."
@@ -141,12 +141,12 @@
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_image3"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_image3"
             />
 
 
         <ImageView
-            android:id="@+id/user_guide_statview_image4"
+            android:id="@+id/user_guide_searchview_image4"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
 
@@ -156,7 +156,7 @@
             android:src="@drawable/user_guide_searchview_last"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation4"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_searchview_explanation4"
             />
 
         <Button
@@ -167,7 +167,7 @@
             android:layout_marginTop="20dp"
             android:text="이해했어요!"
             android:fontFamily="@font/maruburi_regular"
-            app:layout_constraintTop_toBottomOf="@+id/user_guide_statview_image4"
+            app:layout_constraintTop_toBottomOf="@+id/user_guide_searchview_image4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

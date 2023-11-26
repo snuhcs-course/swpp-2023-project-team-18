@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private ActivityMainBinding binding;
     private TextView toolbarTitle;
+    // 도움 버튼
+    private Button infoButton;
 
     private final MutableLiveData<LocalDate> writeDestinationDate = new MutableLiveData<>();
 
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle("");
 
         toolbarTitle = binding.appBarMain.textTitle;
-
+        infoButton = findViewById(R.id.info_button);
         setSupportActionBar(binding.appBarMain.toolbar);
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -114,30 +116,28 @@ public class MainActivity extends AppCompatActivity {
         String currentDate = sdf.format(new Date());
         System.out.println("#Debug Mainactivity date ok");
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+
             if (destination.getId() == R.id.WriteView) {
                 setToolbarTitle(currentDate);
+                infoButton.setVisibility(View.VISIBLE);
             } else if (destination.getId() == R.id.StatView) {
                 setToolbarTitle("돌아보기");
+                infoButton.setVisibility(View.VISIBLE);
             } else if (destination.getId() == R.id.SearchView) {
                 setToolbarTitle("찾아보기");
-            } else if (destination.getId() == R.id.UserInfoView) {
+                infoButton.setVisibility(View.VISIBLE);
+            } else if(destination.getId() == R.id.MonthView){
+                infoButton.setVisibility(View.VISIBLE);
+                // 그외에 MonthView는 fragment 안에서 별도로 설정
+            }else if (destination.getId() == R.id.UserInfoView) {
                 setToolbarTitle("내 정보");
+                infoButton.setVisibility(View.GONE);
             } else if (destination.getId() == R.id.LogoutView) {
+                infoButton.setVisibility(View.GONE);
                 setToolbarTitle("로그아웃");
             }
-            // MonthView는 fragment 안에서 별도로 설정
         });
 
-
-        // 도움 버튼 : frontend/P8
-        Button infoButton = findViewById(R.id.info_button);
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 여기에서 팝업을 띄우거나 원하는 동작을 수행합니다.
-                showHelpPopup();
-            }
-        });
 
         // MainActivity에서 뒤로가기 버튼이 눌린 경우 로그인 화면으로 돌아가지 않도록
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -151,6 +151,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         this.getOnBackPressedDispatcher().addCallback(this, callback);
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showHelpPopup();
+            }
+        });
     }
 
 
@@ -199,177 +206,106 @@ public class MainActivity extends AppCompatActivity {
         writeDestinationDate.setValue(null);
     }
 
-    /*
-    private void showInformationPopup() {
-        // 현재 NavController의 목적지 ID를 기반으로 정보를 표시합니다.
-        int currentDestinationId = navController.getCurrentDestination().getId();
-        String infoMessage = "";
-
-        if (currentDestinationId == R.id.WriteView) {
-            infoMessage = "하루쓰기";
-        } else if (currentDestinationId == R.id.MonthView) {
-            infoMessage = "한달보기";
-        } else if (currentDestinationId == R.id.StatView) {
-            infoMessage = "돌아보기";
-        } else if (currentDestinationId == R.id.SearchView) {
-            infoMessage = "찾아보기";
-        } else if (currentDestinationId == R.id.UserInfoView) {
-            infoMessage = "내 정보";
-        } else if (currentDestinationId == R.id.LogoutView) {
-            infoMessage = "로그아웃";
-        } else {
-            infoMessage = "알 수 없는 뷰";
-        }
-
-        showHelpPopup(infoMessage);
-    }
-    */
     // Help Popup
     private void showHelpPopup() {
-
-        // 현재 NavController의 목적지 ID를 기반으로 정보를 표시합니다.
         int currentDestinationId = navController.getCurrentDestination().getId();
-        String infoMessage = "";
+        Dialog helpDialog = createHelpDialog(currentDestinationId);
 
-
-        if (currentDestinationId == R.id.WriteView) {
-            infoMessage = "하루쓰기";
-        } else if (currentDestinationId == R.id.MonthView) {
-            infoMessage = "한달보기";
-        } else if (currentDestinationId == R.id.StatView) {
-            infoMessage = "돌아보기";
-        } else if (currentDestinationId == R.id.SearchView) {
-            infoMessage = "찾아보기";
-        } else if (currentDestinationId == R.id.UserInfoView) {
-            infoMessage = "내 정보";
-        } else if (currentDestinationId == R.id.LogoutView) {
-            infoMessage = "로그아웃";
-        } else {
-            infoMessage = "알 수 없는 뷰";
-        }
-
-
-
-
-        // Dialog 인스턴스를 생성
-        Dialog helpDialog = new Dialog(this);
-        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        // 볼드처리할 단어와 TextView ID를 매핑
-        HashMap<Integer, String> textViewMap = new HashMap<>();
-        // 커스텀 레이아웃을 사용하여 Dialog를 설정
-        if(infoMessage.equals("하루쓰기")) {
-            helpDialog.setContentView(R.layout.user_guide_writeview);
-
-
-            textViewMap.put(R.id.user_guide_writeview_explanation1, "하루쓰기");
-            textViewMap.put(R.id.user_guide_writeview_explanation2, "넛지");
-            textViewMap.put(R.id.user_guide_writeview_explanation3, "새 모먼트 추가하기");
-            textViewMap.put(R.id.user_guide_writeview_explanation4, "하루 마무리하기");
-            textViewMap.put(R.id.user_guide_writeview_explanation5, "AI에게 부탁하기");
-
-            // 반복문을 통해 각 TextView에 볼드처리 적용
-            for(Map.Entry<Integer, String> entry : textViewMap.entrySet()) {
-                TextView textView = helpDialog.findViewById(entry.getKey());
-                String boldUnderlineWord = entry.getValue();
-                applyBoldUnderlineSpan(textView, boldUnderlineWord);
-            }
-        }
-        else if(infoMessage.equals("돌아보기")){
-            helpDialog.setContentView(R.layout.user_guide_statview);
-
-            ImageView hashCloudGif = (ImageView) helpDialog.findViewById(R.id.user_guide_statview_image3);
-            if (hashCloudGif != null) {
-                Glide.with(this).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
-            }
-
-        }
-
-        else if(infoMessage.equals("한달보기")){
-            helpDialog.setContentView(R.layout.user_guide_monthview);
-
-        }
-        else if(infoMessage.equals("찾아보기")){
-            helpDialog.setContentView(R.layout.user_guide_searchview);
-        }
-        else
-            helpDialog.setContentView(R.layout.dialog_help);
-        // 도움말 텍스트를 설정합니다.
-        //TextView helpText = helpDialog.findViewById(R.id.tv_help_text);
-        //helpText.setText(infoMessage);
-
-
-/*
-        // 커스텀 레이아웃을 Dialog에 설정합니다.
-        if(infoMessage.equals("하루쓰기"))
-            helpDialog.setContentView(R.layout.user_guide_writeview); // 혹은 infoMessage에 따른 다른 레이아웃 설정
-        else if(infoMessage.equals("한달보기"))
-            helpDialog.setContentView(R.layout.user_guide_statview);
-        else
-            helpDialog.setContentView(R.layout.dialog_help); // 혹은 infoMessage에 따른 다른 레이아웃 설정
-*/
+        setupDialogContentView(helpDialog, currentDestinationId);
+        applyTextStyles(helpDialog);
+        setupCloseButton(helpDialog);
+        animateDialogContent(helpDialog);
         setHelpDialogSize(helpDialog);
 
-
-        // Dialog가 표시되기 전에 애니메이션을 설정합니다.
-        helpDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-
-        // "닫기" 버튼에 클릭 리스너를 설정합니다.
-        Button closeButton = helpDialog.findViewById(R.id.btn_close);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                helpDialog.dismiss(); // Dialog를 닫습니다.
-            }
-        });
-        closeButton.setActivated(true);
-        // Dialog를 화면에 표시
         helpDialog.show();
+    }
 
-        // Dialog 컨텐츠에 애니메이션을 적용합니다.
-        View dialogContent = helpDialog.findViewById(android.R.id.content);
+    private Dialog createHelpDialog(int currentDestinationId) {
+        Dialog helpDialog = new Dialog(this);
+        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return helpDialog;
+    }
+
+    // Note : switch-case로 하면 R.id.XXX 가 컴파일타임에 상수로 결정되지 않아서 문제가 생기는 것 같음
+    private void setupDialogContentView(Dialog dialog, int destinationId) {
+        if (destinationId == R.id.WriteView) {
+            dialog.setContentView(R.layout.user_guide_writeview);
+        } else if (destinationId == R.id.MonthView) {
+            dialog.setContentView(R.layout.user_guide_monthview);
+        } else if (destinationId == R.id.StatView) {
+            dialog.setContentView(R.layout.user_guide_statview);
+            setupStatViewDialog(dialog);
+        } else if (destinationId == R.id.SearchView) {
+            dialog.setContentView(R.layout.user_guide_searchview);
+        }
+    }
+
+    private void setupStatViewDialog(Dialog dialog) {
+        ImageView hashCloudGif = dialog.findViewById(R.id.user_guide_statview_image3);
+        if (hashCloudGif != null) {
+            Glide.with(this).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
+        }
+    }
+
+    private void applyTextStyles(Dialog dialog) {
+        HashMap<Integer, String> textViewMap = getBoldTextHashMap();
+        for (Map.Entry<Integer, String> entry : textViewMap.entrySet()) {
+            TextView textView = dialog.findViewById(entry.getKey());
+            if (textView != null) {
+                applyBoldUnderlineSpan(textView, entry.getValue());
+            }
+        }
+    }
+
+    private HashMap<Integer, String> getBoldTextHashMap() {
+        HashMap<Integer, String> textViewMap = new HashMap<>();
+
+        // WirteView
+        textViewMap.put(R.id.user_guide_writeview_explanation1, "하루쓰기");
+        textViewMap.put(R.id.user_guide_writeview_explanation2, "넛지");
+        textViewMap.put(R.id.user_guide_writeview_explanation3, "새 모먼트 추가하기");
+        textViewMap.put(R.id.user_guide_writeview_explanation4, "하루 마무리하기");
+        textViewMap.put(R.id.user_guide_writeview_explanation5, "AI에게 부탁하기");
+
+        // MonthView
+        textViewMap.put(R.id.user_guide_monthview_explanation1, "한달보기");
+
+        // StatView
+        textViewMap.put(R.id.user_guide_statview_explanation1, "돌아보기");
+
+        // SearchView
+        textViewMap.put(R.id.user_guide_searchview_explanation1, "찾아보기");
+
+        return textViewMap;
+    }
+
+    private void applyBoldUnderlineSpan(TextView textView, String boldUnderlinePart) {
+        String text = textView.getText().toString();
+        int start = text.indexOf(boldUnderlinePart);
+        if (start != -1) {
+            int end = start + boldUnderlinePart.length();
+            SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            spannable.setSpan(new UnderlineSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            textView.setText(spannable);
+        }
+    }
+
+    private void setupCloseButton(Dialog dialog) {
+        Button closeButton = dialog.findViewById(R.id.btn_close);
+        if (closeButton != null) {
+            closeButton.setActivated(true);
+            closeButton.setOnClickListener(v -> dialog.dismiss());
+        }
+    }
+
+    private void animateDialogContent(Dialog dialog) {
+        View dialogContent = dialog.findViewById(android.R.id.content);
         if (dialogContent != null) {
             Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
             dialogContent.startAnimation(fadeInAnimation);
         }
     }
-
-
-    /*
-    // 볼드처리를 적용하는 메소드 정의
-    private void applyBoldSpan(TextView textView, String boldWord) {
-        if (textView != null) {
-            String text = textView.getText().toString();
-            int start = text.indexOf(boldWord);
-            if (start != -1) {
-                int end = start + boldWord.length();
-                SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-                spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                textView.setText(spannable);
-            }
-        }
-    }
-    */
-
-
-    // 텍스트에 볼드와 밑줄 치는 함수
-    private void applyBoldUnderlineSpan(TextView textView, String boldUnderlinePart) {
-        if (textView != null && boldUnderlinePart != null) {
-            String text = textView.getText().toString();
-            int start = text.indexOf(boldUnderlinePart);
-            if (start != -1) {
-                int end = start + boldUnderlinePart.length();
-                SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-                // 볼드 스팬 적용
-                spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                // 밑줄 스팬 적용
-                spannable.setSpan(new UnderlineSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                textView.setText(spannable);
-            }
-        }
-    }
-
 
     private void setHelpDialogSize(Dialog helpDialog){
         // Dialog 사이즈 설정
@@ -386,6 +322,4 @@ public class MainActivity extends AppCompatActivity {
             window.setAttributes(lp);
         }
     }
-
-
 }
