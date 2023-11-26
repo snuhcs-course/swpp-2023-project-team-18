@@ -35,8 +35,10 @@ public class LoginAction {
     }
 
     private static void login() {
-        onView(withId(R.id.username)).perform(click(), replaceText(username));
-        onView(withId(R.id.password)).perform(click(), replaceText(password));
+        onView(withId(R.id.username)).perform(new DisableAutoFillAction(), click(),
+            replaceText(username));
+        onView(withId(R.id.password)).perform(new DisableAutoFillAction(), click(),
+            replaceText(password));
         onView(withId(R.id.login_button)).perform(forceClick());
     }
 }
