@@ -47,6 +47,8 @@ import java.util.Map;
 
 import snu.swpp.moment.databinding.ActivityMainBinding;
 import snu.swpp.moment.utils.AnimationProvider;
+import snu.swpp.moment.utils.userguide_dialog.CustomDialog;
+import snu.swpp.moment.utils.userguide_dialog.CustomDialogFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd.", Locale.getDefault());
         String currentDate = sdf.format(new Date());
         System.out.println("#Debug Mainactivity date ok");
+
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.WriteView) {
                 setToolbarTitle(currentDate);
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 // 그외에 MonthView는 fragment 안에서 별도로 설정
             } else if (destination.getId() == R.id.UserInfoView) {
                 setToolbarTitle("내 정보");
+                infoButton.setVisibility(View.GONE);
             }
         });
 
@@ -200,77 +204,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Help Popup
     private void showHelpPopup() {
-        // 현재 NavController의 목적지 ID
         int currentDestinationId = navController.getCurrentDestination().getId();
-
-        // 지정된 4개의 뷰 중 하나가 아니면 메서드 종료
-        if (!(currentDestinationId == R.id.WriteView ||
-                currentDestinationId == R.id.MonthView ||
-                currentDestinationId == R.id.StatView ||
-                currentDestinationId == R.id.SearchView)) {
-            return;
-        }
-
-        // Dialog 인스턴스를 생성
-        Dialog helpDialog = new Dialog(this);
-        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
-        if(currentDestinationId == R.id.WriteView) {
-            helpDialog.setContentView(R.layout.user_guide_writeview);
-        }
-        else if(currentDestinationId == R.id.MonthView){
-            helpDialog.setContentView(R.layout.user_guide_monthview);
-        }
-        else if(currentDestinationId == R.id.StatView){
-            helpDialog.setContentView(R.layout.user_guide_statview);
-            ImageView hashCloudGif = (ImageView) helpDialog.findViewById(R.id.user_guide_statview_image3);
-            if (hashCloudGif != null) {
-                Glide.with(this).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
-            }
-        }
-        else if(currentDestinationId == R.id.SearchView){
-            helpDialog.setContentView(R.layout.user_guide_searchview);
-        }
-
-
-        Button closeButton = helpDialog.findViewById(R.id.btn_close);
-        closeButton.setActivated(true);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                helpDialog.dismiss();
-            }
-        });
-
-        // Dialog 컨텐츠에 애니메이션을 적용
-        View dialogContent = helpDialog.findViewById(android.R.id.content);
-        if (dialogContent != null) {
-            Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-            dialogContent.startAnimation(fadeInAnimation);
-        }
-
-        // 상대적인 크기 적용
-        setHelpDialogSize(helpDialog);
-
-        // Dialog를 화면에 표시
+        CustomDialog helpDialog = CustomDialogFactory.createDialog(this, currentDestinationId);
         helpDialog.show();
     }
-
-    private void setHelpDialogSize(Dialog helpDialog){
-        // Dialog 사이즈 설정
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = helpDialog.getWindow();
-        if (window != null) {
-            lp.copyFrom(window.getAttributes());
-            // Dialog의 너비와 높이를 화면의 80%로 설정
-            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-            int dialogWidth = (int)(displayMetrics.widthPixels * 0.9);
-            int dialogHeight = (int)(displayMetrics.heightPixels * 0.8);
-            lp.width = dialogWidth;
-            lp.height = dialogHeight;
-            window.setAttributes(lp);
-        }
-    }
-
 }

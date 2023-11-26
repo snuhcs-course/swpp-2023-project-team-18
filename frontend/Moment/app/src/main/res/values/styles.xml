@@ -73,5 +73,5 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
-    
+
 </resources>
