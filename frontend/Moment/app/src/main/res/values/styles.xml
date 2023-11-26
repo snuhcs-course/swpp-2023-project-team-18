@@ -73,10 +73,5 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
-
-
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/fade_in</item>
-    </style>
-
+    
 </resources>

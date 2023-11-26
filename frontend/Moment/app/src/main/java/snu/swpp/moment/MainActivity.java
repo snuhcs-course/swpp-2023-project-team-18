@@ -92,10 +92,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 // AppBar의 높이
                 int appBarHeight = toolbarTitle.getHeight();
-
                 // AppBar 높이의 80% 계산
                 int buttonSize = (int) (appBarHeight);
-
                 // 버튼 참조
                 Button infoButton = findViewById(R.id.info_button);
 
@@ -202,103 +200,61 @@ public class MainActivity extends AppCompatActivity {
 
     // Help Popup
     private void showHelpPopup() {
+        // 현재 NavController의 목적지 ID
         int currentDestinationId = navController.getCurrentDestination().getId();
-        Dialog helpDialog = createHelpDialog(currentDestinationId);
 
-        setupDialogContentView(helpDialog, currentDestinationId);
-        applyTextStyles(helpDialog);
-        setupCloseButton(helpDialog);
-        animateDialogContent(helpDialog);
-        setHelpDialogSize(helpDialog);
+        // 지정된 4개의 뷰 중 하나가 아니면 메서드 종료
+        if (!(currentDestinationId == R.id.WriteView ||
+                currentDestinationId == R.id.MonthView ||
+                currentDestinationId == R.id.StatView ||
+                currentDestinationId == R.id.SearchView)) {
+            return;
+        }
 
-        helpDialog.show();
-    }
-
-    private Dialog createHelpDialog(int currentDestinationId) {
+        // Dialog 인스턴스를 생성
         Dialog helpDialog = new Dialog(this);
         helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        return helpDialog;
-    }
 
-    // Note : switch-case로 하면 R.id.XXX 가 컴파일타임에 상수로 결정되지 않아서 문제가 생기는 것 같음
-    private void setupDialogContentView(Dialog dialog, int destinationId) {
-        if (destinationId == R.id.WriteView) {
-            dialog.setContentView(R.layout.user_guide_writeview);
-        } else if (destinationId == R.id.MonthView) {
-            dialog.setContentView(R.layout.user_guide_monthview);
-        } else if (destinationId == R.id.StatView) {
-            dialog.setContentView(R.layout.user_guide_statview);
-            setupStatViewDialog(dialog);
-        } else if (destinationId == R.id.SearchView) {
-            dialog.setContentView(R.layout.user_guide_searchview);
+
+        if(currentDestinationId == R.id.WriteView) {
+            helpDialog.setContentView(R.layout.user_guide_writeview);
         }
-    }
-
-    private void setupStatViewDialog(Dialog dialog) {
-        ImageView hashCloudGif = dialog.findViewById(R.id.user_guide_statview_image3);
-        if (hashCloudGif != null) {
-            Glide.with(this).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
+        else if(currentDestinationId == R.id.MonthView){
+            helpDialog.setContentView(R.layout.user_guide_monthview);
         }
-    }
-
-    private void applyTextStyles(Dialog dialog) {
-        HashMap<Integer, String> textViewMap = getBoldTextHashMap();
-        for (Map.Entry<Integer, String> entry : textViewMap.entrySet()) {
-            TextView textView = dialog.findViewById(entry.getKey());
-            if (textView != null) {
-                applyBoldUnderlineSpan(textView, entry.getValue());
+        else if(currentDestinationId == R.id.StatView){
+            helpDialog.setContentView(R.layout.user_guide_statview);
+            ImageView hashCloudGif = (ImageView) helpDialog.findViewById(R.id.user_guide_statview_image3);
+            if (hashCloudGif != null) {
+                Glide.with(this).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
             }
         }
-    }
-
-    private HashMap<Integer, String> getBoldTextHashMap() {
-        HashMap<Integer, String> textViewMap = new HashMap<>();
-
-        // WirteView
-        textViewMap.put(R.id.user_guide_writeview_explanation1, "하루쓰기");
-        textViewMap.put(R.id.user_guide_writeview_explanation2, "넛지");
-        textViewMap.put(R.id.user_guide_writeview_explanation3, "새 모먼트 추가하기");
-        textViewMap.put(R.id.user_guide_writeview_explanation4, "하루 마무리하기");
-        textViewMap.put(R.id.user_guide_writeview_explanation5, "AI에게 부탁하기");
-
-        // MonthView
-        textViewMap.put(R.id.user_guide_monthview_explanation1, "한달보기");
-
-        // StatView
-        textViewMap.put(R.id.user_guide_statview_explanation1, "돌아보기");
-
-        // SearchView
-        textViewMap.put(R.id.user_guide_searchview_explanation1, "찾아보기");
-
-        return textViewMap;
-    }
-
-    private void applyBoldUnderlineSpan(TextView textView, String boldUnderlinePart) {
-        String text = textView.getText().toString();
-        int start = text.indexOf(boldUnderlinePart);
-        if (start != -1) {
-            int end = start + boldUnderlinePart.length();
-            SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            spannable.setSpan(new UnderlineSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            textView.setText(spannable);
+        else if(currentDestinationId == R.id.SearchView){
+            helpDialog.setContentView(R.layout.user_guide_searchview);
         }
-    }
 
-    private void setupCloseButton(Dialog dialog) {
-        Button closeButton = dialog.findViewById(R.id.btn_close);
-        if (closeButton != null) {
-            closeButton.setActivated(true);
-            closeButton.setOnClickListener(v -> dialog.dismiss());
-        }
-    }
 
-    private void animateDialogContent(Dialog dialog) {
-        View dialogContent = dialog.findViewById(android.R.id.content);
+        Button closeButton = helpDialog.findViewById(R.id.btn_close);
+        closeButton.setActivated(true);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpDialog.dismiss();
+            }
+        });
+
+        // Dialog 컨텐츠에 애니메이션을 적용
+        View dialogContent = helpDialog.findViewById(android.R.id.content);
         if (dialogContent != null) {
             Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
             dialogContent.startAnimation(fadeInAnimation);
         }
+
+        // 상대적인 크기 적용
+        setHelpDialogSize(helpDialog);
+
+        // Dialog를 화면에 표시
+        helpDialog.show();
     }
 
     private void setHelpDialogSize(Dialog helpDialog){
@@ -316,4 +272,5 @@ public class MainActivity extends AppCompatActivity {
             window.setAttributes(lp);
         }
     }
+
 }
