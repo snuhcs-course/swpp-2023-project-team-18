@@ -79,6 +79,9 @@ public class UserInfoViewTest {
         onView(withId(R.id.pen_icon)).perform(forceClick());
         onView(withId(R.id.nickname_edittext)).perform(forceClick(),
             replaceText("닉네임!닉네임!닉네임!닉네임!닉네임!닉네임!"));
+        // 저장 버튼이 비활성화됨
+        onView(withId(R.id.pen_icon))
+            .check(matches(withTagValue(equalTo(R.drawable.moment_write_inactivate))));
         // 경고 문구 표시됨
         onView(withId(R.id.nickname_length_warning_text)).check(matches(isDisplayed()));
     }

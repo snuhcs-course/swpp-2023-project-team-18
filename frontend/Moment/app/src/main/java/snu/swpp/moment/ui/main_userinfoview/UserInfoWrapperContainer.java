@@ -87,6 +87,7 @@ public class UserInfoWrapperContainer {
                 setPenIconImage(R.drawable.moment_write_inactivate);
                 break;
         }
+        Log.d("UserInfoWrapperContainer", "updatePenIcon: " + binding.penIcon.getTag());
     }
 
     private void setPenIconImage(@DrawableRes int resId) {
