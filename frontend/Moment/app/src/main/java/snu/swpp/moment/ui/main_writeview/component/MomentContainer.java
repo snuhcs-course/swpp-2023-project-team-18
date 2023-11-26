@@ -147,9 +147,10 @@ public class MomentContainer {
                 addButtonText.startAnimation(animationProvider.fadeOut);
                 addButtonText.setVisibility(View.GONE);
                 addButtonInactive.setVisibility(View.GONE);
-                submitButtonInactive.startAnimation(animationProvider.fadeIn);
+                submitButtonInactive.startAnimation(animationProvider.delayedFadeIn);
                 submitButtonInactive.setVisibility(View.VISIBLE);
                 submitButton.setVisibility(View.GONE);
+                submitButtonTextInactive.startAnimation(animationProvider.delayedFadeIn);
                 submitButtonTextInactive.setVisibility(View.VISIBLE);
                 submitButtonText.setVisibility(View.GONE);
                 addLimitWarnText.setVisibility(View.GONE);
