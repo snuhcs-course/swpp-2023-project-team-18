@@ -33,6 +33,7 @@
         style="@style/BIG_BLACK_BOLD"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
+        android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:background="@null"
         android:inputType="text"
