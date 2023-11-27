@@ -123,7 +123,13 @@ public class ListFooterContainer {
             } else {
                 setState(WritePageState.FOOTER_INVISIBLE);
             }
-        } else {
+        }
+        else if(storyUiState.isEmotionInvalid()){
+            setState(WritePageState.AUTO_COMPLETED);
+            storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
+            storyContainer.setCompletedDate(storyUiState.getCreatedAt());
+        }
+        else {
             setState(WritePageState.COMPLETE);
             storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
             storyContainer.setCompletedDate(storyUiState.getCreatedAt());
@@ -184,6 +190,7 @@ public class ListFooterContainer {
             case TAG:
             case SCORE:
             case COMPLETE:
+            case AUTO_COMPLETED:
                 storyContainer.setState(StoryContainerState.COMPLETE);
                 break;
             default:

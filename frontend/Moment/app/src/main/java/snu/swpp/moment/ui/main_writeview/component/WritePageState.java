@@ -11,4 +11,5 @@ public enum WritePageState {
     TAG,
     SCORE,
     COMPLETE,
+    AUTO_COMPLETED
 }
