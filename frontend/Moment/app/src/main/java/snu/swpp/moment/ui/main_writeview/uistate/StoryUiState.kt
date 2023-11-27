@@ -22,7 +22,7 @@ class StoryUiState(
             isEmpty = true,
             title = "",
             content = "",
-            emotion = 0,
+            emotion = EmotionMap.INVALID_EMOTION,
             tags = listOf(),
             score = 0,
             createdAt = Date(),
@@ -35,7 +35,7 @@ class StoryUiState(
             isEmpty = true,
             title = "",
             content = "",
-            emotion = 0,
+            emotion = EmotionMap.INVALID_EMOTION,
             tags = listOf(),
             score = 0,
             createdAt = Date(),
@@ -45,6 +45,9 @@ class StoryUiState(
 
     fun hasNoData(): Boolean {
         Log.d("StoryUiState", "title: $title, isEmpty: $isEmpty, emotion: $emotion")
-        return isEmpty || (emotion == EmotionMap.INVALID_EMOTION)
+        return isEmpty && (emotion == EmotionMap.INVALID_EMOTION)
+    }
+    fun isEmotionInvalid():Boolean{
+        return !isEmpty && emotion == EmotionMap.INVALID_EMOTION
     }
 }
