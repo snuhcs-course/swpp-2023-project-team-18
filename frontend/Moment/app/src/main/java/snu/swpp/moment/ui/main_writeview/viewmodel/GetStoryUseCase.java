@@ -66,7 +66,7 @@ public class GetStoryUseCase {
                                 storyId = storyInstance.getId();
 
                                 storyState.setValue(
-                                    new StoryUiState(null, false, title, content, emotion,
+                                    new StoryUiState(null, content.isEmpty(), title, content, emotion,
                                         parsedTags,
                                         score,
                                         createdAt,
