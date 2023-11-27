@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Wirte View의 타이틀이 항상 날짜로 나오도록 NavController의 타이틀 업데이트 비활성화:
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd.", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd. E", Locale.KOREA);//다른 탭 갔다 왔을 때 요일이 잠시 영어로 보이는 문제 해결 위해 Locale을 직접 지정
         String currentDate = sdf.format(new Date());
         System.out.println("#Debug Mainactivity date ok");
 
