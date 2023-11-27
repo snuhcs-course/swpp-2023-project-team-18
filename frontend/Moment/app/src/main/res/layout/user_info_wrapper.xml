@@ -33,13 +33,13 @@
         style="@style/BIG_BLACK_BOLD"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:paddingRight="7dp"
+        android:paddingEnd="8dp"
         android:background="@null"
         android:inputType="text"
 
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/pen_icon"
+        app:layout_constraintEnd_toEndOf="@id/border"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@id/border"
         app:layout_constraintTop_toTopOf="parent" />
