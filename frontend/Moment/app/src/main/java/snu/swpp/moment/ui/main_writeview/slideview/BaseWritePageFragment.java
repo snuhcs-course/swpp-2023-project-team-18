@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -104,10 +105,21 @@ public abstract class BaseWritePageFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        apiResponseManager.resetData();
+        apiResponseManager.resetProcessor();
+        refreshHandler.removeCallbacksAndMessages(null);
+    }
+
     protected static class ApiResponseManager {
 
+        @Nullable
         MomentUiState momentUiState = null;
+        @Nullable
         StoryUiState storyUiState = null;
+        @Nullable
         ApiResponseProcessor processor = null;
 
         void saveResponse(MomentUiState momentUiState) {
@@ -118,16 +130,23 @@ public abstract class BaseWritePageFragment extends Fragment {
             this.storyUiState = storyUiState;
         }
 
-        void reset() {
+        void resetData() {
             momentUiState = null;
             storyUiState = null;
         }
 
-        void registerProcessor(ApiResponseProcessor processor) {
+        void setProcessor(@NonNull ApiResponseProcessor processor) {
             this.processor = processor;
         }
 
+        void resetProcessor() {
+            this.processor = null;
+        }
+
         void process() {
+            if (processor == null) {
+                return;
+            }
             if (momentUiState == null || storyUiState == null) {
                 return;
             }
@@ -137,7 +156,8 @@ public abstract class BaseWritePageFragment extends Fragment {
 
     interface ApiResponseProcessor {
 
-        void processApiResponse(MomentUiState momentUiState, StoryUiState storyUiState);
+        void processApiResponse(@NonNull MomentUiState momentUiState,
+            @NonNull StoryUiState storyUiState);
     }
 }
 
