@@ -6,24 +6,29 @@
     android:layout_height="match_parent">
 
     <Button
+        tools:visibility="visible"
         android:id="@+id/addButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/moment_add_button"
         android:clickable="true"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
 
     <Button
+        tools:visibility="visible"
         android:id="@+id/addButtonInactive"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/moment_add_button_inactivated"
         android:clickable="true"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper" />
+        app:layout_constraintTop_toBottomOf="@+id/momentEditTextWrapper"
+      />
     <Button
         android:id="@+id/submitButton"
         android:layout_width="30dp"
