@@ -14,6 +14,9 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.Locale;
 import snu.swpp.moment.R;
@@ -178,6 +181,7 @@ public class StoryContainer {
                 storyWrapper.setVisibility(View.GONE);
                 break;
             case WRITING:
+                completeTimeText.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
                 storyWrapper.setVisibility(View.VISIBLE);
                 storyWrapper.startAnimation(animationProvider.fadeIn);
                 break;
