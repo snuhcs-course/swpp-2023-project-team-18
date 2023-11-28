@@ -206,6 +206,13 @@ public class MainActivity extends AppCompatActivity {
     private void showHelpPopup() {
         int currentDestinationId = navController.getCurrentDestination().getId();
         CustomDialog helpDialog = CustomDialogFactory.createDialog(this, currentDestinationId);
+
+        // StatView user guide gif requires dialog object
+        if (currentDestinationId == R.id.StatView) {
+            ImageView hashCloudGif = (ImageView) helpDialog.findViewById(R.id.user_guide_statview_image3);
+            Glide.with(this).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
+        }
+
         helpDialog.show();
     }
 }
