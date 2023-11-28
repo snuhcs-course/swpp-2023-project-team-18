@@ -121,7 +121,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/user_guide_statview_hashcloud_smallsize"
+            android:src="@drawable/user_guide_hashcloud_gif"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation3"
