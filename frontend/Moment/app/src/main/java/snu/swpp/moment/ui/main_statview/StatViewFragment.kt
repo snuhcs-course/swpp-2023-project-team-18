@@ -88,7 +88,7 @@ class StatViewFragment : Fragment() {
         }
         binding.statWordCloud.setOnTouchListener { v, event ->
             Log.d("touch2", "touch")
-            binding.con.requestDisallowInterceptTouchEvent(true)
+            binding.statviewLayout.requestDisallowInterceptTouchEvent(true)
             return@setOnTouchListener false
 
         }
@@ -98,6 +98,10 @@ class StatViewFragment : Fragment() {
         // Include된 버튼, 기간을 포함하는 레이아웃에 대한 바인딩 객체 생성
         val buttonDateBinding =
             StatButtonDateBinding.bind(root.findViewById(R.id.statUtilContainer))
+
+        buttonDateBinding.statWeekButton.setText(getString(R.string.stat_section_week))
+        buttonDateBinding.statMonthButton.setText(getString(R.string.stat_section_month))
+
         val durationBinding =
             StatDurationBinding.bind(root.findViewById(R.id.stat_duration_container))
         // 기간 설정을 위한 코드

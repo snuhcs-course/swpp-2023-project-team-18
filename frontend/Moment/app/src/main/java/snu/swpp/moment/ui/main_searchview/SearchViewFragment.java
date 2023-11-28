@@ -69,6 +69,10 @@ public class SearchViewFragment extends Fragment {
         hashtagButton = root.findViewById(R.id.search_hashtag_button);
         contentButton = root.findViewById(R.id.search_content_button);
 
+        // 문자열 리소스를 사용하여 버튼 텍스트 설정
+        hashtagButton.setText(getString(R.string.search_hashtag_button));
+        contentButton.setText(getString(R.string.search_content_button));
+
         // Set up listeners for the buttons
         hashtagButton.setOnClickListener(v -> {
             currentSearchMode = SearchMode.HASHTAG;

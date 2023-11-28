@@ -7,7 +7,6 @@
     android:layout_marginTop="?attr/actionBarSize"
     tools:context=".ui.main_searchview.SearchViewFragment">
 
-
     <include
         android:id="@+id/search_button_container"
         layout="@layout/search_button_type"
@@ -18,18 +17,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible" />
 
-
     <EditText
         android:id="@+id/search_hashtag_edittext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/maruburi_light"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="40dp"
         android:inputType="text"
 
 
         android:hint="해시태그 검색"
-        android:textSize="14dp"
+        style="@style/BIG_BLACK"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,8 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="text"
-
-
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="40dp"
         app:layout_constraintWidth_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/search_button_container"
         android:hint="내용 검색"
         android:fontFamily="@font/maruburi_light"
-        android:textSize="14dp"
+        style="@style/BIG_BLACK"
         tools:visibility="invisible" />
 
     <ImageButton

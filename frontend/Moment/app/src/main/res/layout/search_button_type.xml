@@ -4,19 +4,18 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_button_container"
-    tools:layout_height="40dp"
+    tools:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <Button
         android:id="@+id/search_hashtag_button"
-        android:layout_width="@dimen/stat_view_button_width"
-        android:layout_height="@dimen/stat_view_button_height"
-        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text=""
         android:fontFamily="@font/maruburi_bold"
-        android:text="@string/search_hashtag_button"
-        android:textSize="13sp"
-        android:background="@drawable/button"
+        style="@style/NORMAL_WHITE"
+        android:background="@drawable/button_small"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/search_content_button"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,14 +23,13 @@
 
     <Button
         android:id="@+id/search_content_button"
-        android:layout_width="@dimen/stat_view_button_width"
-        android:layout_height="@dimen/stat_view_button_height"
-        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text=""
         android:layout_marginStart="10dp"
         android:fontFamily="@font/maruburi_bold"
-        android:text="@string/search_content_button"
-        android:textSize="13sp"
-        android:background="@drawable/button"
+        style="@style/NORMAL_WHITE"
+        android:background="@drawable/button_small"
         app:layout_constraintStart_toEndOf="@id/search_hashtag_button"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
