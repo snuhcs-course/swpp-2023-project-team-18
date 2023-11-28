@@ -14,11 +14,6 @@ public class CustomDialogFactory {
         CustomDialog dialog = new CustomDialog(context);
 
         dialog.setView(destinationId); // 뷰 설정
-        if(destinationId == R.id.StatView){
-            //set gif image works
-            ImageView hashCloudGif = dialog.findViewById(R.id.user_guide_statview_image3);
-            Glide.with(context).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
-        }
         dialog.setCustomAnimations(); // 애니메이션 설정
         dialog.setCustomSize(); // 사이즈 설정
         dialog.setCloseButton(R.id.btn_close); // 닫기(이해했어요) 버튼 설정

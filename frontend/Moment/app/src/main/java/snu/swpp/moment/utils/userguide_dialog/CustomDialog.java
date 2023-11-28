@@ -31,6 +31,11 @@ public class CustomDialog extends Dialog {
             setContentView(R.layout.user_guide_monthview);
         } else if (destinationId == R.id.StatView) {
             setContentView(R.layout.user_guide_statview);
+            ImageView hashCloudGif = findViewById(R.id.user_guide_statview_image3);
+            Glide.with(getContext())
+                    .load(R.drawable.user_guide_statview_hashcloud_smallsize) // 로드할 GIF
+                    .placeholder(R.drawable.user_guide_statview_hashcloud) // 로딩 중에 표시될 임시 이미지
+                    .into(hashCloudGif); // 이미지를 표시할 ImageView
         } else if (destinationId == R.id.SearchView) {
             setContentView(R.layout.user_guide_searchview);
         }
@@ -60,6 +65,7 @@ public class CustomDialog extends Dialog {
             window.setAttributes(lp);
         }
     }
+
     // 이해했어요 버튼 설정
     public void setCloseButton(int closeButtonId) {
         Button closeButton = findViewById(closeButtonId);
