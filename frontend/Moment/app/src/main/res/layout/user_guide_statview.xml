@@ -91,7 +91,6 @@
             android:id="@+id/user_guide_statview_image2"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
-
             android:layout_marginTop="20dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -115,7 +114,6 @@
             app:layout_constraintTop_toBottomOf="@id/user_guide_statview_image2"
             />
 
-
         <ImageView
             android:id="@+id/user_guide_statview_image3"
             android:scaleType="fitStart"
@@ -123,7 +121,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/gif_user_guide_hashcloud"
+            android:src="@drawable/user_guide_hashcloud_gif"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@id/user_guide_statview_explanation3"

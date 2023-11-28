@@ -2,6 +2,9 @@ package snu.swpp.moment.utils.userguide_dialog;
 
 import android.content.Context;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import snu.swpp.moment.R;
 
