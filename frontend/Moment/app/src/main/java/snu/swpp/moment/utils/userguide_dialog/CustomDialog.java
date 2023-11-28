@@ -10,7 +10,11 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
+
+import com.bumptech.glide.Glide;
 
 import snu.swpp.moment.R;
 
@@ -27,6 +31,9 @@ public class CustomDialog extends Dialog {
             setContentView(R.layout.user_guide_monthview);
         } else if (destinationId == R.id.StatView) {
             setContentView(R.layout.user_guide_statview);
+            //set gif image works
+            ImageView hashCloudGif = findViewById(R.id.user_guide_statview_image3);
+            Glide.with(getContext()).load(R.drawable.gif_user_guide_hashcloud).into(hashCloudGif);
         } else if (destinationId == R.id.SearchView) {
             setContentView(R.layout.user_guide_searchview);
         }
