@@ -101,6 +101,8 @@ public abstract class BaseWritePageFragment extends Fragment {
             startActivity(intent);
         } else {
             Toast.makeText(requireContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+            callApisToRefresh();
+            updateRefreshTime();
         }
     }
 
