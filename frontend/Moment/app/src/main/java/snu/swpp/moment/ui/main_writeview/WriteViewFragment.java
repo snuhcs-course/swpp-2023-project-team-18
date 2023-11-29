@@ -38,7 +38,7 @@ public class WriteViewFragment extends Fragment {
     private AnimationProvider animationProvider;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         authenticationRepositoryFactory = new AuthenticationRepositoryFactory(context);
     }
@@ -100,6 +100,10 @@ public class WriteViewFragment extends Fragment {
                 boolean newValue = position == numPages - 1;
                 showBackToTodayButton(!newValue, isInTodayPage && !newValue);
                 isInTodayPage = newValue;
+
+                if (slideViewAdapter.getFragment(position).isCompletionInProgress()) {
+                    binding.viewpager.setUserInputEnabled(false);
+                }
             }
         });
 

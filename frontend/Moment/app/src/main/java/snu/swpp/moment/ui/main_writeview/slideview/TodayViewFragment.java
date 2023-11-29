@@ -317,4 +317,9 @@ public class TodayViewFragment extends BaseWritePageFragment {
         binding = null;
         listFooterContainer.removeObservers();
     }
+
+    @Override
+    public boolean isCompletionInProgress() {
+        return listFooterContainer.isCompletionInProgress();
+    }
 }

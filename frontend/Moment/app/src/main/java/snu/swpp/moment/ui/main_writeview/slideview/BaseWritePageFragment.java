@@ -48,6 +48,10 @@ public abstract class BaseWritePageFragment extends Fragment {
         }
     }
 
+    public boolean isCompletionInProgress() {
+        return false;
+    }
+
     protected void setToolbarTitle() {
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.setToolbarTitle(getDateText());
