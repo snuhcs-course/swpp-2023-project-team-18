@@ -27,6 +27,7 @@ import snu.swpp.moment.databinding.PageTodayBinding;
 import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
+import snu.swpp.moment.ui.main_writeview.component.StoryContainer;
 import snu.swpp.moment.ui.main_writeview.component.WritePageState;
 import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
@@ -187,6 +188,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
             listViewAdapter.notifyDataSetChanged();
 
             bottomButtonContainer.updateWithServerData(storyUiState, doMomentsExist);
+            // FIXME: for test
+            //bottomButtonContainer.setState(WritePageState.STORY);
         }));
 
         // moment GET API response를 받았을 때

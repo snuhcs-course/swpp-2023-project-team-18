@@ -259,6 +259,7 @@ public class ListFooterContainer {
 
     public String[] getStoryInput() {
         return new String[]{
+
             storyContainer.getStoryTitle(),
             storyContainer.getStoryContent()
         };

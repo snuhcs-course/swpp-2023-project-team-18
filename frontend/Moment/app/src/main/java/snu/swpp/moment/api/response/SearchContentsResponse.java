@@ -8,7 +8,7 @@ public class SearchContentsResponse {
     @SerializedName("searchentries")
     private List<SearchEntry> searchEntries;
 
-    public List<SearchEntry> getSearchentries() {
+    public List<SearchEntry> getSearchEntries() {
         return searchEntries;
     }
 
@@ -25,7 +25,6 @@ public class SearchContentsResponse {
         private String content;
         private int id;
         private int field;
-
         // Getters and setters for these fields
         public String getTitle() {
             return title;
