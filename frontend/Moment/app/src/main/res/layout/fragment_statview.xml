@@ -56,8 +56,7 @@
             app:layout_constraintBottom_toTopOf="@+id/stat_line_chart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="하루의 점수"
-            />
+            android:text="하루의 점수" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/stat_line_chart"
@@ -77,8 +76,8 @@
             android:layout_height="wrap_content"
             style="@style/NORMAL_BLACK_BOLD"
             android:layout_marginTop="5dp"
-            android:text="Average Score"
             android:textAlignment="center"
+            tools:text="7일 평균"
             app:layout_constraintTop_toBottomOf="@+id/stat_line_chart"
             app:layout_constraintBottom_toTopOf="@+id/average_score_text_view"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,8 +88,8 @@
             android:id="@+id/average_score_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:fontFamily="@font/maruburi_bold"
-            android:text="Average Score"
             android:textAlignment="center"
             android:textColor="@color/red"
             android:textSize="20sp"
@@ -100,21 +99,22 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/average_score_text" />
+            app:layout_constraintTop_toBottomOf="@+id/average_score_text"
+            tools:text="3.0" />
 
         <TextView
             android:id="@+id/score_unit"
+            style="@style/NORMAL_BLACK_BOLD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingEnd="5dp"
             android:text="점"
             android:textAlignment="center"
-            android:textSize="14sp"
-            android:fontFamily="@font/maruburi_bold"
-            app:layout_constraintTop_toBottomOf="@+id/average_score_text"
-            app:layout_constraintStart_toEndOf="@+id/average_score_text_view"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/stat_border2"
-            app:layout_constraintHorizontal_weight="1" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/average_score_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/average_score_text" />
 
         <View
             android:id="@+id/stat_border2"
@@ -139,8 +139,7 @@
             app:layout_constraintBottom_toTopOf="@+id/stat_pie_chart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="하루의 감정"
-         />
+            android:text="하루의 감정" />
 
 
         <com.github.mikephil.charting.charts.PieChart
@@ -188,8 +187,7 @@
             app:layout_constraintBottom_toTopOf="@+id/frame"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="하루의 태그"
-            />
+            android:text="하루의 태그" />
 
 
         <FrameLayout
