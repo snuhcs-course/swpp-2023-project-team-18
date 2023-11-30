@@ -49,7 +49,7 @@ class StatViewModel(
             todayDate.minusDays(7)
         }
         startDate.value = periodStartDate
-        endDate.value = todayDate
+        endDate.value = todayDate.minusDays(1)
 
         selectedPeriod.value = if (isMonth) ButtonType.MONTH else ButtonType.WEEK
 
