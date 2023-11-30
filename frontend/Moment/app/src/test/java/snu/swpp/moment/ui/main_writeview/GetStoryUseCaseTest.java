@@ -33,6 +33,7 @@ import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.exception.UnknownErrorException;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
+import snu.swpp.moment.utils.EmotionMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetStoryUseCaseTest {
@@ -115,7 +116,7 @@ public class GetStoryUseCaseTest {
             assertTrue(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "");
             assertEquals(storyUiState.getContent(), "");
-            assertEquals(storyUiState.getEmotion(), 0);
+            assertEquals(storyUiState.getEmotion(), EmotionMap.INVALID_EMOTION);
             assertEquals(storyUiState.getTags().size(), 0);
             assertFalse(storyUiState.isPointCompleted());
         };
