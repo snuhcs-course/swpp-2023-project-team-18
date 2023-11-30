@@ -100,10 +100,6 @@ public class WriteViewFragment extends Fragment {
                 boolean newValue = position == numPages - 1;
                 showBackToTodayButton(!newValue, isInTodayPage && !newValue);
                 isInTodayPage = newValue;
-
-                if (slideViewAdapter.getFragment(position).isCompletionInProgress()) {
-                    binding.viewpager.setUserInputEnabled(false);
-                }
             }
         });
 
