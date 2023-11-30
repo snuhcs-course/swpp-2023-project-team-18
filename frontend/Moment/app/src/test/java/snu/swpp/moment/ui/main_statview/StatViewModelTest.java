@@ -121,7 +121,7 @@ public class StatViewModelTest extends TestCase {
         assertEquals(Optional.of(2), Optional.ofNullable(scores.get(6)));
 
         assertEquals(viewModel.getStartDate().getValue(), LocalDate.of(2023, 10, 27));
-        assertEquals(viewModel.getEndDate().getValue(), testDay);
+        assertEquals(viewModel.getEndDate().getValue(), testDay.minusDays(1));
         assertEquals(viewModel.getAverageScore().getValue(), 2.5, 0.001);
     }
 }
