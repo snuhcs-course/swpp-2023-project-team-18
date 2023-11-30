@@ -28,7 +28,6 @@ import snu.swpp.moment.ui.main_writeview.component.BottomButtonContainer;
 import snu.swpp.moment.ui.main_writeview.component.ListFooterContainer;
 import snu.swpp.moment.ui.main_writeview.component.NudgeHeaderContainer;
 import snu.swpp.moment.ui.main_writeview.component.WritePageState;
-import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModelFactory;
@@ -46,6 +45,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
     private NudgeHeaderContainer nudgeHeaderContainer;
 
     private TodayViewModel viewModel;
+
+    private OnBackPressedCallback onBackPressedCallback;
 
     private final int MOMENT_HOUR_LIMIT = 2;
 
@@ -172,7 +173,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
             bottomButtonContainer.waitingAiReplySwitchObserver());
 
         // moment & story GET API response를 모두 받았을 때
-        apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
+        apiResponseManager.setProcessor(((momentUiState, storyUiState) -> {
             listViewItems.clear();
             listViewAdapter.setAnimation(false);
 
@@ -218,8 +219,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
         callApisToRefresh();
         updateRefreshTime();
 
-        // 마무리 과정 중 뒤로가기 버튼 경고
-        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        // 마무리 과정 중 뒤로가기 버튼 경고 - 실제 등록은 onResume에서 처리
+        onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 Log.d("TodayViewFragment", "handleOnBackPressed: called / isCompletionInProgress="
@@ -232,9 +233,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(),
                     R.style.DialogTheme);
                 builder.setMessage(R.string.completion_back_button_popup)
-                    .setPositiveButton(R.string.popup_yes, (dialog, id) -> {
-                        doOriginalAction();
-                    }).setNegativeButton(R.string.popup_no, (dialog, id) -> {
+                    .setPositiveButton(R.string.popup_yes, (dialog, id) -> doOriginalAction())
+                    .setNegativeButton(R.string.popup_no, (dialog, id) -> {
                     });
                 builder.create().show();
             }
@@ -244,8 +244,6 @@ public class TodayViewFragment extends BaseWritePageFragment {
                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
             }
         };
-        requireActivity().getOnBackPressedDispatcher()
-            .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
 
         // 날짜 변화 확인해서 GET API 다시 호출
         Runnable refreshRunnable = new Runnable() {
@@ -277,7 +275,7 @@ public class TodayViewFragment extends BaseWritePageFragment {
     protected void callApisToRefresh() {
         LocalDateTime now = getCurrentDateTime();
         Log.d("TodayViewFragment", "callApisToRefresh: called with timestamp " + now);
-        apiResponseManager.reset();
+        apiResponseManager.resetData();
         viewModel.getMoment(now);
         viewModel.getStory(now);
         viewModel.getNudge(now);
@@ -303,7 +301,18 @@ public class TodayViewFragment extends BaseWritePageFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TodayViewFragment",
+            "onResume: onBackPress callback enabled: " + onBackPressedCallback.isEnabled());
+        onBackPressedCallback.setEnabled(true);
+        requireActivity().getOnBackPressedDispatcher()
+            .addCallback(getViewLifecycleOwner(), onBackPressedCallback);
+    }
+
+    @Override
     public void onDestroyView() {
+        Log.d("TodayViewFragment", "onDestroyView: called");
         super.onDestroyView();
         binding = null;
         listFooterContainer.removeObservers();
