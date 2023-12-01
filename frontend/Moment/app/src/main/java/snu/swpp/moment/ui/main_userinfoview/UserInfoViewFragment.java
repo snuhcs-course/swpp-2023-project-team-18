@@ -49,7 +49,7 @@ public class UserInfoViewFragment extends Fragment {
         binding.logoutButton.setActivated(true);
 
         int daysPassedSinceRegistration = (int) ChronoUnit.DAYS.between(
-            viewModel.getCreatedAt(), TimeConverter.getToday());
+            viewModel.getCreatedAt(), TimeConverter.getToday()) + 1;
         userInfoWrapperContainer.setCreatedAtText(daysPassedSinceRegistration);
 
         viewModel.getNicknameUpdateErrorState().observe(getViewLifecycleOwner(), errorState -> {
