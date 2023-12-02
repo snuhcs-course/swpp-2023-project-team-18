@@ -10,7 +10,9 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
+import com.bumptech.glide.Glide;
 import snu.swpp.moment.R;
 
 public class CustomDialog extends Dialog {
@@ -27,6 +29,11 @@ public class CustomDialog extends Dialog {
             setContentView(R.layout.user_guide_monthview);
         } else if (destinationId == R.id.StatView) {
             setContentView(R.layout.user_guide_statview);
+            ImageView hashCloudGif = findViewById(R.id.user_guide_statview_image3);
+            Glide.with(getContext())
+                    .load(R.drawable.user_guide_hashcloud_gif) // 로드할 GIF
+                    .placeholder(R.drawable.user_guide_statview_hashcloud) // 로딩 중에 표시될 임시 이미지
+                    .into(hashCloudGif); // 이미지를 표시할 ImageView
         } else if (destinationId == R.id.SearchView) {
             setContentView(R.layout.user_guide_searchview);
         }

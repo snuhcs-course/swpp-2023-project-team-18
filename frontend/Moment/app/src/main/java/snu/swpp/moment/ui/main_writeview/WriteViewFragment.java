@@ -38,7 +38,7 @@ public class WriteViewFragment extends Fragment {
     private AnimationProvider animationProvider;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         authenticationRepositoryFactory = new AuthenticationRepositoryFactory(context);
     }

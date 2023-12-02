@@ -85,7 +85,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
             false);
 
         // moment & story GET API response를 모두 받았을 때
-        apiResponseManager.registerProcessor(((momentUiState, storyUiState) -> {
+        apiResponseManager.setProcessor(((momentUiState, storyUiState) -> {
             listViewItems.clear();
             if (momentUiState.getNumMoments() > 0) {
                 binding.noMomentText.setVisibility(View.GONE);
@@ -155,7 +155,7 @@ public class DailyViewFragment extends BaseWritePageFragment {
     protected void callApisToRefresh() {
         LocalDateTime currentDateTime = getCurrentDateTime();
         Log.d("DailyViewFragment", "callApisToRefresh: called with timestamp " + currentDateTime);
-        apiResponseManager.reset();
+        apiResponseManager.resetData();
         viewModel.getMoment(currentDateTime);
         viewModel.getStory(currentDateTime);
     }

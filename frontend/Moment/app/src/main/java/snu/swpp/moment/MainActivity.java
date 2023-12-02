@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView toolbarTitle;
     // 도움 버튼
     private Button infoButton;
-
     private final MutableLiveData<LocalDate> writeDestinationDate = new MutableLiveData<>();
 
     @Override
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Wirte View의 타이틀이 항상 날짜로 나오도록 NavController의 타이틀 업데이트 비활성화:
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd.", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd. E", Locale.KOREA);//다른 탭 갔다 왔을 때 요일이 잠시 영어로 보이는 문제 해결 위해 Locale을 직접 지정
         String currentDate = sdf.format(new Date());
         System.out.println("#Debug Mainactivity date ok");
 
@@ -128,6 +127,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // StatView가 시작될 때 preload를 호출하면 앱이 해당 뷰로 이동할 준비를 할 수 있습니다.
+        if (navController.getCurrentDestination().getId() == R.id.StatView) {
+            Glide.with(this)
+                    .load(R.drawable.user_guide_hashcloud_gif)
+                    .preload();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
