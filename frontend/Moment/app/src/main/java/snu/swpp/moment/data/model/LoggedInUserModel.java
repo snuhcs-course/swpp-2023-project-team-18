@@ -27,7 +27,8 @@ public class LoggedInUserModel {
     public LoggedInUserModel(LoginResponse.User user, LoginResponse.Token token) {
         this.username = user.getUsername();
         this.nickName = user.getNickname();
-        this.createAt = TimeConverter.convertUTCToLocalTimeZone(user.getCreatedAt().substring(0, 19));
+        this.createAt = TimeConverter.convertUTCToLocalTimeZone(
+            user.getCreatedAt().substring(0, 19));
         this.AccessToken = token.getAccessToken();
         this.RefreshToken = token.getRefreshToken();
     }

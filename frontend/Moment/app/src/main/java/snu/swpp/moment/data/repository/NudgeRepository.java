@@ -1,7 +1,7 @@
 package snu.swpp.moment.data.repository;
 
-import snu.swpp.moment.data.callback.NudgeGetCallback;
 import snu.swpp.moment.data.callback.NudgeDeleteCallback;
+import snu.swpp.moment.data.callback.NudgeGetCallback;
 import snu.swpp.moment.data.source.NudgeRemoteDataSource;
 
 public class NudgeRepository extends BaseRepository<NudgeRemoteDataSource> {

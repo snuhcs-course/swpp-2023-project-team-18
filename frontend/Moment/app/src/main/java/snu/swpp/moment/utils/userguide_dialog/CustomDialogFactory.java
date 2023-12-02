@@ -1,8 +1,6 @@
 package snu.swpp.moment.utils.userguide_dialog;
 
 import android.content.Context;
-import android.widget.Button;
-
 import snu.swpp.moment.R;
 
 public class CustomDialogFactory {

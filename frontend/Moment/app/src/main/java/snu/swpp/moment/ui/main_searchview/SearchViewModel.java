@@ -1,7 +1,6 @@
 package snu.swpp.moment.ui.main_searchview;
 
 import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import java.util.List;
@@ -98,9 +97,10 @@ public class SearchViewModel extends ViewModel {
                                 Log.d("SearchViewModel",
                                     "Content search successful: " + response.getSearchEntries());
 
-                                if (response.getSearchEntries().size() !=0) {
+                                if (response.getSearchEntries().size() != 0) {
                                     Log.d("SearchViewModel",
-                                            "Content search Not Null" + response.getSearchEntries().size());
+                                        "Content search Not Null" + response.getSearchEntries()
+                                            .size());
 
                                     searchState.setValue(
                                         SearchState.fromSearchContentsResponse(response));

@@ -123,13 +123,11 @@ public class ListFooterContainer {
             } else {
                 setState(WritePageState.FOOTER_INVISIBLE);
             }
-        }
-        else if(storyUiState.isEmotionInvalid()){
+        } else if (storyUiState.isEmotionInvalid()) {
             setState(WritePageState.AUTO_COMPLETED);
             storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
             storyContainer.setCompletedDate(storyUiState.getCreatedAt());
-        }
-        else {
+        } else {
             setState(WritePageState.COMPLETE);
             storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
             storyContainer.setCompletedDate(storyUiState.getCreatedAt());

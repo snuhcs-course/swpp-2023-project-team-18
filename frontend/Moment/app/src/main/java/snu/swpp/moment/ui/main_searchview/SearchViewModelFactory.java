@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.SearchRepository;
-import snu.swpp.moment.ui.main_searchview.SearchViewModel;
 
 public class SearchViewModelFactory implements ViewModelProvider.Factory {
 

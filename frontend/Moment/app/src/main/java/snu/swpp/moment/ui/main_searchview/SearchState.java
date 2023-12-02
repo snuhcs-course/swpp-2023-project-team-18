@@ -1,7 +1,6 @@
 package snu.swpp.moment.ui.main_searchview;
 
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +25,7 @@ public class SearchState {
 
     public static SearchState fromSearchContentsResponse(SearchContentsResponse response) {
 
-        if (response.getSearchEntries().size()==0) {
+        if (response.getSearchEntries().size() == 0) {
             // Handle the null case, e.g., return an empty list or a specific error state.
             return new SearchState(Collections.emptyList(), null);
         }
@@ -40,7 +39,7 @@ public class SearchState {
     }
 
     public static SearchState fromSearchHashtagsResponse(SearchHashtagsResponse response) {
-        if (response.getSearchentries().size()==0) {
+        if (response.getSearchentries().size() == 0) {
             // Handle the null case, e.g., return an empty list or a specific error state.
             return new SearchState(Collections.emptyList(), null);
         }
@@ -53,9 +52,9 @@ public class SearchState {
     }
 
     //검색 결과가 없는경우
-    public static SearchState withNoResult(){
+    public static SearchState withNoResult() {
         Log.d("SearchState",
-                "State content withNoResult");
+            "State content withNoResult");
         return new SearchState(new ArrayList<>(), null);
     }
 }

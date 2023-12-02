@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -19,8 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-
-import okhttp3.internal.Util;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
@@ -94,26 +90,27 @@ public class SearchViewFragment extends Fragment {
         // TextWatcher을 통해 글자수가 0인 경우 검색 버튼이 눌리지 않도록 하는 로직
         binding.searchContentEdittext.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length()==0)
+                if (s.length() == 0) {
                     binding.searchContentQueryButton.setEnabled(false);
-                else {
+                } else {
                     binding.searchContentQueryButton.setEnabled(true);
 
                     binding.searchContentQueryButton.setOnClickListener(v -> {
                         String query;
                         query = binding.searchContentEdittext.getText().toString();
                         // 공백만 입력된 경우엔 API call 안함
-                        if(query.trim().length()==0){
+                        if (query.trim().length() == 0) {
                             KeyboardUtils.hideSoftKeyboard(requireContext());
-                        }
-                        else{
+                        } else {
                             searchViewModel.search(query);
                             KeyboardUtils.hideSoftKeyboard(requireContext());
                         }
@@ -121,7 +118,6 @@ public class SearchViewFragment extends Fragment {
                 }
             }
         });
-
 
         SearchAdapter adapter = new SearchAdapter((MainActivity) getActivity(), new ArrayList<>());
         SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),
@@ -135,19 +131,18 @@ public class SearchViewFragment extends Fragment {
                 if (searchViewModel.searchType.getValue() == SearchType.CONTENT) {
                     adapter.setData(searchState.searchEntries);
                     adapter.notifyDataSetChanged();
-                    if(searchState.searchEntries.size()==0){
+                    if (searchState.searchEntries.size() == 0) {
                         Log.d("SearchViewFragment", "여기");
                         // tr1. visibility 조정으로 해결이 되긴 하는데 View.VISIBLE 했을 때 다른 코드와 충돌날 까봐 걱정됨
                         displayNoResultsMessage(true);
-                    }
-                    else{
+                    } else {
                         displayNoResultsMessage(false);
                     }
                 } else {
                     // 여기서는 실시간으로 해시태그 검색결과가 없는것을 못띄워줌 - 추천된 해시태그를 눌러야 해당 entry수를 확인하고
                     displayNoResultsMessage(false);
-                        hashtagSearchAdapter.setData(searchState.searchEntries);
-                        hashtagSearchAdapter.notifyDataSetChanged();
+                    hashtagSearchAdapter.setData(searchState.searchEntries);
+                    hashtagSearchAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -168,11 +163,10 @@ public class SearchViewFragment extends Fragment {
                 hashTagCompletionAdapter.notifyDataSetChanged();
 
                 // 여기서 실시간으로 바꿔줘야할
-                if(hashtagCompletionState.hashtags.size() == 0) {
+                if (hashtagCompletionState.hashtags.size() == 0) {
                     binding.searchHashtagResult.setVisibility(View.GONE);
                     displayNoResultsMessage(true);
-                }
-                else{
+                } else {
                     binding.searchHashtagResult.setVisibility(View.VISIBLE);
                     displayNoResultsMessage(false);
                 }
@@ -265,11 +259,11 @@ public class SearchViewFragment extends Fragment {
             binding.searchContentNoResultText.setVisibility(View.GONE);
         }
     }
+
     private void displayNoResultsMessage(boolean show) {
-        if(show){
+        if (show) {
             binding.searchContentNoResultText.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             binding.searchContentNoResultText.setVisibility(View.GONE);
         }
     }

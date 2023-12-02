@@ -47,7 +47,8 @@ class StoryUiState(
         Log.d("StoryUiState", "title: $title, isEmpty: $isEmpty, emotion: $emotion")
         return isEmpty && (emotion == EmotionMap.INVALID_EMOTION)
     }
-    fun isEmotionInvalid():Boolean{
+
+    fun isEmotionInvalid(): Boolean {
         return !isEmpty && emotion == EmotionMap.INVALID_EMOTION
     }
 }

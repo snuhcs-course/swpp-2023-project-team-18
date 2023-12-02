@@ -57,9 +57,11 @@ public class HashTagCompletionAdapter extends
         Log.d("hashtag", searchViewModel.selectedHashtag.getValue());
 
         // set moment-original red and font
-        Typeface typeface = ResourcesCompat.getFont(holder.itemView.getContext(), R.font.maruburi_regular);
-        if(holder.button.getText().equals(searchViewModel.selectedHashtag.getValue())) {
-            holder.button.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
+        Typeface typeface = ResourcesCompat.getFont(holder.itemView.getContext(),
+            R.font.maruburi_regular);
+        if (holder.button.getText().equals(searchViewModel.selectedHashtag.getValue())) {
+            holder.button.setTextColor(
+                ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
             holder.button.setTypeface(typeface, Typeface.BOLD);
         } else {
             holder.button.setTextColor(Color.BLACK);

@@ -25,6 +25,7 @@ public class SearchContentsResponse {
         private String content;
         private int id;
         private int field;
+
         // Getters and setters for these fields
         public String getTitle() {
             return title;
