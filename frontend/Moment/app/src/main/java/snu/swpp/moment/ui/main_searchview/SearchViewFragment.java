@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+
+import okhttp3.internal.Util;
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
@@ -85,7 +87,6 @@ public class SearchViewFragment extends Fragment {
         contentButton.setOnClickListener(v -> {
             currentSearchMode = SearchMode.CONTENT;
             searchViewModel.setSearchType(SearchType.CONTENT);
-
             updateSearchUI();
         });
 
@@ -132,14 +133,15 @@ public class SearchViewFragment extends Fragment {
             @Override
             public void onChanged(SearchState searchState) {
                 if (searchViewModel.searchType.getValue() == SearchType.CONTENT) {
+                    adapter.setData(searchState.searchEntries);
+                    adapter.notifyDataSetChanged();
                     if(searchState.searchEntries.size()==0){
                         Log.d("SearchViewFragment", "여기");
+                        // tr1. visibility 조정으로 해결이 되긴 하는데 View.VISIBLE 했을 때 다른 코드와 충돌날 까봐 걱정됨
                         displayNoResultsMessage(true);
                     }
                     else{
                         displayNoResultsMessage(false);
-                        adapter.setData(searchState.searchEntries);
-                        adapter.notifyDataSetChanged();
                     }
                 } else {
                     // 여기서는 실시간으로 해시태그 검색결과가 없는것을 못띄워줌 - 추천된 해시태그를 눌러야 해당 entry수를 확인하고
@@ -235,6 +237,7 @@ public class SearchViewFragment extends Fragment {
             hashtagButton.setActivated(true);
             contentButton.setActivated(false);
             binding.searchHashtagEdittext.setVisibility(View.VISIBLE);
+            binding.searchHashtagEdittext.requestFocus();
             binding.searchContentQueryButton.setVisibility(View.GONE);
             binding.searchContentEdittext.setVisibility(View.GONE);
             binding.searchHashtagResult.setVisibility(View.VISIBLE);
@@ -252,6 +255,7 @@ public class SearchViewFragment extends Fragment {
             contentButton.setActivated(true);
             binding.searchHashtagEdittext.setVisibility(View.GONE);
             binding.searchContentEdittext.setVisibility(View.VISIBLE);
+            binding.searchContentEdittext.requestFocus();
             binding.searchContentQueryButton.setVisibility(View.VISIBLE);
             binding.searchContentResult.setVisibility(View.VISIBLE);
             binding.hashtagCompleteList.setVisibility(View.GONE);
