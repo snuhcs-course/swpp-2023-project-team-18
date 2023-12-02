@@ -171,16 +171,18 @@ class HashtagSearchTest(TestCase):
 
 
 class ContentSearchTest(TestCase):
+    HOUR_DIFF = 9
+
     def setUp(self):
         user1 = User.objects.create(username="test1")
         user2 = User.objects.create(username="test2")
 
         day_start = datetime.datetime(
             year=2023, month=11, day=3, hour=3, minute=0, second=0
-        )
+        ) - datetime.timedelta(hours=self.HOUR_DIFF)
         day_end = datetime.datetime(
             year=2023, month=11, day=4, hour=2, minute=59, second=59
-        )
+        ) - datetime.timedelta(hours=self.HOUR_DIFF)
         story1 = Story.objects.create(
             created_at=day_end,
             user=user1,
@@ -252,8 +254,11 @@ class ContentSearchTest(TestCase):
         self.assertEqual(entries[0]["field"], SearchFields.MOMENT)
         self.assertEqual(
             entries[0]["created_at"],
-            datetime.datetime(
-                year=2023, month=11, day=6, hour=2, minute=59, second=59
+            (
+                datetime.datetime(
+                    year=2023, month=11, day=6, hour=2, minute=59, second=59
+                )
+                - datetime.timedelta(hours=self.HOUR_DIFF)
             ).timestamp(),
         )
         self.assertEqual(entries[0]["title"], "검색모먼트")
