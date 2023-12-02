@@ -131,13 +131,19 @@ class ContentSearchView(GenericAPIView):
     def _day_start_end(
         time: datetime.datetime,
     ) -> Tuple[datetime.datetime, datetime.datetime]:
-        if time.hour < 3:
-            time = time - datetime.timedelta(days=1)
-        start_time = time.replace(hour=3, minute=0, second=0)
-        end_time = (
-            start_time + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)
+        HOUR_DIFF = 9
+        local_time = time + datetime.timedelta(hours=HOUR_DIFF)
+        if local_time.hour < 3:
+            local_time = local_time - datetime.timedelta(days=1)
+        local_start_time = local_time.replace(hour=3, minute=0, second=0)
+        local_end_time = (
+            local_start_time
+            + datetime.timedelta(days=1)
+            - datetime.timedelta(seconds=1)
         )
-        return start_time, end_time
+        return local_start_time - datetime.timedelta(
+            hours=HOUR_DIFF
+        ), local_end_time - datetime.timedelta(hours=HOUR_DIFF)
 
     @staticmethod
     def _search_moments(
