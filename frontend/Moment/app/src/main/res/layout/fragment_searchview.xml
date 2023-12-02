@@ -103,9 +103,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:fontFamily="@font/maruburi_regular"
-        android:textColor="@color/black" />
+        android:textColor="@color/darkgray" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

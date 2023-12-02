@@ -15,28 +15,26 @@ public class SearchState {
     Throwable error;
     boolean noResults; // 검색 결과 없음 상태
 
-    public SearchState(List<SearchEntryState> searchEntries, Throwable error, boolean noResults) {
+    public SearchState(List<SearchEntryState> searchEntries, Throwable error) {
         this.searchEntries = searchEntries;
         this.error = error;
-        this.noResults = false;
     }
 
     public static SearchState withError(Throwable e) {
-        return new SearchState(null, e, true);
+        return new SearchState(null, e);
     }
 
     public static SearchState fromSearchContentsResponse(SearchContentsResponse response) {
 
         if (response.getSearchEntries().size()==0) {
             // Handle the null case, e.g., return an empty list or a specific error state.
-            return new SearchState(Collections.emptyList(), null, true);
+            return new SearchState(Collections.emptyList(), null);
         }
         return new SearchState(
             response.getSearchEntries().stream()
                 .map(entry -> SearchEntryState.fromContentSearchEntry(entry))
                 .collect(Collectors.toList()),
-            null,
-                false
+            null
         );
 
     }
@@ -44,14 +42,13 @@ public class SearchState {
     public static SearchState fromSearchHashtagsResponse(SearchHashtagsResponse response) {
         if (response.getSearchentries().size()==0) {
             // Handle the null case, e.g., return an empty list or a specific error state.
-            return new SearchState(Collections.emptyList(), null, true);
+            return new SearchState(Collections.emptyList(), null);
         }
         return new SearchState(
             response.getSearchentries().stream()
                 .map(entry -> SearchEntryState.fromHashtagSearchEntry(entry))
                 .collect(Collectors.toList()),
-            null,
-                false
+            null
         );
     }
 
@@ -59,6 +56,6 @@ public class SearchState {
     public static SearchState withNoResult(){
         Log.d("SearchState",
                 "State content withNoResult");
-        return new SearchState(new ArrayList<>(), null, true);
+        return new SearchState(new ArrayList<>(), null);
     }
 }

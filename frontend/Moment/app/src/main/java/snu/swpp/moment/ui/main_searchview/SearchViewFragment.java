@@ -247,8 +247,6 @@ public class SearchViewFragment extends Fragment {
             binding.searchContentResult.setVisibility(View.GONE);
 
             // 기타 UI 설정
-            binding.searchContentNoResultText.setVisibility(View.INVISIBLE);
-
             binding.searchContentNoResultText.setVisibility(View.GONE);
         } else {
             hashtagButton.setActivated(false);
@@ -264,7 +262,7 @@ public class SearchViewFragment extends Fragment {
             binding.searchHashtagResult.setVisibility(View.GONE);
 
             // 기타 UI 설정
-            binding.searchContentNoResultText.setVisibility(View.INVISIBLE);
+            binding.searchContentNoResultText.setVisibility(View.GONE);
         }
     }
     private void displayNoResultsMessage(boolean show) {
