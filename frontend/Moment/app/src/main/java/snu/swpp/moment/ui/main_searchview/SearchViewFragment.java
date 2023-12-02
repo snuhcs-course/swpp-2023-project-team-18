@@ -99,21 +99,15 @@ public class SearchViewFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0) {
+                if (s.toString().isBlank()) {
                     binding.searchContentQueryButton.setEnabled(false);
                 } else {
                     binding.searchContentQueryButton.setEnabled(true);
-
                     binding.searchContentQueryButton.setOnClickListener(v -> {
                         String query;
                         query = binding.searchContentEdittext.getText().toString();
-                        // 공백만 입력된 경우엔 API call 안함
-                        if (query.trim().length() == 0) {
-                            KeyboardUtils.hideSoftKeyboard(requireContext());
-                        } else {
-                            searchViewModel.search(query);
-                            KeyboardUtils.hideSoftKeyboard(requireContext());
-                        }
+                        searchViewModel.search(query);
+                        KeyboardUtils.hideSoftKeyboard(requireContext());
                     });
                 }
             }
