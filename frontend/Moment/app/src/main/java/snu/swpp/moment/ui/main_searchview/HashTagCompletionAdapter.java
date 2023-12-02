@@ -1,6 +1,7 @@
 package snu.swpp.moment.ui.main_searchview;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +55,19 @@ public class HashTagCompletionAdapter extends
         Log.d("holder", items.get(position));
         holder.button.setText(items.get(position));
         Log.d("hashtag", searchViewModel.selectedHashtag.getValue());
-        holder.button.setTextColor(
-            holder.button.getText().equals(searchViewModel.selectedHashtag.getValue()) ? Color.RED
-                : Color.BLACK);
+
+        // set moment-original red and font
+        Typeface typeface = ResourcesCompat.getFont(holder.itemView.getContext(),
+            R.font.maruburi_regular);
+        if (holder.button.getText().equals(searchViewModel.selectedHashtag.getValue())) {
+            holder.button.setTextColor(
+                ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
+            holder.button.setTypeface(typeface, Typeface.BOLD);
+        } else {
+            holder.button.setTextColor(Color.BLACK);
+            holder.button.setTypeface(typeface, Typeface.NORMAL);
+        }
+
         holder.button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,6 +1,5 @@
 package snu.swpp.moment.ui.main_writeview.component;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.content.Intent;
@@ -8,10 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import snu.swpp.moment.LoginRegisterActivity;
 import snu.swpp.moment.R;

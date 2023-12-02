@@ -1,33 +1,16 @@
 package snu.swpp.moment;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
@@ -36,17 +19,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.android.material.navigation.NavigationView;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-
 import snu.swpp.moment.databinding.ActivityMainBinding;
-import snu.swpp.moment.utils.AnimationProvider;
 import snu.swpp.moment.utils.userguide_dialog.CustomDialog;
 import snu.swpp.moment.utils.userguide_dialog.CustomDialogFactory;
 
@@ -121,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (destination.getId() == R.id.SearchView) {
                 setToolbarTitle("찾아보기");
                 infoButton.setVisibility(View.VISIBLE);
-            } else if(destination.getId() == R.id.MonthView){
+            } else if (destination.getId() == R.id.MonthView) {
                 infoButton.setVisibility(View.VISIBLE);
                 // 그외에 MonthView는 fragment 안에서 별도로 설정
             } else if (destination.getId() == R.id.UserInfoView) {

@@ -16,6 +16,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/storyContentLengthText" />
 
+    <!-- 말 그대로 순서만 바꿈 -->
+    <EditText
+        android:id="@+id/storyTitleEditText"
+        style="@style/NORMAL_BLACK_BOLD"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:hint="@string/story_title_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:lines="1"
+        android:textColorHint="@color/darkgray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completeTimeText" />
     <EditText
         android:id="@+id/storyContentEditText"
         style="@style/NORMAL_BLACK"
@@ -35,23 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/storySeparator" />
 
-    <EditText
-        android:id="@+id/storyTitleEditText"
-        style="@style/NORMAL_BLACK_BOLD"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:hint="@string/story_title_hint"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:lines="1"
-        android:textColorHint="@color/darkgray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/completeTimeText" />
+
 
     <TextView
         android:id="@+id/storyContentLengthText"

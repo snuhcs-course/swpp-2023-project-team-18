@@ -1,9 +1,7 @@
 package snu.swpp.moment.data.factory;
 
 import snu.swpp.moment.data.repository.NudgeRepository;
-import snu.swpp.moment.data.repository.SearchRepository;
 import snu.swpp.moment.data.source.NudgeRemoteDataSource;
-import snu.swpp.moment.data.source.SearchRemoteDataSource;
 
 public class NudgeRepositoryFactory implements RepositoryFactory {
 

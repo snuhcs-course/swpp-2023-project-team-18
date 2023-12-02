@@ -53,9 +53,10 @@ public class SearchRemoteDataSource extends BaseRemoteDataSource {
                 Response<SearchContentsResponse> response) {
                 Log.d("APICall", "getContentSearchList: " + response.code());
                 if (response.isSuccessful()) {
-                    Log.d("APIContent", "content: " + response.body().getSearchentries());
-
+                    Log.d("APIContent", "content: " + response.body().getSearchEntries());
                     SearchContentsResponse result = response.body();
+                    Log.d("SearchDataSource",
+                        "response list null? " + (response.body().getSearchEntries() == null));
                     callback.onSuccess(result);
                 } else if (response.code() == 401) {
                     callback.onFailure(new UnauthorizedAccessException());

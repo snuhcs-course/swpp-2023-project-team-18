@@ -188,6 +188,8 @@ public class TodayViewFragment extends BaseWritePageFragment {
             listViewAdapter.notifyDataSetChanged();
 
             bottomButtonContainer.updateWithServerData(storyUiState, doMomentsExist);
+            // FIXME: for test
+            //bottomButtonContainer.setState(WritePageState.STORY);
         }));
 
         // moment GET API response를 받았을 때

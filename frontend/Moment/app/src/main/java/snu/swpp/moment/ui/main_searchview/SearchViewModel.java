@@ -55,8 +55,6 @@ public class SearchViewModel extends ViewModel {
 
                         }
                     });
-
-
             }
 
             @Override
@@ -97,13 +95,19 @@ public class SearchViewModel extends ViewModel {
                             @Override
                             public void onSuccess(SearchContentsResponse response) {
                                 Log.d("SearchViewModel",
-                                    "Content search successful: " + response.getSearchentries());
+                                    "Content search successful: " + response.getSearchEntries());
 
-                                if (response.getSearchentries() != null) {
+                                if (response.getSearchEntries().size() != 0) {
+                                    Log.d("SearchViewModel",
+                                        "Content search Not Null" + response.getSearchEntries()
+                                            .size());
+
                                     searchState.setValue(
                                         SearchState.fromSearchContentsResponse(response));
                                 } else {
-                                    //    Log.d("SearchViewModel", "Content search null ");
+                                    searchState.setValue((SearchState.withNoResult()));
+                                    Log.d("SearchViewModel", "Content search null ");
+
                                 }
                             }
 
@@ -113,7 +117,6 @@ public class SearchViewModel extends ViewModel {
                             }
                         });
                 }
-
             }
 
             @Override

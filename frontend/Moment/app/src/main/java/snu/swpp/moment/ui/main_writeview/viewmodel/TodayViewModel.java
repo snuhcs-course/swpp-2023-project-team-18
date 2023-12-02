@@ -1,7 +1,6 @@
 package snu.swpp.moment.ui.main_writeview.viewmodel;
 
 import android.util.Log;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -13,8 +12,8 @@ import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
-import snu.swpp.moment.data.callback.NudgeGetCallback;
 import snu.swpp.moment.data.callback.NudgeDeleteCallback;
+import snu.swpp.moment.data.callback.NudgeGetCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StorySaveCallback;
 import snu.swpp.moment.data.callback.TokenCallBack;

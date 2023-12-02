@@ -8,7 +8,7 @@ public class SearchContentsResponse {
     @SerializedName("searchentries")
     private List<SearchEntry> searchEntries;
 
-    public List<SearchEntry> getSearchentries() {
+    public List<SearchEntry> getSearchEntries() {
         return searchEntries;
     }
 

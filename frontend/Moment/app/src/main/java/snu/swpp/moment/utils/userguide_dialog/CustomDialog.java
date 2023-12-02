@@ -11,14 +11,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
-
 import com.bumptech.glide.Glide;
-
 import snu.swpp.moment.R;
 
 public class CustomDialog extends Dialog {
+
     public CustomDialog(@NonNull Context context) {
         super(context);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -58,8 +56,8 @@ public class CustomDialog extends Dialog {
             lp.copyFrom(window.getAttributes());
             // Dialog의 너비와 높이를 화면의 90%와 80%로 설정
             DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-            int dialogWidth = (int)(displayMetrics.widthPixels * 0.9);
-            int dialogHeight = (int)(displayMetrics.heightPixels * 0.8);
+            int dialogWidth = (int) (displayMetrics.widthPixels * 0.9);
+            int dialogHeight = (int) (displayMetrics.heightPixels * 0.8);
             lp.width = dialogWidth;
             lp.height = dialogHeight;
             window.setAttributes(lp);
