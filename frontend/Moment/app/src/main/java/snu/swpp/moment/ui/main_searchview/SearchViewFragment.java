@@ -10,42 +10,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 import java.util.ArrayList;
-
 import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
-import snu.swpp.moment.data.repository.AuthenticationRepository;
-import snu.swpp.moment.data.repository.SearchRepository;
-import snu.swpp.moment.data.source.SearchRemoteDataSource;
+import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
+import snu.swpp.moment.data.factory.SearchRepositoryFactory;
 import snu.swpp.moment.databinding.FragmentSearchviewBinding;
 import snu.swpp.moment.ui.main_searchview.SearchViewModel.SearchType;
-import snu.swpp.moment.ui.main_statview.SearchViewModelFactory;
 import snu.swpp.moment.utils.KeyboardUtils;
 
 public class SearchViewFragment extends Fragment {
-
 
     private FragmentSearchviewBinding binding;
     private SearchViewModel searchViewModel;
     private Button hashtagButton;
     private Button contentButton;
-    private EditText hashtagEditText;
-    private EditText contentEditText;
 
     // For hashtag completion
-    private Handler searchHandler = new Handler();
+    private final Handler searchHandler = new Handler();
     private Runnable searchRunnable;
 
 
@@ -60,30 +48,30 @@ public class SearchViewFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        AuthenticationRepository authenticationRepository = null;
-        try {
-            authenticationRepository = AuthenticationRepository.getInstance(context);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        SearchRepository searchRepository = new SearchRepository(new SearchRemoteDataSource());
-        searchViewModel = new ViewModelProvider(this, new SearchViewModelFactory(authenticationRepository, searchRepository ))
-                .get(SearchViewModel.class);
+        AuthenticationRepositoryFactory authenticationRepositoryFactory = new AuthenticationRepositoryFactory(
+            context);
+        SearchRepositoryFactory searchRepositoryFactory = new SearchRepositoryFactory();
+        searchViewModel = new ViewModelProvider(this,
+            new SearchViewModelFactory(
+                authenticationRepositoryFactory.getRepository(),
+                searchRepositoryFactory.getRepository()
+            )
+        ).get(SearchViewModel.class);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSearchviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // Include된 레이아웃에서 버튼 찾기
         hashtagButton = root.findViewById(R.id.search_hashtag_button);
         contentButton = root.findViewById(R.id.search_content_button);
-        hashtagEditText = binding.searchHashtagEdittext;
-        contentEditText = binding.searchContentEdittext;
+
+        // 문자열 리소스를 사용하여 버튼 텍스트 설정
+        hashtagButton.setText(getString(R.string.search_hashtag_button));
+        contentButton.setText(getString(R.string.search_content_button));
 
         // Set up listeners for the buttons
         hashtagButton.setOnClickListener(v -> {
@@ -95,46 +83,63 @@ public class SearchViewFragment extends Fragment {
         contentButton.setOnClickListener(v -> {
             currentSearchMode = SearchMode.CONTENT;
             searchViewModel.setSearchType(SearchType.CONTENT);
-
             updateSearchUI();
         });
 
-
-        // Listener for the searchContentQueryButton
-        binding.searchContentQueryButton.setOnClickListener(v -> {
-            String query;
-            if (currentSearchMode == SearchMode.HASHTAG) {
-                query = binding.searchHashtagEdittext.getText().toString();
-                searchViewModel.setSearchType(SearchViewModel.SearchType.HASHTAG);
-            } else {
-                query = binding.searchContentEdittext.getText().toString();
-                searchViewModel.setSearchType(SearchViewModel.SearchType.CONTENT);
+        // binding.searchHashtagEdittext.addTextChangedListener과 같이 EditText를
+        // TextWatcher을 통해 글자수가 0인 경우 검색 버튼이 눌리지 않도록 하는 로직
+        binding.searchContentEdittext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-            searchViewModel.search(query);
-            KeyboardUtils.hideSoftKeyboard(getContext());
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().isBlank()) {
+                    binding.searchContentQueryButton.setEnabled(false);
+                } else {
+                    binding.searchContentQueryButton.setEnabled(true);
+                    binding.searchContentQueryButton.setOnClickListener(v -> {
+                        String query;
+                        query = binding.searchContentEdittext.getText().toString();
+                        searchViewModel.search(query);
+                        KeyboardUtils.hideSoftKeyboard(requireContext());
+                    });
+                }
+            }
         });
+
         SearchAdapter adapter = new SearchAdapter((MainActivity) getActivity(), new ArrayList<>());
-        SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),new ArrayList<>());
+        SearchAdapter hashtagSearchAdapter = new SearchAdapter((MainActivity) getActivity(),
+            new ArrayList<>());
         binding.searchContentResult.setAdapter(adapter);
         binding.searchHashtagResult.setAdapter(hashtagSearchAdapter);
-
 
         searchViewModel.searchState.observe(getViewLifecycleOwner(), new Observer<SearchState>() {
             @Override
             public void onChanged(SearchState searchState) {
                 if (searchViewModel.searchType.getValue() == SearchType.CONTENT) {
-
                     adapter.setData(searchState.searchEntries);
                     adapter.notifyDataSetChanged();
-                }
-                else{
+                    if (searchState.searchEntries.size() == 0) {
+                        Log.d("SearchViewFragment", "여기");
+                        // tr1. visibility 조정으로 해결이 되긴 하는데 View.VISIBLE 했을 때 다른 코드와 충돌날 까봐 걱정됨
+                        displayNoResultsMessage(true);
+                    } else {
+                        displayNoResultsMessage(false);
+                    }
+                } else {
+                    // 여기서는 실시간으로 해시태그 검색결과가 없는것을 못띄워줌 - 추천된 해시태그를 눌러야 해당 entry수를 확인하고
+                    displayNoResultsMessage(false);
                     hashtagSearchAdapter.setData(searchState.searchEntries);
                     hashtagSearchAdapter.notifyDataSetChanged();
                 }
             }
         });
-
-
 
         // RecyclerView 설정
         RecyclerView hashtagCompletionRecyclerView = binding.hashtagCompleteList;
@@ -142,16 +147,25 @@ public class SearchViewFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         hashtagCompletionRecyclerView.setLayoutManager(linearLayoutManager);
 
-        HashTagCompletionAdapter hashTagCompletionAdapter = new HashTagCompletionAdapter(searchViewModel);
+        HashTagCompletionAdapter hashTagCompletionAdapter = new HashTagCompletionAdapter(
+            searchViewModel);
         binding.hashtagCompleteList.setAdapter(hashTagCompletionAdapter);
 
-        searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(), new Observer<HashtagCompletionState>() {
-            @Override
-            public void onChanged(HashtagCompletionState hashtagCompletionState) {
+        searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(),
+            hashtagCompletionState -> {
                 hashTagCompletionAdapter.setItems(hashtagCompletionState.hashtags);
                 hashTagCompletionAdapter.notifyDataSetChanged();
-            }
-        });
+
+                // 여기서 실시간으로 바꿔줘야할
+                if (hashtagCompletionState.hashtags.size() == 0) {
+                    binding.searchHashtagResult.setVisibility(View.GONE);
+                    displayNoResultsMessage(true);
+                } else {
+                    binding.searchHashtagResult.setVisibility(View.VISIBLE);
+                    displayNoResultsMessage(false);
+                }
+            });
+
         searchViewModel.selectedHashtag.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -160,7 +174,7 @@ public class SearchViewFragment extends Fragment {
         });
         // Hashtag 자동 완성을 위한 로직
 
-        hashtagEditText.addTextChangedListener(new TextWatcher() {
+        binding.searchHashtagEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // 필요한 경우 여기에 코드 추가
@@ -170,7 +184,6 @@ public class SearchViewFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 필요한 경우 여기에 코드 추가
             }
-
 
             private String lastQuery = ""; // 이전 텍스트를 저장할 변수
 
@@ -193,17 +206,10 @@ public class SearchViewFragment extends Fragment {
                     searchRunnable = () -> searchViewModel.completeHashtag(currentText);
                     searchHandler.postDelayed(searchRunnable, 300); // 300ms 후에 실행
                 }
-                if(currentText.isEmpty()){
+                if (currentText.isEmpty()) {
                     hashTagCompletionAdapter.setItems(new ArrayList<>());
                     hashtagSearchAdapter.setData(new ArrayList<>());
                 }
-
-            }
-        });
-
-        searchViewModel.hashtagCompletionState.observe(getViewLifecycleOwner(), new Observer<HashtagCompletionState>() {
-            @Override
-            public void onChanged(HashtagCompletionState hashtagCompletionState) {
 
             }
         });
@@ -219,23 +225,42 @@ public class SearchViewFragment extends Fragment {
             hashtagButton.setActivated(true);
             contentButton.setActivated(false);
             binding.searchHashtagEdittext.setVisibility(View.VISIBLE);
+            binding.searchHashtagEdittext.requestFocus();
             binding.searchContentQueryButton.setVisibility(View.GONE);
             binding.searchContentEdittext.setVisibility(View.GONE);
-            binding.searchContentResult.setVisibility(View.GONE);
             binding.searchHashtagResult.setVisibility(View.VISIBLE);
             binding.hashtagCompleteList.setVisibility(View.VISIBLE);
+
+            // Content 검색 결과 숨기기
+            binding.searchContentResult.setVisibility(View.GONE);
+
+            // 기타 UI 설정
+            binding.searchContentNoResultText.setVisibility(View.GONE);
         } else {
             hashtagButton.setActivated(false);
             contentButton.setActivated(true);
             binding.searchHashtagEdittext.setVisibility(View.GONE);
             binding.searchContentEdittext.setVisibility(View.VISIBLE);
+            binding.searchContentEdittext.requestFocus();
             binding.searchContentQueryButton.setVisibility(View.VISIBLE);
             binding.searchContentResult.setVisibility(View.VISIBLE);
-            binding.searchHashtagResult.setVisibility(View.GONE);
             binding.hashtagCompleteList.setVisibility(View.GONE);
+
+            // HashTag 검색 결과 숨기기
+            binding.searchHashtagResult.setVisibility(View.GONE);
+
+            // 기타 UI 설정
+            binding.searchContentNoResultText.setVisibility(View.GONE);
         }
     }
 
+    private void displayNoResultsMessage(boolean show) {
+        if (show) {
+            binding.searchContentNoResultText.setVisibility(View.VISIBLE);
+        } else {
+            binding.searchContentNoResultText.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onDestroyView() {

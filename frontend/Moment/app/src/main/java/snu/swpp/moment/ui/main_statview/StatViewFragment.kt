@@ -40,9 +40,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import eu.wewox.tagcloud.TagCloud
 import eu.wewox.tagcloud.rememberTagCloudState
 import snu.swpp.moment.R
-import snu.swpp.moment.data.repository.AuthenticationRepository
-import snu.swpp.moment.data.repository.StoryRepository
-import snu.swpp.moment.data.source.StoryRemoteDataSource
+import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory
+import snu.swpp.moment.data.factory.StoryRepositoryFactory
 import snu.swpp.moment.databinding.FragmentStatviewBinding
 import snu.swpp.moment.databinding.StatButtonDateBinding
 import snu.swpp.moment.databinding.StatDurationBinding
@@ -53,18 +52,20 @@ import java.time.format.DateTimeFormatter
 
 class StatViewFragment : Fragment() {
     private lateinit var binding: FragmentStatviewBinding
-    private lateinit var viewModel: StatViewModel
     private lateinit var lineChart: LineChart
-    private val authenticationRepository: AuthenticationRepository =
-        AuthenticationRepository.getInstance(context)
-    private val storyRepository: StoryRepository = StoryRepository(StoryRemoteDataSource())
 
-    //private lateinit var emotionColors: Map<String, Int>
+    private lateinit var viewModel: StatViewModel
+    private val authenticationRepositoryFactory = AuthenticationRepositoryFactory(context)
+    private val storyRepositoryFactory = StoryRepositoryFactory()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(
             this,
-            StatViewModelFactory(authenticationRepository, storyRepository)
+            StatViewModelFactory(
+                authenticationRepositoryFactory.repository,
+                storyRepositoryFactory.repository
+            )
         )[StatViewModel::class.java]
     }
 
@@ -87,7 +88,7 @@ class StatViewFragment : Fragment() {
         }
         binding.statWordCloud.setOnTouchListener { v, event ->
             Log.d("touch2", "touch")
-            binding.con.requestDisallowInterceptTouchEvent(true)
+            binding.statviewLayout.requestDisallowInterceptTouchEvent(true)
             return@setOnTouchListener false
 
         }
@@ -97,6 +98,10 @@ class StatViewFragment : Fragment() {
         // Include된 버튼, 기간을 포함하는 레이아웃에 대한 바인딩 객체 생성
         val buttonDateBinding =
             StatButtonDateBinding.bind(root.findViewById(R.id.statUtilContainer))
+
+        buttonDateBinding.statWeekButton.setText(getString(R.string.stat_section_week))
+        buttonDateBinding.statMonthButton.setText(getString(R.string.stat_section_month))
+
         val durationBinding =
             StatDurationBinding.bind(root.findViewById(R.id.stat_duration_container))
         // 기간 설정을 위한 코드

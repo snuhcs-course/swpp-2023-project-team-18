@@ -1,15 +1,15 @@
 package snu.swpp.moment.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
@@ -129,7 +129,7 @@ public class TimeConverterTest {
 
         long secondDiff = 3600 * hourDiff;
         long answer1 = 1698375600L - secondDiff; // 현지 시각 2023년 10월 27일 오전 3:00:00
-        long answer2 = 1699066799L - secondDiff; // 현지 시각 2023년 11월 4일 오전 2:59:59
+        long answer2 = 1698980399L - secondDiff; // 현지 시각 2023년 11월 3일 오전 2:59:59
         assertEquals(answer2, timestamps[1]);
 
         assertEquals(answer1, timestamps[0]);
@@ -144,7 +144,7 @@ public class TimeConverterTest {
 
         long secondDiff = 3600 * hourDiff;
         long answer1 = 1696388400L - secondDiff; // 현지 시각 2023년 10월 4일 오전 3:00:00
-        long answer2 = 1699066799L - secondDiff; // 현지 시각 2023년 11월 4일 오전 2:59:59
+        long answer2 = 1698980399L - secondDiff; // 현지 시각 2023년 11월 3일 오전 2:59:59
 
         assertEquals(answer1, timestamps[0]);
         assertEquals(answer2, timestamps[1]);
@@ -191,5 +191,16 @@ public class TimeConverterTest {
 
         cur = LocalDateTime.of(2023, 11, 3, 3, 0, 0);
         assertTrue(TimeConverter.hasDayPassed(base, cur));
+    }
+
+    @Test
+    public void convertUTCToLocalTimeZone() {
+        LocalDateTime utcDateTime = LocalDateTime.of(2023, 10, 13, 17, 16, 47);
+        String utcDateTimeInString = utcDateTime.toString() + ".210625Z"; // "2023-10-13T17:16:47.210625Z"
+
+        LocalDateTime localDateTime = utcDateTime.plusHours(hourDiff);
+        String answer = localDateTime.toString();
+
+        assertEquals(answer, TimeConverter.convertUTCToLocalTimeZone(utcDateTimeInString));
     }
 }

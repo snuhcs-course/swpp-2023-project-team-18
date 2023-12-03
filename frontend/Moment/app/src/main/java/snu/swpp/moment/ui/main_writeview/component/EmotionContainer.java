@@ -3,6 +3,8 @@ package snu.swpp.moment.ui.main_writeview.component;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -38,6 +40,8 @@ public class EmotionContainer {
     private final int colorRed;
     private final AnimationProvider animationProvider;
 
+    private final List<LinearLayout> linearLayoutList;
+    private final List<ImageView> imageViewList;
 
     public EmotionContainer(View view) {
         emotionWrapper = (ConstraintLayout) view;
@@ -55,6 +59,32 @@ public class EmotionContainer {
             view.findViewById(R.id.angry2Button)
         );
 
+        linearLayoutList = Arrays.asList(
+            view.findViewById(R.id.emotionSun1),
+            view.findViewById(R.id.emotionSun2),
+            view.findViewById(R.id.emotionSunCloud1),
+            view.findViewById(R.id.emotionSunCloud2),
+            view.findViewById(R.id.emotionCloud1),
+            view.findViewById(R.id.emotionCloud2),
+            view.findViewById(R.id.emotionRain1),
+            view.findViewById(R.id.emotionRain2),
+            view.findViewById(R.id.emotionLightning1),
+            view.findViewById(R.id.emotionLightning2)
+        );
+
+        imageViewList = Arrays.asList(
+            view.findViewById(R.id.emotionSunRow1),
+            view.findViewById(R.id.emotionSunRow2),
+            view.findViewById(R.id.emotionSunCloudRow1),
+            view.findViewById(R.id.emotionSunCloudRow2),
+            view.findViewById(R.id.emotionCloudRow1),
+            view.findViewById(R.id.emotionCloudRow2),
+            view.findViewById(R.id.emotionRainRow1),
+            view.findViewById(R.id.emotionRainRow2),
+            view.findViewById(R.id.emotionLightningRow1),
+            view.findViewById(R.id.emotionLightningRow2)
+        );
+
         maruburiLight = ResourcesCompat.getFont(view.getContext(),
             R.font.maruburi_regular);
         maruburiBold = ResourcesCompat.getFont(view.getContext(),
@@ -66,9 +96,19 @@ public class EmotionContainer {
         for (int i = 0; i < textButtonList.size(); i++) {
             TextView textButton = textButtonList.get(i);
             final int emotionIdx = i;
-            textButton.setOnClickListener(v -> {
-                selectEmotion(emotionIdx);
-            });
+            textButton.setOnClickListener(v -> selectEmotion(emotionIdx));
+        }
+
+        for (int i = 0; i < linearLayoutList.size(); i++) {
+            LinearLayout linearLayout = linearLayoutList.get(i);
+            final int linearLayoutIndex = i;
+            linearLayout.setOnClickListener(v -> selectEmotion(linearLayoutIndex));
+        }
+
+        for (int i = 0; i < imageViewList.size(); i++) {
+            ImageView imageView = imageViewList.get(i);
+            final int imageViewIndex = i;
+            imageView.setOnClickListener(v -> selectEmotion(imageViewIndex));
         }
     }
 
@@ -124,12 +164,24 @@ public class EmotionContainer {
             TextView previousButton = textButtonList.get(previous);
             previousButton.setTypeface(maruburiLight);
             previousButton.setTextColor(colorBlack);
+
+            // 기존 감정의 ImageView 색상을 원래대로 변경
+            ImageView previousImage = imageViewList.get(previous);
+            previousImage.clearColorFilter();
+
+            linearLayoutList.get(previous).setSelected(false);
         }
         if (0 <= emotion && emotion < textButtonList.size()) {
             // 새로운 감정 선택
             TextView newButton = textButtonList.get(emotion);
             newButton.setTypeface(maruburiBold);
             newButton.setTextColor(colorRed);
+
+            // 새로운 감정의 ImageView 색상을 빨간색으로 변경
+            ImageView newImage = imageViewList.get(emotion);
+            newImage.setColorFilter(colorRed, android.graphics.PorterDuff.Mode.SRC_IN);
+
+            linearLayoutList.get(emotion).setSelected(true);
         }
         selectedEmotion.setValue(emotion);
     }
@@ -150,6 +202,14 @@ public class EmotionContainer {
         for (int i = 0; i < textButtonList.size(); i++) {
             TextView textButton = textButtonList.get(i);
             textButton.setClickable(!freeze);
+
+            //Linear layout
+            LinearLayout linearLayout = linearLayoutList.get(i);
+            linearLayout.setClickable(!freeze);
+
+            // ImageView Layout
+            ImageView imageView = imageViewList.get(i);
+            imageView.setClickable(!freeze);
         }
     }
 }

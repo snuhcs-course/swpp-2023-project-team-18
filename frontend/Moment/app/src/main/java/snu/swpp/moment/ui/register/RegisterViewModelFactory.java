@@ -4,9 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import snu.swpp.moment.data.repository.AuthenticationRepository;
+import snu.swpp.moment.data.factory.AuthenticationRepositoryFactory;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel. Required given LoginViewModel has a
@@ -25,13 +23,8 @@ public class RegisterViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(RegisterViewModel.class)) {
-            try {
-                return (T) new RegisterViewModel(AuthenticationRepository.getInstance(context));
-            } catch (GeneralSecurityException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            return (T) new RegisterViewModel(
+                new AuthenticationRepositoryFactory(context).getRepository());
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

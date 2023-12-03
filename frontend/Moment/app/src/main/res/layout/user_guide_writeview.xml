@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_guide_outer_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@drawable/help_dialog_design">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_guide_writeview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/user_guide_write_title"
+            android:fontFamily="@font/maruburi_bold"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_explanation1"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_text"
+            app:layout_constraintBottom_toTopOf="@id/user_guide_writeview_image1"/>
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image1"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_moment_and_nudge"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation1"
+        />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_explanation2"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image1"
+            />
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image2"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_moment"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation2"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_explanation3"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image2"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image3"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_day_completion"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation3"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_explanation4"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image3"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image4"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_story"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation4"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_explanation5"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image4"
+            />
+
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image5"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_emotion"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation5"
+            />
+
+        <ImageView
+            android:id="@+id/user_guide_writeview_image6"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_hashtag"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image5"
+            />
+        <ImageView
+            android:id="@+id/user_guide_writeview_image7"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/user_guide_write_score"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image6"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_explanation6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_explanation6"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_image7"
+            />
+
+
+        <TextView
+            android:id="@+id/user_guide_writeview_warning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_warning"
+            android:fontFamily="@font/maruburi_bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_explanation6"
+            />
+
+        <TextView
+            android:id="@+id/user_guide_writeview_warning_explanation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_guide_write_warning_detail"
+            android:fontFamily="@font/maruburi_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/user_guide_writeview_warning"
+            />
+
+
+
+
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:layout_marginTop="20dp"
+            android:text="@string/user_guide_got_it"
+            android:fontFamily="@font/maruburi_regular"
+            app:layout_constraintTop_toBottomOf="@+id/user_guide_writeview_warning_explanation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="32dp"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

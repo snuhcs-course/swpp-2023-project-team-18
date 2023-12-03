@@ -50,17 +50,39 @@ public class TagBoxContainer {
         animationProvider = new AnimationProvider(view);
 
         tagEditText.addTextChangedListener(new TextWatcher() {
+            // #의 연속 입력을 막기 위한 변수 (스페이스바만 계속 누르는 경우 스페이스바 무시)
+            private boolean isHashJustEntered = false;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // 사용자가 삭제를 눌렀는지 확인 (스페이스바 무시 로직에서 예외 처리)
+                if (count > 0 && after == 0) {
+                    isHashJustEntered = false;
+                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // 사용자가 스페이스바를 눌렀는지 확인
+                if (count > 0 && s.subSequence(start, start + count).toString().equals(" ")) {
+                    if (s.length() > 1 && s.charAt(s.length() - 2) == '#') {
+                        // # 뒤에 스페이스바가 눌렸다면
+                        isHashJustEntered = true;
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d("TagBoxContainer", "afterTextChanged: " + s.toString());
+                if (isHashJustEntered) {
+                    // # 뒤에 스페이스바가 눌렸을 경우, 스페이스바 제거
+                    s.delete(s.length() - 1, s.length());
+                    isHashJustEntered = false;
+                } else if (s.length() > 0 && s.charAt(0) != '#') {
+                    // 사용자 입력이 시작되면 맨 앞에 # 추가
+                    s.insert(0, "#");
+                }
+                Log.d("TagBoxContainer", "afterTextChanged - changed to: " + s);
                 List<String> currentTags = parseTags(s.toString());
                 if (currentTags.size() > MAX_TAGS) {
                     // 개수 제한 초과
@@ -134,7 +156,11 @@ public class TagBoxContainer {
         for (String tag : tags) {
             sb.append("#").append(tag).append(" ");
         }
-        tagEditText.setText(sb.toString());
+        Log.d("TagBoxContainer", "setTags: " + tags + ", parsed to " + sb);
+        if (sb.length() > 0) {
+            // 마지막 공백은 제거
+            tagEditText.setText(sb.substring(0, sb.length() - 1));
+        }
     }
 
     public void setHelpText(String text) {

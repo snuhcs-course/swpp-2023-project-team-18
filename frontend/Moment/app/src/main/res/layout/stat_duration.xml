@@ -11,48 +11,40 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:text="@string/stat_duration"
-        android:textSize="13sp"
-        android:fontFamily="@font/maruburi_light"
+        style="@style/SMALL_NORMAL_GRAY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/stat_date_duration_start"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        />
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
     <TextView
         android:id="@+id/stat_date_duration_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2023.11.28"
-        android:textSize="12sp"
-        android:fontFamily="@font/maruburi_light"
+        style="@style/SMALL_NORMAL_GRAY"
         app:layout_constraintStart_toEndOf="@id/stat_date_duration_text"
         app:layout_constraintTop_toTopOf="@id/stat_date_duration_text"
-        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_dash"
-        />
+        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_dash" />
 
     <TextView
         android:id="@+id/stat_date_duration_dash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" - "
-        android:textSize="12sp"
-        android:fontFamily="@font/maruburi_light"
+        style="@style/SMALL_NORMAL_GRAY"
         app:layout_constraintStart_toEndOf="@id/stat_date_duration_start"
         app:layout_constraintTop_toTopOf="@id/stat_date_duration_start"
-        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_end"
-        />
+        app:layout_constraintEnd_toStartOf="@id/stat_date_duration_end" />
 
     <TextView
         android:id="@+id/stat_date_duration_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2023.11.29"
-        android:textSize="12sp"
-        android:fontFamily="@font/maruburi_light"
+        style="@style/SMALL_NORMAL_GRAY"
         app:layout_constraintStart_toEndOf="@id/stat_date_duration_dash"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/stat_date_duration_dash"
-        />
+        app:layout_constraintTop_toTopOf="@id/stat_date_duration_dash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

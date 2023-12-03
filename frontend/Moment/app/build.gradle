@@ -42,9 +42,7 @@ android {
         jvmTarget = "11"
     }
     composeOptions {
-
-
-        kotlinCompilerExtensionVersion  "1.4.3"
+        kotlinCompilerExtensionVersion "1.4.3"
     }
     packaging {
         resources {
@@ -53,8 +51,10 @@ android {
     }
     // kotlinCompilerExtensionVersion = Versions.COMPOSE
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
-
 
 dependencies {
     // Kotlin
@@ -113,4 +113,8 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
+
+
+    //  gif picture
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 }

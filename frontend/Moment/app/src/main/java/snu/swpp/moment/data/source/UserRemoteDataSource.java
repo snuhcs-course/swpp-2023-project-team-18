@@ -5,30 +5,31 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import snu.swpp.moment.api.RetrofitClient;
-import snu.swpp.moment.api.ServiceApi;
 import snu.swpp.moment.api.request.LoginRequest;
+import snu.swpp.moment.api.request.NicknameUpdateRequest;
 import snu.swpp.moment.api.request.RegisterRequest;
 import snu.swpp.moment.api.request.TokenRefreshRequest;
 import snu.swpp.moment.api.request.TokenVerifyRequest;
 import snu.swpp.moment.api.response.LoginResponse;
+import snu.swpp.moment.api.response.NicknameUpdateResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
 import snu.swpp.moment.api.response.TokenRefreshResponse;
 import snu.swpp.moment.api.response.TokenVerifyResponse;
 import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.callback.NicknameCallBack;
 import snu.swpp.moment.data.callback.RefreshCallBack;
 import snu.swpp.moment.data.callback.TokenCallBack;
 import snu.swpp.moment.data.model.LoggedInUserModel;
+import snu.swpp.moment.exception.NoInternetException;
+import snu.swpp.moment.exception.UnauthorizedAccessException;
+import snu.swpp.moment.exception.UnknownErrorException;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-public class UserRemoteDataSource {
-
-    private ServiceApi service;
+public class UserRemoteDataSource extends BaseRemoteDataSource {
 
     public void login(String username, String password, AuthenticationCallBack loginCallBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         LoginRequest loginRequest = new LoginRequest(username, password);
         service.userLogin(loginRequest).enqueue(new Callback<>() {
             @Override
@@ -59,7 +60,6 @@ public class UserRemoteDataSource {
 
     public void register(String username, String password, String nickname,
         AuthenticationCallBack registerCallBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         RegisterRequest request = new RegisterRequest(username, password, nickname);
         service.userRegister(request).enqueue(new Callback<>() {
             @Override
@@ -93,7 +93,6 @@ public class UserRemoteDataSource {
     }
 
     public void isTokenValid(String token, TokenCallBack callBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         TokenVerifyRequest request = new TokenVerifyRequest(token);
         service.tokenVerify(request).enqueue(new Callback<>() {
             @Override
@@ -118,7 +117,6 @@ public class UserRemoteDataSource {
     }
 
     public void refresh(String token, RefreshCallBack callBack) {
-        service = RetrofitClient.getClient().create(ServiceApi.class);
         TokenRefreshRequest request = new TokenRefreshRequest(token);
         service.tokenRefresh(request).enqueue(new Callback<>() {
             @Override
@@ -135,6 +133,30 @@ public class UserRemoteDataSource {
 
             @Override
             public void onFailure(Call<TokenRefreshResponse> call, Throwable t) {
+            }
+        });
+    }
+
+    public void updateNickname(String access_token, String nickname, NicknameCallBack callBack) {
+        String bearer = "Bearer " + access_token;
+        NicknameUpdateRequest request = new NicknameUpdateRequest(nickname);
+        service.updateNickname(bearer, request).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<NicknameUpdateResponse> call,
+                Response<NicknameUpdateResponse> response) {
+                Log.d("APICall", "nickname: " + response.code());
+                if (response.isSuccessful()) {
+                    callBack.onSuccess(response.body().getNickname());
+                } else if (response.code() == 401) {
+                    callBack.onFailure(new UnauthorizedAccessException());
+                } else {
+                    callBack.onFailure(new UnknownErrorException());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NicknameUpdateResponse> call, Throwable t) {
+                callBack.onFailure(new NoInternetException());
             }
         });
     }

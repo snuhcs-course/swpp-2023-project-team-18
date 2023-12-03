@@ -4,10 +4,11 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class SearchContentsResponse {
+
     @SerializedName("searchentries")
     private List<SearchEntry> searchEntries;
 
-    public List<SearchEntry> getSearchentries() {
+    public List<SearchEntry> getSearchEntries() {
         return searchEntries;
     }
 
@@ -17,6 +18,7 @@ public class SearchContentsResponse {
     }
 
     public static class SearchEntry {
+
         private String title;
         private Long created_at;
         private String emotion;

@@ -9,6 +9,8 @@ import androidx.annotation.StringRes;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.viewpager2.widget.ViewPager2;
+import snu.swpp.moment.MainActivity;
 import snu.swpp.moment.R;
 import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
@@ -39,6 +41,8 @@ public class ListFooterContainer {
     private final TextView loadingText;
     // 마무리된 하루 텍스트
     private final TextView completedText;
+    // Viewpager
+    private final ViewPager2 viewpager;
 
     // 애니메이션 개체 묶음
     private final AnimationProvider animationProvider;
@@ -74,6 +78,9 @@ public class ListFooterContainer {
         animationProvider = new AnimationProvider(view);
         // 마무리된 하루 텍스트
         completedText = view.findViewById(R.id.completed_text);
+        // Viewpager
+        MainActivity activity = (MainActivity) view.getContext();
+        viewpager = activity.findViewById(R.id.viewpager);
 
         // 스토리 자수 제한 감지
         storyContainer.observeLimit(lifecycleOwner, isLimitExceeded -> {
@@ -123,6 +130,10 @@ public class ListFooterContainer {
             } else {
                 setState(WritePageState.FOOTER_INVISIBLE);
             }
+        } else if (storyUiState.isEmotionInvalid()) {
+            setState(WritePageState.AUTO_COMPLETED);
+            storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
+            storyContainer.setCompletedDate(storyUiState.getCreatedAt());
         } else {
             setState(WritePageState.COMPLETE);
             storyContainer.setStoryText(storyUiState.getTitle(), storyUiState.getContent());
@@ -154,6 +165,8 @@ public class ListFooterContainer {
         if (state != WritePageState.FOOTER_INVISIBLE) {
             setScrollToBottomSwitch();
         }
+
+        viewpager.setUserInputEnabled(!isCompletionInProgress());
     }
 
     private void updateMomentContainer() {
@@ -184,6 +197,7 @@ public class ListFooterContainer {
             case TAG:
             case SCORE:
             case COMPLETE:
+            case AUTO_COMPLETED:
                 storyContainer.setState(StoryContainerState.COMPLETE);
                 break;
             default:
@@ -252,6 +266,7 @@ public class ListFooterContainer {
 
     public String[] getStoryInput() {
         return new String[]{
+
             storyContainer.getStoryTitle(),
             storyContainer.getStoryContent()
         };

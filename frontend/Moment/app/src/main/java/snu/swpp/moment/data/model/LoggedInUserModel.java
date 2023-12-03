@@ -3,6 +3,7 @@ package snu.swpp.moment.data.model;
 import java.time.LocalDateTime;
 import snu.swpp.moment.api.response.LoginResponse;
 import snu.swpp.moment.api.response.RegisterResponse;
+import snu.swpp.moment.utils.TimeConverter;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
@@ -26,7 +27,8 @@ public class LoggedInUserModel {
     public LoggedInUserModel(LoginResponse.User user, LoginResponse.Token token) {
         this.username = user.getUsername();
         this.nickName = user.getNickname();
-        this.createAt = user.getCreatedAt();
+        this.createAt = TimeConverter.convertUTCToLocalTimeZone(
+            user.getCreatedAt().substring(0, 19));
         this.AccessToken = token.getAccessToken();
         this.RefreshToken = token.getRefreshToken();
     }

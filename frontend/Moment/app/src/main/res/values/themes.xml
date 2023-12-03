@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Moment" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -56,4 +56,4 @@
     </style>
 </resources>
 
-  <!--        <item name="android:buttonStyle">@style/CustomButton</item> -->
+    <!--        <item name="android:buttonStyle">@style/CustomButton</item> -->

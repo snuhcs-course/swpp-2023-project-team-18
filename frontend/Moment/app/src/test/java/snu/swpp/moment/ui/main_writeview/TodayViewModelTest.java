@@ -30,6 +30,8 @@ import snu.swpp.moment.data.callback.EmotionSaveCallback;
 import snu.swpp.moment.data.callback.HashtagSaveCallback;
 import snu.swpp.moment.data.callback.MomentGetCallBack;
 import snu.swpp.moment.data.callback.MomentWriteCallBack;
+import snu.swpp.moment.data.callback.NudgeDeleteCallback;
+import snu.swpp.moment.data.callback.NudgeGetCallback;
 import snu.swpp.moment.data.callback.ScoreSaveCallback;
 import snu.swpp.moment.data.callback.StoryCompletionNotifyCallBack;
 import snu.swpp.moment.data.callback.StoryGetCallBack;
@@ -40,8 +42,10 @@ import snu.swpp.moment.data.model.StoryModel;
 import snu.swpp.moment.data.model.TokenModel;
 import snu.swpp.moment.data.repository.AuthenticationRepository;
 import snu.swpp.moment.data.repository.MomentRepository;
+import snu.swpp.moment.data.repository.NudgeRepository;
 import snu.swpp.moment.data.repository.StoryRepository;
 import snu.swpp.moment.data.source.MomentRemoteDataSource;
+import snu.swpp.moment.data.source.NudgeRemoteDataSource;
 import snu.swpp.moment.data.source.StoryRemoteDataSource;
 import snu.swpp.moment.exception.InvalidEmotionException;
 import snu.swpp.moment.exception.InvalidHashtagSaveRequestException;
@@ -54,10 +58,12 @@ import snu.swpp.moment.ui.main_writeview.uistate.AiStoryState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionState;
 import snu.swpp.moment.ui.main_writeview.uistate.CompletionStoreResultState;
 import snu.swpp.moment.ui.main_writeview.uistate.MomentUiState;
+import snu.swpp.moment.ui.main_writeview.uistate.NudgeUiState;
 import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.TodayViewModel;
+import snu.swpp.moment.utils.EmotionMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TodayViewModelTest {
@@ -68,6 +74,8 @@ public class TodayViewModelTest {
     private MomentRemoteDataSource momentDataSource;
     @Mock
     private StoryRemoteDataSource storyDataSource;
+    @Mock
+    private NudgeRemoteDataSource nudgeDataSource;
 
     @Spy
     @InjectMocks
@@ -78,6 +86,9 @@ public class TodayViewModelTest {
     @Spy
     @InjectMocks
     private StoryRepository storyRepository;
+    @Spy
+    @InjectMocks
+    private NudgeRepository nudgeRepository;
 
     private GetStoryUseCase getStoryUseCase;
     private SaveScoreUseCase saveScoreUseCase;
@@ -104,6 +115,7 @@ public class TodayViewModelTest {
             authenticationRepository,
             momentRepository,
             storyRepository,
+            nudgeRepository,
             getStoryUseCase,
             saveScoreUseCase
         );
@@ -324,7 +336,7 @@ public class TodayViewModelTest {
             assertTrue(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "");
             assertEquals(storyUiState.getContent(), "");
-            assertEquals(storyUiState.getEmotion(), 0);
+            assertEquals(storyUiState.getEmotion(), EmotionMap.INVALID_EMOTION);
             assertEquals(storyUiState.getTags().size(), 0);
             assertFalse(storyUiState.isPointCompleted());
         };
@@ -536,4 +548,83 @@ public class TodayViewModelTest {
         // When
         todayViewModel.saveScore(3);
     }
+
+    @Test
+    public void getNudge_success() {
+        final String nudge = "nudge";
+        doAnswer(invocation -> {
+            NudgeGetCallback callback = (NudgeGetCallback) invocation.getArguments()[3];
+            callback.onSuccess(nudge);
+            return null;
+        }).when(nudgeDataSource).getNudge(anyString(), anyLong(), anyLong(), any());
+        todayViewModel.getNudge(LocalDateTime.now());
+        todayViewModel.observeNudgeState(nudgeUiState -> {
+            System.out.println("observer for getNudge");
+            assertNull(nudgeUiState.getError());
+            assertEquals(nudgeUiState.getContent(), nudge);
+            assertFalse(nudgeUiState.isDeleted());
+        });
+
+    }
+
+    @Test
+    public void getNudge_empty() {
+        doAnswer(invocation -> {
+            NudgeGetCallback callback = (NudgeGetCallback) invocation.getArguments()[3];
+            callback.onSuccess("");
+            return null;
+        }).when(nudgeDataSource).getNudge(anyString(), anyLong(), anyLong(), any());
+        todayViewModel.getNudge(LocalDateTime.now());
+        todayViewModel.observeNudgeState(nudgeUiState -> {
+            System.out.println("observer for getNudge");
+            assertNull(nudgeUiState.getError());
+            assertEquals(nudgeUiState.getContent(), "");
+            assertTrue(nudgeUiState.isDeleted());
+        });
+    }
+
+    @Test
+    public void getNudge_fail() {
+        doAnswer(invocation -> {
+            NudgeGetCallback callback = (NudgeGetCallback) invocation.getArguments()[3];
+            callback.onFailure(new UnauthorizedAccessException());
+            return null;
+        }).when(nudgeDataSource).getNudge(anyString(), anyLong(), anyLong(), any());
+        todayViewModel.getNudge(LocalDateTime.now());
+        todayViewModel.observeNudgeState(nudgeUiState -> {
+            System.out.println("observer for getNudge");
+            assertTrue(nudgeUiState.getError() instanceof UnauthorizedAccessException);
+        });
+    }
+
+    @Test
+    public void deleteNudge_success() {
+        doAnswer(invocation -> {
+            NudgeDeleteCallback callback = (NudgeDeleteCallback) invocation.getArguments()[1];
+            callback.onSuccess();
+            return null;
+        }).when(nudgeDataSource).deleteNudge(anyString(), any());
+        todayViewModel.deleteNudge();
+        todayViewModel.observeNudgeState(nudgeUiState -> {
+            System.out.println("observer for deleteNudge");
+            assertNull(nudgeUiState.getError());
+            assertEquals(nudgeUiState.getContent(), "");
+            assertTrue(nudgeUiState.isDeleted());
+        });
+    }
+
+    @Test
+    public void deleteNudge_fail() {
+        doAnswer(invocation -> {
+            NudgeDeleteCallback callback = (NudgeDeleteCallback) invocation.getArguments()[1];
+            callback.onFailure(new UnauthorizedAccessException());
+            return null;
+        }).when(nudgeDataSource).deleteNudge(anyString(), any());
+        todayViewModel.deleteNudge();
+        todayViewModel.observeNudgeState(nudgeUiState -> {
+            System.out.println("observer for deleteNudge");
+            assertTrue(nudgeUiState.getError() instanceof UnauthorizedAccessException);
+        });
+    }
+
 }

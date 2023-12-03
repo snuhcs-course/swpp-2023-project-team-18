@@ -1,6 +1,9 @@
 package snu.swpp.moment.ui.main_writeview;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -44,6 +47,7 @@ import snu.swpp.moment.ui.main_writeview.uistate.StoryUiState;
 import snu.swpp.moment.ui.main_writeview.viewmodel.DailyViewModel;
 import snu.swpp.moment.ui.main_writeview.viewmodel.GetStoryUseCase;
 import snu.swpp.moment.ui.main_writeview.viewmodel.SaveScoreUseCase;
+import snu.swpp.moment.utils.EmotionMap;
 import snu.swpp.moment.utils.TimeConverter;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -203,7 +207,7 @@ public class DailyViewModelTest {
             assertTrue(storyUiState.isEmpty());
             assertEquals(storyUiState.getTitle(), "");
             assertEquals(storyUiState.getContent(), "");
-            assertEquals(storyUiState.getEmotion(), 0);
+            assertEquals(storyUiState.getEmotion(), EmotionMap.INVALID_EMOTION);
             assertEquals(storyUiState.getTags().size(), 0);
             assertFalse(storyUiState.isPointCompleted());
         };
