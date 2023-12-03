@@ -16,6 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import snu.swpp.moment.ui.register.RegisterActivity;
+import snu.swpp.moment.utils.DisableAutoFillAction;
 
 @RunWith(AndroidJUnit4.class)
 public class RegisterActivityTest {
@@ -43,10 +44,12 @@ public class RegisterActivityTest {
 
     @Test
     public void whenUsernameEmpty_RegistrationIsDisabled() {
-        onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_password)).perform(click(), replaceText("000000"));
+        onView(withId(R.id.register_nickname)).perform(
+            new DisableAutoFillAction(), click(), replaceText("moment"));
+        onView(withId(R.id.register_password)).perform(
+            new DisableAutoFillAction(), click(), replaceText("000000"));
         onView(withId(R.id.register_password_check)).perform(
-            click(), replaceText("000000"));
+            new DisableAutoFillAction(), click(), replaceText("000000"));
 
         onView(withId(R.id.register))
             .check(matches(not(isEnabled())));
@@ -54,10 +57,14 @@ public class RegisterActivityTest {
 
     @Test
     public void whenPasswordInvalid_RegistrationIsDisabled() {
-        onView(withId(R.id.register_username)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_password)).perform(click(), replaceText("0"));
-        onView(withId(R.id.register_password_check)).perform(click(), replaceText("0"));
+        onView(withId(R.id.register_username)).perform(new DisableAutoFillAction(), click(),
+            replaceText("moment"));
+        onView(withId(R.id.register_nickname)).perform(new DisableAutoFillAction(), click(),
+            replaceText("moment"));
+        onView(withId(R.id.register_password)).perform(new DisableAutoFillAction(), click(),
+            replaceText("0"));
+        onView(withId(R.id.register_password_check)).perform(new DisableAutoFillAction(), click(),
+            replaceText("0"));
 
         onView(withId(R.id.register))
             .check(matches(not(isEnabled())));
@@ -65,11 +72,14 @@ public class RegisterActivityTest {
 
     @Test
     public void whenPasswordAndPasswordCheckNotEqual_RegistrationIsDisabled() {
-        onView(withId(R.id.register_username)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_password)).perform(click(), replaceText("000000"));
+        onView(withId(R.id.register_username)).perform(
+            new DisableAutoFillAction(), click(), replaceText("moment"));
+        onView(withId(R.id.register_nickname)).perform(
+            new DisableAutoFillAction(), click(), replaceText("moment"));
+        onView(withId(R.id.register_password)).perform(
+            new DisableAutoFillAction(), click(), replaceText("000000"));
         onView(withId(R.id.register_password_check)).perform(
-            click(), replaceText("000001"));
+            new DisableAutoFillAction(), click(), replaceText("000001"));
 
         onView(withId(R.id.register))
             .check(matches(not(isEnabled())));
@@ -77,11 +87,14 @@ public class RegisterActivityTest {
 
     @Test
     public void whenAllFieldsValid_RegistrationIsEnabled() {
-        onView(withId(R.id.register_username)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_nickname)).perform(click(), replaceText("moment"));
-        onView(withId(R.id.register_password)).perform(click(), replaceText("000000"));
+        onView(withId(R.id.register_username)).perform(
+            new DisableAutoFillAction(), click(), replaceText("moment"));
+        onView(withId(R.id.register_nickname)).perform(
+            new DisableAutoFillAction(), click(), replaceText("moment"));
+        onView(withId(R.id.register_password)).perform(
+            new DisableAutoFillAction(), click(), replaceText("000000"));
         onView(withId(R.id.register_password_check)).perform(
-            click(), replaceText("000000"));
+            new DisableAutoFillAction(), click(), replaceText("000000"));
 
         onView(withId(R.id.register))
             .check(matches(isEnabled()));
