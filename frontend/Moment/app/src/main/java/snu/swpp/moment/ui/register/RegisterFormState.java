@@ -6,15 +6,17 @@ import androidx.annotation.Nullable;
  * Data validation state of the login form.
  */
 class RegisterFormState {
-    @Nullable
-    private Integer usernameError;
-    @Nullable
-    private Integer passwordError;
-    @Nullable
-    private  Integer passwordDiffError;
-    private boolean isDataValid;
 
-    RegisterFormState(@Nullable Integer usernameError, @Nullable Integer passwordError, @Nullable Integer passwordDiffError) {
+    @Nullable
+    private final Integer usernameError;
+    @Nullable
+    private final Integer passwordError;
+    @Nullable
+    private final Integer passwordDiffError;
+    private final boolean isDataValid;
+
+    RegisterFormState(@Nullable Integer usernameError, @Nullable Integer passwordError,
+        @Nullable Integer passwordDiffError) {
         this.usernameError = usernameError;
         this.passwordError = passwordError;
         this.passwordDiffError = passwordDiffError;
@@ -39,7 +41,9 @@ class RegisterFormState {
     }
 
     @Nullable
-    Integer getPasswordDiffError(){ return passwordDiffError; }
+    Integer getPasswordDiffError() {
+        return passwordDiffError;
+    }
 
     boolean isDataValid() {
         return isDataValid;

@@ -7,11 +7,37 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lightgray">#EFEFEF</color>
     <color name="gray">#C2C2C2</color>
     <color name="darkgray">#707070</color>
     <color name="red">#CD5252</color>
-
+    <color name="lightred">#D08787</color>
 
     <color name="button_pressed">#707070</color>
     <color name="button_idle">#C2C2C2</color>
+
+    <!--  <color name="stat_emotion_1">#FFFFFF</color>
+      <color name="stat_emotion_2">#E6E6E6</color>
+      <color name="stat_emotion_3">#CCCCCC</color>
+      <color name="stat_emotion_4">#B3B3B3</color>
+      <color name="stat_emotion_5">#999999</color>
+      <color name="stat_emotion_6">#7F7F7F</color>
+      <color name="stat_emotion_7">#666666</color>
+      <color name="stat_emotion_8">#4C4C4C</color>
+      <color name="stat_emotion_9">#333333</color>
+      <color name="stat_emotion_10">#191919</color> -->
+
+    <color name="stat_emotion_1">#E6E6E6</color>
+    <color name="stat_emotion_2">#E6E6E6</color>
+    <color name="stat_emotion_3">#CCCCCC</color>
+    <color name="stat_emotion_4">#CCCCCC</color>
+    <color name="stat_emotion_5">#B3B3B3</color>
+    <color name="stat_emotion_6">#B3B3B3</color>
+    <color name="stat_emotion_7">#999999</color>
+    <color name="stat_emotion_8">#999999</color>
+    <color name="stat_emotion_9">#7F7F7F</color>
+    <color name="stat_emotion_10">#7F7F7F</color>
+
+    <color name="cccccc">#CCCCCC</color>
+
 </resources>

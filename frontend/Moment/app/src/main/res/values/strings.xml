@@ -2,7 +2,8 @@
     <string name="app_name">Moment</string>
     <string name="unknown_error">"알 수 없는 오류"</string>
     <string name="server_error">"서버 오류입니다."</string>
-    <string name="internet_error">"인터넷 연결 오류입니다."</string>
+    <string name="internet_error">"서버와의 연결이 불안정합니다."</string>
+    <string name="token_expired_error">"토큰이 만료되었습니다."</string>
     <string name="username_error">"동일한 아이디가 이미 존재합니다."</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">아이디</string>
@@ -12,11 +13,11 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"환영합니다! "</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">비밀번호는 6자 이상이어야 합니다.</string>
     <string name="wrong_password">"아이디 혹은 비밀번호 오류입니다."</string>
     <string name="register_failed">"회원가입에 실패했습니다."</string>
-    <string name="register_username">Not a valid username</string>
-    <string name="register_password">Password must be >5 characters</string>
+    <string name="register_username">유효하지 않은 아이디입니다.</string>
+    <string name="register_password">비밀번호는 6자 이상이어야 합니다.</string>
     <string name="register_password_check">비밀번호가 다릅니다.</string>
     <string name="offer_register">처음이신가요?</string>
     <string name="start_register"><u>회원가입</u></string>
@@ -26,5 +27,120 @@
     <string name="register_nickname">닉네임</string>
     <string name="password">비밀번호</string>
     <string name="password_check">비밀번호 확인</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <!-- 쓰기 탭 -->
+    <string name="edit_text_message">오늘의 모먼트를 기록해 주세요</string>
+    <string name="add_moment_help_text">새 모먼트 추가</string>
+    <string name="submit_moment_help_text">모먼트 저장</string>
+    <string name="ai_response_help_text">AI의 답글</string>
+    <string name="moment_limit_help_text">모먼트는 1시간에 2개만 쓸 수 있어요</string>
+    <string name="moment_reply_loading">AI의 답글을 기다리고 있어요</string>
+    <string name="no_moment">작성된 모먼트가 없어요</string>
+    <string name="day_complete_string">하루 마무리하기</string>
+    <string name="day_complete_popup">하루를 마무리하면 더 이상 모먼트를 작성할 수 없어요. 지금 마무리하실래요?</string>
+    <string name="ai_reply_loading">· · ·\nAI가 일기를 읽고 있어요</string>
+
+    <string name="day_complete_story">스토리 저장하기</string>
+    <string name="day_complete_emotion">감정 저장하기</string>
+    <string name="day_completion_tag">태그 저장하기</string>
+    <string name="day_completion_score">점수 저장하기</string>
+
+    <string name="story_title_hint">스토리 제목</string>
+    <string name="story_content_hint">오늘 하루를 마무리하는 스토리를 써보세요.\n작성 완료 후에는 다시 수정할 수 없어요.</string>
+    <string name="ai_button_help_text">AI에게 부탁하기</string>
+    <string name="ai_story_popup">AI에게 오늘의 스토리 작성을 부탁하실래요?</string>
+    <string name="ai_story_unavailable_popup">직접 작성한 내용이 있는 경우 AI에게 작성을 부탁할 수 없어요.</string>
+    <string name="ai_story_loading">· · ·\nAI가 하루를 요약하고 있어요</string>
+    <string name="next_stage_button">다음 단계로 이동</string>
+    <string name="emotion_help_text">오늘 하루를 가장 잘 나타내는 감정을 골라주세요</string>
+    <string name="tag_help_text">오늘 하루를 표현하는 태그를 달아주세요</string>
+    <string name="tag_limit_help_text">태그는 10개까지 사용할 수 있어요</string>
+    <string name="tag_hint">#태그를 #적어주세요</string>
+    <string name="score_help_text">마지막으로 오늘 하루에 점수를 매겨주세요</string>
+    <string name="completed_day">마무리된 하루</string>
+    <string name="completion_loading">· · ·\n잠시만 기다려주세요</string>
+    <string name="please_retry">다시 시도해주세요</string>
+    <string name="ai_story_done">AI가 스토리 작성을 완료했어요</string>
+    <string name="auto_complete_warning">직접 점수를 매기지 않아 자동으로 입력되었으니 수정해주세요</string>
+    <string name="completion_back_button_popup">하루 마무리를 중단하면 지금까지의 내용이 제대로 저장되지 않을 수 있어요. 지금 중단하실래요?</string>
+    <string name="back_to_today">오늘로 돌아가기</string>
+
+    <string name="popup_yes">네</string>
+    <string name="popup_no">아니요</string>
+    <string name="popup_ok">확인</string>
+
+    <!-- 한달보기 탭 -->
+    <string name="day_section_emotion">이날의 감정</string>
+    <string name="day_section_tags">이날의 태그</string>
+    <string name="day_section_score">이날의 점수</string>
+    <string name="day_navigate_button">이날의 기록 보기</string>
+    <string name="auto_completed_warning">직접 하루를 마무리하지 않았어요</string>
+
+    <!-- 돌아보기 탭 -->
+    <string name="stat_section_week">7일</string>
+    <string name="stat_section_month">30일</string>
+    <string name="stat_section_week_score">일주일 돌아보기</string>
+    <string name="stat_section_month_score">한 달 돌아보기</string>
+    <string name="stat_duration">기간</string>
+
+    <string name="stat_seven_avg">7일 평균</string>
+    <string name="stat_thirty_avg">30일 평균</string>
+    <string name="average_score_text">%1$s</string>
+
+
+    <string name="stat_section_score">하루 점수</string>
+    <string name="title_activity_min">MinActivity</string>
+
+
+    <!-- 찾아보기 탭 -->
+    <string name="search_hashtag_button">해시태그</string>
+    <string name="search_content_button">내용</string>
+    <string name="search_content_no_result">검색결과가 없어요</string>
+
+    <!-- 유저정보 탭 -->
+    <string name="nickname_too_long">닉네임은 20자까지만 쓸 수 있어요</string>
+    <string name="nickname_update_success">닉네임이 변경되었습니다</string>
+
+
+    <!-- 도움 view -->
+    <string name="user_guide_write_title">하루쓰기</string>
+    <string name="user_guide_write_explanation1"><b><u>하루쓰기</u></b> 탭에서는 순간의 기록인 모먼트를 작성하고, AI의 답글을 받고, 하루를 마무리하는 스토리를 작성할 수 있어요.</string>
+    <string name="user_guide_write_explanation2">꾸준히 일기를 쓰다 보면 어느 날 일기를 쓰러 왔을 때 따뜻한 응원의 한 마디를 발견하게 될지도 몰라요. 메시지는 하루 동안만 볼 수 있고, X를 눌러 지울 수 있어요.</string>
+    <string name="user_guide_write_explanation3"><b><u>새 모먼트 추가하기</u></b> 버튼을 눌러 지금 이 순간의 생생한 감정과 생각을 작성해보세요. 모먼트를 작성하면 잠시 후 모먼트에 대한 AI의 응원과 격려가 담긴 응답을 받을 수 있어요.</string>
+    <string name="user_guide_write_explanation4"><b><u>하루 마무리하기</u></b> 버튼을 누르면 스토리를 작성할 수 있어요. 만약, 스토리를 작성하지 않고 새벽 3시가 지나면 모먼트를 기반으로 AI가 스토리를 자동으로 생성해줘요.</string>
+    <string name="user_guide_write_explanation5">스토리는 직접 작성할 수도 있고, 스토리 작성이 낯설다면 <b><u>AI에게 부탁하기</u></b> 버튼을 눌러보세요. 작성된 모먼트들을 기반으로 AI가 스토리를 생성해주고 직접 수정할 수 있어요.</string>
+    <string name="user_guide_write_explanation6">스토리 작성이 끝나면 오늘의 감정과 해시태그, 점수를 입력할 수 있어요. 이 정보들은 돌아보기 탭에서 내가 작성한 과거의 스토리들에 대한 통계자료로 쓰여요.</string>
+    <string name="user_guide_write_warning">주의사항</string>
+    <string name="user_guide_write_warning_detail">1. 모먼트는 한 시간에 최대 두 개까지 작성이 가능해요. \n\n2. 모먼트가 없으면 스토리가 만들어지지 않아요. \n\n3. 새벽 3시가 지나서 자동 마무리가 되면 태그와 감정, 점수를 입력할 수 없어요. 해당 날짜는 통계에 반영되지 않아요.\n\n4. 하루 마무리를 하는 도중 다른 탭으로 이동하거나 앱을 끄면 다시 수정할 수 없어요.</string>
+
+    <string name="user_guide_month_title">한달보기</string>
+    <string name="user_guide_month_explanation1"><b><u>한달보기</u></b> 탭에서는 달력을 통해 과거에 작성한 스토리를 살펴보고 쉽게 찾아갈 수 있어요.</string>
+    <string name="user_guide_month_explanation2">달력은 양 옆으로 스와이프 할 수 있고, 작성된 스토리가 있는 날짜의 기분 아이콘들이 나타나요. 날짜를 누르면 스토리의 내용을 간략하게 확인할 수 있어요</string>
+    <string name="user_guide_month_explanation3">이날의 기록 보기 버튼을 누르면 해당 날짜의 하루 쓰기 탭으로 이동하여 작성된 모먼트와 스토리를 모두 볼 수 있어요.</string>
+
+    <string name="user_guide_stat_title">돌아보기</string>
+    <string name="user_guide_stat_explanation1"><b><u>돌아보기</u></b> 탭에서는 과거에 작성된 스토리들을 기반으로 최근 7일, 30일 동안의 점수의 변화, 감정들의 빈도와 작성된 태그를 볼 수 있어요.</string>
+    <string name="user_guide_stat_explanation2">해당 기간동안 스토리를 마무리하면서 선택한 하루의 감정 비율을 확인해볼 수 있어요.</string>
+    <string name="user_guide_stat_explanation3">지금까지 추가한 #태그들은 태그 클라우드로 볼 수 있어요. 태그 클라우드를 움직여서 확인해보세요.</string>
+
+    <string name="user_guide_search_title">찾아보기</string>
+    <string name="user_guide_search_explanation1"><b><u>찾아보기</u></b> 탭에서는 작성된 스토리와 모먼트들을 해시태그 또는 내용으로 검색할 수 있어요.</string>
+    <string name="user_guide_search_explanation2">해시태그 검색은 검색창에 입력된 글자가 포함된 해시태그를 추천해주고, 태그를 누르면 해시태그가 포함된 모든 스토리 목록을 보여줘요.</string>
+    <string name="user_guide_search_explanation3">내용 검색은 찾고 싶은 단어를 입력하고 돋보기 버튼을 누르면 단어가 포함된 모든 스토리 목록을 보여줘요.</string>
+    <string name="user_guide_search_explanation4">검색 결과로 나타난 스토리를 터치하면 해당 날짜의 하루쓰기 탭으로 이동하고 모먼트와 스토리를 볼 수 있어요.</string>
+
+
+    <!-- 공통 -->
+    <string name="user_guide_got_it">이해했어요</string>
 </resources>

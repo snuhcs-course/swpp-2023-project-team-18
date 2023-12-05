@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:alignmentMode="alignBounds"
+    android:columnCount="5"
+    android:orientation="horizontal"
+    android:rowCount="2"
+    tools:layout_height="100dp">
+
+    <!-- Row 0 -->
+    <!-- 첫 번째 셀: 이미지와 텍스트를 포함하는 LinearLayout -->
+    <LinearLayout
+        android:id="@+id/emotionSun1"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="0"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionSunRow1"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_sunny" />
+
+        <TextView
+            android:id="@+id/excited1Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="설렘" />
+    </LinearLayout>
+
+    <!-- 두 번째 셀: 이미지와 텍스트를 포함하는 LinearLayout -->
+    <LinearLayout
+        android:id="@+id/emotionSunCloud1"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="0"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionSunCloudRow1"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_sun_cloud" />
+
+        <TextView
+            android:id="@+id/happy1Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="기쁨" />
+    </LinearLayout>
+    <!-- 세 번째 셀: 이미지 3과 텍스트 3 -->
+    <LinearLayout
+        android:id="@+id/emotionCloud1"
+        android:layout_column="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="0"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionCloudRow1"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_cloud" />
+
+        <TextView
+            android:id="@+id/normal1Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="평범" />
+    </LinearLayout>
+
+    <!-- 네 번째 셀: 이미지 4와 텍스트 4 -->
+    <LinearLayout
+        android:id="@+id/emotionRain1"
+        android:layout_column="3"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="0"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionRainRow1"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_rain" />
+
+        <TextView
+            android:id="@+id/sad1Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="슬픔" />
+    </LinearLayout>
+
+    <!-- 다섯 번째 셀: 이미지 5와 텍스트 5 -->
+    <LinearLayout
+        android:id="@+id/emotionLightning1"
+        android:layout_column="4"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="0"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionLightningRow1"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_lightning" />
+
+        <TextView
+            android:id="@+id/angry1Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="짜증" />
+    </LinearLayout>
+
+    <!-- Row 1 -->
+    <!-- Image 1 and Text 1 -->
+    <LinearLayout
+        android:id="@+id/emotionSun2"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="1"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionSunRow2"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_sunny" />
+
+        <TextView
+            android:id="@+id/excited2Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="신남" />
+    </LinearLayout>
+
+    <!-- Image 2 and Text 2 -->
+    <LinearLayout
+        android:id="@+id/emotionSunCloud2"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="1"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionSunCloudRow2"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_sun_cloud" />
+
+        <TextView
+            android:id="@+id/happy2Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="행복" />
+    </LinearLayout>
+
+    <!-- Image 3 and Text 3 -->
+    <LinearLayout
+        android:id="@+id/emotionCloud2"
+        android:layout_column="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="1"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionCloudRow2"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_cloud" />
+
+        <TextView
+            android:id="@+id/normal2Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="모름" />
+    </LinearLayout>
+
+    <!-- Image 4 and Text 4 -->
+    <LinearLayout
+        android:id="@+id/emotionRain2"
+        android:layout_column="3"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="1"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionRainRow2"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_rain" />
+
+        <TextView
+            android:id="@+id/sad2Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="우울" />
+    </LinearLayout>
+
+    <!-- Image 5 and Text 5 -->
+    <LinearLayout
+        android:id="@+id/emotionLightning2"
+        android:layout_column="4"
+        android:layout_columnWeight="1"
+        android:layout_gravity="center"
+        android:layout_row="1"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="@dimen/emotionVerticalPadding"
+        android:background="@drawable/emotion_border_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/emotionLightningRow2"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:padding="0dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_lightning" />
+
+        <TextView
+            android:id="@+id/angry2Button"
+            style="@style/EMOTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="화남" />
+    </LinearLayout>
+
+
+</GridLayout>
+
+

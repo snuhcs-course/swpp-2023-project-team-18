@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/stat_sunny_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/small_icon_sunny"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        android:layout_marginRight="@dimen/legendMarginBetweenPictureAndText"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/stat_sunny_text" />
+
+    <TextView
+        android:id="@+id/stat_sunny_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="신남/설렘"
+        style="@style/stat_piechart_legend_font"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        android:layout_marginRight="@dimen/legendMarginRight"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stat_sunny_image"
+        app:layout_constraintEnd_toStartOf="@id/stat_sun_cloud_image" />
+
+    <ImageView
+        android:id="@+id/stat_sun_cloud_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/small_icon_sun_cloud"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        android:layout_marginRight="@dimen/legendMarginBetweenPictureAndText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/stat_sunny_text"
+        app:layout_constraintEnd_toStartOf="@+id/stat_sun_cloud_text" />
+
+    <TextView
+        android:id="@+id/stat_sun_cloud_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="기쁨/행복"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        android:layout_marginRight="@dimen/legendMarginRight"
+        style="@style/stat_piechart_legend_font"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stat_sun_cloud_image"
+        app:layout_constraintEnd_toStartOf="@id/stat_cloud_image" />
+
+    <ImageView
+        android:id="@+id/stat_cloud_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/small_icon_cloud"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        android:layout_marginRight="@dimen/legendMarginBetweenPictureAndText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/stat_sun_cloud_text"
+        app:layout_constraintEnd_toStartOf="@+id/stat_cloud_text" />
+
+    <TextView
+        android:id="@+id/stat_cloud_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="평범/모름"
+        style="@style/stat_piechart_legend_font"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stat_cloud_image"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/stat_rain_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/small_icon_rain"
+        android:layout_marginRight="@dimen/legendMarginBetweenPictureAndText"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/stat_rain_text" />
+
+    <TextView
+        android:id="@+id/stat_rain_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="슬픔/우울"
+        android:layout_marginRight="@dimen/legendMarginRight"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        style="@style/stat_piechart_legend_font"
+        app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
+        app:layout_constraintStart_toEndOf="@+id/stat_rain_image"
+        app:layout_constraintEnd_toEndOf="@+id/stat_lightning_image" />
+
+
+    <ImageView
+        android:id="@+id/stat_lightning_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/small_icon_lightning"
+        android:layout_marginRight="@dimen/legendMarginBetweenPictureAndText"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
+        app:layout_constraintStart_toEndOf="@id/stat_rain_text"
+        app:layout_constraintEnd_toStartOf="@+id/stat_lightning_text" />
+
+    <TextView
+        android:id="@+id/stat_lightning_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="화남/짜증"
+        style="@style/stat_piechart_legend_font"
+        android:layout_marginTop="@dimen/legendMarginTop"
+        app:layout_constraintTop_toBottomOf="@+id/stat_sunny_image"
+        app:layout_constraintStart_toEndOf="@+id/stat_lightning_image"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

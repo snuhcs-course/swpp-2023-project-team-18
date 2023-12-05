@@ -1,83 +1,64 @@
 package snu.swpp.moment.ui.login;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import android.util.Patterns;
-
-import snu.swpp.moment.data.AuthenticationCallBack;
-import snu.swpp.moment.data.AuthenticationRepository;
-import snu.swpp.moment.data.model.LoggedInUser;
 import snu.swpp.moment.R;
+import snu.swpp.moment.data.callback.AuthenticationCallBack;
+import snu.swpp.moment.data.model.LoggedInUserModel;
+import snu.swpp.moment.data.repository.AuthenticationRepository;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private AuthenticationRepository loginRepository;
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginResultState> loginResult = new MutableLiveData<>();
+    private final AuthenticationRepository authenticationRepository;
 
-    LoginViewModel(AuthenticationRepository loginRepository) {
-        this.loginRepository = loginRepository;
+    LoginViewModel(AuthenticationRepository authenticationRepository) {
+        this.authenticationRepository = authenticationRepository;
     }
 
     LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
     }
 
-    LiveData<LoginResult> getLoginResult() {
+    LiveData<LoginResultState> getLoginResult() {
         return loginResult;
     }
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        System.out.println("#Debug from ViewModel || username : " + username + "password : " + password);
-        loginRepository.login(username, password, new AuthenticationCallBack(){
+        Log.d("LoginViewModel", "login");
+        authenticationRepository.login(username, password, new AuthenticationCallBack() {
             @Override
-            public void onSuccess(LoggedInUser loggedInUser) {
+            public void onSuccess(LoggedInUserModel loggedInUser) {
                 System.out.println("#Debug from ViewModel HIHIHIHIHIHIHIHI");
-                loginResult.setValue(new LoginResult(new LoggedInUserView(loggedInUser.getNickName())));
+                loginResult.setValue(
+                    new LoginResultState(new LoggedInUserState(loggedInUser.getNickName())));
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                if (errorMessage.equals("{\"error\":[\"Unable to log in with provided credentials.\"]}")) {
-                    loginResult.setValue(new LoginResult(R.string.wrong_password));
-                } else if (errorMessage.equals("Server")) {
-                    loginResult.setValue(new LoginResult(R.string.server_error));
-                } else if (errorMessage.equals("NO INTERNET")) {
-                    loginResult.setValue(new LoginResult(R.string.internet_error));
-                }else {
-                    loginResult.setValue(new LoginResult(R.string.unknown_error));
+                switch (errorMessage) {
+                    case "{\"error\":[\"Unable to log in with provided credentials.\"]}":
+                        loginResult.setValue(new LoginResultState(R.string.wrong_password));
+                        break;
+                    case "Server":
+                        loginResult.setValue(new LoginResultState(R.string.server_error));
+                        break;
+                    case "NO INTERNET":
+                        loginResult.setValue(new LoginResultState(R.string.internet_error));
+                        break;
+                    default:
+                        loginResult.setValue(new LoginResultState(R.string.unknown_error));
+                        break;
                 }
             }
         });
     }
 
     public void loginDataChanged(String username, String password) {
-        if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
-        } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
-        } else {
-            loginFormState.setValue(new LoginFormState(true));
-        }
-    }
-
-    // A placeholder username validation check
-    private boolean isUserNameValid(String username) {
-        if (username == null) {
-            return false;
-        }
-        if (username.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
-        } else {
-            return !username.trim().isEmpty();
-        }
-    }
-
-    // A placeholder password validation check
-    private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        loginFormState.setValue(new LoginFormState(true));
     }
 }
